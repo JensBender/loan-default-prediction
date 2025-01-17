@@ -1,6 +1,7 @@
 data/sample_prediction_dataset.csv 
 data/test_data.csv
 data/training_data.csv
+data/training_data_preprocessed.csv
 loan-default-venv
 .ipynb_checkpoints
 machine_learning_template.ipynb 
