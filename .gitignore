@@ -4,6 +4,6 @@ data/sample_prediction_dataset.csv
 data/training_data_preprocessed.csv
 data/validation_data_preprocessed.csv
 data/test_data_preprocessed.csv
-images/*.webp
+images/header-image-alternative.webp
 loan-default-venv
 .ipynb_checkpoints
