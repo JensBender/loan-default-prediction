@@ -18,6 +18,9 @@ Loan default prediction powered by machine learning.
       <li><a href="#️-built-with">Built With</a></li>
     </ul>
   </li>
+  <li>
+    <a href="#-motivation">Motivation</a>
+  </li>
 </ol>
 
 
@@ -33,6 +36,27 @@ This project aims to develop a machine learning model to predict whether the cus
 - [![Seaborn][Seaborn-badge]][Seaborn-url]
 - [![scikit-learn][scikit-learn-badge]][scikit-learn-url]
 - [![Jupyter Notebook][JupyterNotebook-badge]][JupyterNotebook-url]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- MOTIVATION -->
+## 💡 Motivation
+**Problem**  
+Predicting loan defaults is a challenging task due to the multitude of influencing factors such as customers' demographic, financial, location, and behavioral attributes. Traditional default prediction models often oversimplify complex relationships between customer features and default risk. Machine learning offers enhanced predictive capability by capturing non-linear patterns and intricate dependencies in loan application data, enabling more accurate predictions of loan default risk.
+
+**Objectives**  
+- Develop a machine learning model to predict loan defaults using customer data from loan applications.
+- Compare multiple models (e.g., Logistic Regression, Random Forest, XGBoost) using a suitable evaluation metric (such as AUC-PR).
+- Identify key factors influencing loan default risk through feature importance analysis.
+
+**Value Proposition**  
+This project enables financial institutions to reduce loan default rates and make better and faster lending decisions by leveraging machine learning for automated and improved risk assessment. 
+
+**Business Goals**  
+- Reduce losses by 5M-10M INR within 12 months of model deployment by decreasing the loan default rate by 10%-20%.
+- Decrease loan processing time by 25%-40% by automating risk assessment, leading to less time spent on manual evaluations.
+- Ensure 100% compliance with regulatory requirements and fair lending practices.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
