@@ -125,7 +125,7 @@ Used `pandas` and `sklearn` for data loading, cleaning, transformation, and savi
 - **Train-validation-test split**:
     - Split data into training (80%), validation (10%), and test (10%) sets using `sklearn` `train_test_split`.
 - **Engineered new features**:
-    - Profession-based features: Derived job stability from profession and city tier from city using `pandas` `map`. 
+    - Profession-based features: Derived job stability from profession and city tier from city using mapping functions with  `pandas` `map`. 
     - Location-based features: Derived state default rate from state using target encoding.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
