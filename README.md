@@ -158,7 +158,15 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
     - **Categorical columns**:
         - Examined frequencies using `pandas` `value_counts`.
         - Visualized frequencies with bar plots using `seaborn` `barplot` and `matplotlib`. 
-        
+- **Bivariate EDA**:
+    - **Numerical x numerical**:
+        - Analyzed pairwise relationships with a correlation matrix (`pandas` `corr` and `numpy`) and visualized them with a heatmap (`seaborn` `heatmap`).
+        - Visualized relationships with scatterplots using `seaborn` `scatterplot` and `matplotlib`.
+    - **Numerical x categorical**:
+        - Explored relationships with group-wise statistics (e.g., mean or median by category) using `pandas` `groupby` and `agg`.
+        - Quantified the magnitude of group differences with Cohen's d using a custom function.
+        - Visualized results with bar plots using `seaborn` `barplot` and `matplotlib`.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
