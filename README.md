@@ -139,6 +139,8 @@ Used `pandas` and `sklearn` for data loading, cleaning, transformation, and savi
         - Nominal features: Used one-hot encoding with `sklearn` `OneHotEncoder`.
         - Ordinal features: Used ordinal encoding with `sklearn` `OrdinalEncoder`.
     - Applied scaling and encoding together using `sklearn` `ColumnTransformer`.
+- **Saved the preprocessed data**:
+    - As .csv files using `pandas` `to_csv`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
