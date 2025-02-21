@@ -24,6 +24,9 @@ Loan default prediction powered by machine learning.
   <li>
     <a href="#️-data">Data</a>
   </li>
+  <li>
+    <a href="#-data-preprocessing">Data Preprocessing</a>
+  </li>
 </ol>
 
 
@@ -104,6 +107,20 @@ Example Training Data:
 | 0         | 1,303,834 | 23  | 3          | Mechanical_engineer | single  | rented          | no            | 3                 | 13                   | Rewa      | Madhya_Pradesh |
 | 1         | 6,256,451 | 41  | 2          | Software_Developer | single  | rented          | yes           | 2                 | 12                   | Bangalore | Tamil_Nadu    |
 | 0         | 3,991,815 | 66  | 4          | Technical_writer   | married | rented          | no            | 4                 | 10                   | Alappuzha | Kerala        |
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## 🧹 Data Preprocessing
+Used `pandas` and `sklearn` for data loading, cleaning, transformation, and saving.
+- **Loaded data**:
+    - From three .csv files using `pandas` `read_csv`.
+- **Standardized names and labels**:
+    - Converted all column names and categorical labels to `snake_case` using `pandas` string methods and `apply` with custom functions.
+- **Handled duplicates**:
+    - Identified no duplicate rows based on the ID column or all columns.
+- **Handled data types**:
+    - Converted string columns with two unique categories to boolean columns using `pandas` `map`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
