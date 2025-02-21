@@ -155,7 +155,10 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
     - **Numerical columns**:
         - Analyzed descriptive statistics (e.g., mean, median, standard deviation) using `pandas` `describe`.
         - Visualized distributions with histograms using `seaborn` `histplot` and `matplotlib`.
-
+    - **Categorical columns**:
+        - Examined frequencies using `pandas` `value_counts`.
+        - Visualized frequencies with bar plots using `seaborn` `barplot` and `matplotlib`. 
+        
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
