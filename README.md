@@ -133,6 +133,12 @@ Used `pandas` and `sklearn` for data loading, cleaning, transformation, and savi
 - **Handled outliers**:
     - Identified and removed univariate outliers using statistical methods (3 standard deviations and 1.5 IQR) with custom transformer classes that inherit from `sklearn` `BaseEstimator` and `TransformerMixin`.
     - Identified and removed multivariate outliers using `sklearn` `IsolationForest`.
+- **Feature scaling and encoding**:
+    - Scaled numerical features using standard scaling with `sklearn` `StandardScaler`.
+    - Encoded categorical features:
+        - Nominal features: Used one-hot encoding with `sklearn` `OneHotEncoder`.
+        - Ordinal features: Used ordinal encoding with `sklearn` `OrdinalEncoder`.
+    - Applied scaling and encoding together using `sklearn` `ColumnTransformer`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
