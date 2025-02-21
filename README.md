@@ -130,6 +130,9 @@ Used `pandas` and `sklearn` for data loading, cleaning, transformation, and savi
 - **Defined semantic type** of columns (numerical, categorical, boolean).
 - **Handled missing values**:
     - Identified no missing values in any of the columns in the training, validation, and test data.
+- **Handled outliers**:
+    - Identified and removed univariate outliers using statistical methods (3 standard deviations and 1.5 IQR) with custom transformer classes that inherit from `sklearn` `BaseEstimator` and `TransformerMixin`.
+    - Identified and removed multivariate outliers using `sklearn` `IsolationForest`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
