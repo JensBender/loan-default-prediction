@@ -127,6 +127,9 @@ Used `pandas` and `sklearn` for data loading, cleaning, transformation, and savi
 - **Engineered new features**:
     - Profession-based features: Derived job stability from profession and city tier from city using mapping functions with  `pandas` `map`. 
     - Location-based features: Derived state default rate from state using target encoding.
+- **Defined semantic type** of columns (numerical, categorical, boolean).
+- **Handled missing values**:
+    - Identified no missing values in any of the columns in the training, validation, and test data.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
