@@ -124,6 +124,9 @@ Used `pandas` and `sklearn` for data loading, cleaning, transformation, and savi
     - Converted string columns with two unique categories to boolean columns using `pandas` `map`.
 - **Train-validation-test split**:
     - Split data into training (80%), validation (10%), and test (10%) sets using `sklearn` `train_test_split`.
+- **Engineered new features**:
+    - Profession-based features: Derived job stability from profession and city tier from city using `pandas` `map`. 
+    - Location-based features: Derived state default rate from state using target encoding.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
