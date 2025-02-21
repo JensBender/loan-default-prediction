@@ -27,6 +27,9 @@ Loan default prediction powered by machine learning.
   <li>
     <a href="#-data-preprocessing">Data Preprocessing</a>
   </li>
+  <li>
+    <a href="#-exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)</a>
+  </li>
 </ol>
 
 
@@ -110,7 +113,7 @@ Example Training Data:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
+<!-- DATA PREPROCESSING -->
 ## 🧹 Data Preprocessing
 Used `pandas` and `sklearn` for data loading, cleaning, transformation, and saving.
 - **Loaded data**:
@@ -141,6 +144,17 @@ Used `pandas` and `sklearn` for data loading, cleaning, transformation, and savi
     - Applied scaling and encoding together using `sklearn` `ColumnTransformer`.
 - **Saved the preprocessed data**:
     - As .csv files using `pandas` `to_csv`.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- EXPLORATORY DATA ANALYSIS -->
+## 🔍 Exploratory Data Analysis (EDA)
+Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and visualizations.
+- **Univariate EDA**:
+    - **Numerical columns**:
+        - Analyzed descriptive statistics (e.g., mean, median, standard deviation) using `pandas` `describe`.
+        - Visualized distributions with histograms using `seaborn` `histplot` and `matplotlib`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
