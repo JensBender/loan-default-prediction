@@ -28,6 +28,9 @@ Loan default prediction powered by machine learning.
     <a href="#-data-preprocessing">Data Preprocessing</a>
   </li>
   <li>
+    <a href="#-modeling">Modeling</a>
+  </li>
+  <li>
     <a href="#-exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)</a>
   </li>
 </ol>
@@ -169,6 +172,15 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
     - **Categorical x categorical**:
         - Analyzed relationships with contingency tables using `pandas` `crosstab`.
         - Visualized relationships with grouped bar plots using `pandas` `crosstab` `plot` and `matplotlib`.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## 🧠 Modeling
+Used `sklearn`, `xgboost`, and `pickle` for model training, evaluation, and saving.
+
+**Training baseline models**:  
+Implemented eight machine learning models using `sklearn` and `xgboost` with default hyperparameters. Evaluated model performance on validation data using AUC-PR as the primary metric, with class-1-specific recall, precision, and F1-score as secondary metrics.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
