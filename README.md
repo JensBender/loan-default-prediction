@@ -193,6 +193,9 @@ Implemented eight machine learning models using `sklearn` and `xgboost` with def
 | Random Forest          | 0.60   | 0.53             | 0.60                 | 0.56               | 0.90     |
 | XGBoost                | 0.54   | 0.20             | 0.64                 | 0.30               | 0.89     |
 
+Plotted the precision-recall curves of all baseline models using `matplotlib`.  
+![Precision-Recall Curves](images/precision_recall_curves.png)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
