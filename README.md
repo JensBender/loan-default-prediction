@@ -182,6 +182,17 @@ Used `sklearn`, `xgboost`, and `pickle` for model training, evaluation, and savi
 **Training baseline models**:  
 Implemented eight machine learning models using `sklearn` and `xgboost` with default hyperparameters. Evaluated model performance on validation data using AUC-PR as the primary metric, with class-1-specific recall, precision, and F1-score as secondary metrics.
 
+| Model                  | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
+|------------------------|--------|------------------|----------------------|--------------------|----------|
+| Logistic Regression    | 0.16   | 0.00             | 0.00                 | 0.00               | 0.88     |
+| Elastic Net            | 0.16   | 0.00             | 0.00                 | 0.00               | 0.88     |
+| K-Nearest Neighbors    | 0.53   | 0.50             | 0.56                 | 0.53               | 0.89     |
+| Support Vector Machine | 0.13   | 0.28             | 0.13                 | 0.18               | 0.67     |
+| Neural Network         | 0.32   | 0.10             | 0.51                 | 0.17               | 0.88     |
+| Decision Tree          | 0.46   | 0.57             | 0.52                 | 0.55               | 0.88     |
+| Random Forest          | 0.60   | 0.53             | 0.60                 | 0.56               | 0.90     |
+| XGBoost                | 0.54   | 0.20             | 0.64                 | 0.30               | 0.89     |
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
