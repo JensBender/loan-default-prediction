@@ -196,6 +196,8 @@ Implemented eight machine learning models using `sklearn` and `xgboost` with def
 Plotted the precision-recall curves of all baseline models using `matplotlib`.  
 ![Precision-Recall Curves](images/precision_recall_curves.png)
 
+Identified Random Forest, XGBoost, K-Nearest Neighbors, and Decision Tree as the top performers (highest AUC-PR and class-1-specific recall, precision, and f1-score) for hyperparameter tuning.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
