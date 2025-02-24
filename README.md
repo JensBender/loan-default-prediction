@@ -166,6 +166,9 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
         - Explored relationships with group-wise statistics (e.g., mean or median by category) using `pandas` `groupby` and `agg`.
         - Quantified the magnitude of group differences with Cohen's d using a custom function.
         - Visualized results with bar plots using `seaborn` `barplot` and `matplotlib`.
+    - **Categorical x categorical**:
+        - Analyzed relationships with contingency tables using `pandas` `crosstab`.
+        - Visualized relationships with grouped bar plots using `pandas` `crosstab` `plot` and `matplotlib`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
