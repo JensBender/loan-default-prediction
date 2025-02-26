@@ -28,14 +28,14 @@ Loan default prediction powered by machine learning.
     <a href="#-data-preprocessing">Data Preprocessing</a>
   </li>
   <li>
+    <a href="#-exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)</a>
+  </li>
+  <li>
     <a href="#-modeling">Modeling</a>
     <ul>
       <li><a href="#️-training-baseline-models">Training Baseline Models</a></li>      
       <li><a href="#️-hyperparameter-tuning">Hyperparameter Tuning</a></li>
     </ul>
-  </li>
-  <li>
-    <a href="#-exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)</a>
   </li>
 </ol>
 
