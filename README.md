@@ -29,6 +29,10 @@ Loan default prediction powered by machine learning.
   </li>
   <li>
     <a href="#-modeling">Modeling</a>
+    <ul>
+      <li><a href="#️-training-baseline-models">Training Baseline Models</a></li>      
+      <li><a href="#️-hyperparameter-tuning">Hyperparameter Tuning</a></li>
+    </ul>
   </li>
   <li>
     <a href="#-exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)</a>
@@ -179,8 +183,11 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
 ## 🧠 Modeling
 Used `sklearn`, `xgboost`, and `pickle` for model training, evaluation, and saving.
 
-**Training baseline models**:  
-Implemented eight machine learning models using `sklearn` and `xgboost` with default hyperparameters. Evaluated model performance on validation data using AUC-PR as the primary metric, with class-1-specific recall, precision, and F1-score as secondary metrics.
+### 🏗️ Training Baseline Models  
+- Implemented eight machine learning models (default hyperparameter values) with four outlier handling methods. 
+- Evaluated model performance on the validation data: 
+  - Primary metric: AUC-PR.
+  - Secondary metrics: Class-1-specific recall, precision, and F1-score.
 
 | Model                  | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
 |------------------------|--------|------------------|----------------------|--------------------|----------|
@@ -198,7 +205,7 @@ Plotted the precision-recall curves of all baseline models using `matplotlib`.
 
 Identified Random Forest, XGBoost, K-Nearest Neighbors, and Decision Tree as the top performers (highest AUC-PR and class-1-specific recall, precision, and f1-score) for hyperparameter tuning.
 
-**Hyperparameter tuning**:  
+### ⚙️ Hyperparameter Tuning  
 Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
