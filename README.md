@@ -189,6 +189,9 @@ Used `sklearn`, `xgboost`, and `pickle` for model training, evaluation, and savi
   - Primary metric: AUC-PR.
   - Secondary metrics: Class-1-specific recall, precision, and F1-score.
 
+![AUC-PR Comparison by Model and Outlier Handling Method](images/aucpr_comparison_by_outlier_method.png)
+
+Evaluation metrics comparison of all baseline models (no outlier handling).
 | Model                  | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
 |------------------------|--------|------------------|----------------------|--------------------|----------|
 | Logistic Regression    | 0.16   | 0.00             | 0.00                 | 0.00               | 0.88     |
@@ -200,7 +203,7 @@ Used `sklearn`, `xgboost`, and `pickle` for model training, evaluation, and savi
 | Random Forest          | 0.60   | 0.53             | 0.60                 | 0.56               | 0.90     |
 | XGBoost                | 0.54   | 0.20             | 0.64                 | 0.30               | 0.89     |
 
-Plotted the precision-recall curves of all baseline models using `matplotlib`.  
+Precision-recall curves of all baseline models (no outlier handling).  
 ![Precision-Recall Curves](images/precision_recall_curves.png)
 
 Identified Random Forest, XGBoost, K-Nearest Neighbors, and Decision Tree as the top performers (highest AUC-PR and class-1-specific recall, precision, and f1-score) for hyperparameter tuning.
