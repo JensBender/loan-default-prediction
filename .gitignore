@@ -5,6 +5,7 @@ data/training_data_preprocessed.csv
 data/validation_data_preprocessed.csv
 data/test_data_preprocessed.csv
 images/header-image-alternative.webp
+models/baseline_models.pkl
 models/*random_search*.pkl
 loan-default-venv
 .ipynb_checkpoints
