@@ -5,7 +5,7 @@
 <img src="images/header-image.webp">
 
 <!-- SHORT SUMMARY  -->
-Loan default prediction powered by machine learning.
+Leveraged machine learning to predict loan defaults from customer application data, helping financial institutions minimize risk and make data-driven lending decisions.
 
 ---
 
