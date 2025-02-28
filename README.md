@@ -193,7 +193,7 @@ Evaluation metrics comparison of all baseline models (no outlier handling).
 | XGBoost                | 0.54   | 0.20             | 0.64                 | 0.30               | 0.89     |
 
 Precision-recall curves of all baseline models (no outlier handling).  
-![Precision-Recall Curves](images/precision_recall_curves.png)
+![Precision-Recall Curves: Baseline Models](images/baseline_precision_recall_curves.png)
 
 Identified Random Forest, XGBoost, K-Nearest Neighbors, and Decision Tree as the top performers (highest AUC-PR and class-1-specific recall, precision, and f1-score) for hyperparameter tuning.
 
