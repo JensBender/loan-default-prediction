@@ -200,7 +200,7 @@ Identified Random Forest, XGBoost, K-Nearest Neighbors, and Decision Tree as the
 ### ⚙️ Hyperparameter Tuning  
 Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`.  
 
-Evaluation metrics comparison of hyperparameter tuned models (no outlier handling).
+Evaluation metrics comparison of hyperparameter-tuned models (no outlier handling).
 | Model                | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
 |----------------------|--------|------------------|----------------------|--------------------|----------|
 | K-Nearest Neighbors | 0.57   | 0.53             | 0.57                 | 0.55               | 0.89     |
@@ -208,6 +208,8 @@ Evaluation metrics comparison of hyperparameter tuned models (no outlier handlin
 | Random Forest       | 0.60   | 0.76             | 0.56                 | 0.64               | 0.90     |
 | XGBoost            | 0.60   | 0.79             | 0.51                 | 0.62               | 0.88     |
 
+Precision-recall curves of hyperparameter-tuned models (no outlier handling).  
+![Precision-Recall Curves: Hyperparameter-Tuned Models](images/tuned_precision_recall_curves.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
