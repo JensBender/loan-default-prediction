@@ -37,6 +37,9 @@ Leveraged machine learning to predict loan defaults from customer application da
       <li><a href="#️-hyperparameter-tuning">Hyperparameter Tuning</a></li>
     </ul>
   </li>
+  <li>
+    <a href="#️-license">License</a>
+  </li>
 </ol>
 
 
@@ -210,6 +213,13 @@ Evaluation metrics comparison of hyperparameter-tuned models (no outlier handlin
 
 Precision-recall curves of hyperparameter-tuned models (no outlier handling).  
 ![Precision-Recall Curves: Hyperparameter-Tuned Models](images/tuned_precision_recall_curves.png)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- LICENSE -->
+## ©️ License
+This project is licensed under the [MIT License](LICENSE).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
