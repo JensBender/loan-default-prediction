@@ -178,7 +178,7 @@ Used `sklearn`, `xgboost`, and `pickle` for model training, evaluation, and savi
   - Primary metric: AUC-PR.
   - Secondary metrics: Class-1-specific recall, precision, and F1-score.
 
-![AUC-PR Comparison by Model and Outlier Handling Method](images/aucpr_comparison_by_outlier_method.png)
+![AUC-PR Comparison by Baseline Model and Outlier Handling Method](images/baseline_aucpr_comparison_by_outlier_method.png)
 
 Evaluation metrics comparison of all baseline models (no outlier handling).
 | Model                  | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
