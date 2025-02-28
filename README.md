@@ -198,7 +198,16 @@ Precision-recall curves of all baseline models (no outlier handling).
 Identified Random Forest, XGBoost, K-Nearest Neighbors, and Decision Tree as the top performers (highest AUC-PR and class-1-specific recall, precision, and f1-score) for hyperparameter tuning.
 
 ### ⚙️ Hyperparameter Tuning  
-Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`.
+Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`.  
+
+Evaluation metrics comparison of hyperparameter tuned models (no outlier handling).
+| Model                | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
+|----------------------|--------|------------------|----------------------|--------------------|----------|
+| K-Nearest Neighbors | 0.57   | 0.53             | 0.57                 | 0.55               | 0.89     |
+| Decision Tree       | 0.56   | 0.00             | 0.00                 | 0.00               | 0.88     |
+| Random Forest       | 0.60   | 0.76             | 0.56                 | 0.64               | 0.90     |
+| XGBoost            | 0.60   | 0.79             | 0.51                 | 0.62               | 0.88     |
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
