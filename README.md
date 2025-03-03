@@ -217,6 +217,11 @@ Evaluation metrics comparison of hyperparameter-tuned models (no outlier handlin
 Precision-recall curves of hyperparameter-tuned models (no outlier handling).  
 ![Precision-Recall Curves: Hyperparameter-Tuned Models](images/tuned_precision_recall_curves.png)
 
+Class-1 metrics by threshold (no outlier handling).
+| Random Forest | XGBoost |
+|--------------|---------|
+| ![Random Forest: Class-1 Metrics by Threshold](images/tuned_randomforest_metrics_by_threshold.png) | ![XGBoost: Class-1 Metrics by Threshold](images/tuned_xgboost_metrics_by_threshold.png) |
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
