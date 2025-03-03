@@ -40,6 +40,9 @@ Leveraged machine learning to predict loan defaults from customer application da
   <li>
     <a href="#️-license">License</a>
   </li>
+  <li>
+    <a href="#-credits">Credits</a>
+  </li>
 </ol>
 
 
@@ -220,6 +223,14 @@ Precision-recall curves of hyperparameter-tuned models (no outlier handling).
 <!-- LICENSE -->
 ## ©️ License
 This project is licensed under the [MIT License](LICENSE).
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- CREDITS -->
+## 👏 Credits
+This project was made possible with the help of the following resources:
+- **Header image**: Generated using the FLUX.1 [dev] image generator via [Hugging Face](https://huggingface.co/spaces/black-forest-labs/FLUX.1-dev) by [Black Forest Labs](https://blackforestlabs.ai/).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
