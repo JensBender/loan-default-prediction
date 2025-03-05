@@ -35,6 +35,7 @@ Leveraged machine learning to predict loan defaults from customer application da
     <ul>
       <li><a href="#️-training-baseline-models">Training Baseline Models</a></li>      
       <li><a href="#️-hyperparameter-tuning">Hyperparameter Tuning</a></li>
+      <li><a href="#-final-model">Final Model</a></li>
     </ul>
   </li>
   <li>
@@ -222,6 +223,17 @@ Class-1 metrics by threshold (no outlier handling).
   <img src="images/tuned_randomforest_metrics_by_threshold.png" width="48%" alt="Random Forest: Class-1 Metrics by Threshold" >
   <img src="images/tuned_xgboost_metrics_by_threshold.png" width="48%" alt="XGBoost: Class-1 Metrics by Threshold">
 </p>
+
+### 🏆 Final Model
+Random Forest with a decision threshold of 0.26.  
+
+Hyperparameter Values:
+- `n_estimators=225`
+- `max_depth=26`
+- `min_samples_split=2`
+- `min_samples_leaf=1`
+- `max_features=0.13`
+- `class_weight="balanced"`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
