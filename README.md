@@ -235,6 +235,9 @@ Hyperparameter Values:
 - `max_features=0.13`
 - `class_weight="balanced"`
 
+**Feature Importance**: The plot highlights the top ten predictors of loan default, with income (0.22) and age (0.20) as the most influential features, followed by state default rate (0.15). Job-related features like experience (0.13), current years in the job (0.12) and job stability (0.05) also play a strong role. 
+![Random Forest: Feature Importance](images/final_rf_feature_importance.png)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
