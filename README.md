@@ -220,8 +220,8 @@ Precision-recall curves of hyperparameter-tuned models (no outlier handling).
 
 Class-1 metrics by threshold (no outlier handling).
 <p align="center">
-  <img src="images/tuned_randomforest_metrics_by_threshold.png" width="48%" alt="Random Forest: Class-1 Metrics by Threshold" >
-  <img src="images/tuned_xgboost_metrics_by_threshold.png" width="48%" alt="XGBoost: Class-1 Metrics by Threshold">
+  <img src="images/tuned_randomforest_metrics_by_threshold.png" width="48%" alt="Tuned Random Forest: Class-1 Metrics by Threshold" >
+  <img src="images/tuned_xgboost_metrics_by_threshold.png" width="48%" alt="Tuned XGBoost: Class-1 Metrics by Threshold">
 </p>
 
 ### 🏆 Final Model
@@ -236,7 +236,7 @@ Hyperparameter Values:
 - `class_weight="balanced"`
 
 **Feature Importance**: The plot highlights the top ten predictors of loan default, with income (0.22) and age (0.20) as the most influential features, followed by state default rate (0.15). Job-related features like experience (0.13), current years in the job (0.12) and job stability (0.05) also play a strong role. 
-![Random Forest: Feature Importance](images/final_rf_feature_importance.png)
+![Final Random Forest: Feature Importance](images/final_rf_feature_importance.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
