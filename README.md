@@ -206,10 +206,12 @@ Decided to proceed without outlier handling, as it did not improve AUC-PR.
 
 Identified Random Forest, XGBoost, K-Nearest Neighbors, and Decision Tree as the top performers (highest AUC-PR and class-1-specific recall, precision, and f1-score) for hyperparameter tuning.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### ⚙️ Hyperparameter Tuning  
 Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`.  
 
-Evaluation metrics comparison of hyperparameter-tuned models (no outlier handling):
+**Comparison table** of evaluation metrics for hyperparameter-tuned models (no outlier handling):
 | Model                | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
 |----------------------|--------|------------------|----------------------|--------------------|----------|
 | K-Nearest Neighbors | 0.57   | 0.53             | 0.57                 | 0.55               | 0.89     |
@@ -225,6 +227,8 @@ Evaluation metrics comparison of hyperparameter-tuned models (no outlier handlin
   <img src="images/rf_metrics_by_threshold_tuned.png" width="48%" alt="Tuned Random Forest: Class-1 Metrics by Threshold" >
   <img src="images/xgb_metrics_by_threshold_tuned.png" width="48%" alt="Tuned XGBoost: Class-1 Metrics by Threshold">
 </p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### 🏆 Final Model
 **Random Forest** with a decision threshold of 0.26 and the following hyperparameters:
