@@ -185,7 +185,7 @@ Used `sklearn`, `xgboost`, and `pickle` for model training, evaluation, and savi
   - Primary metric: AUC-PR.
   - Secondary metrics: Class-1-specific recall, precision, and F1-score.
 
-![AUC-PR Comparison by Baseline Model and Outlier Handling Method](images/baseline_aucpr_comparison_by_outlier_method.png)
+![AUC-PR Comparison by Baseline Model and Outlier Handling Method](images/aucpr_comparison_baseline.png)
 
 Evaluation metrics comparison of all baseline models (no outlier handling).
 | Model                  | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
@@ -200,7 +200,7 @@ Evaluation metrics comparison of all baseline models (no outlier handling).
 | XGBoost                | 0.54   | 0.20             | 0.64                 | 0.30               | 0.89     |
 
 Precision-recall curves of all baseline models (no outlier handling).  
-![Precision-Recall Curves: Baseline Models](images/baseline_precision_recall_curves.png)
+![Precision-Recall Curves: Baseline Models](images/precision_recall_curves_baseline.png)
 
 Identified Random Forest, XGBoost, K-Nearest Neighbors, and Decision Tree as the top performers (highest AUC-PR and class-1-specific recall, precision, and f1-score) for hyperparameter tuning.
 
@@ -216,12 +216,12 @@ Evaluation metrics comparison of hyperparameter-tuned models (no outlier handlin
 | XGBoost            | 0.60   | 0.79             | 0.51                 | 0.62               | 0.88     |
 
 Precision-recall curves of hyperparameter-tuned models (no outlier handling).  
-![Precision-Recall Curves: Hyperparameter-Tuned Models](images/tuned_precision_recall_curves.png)
+![Precision-Recall Curves: Hyperparameter-Tuned Models](images/precision_recall_curves_tuned.png)
 
 Class-1 metrics by threshold (no outlier handling).
 <p align="center">
-  <img src="images/tuned_randomforest_metrics_by_threshold.png" width="48%" alt="Tuned Random Forest: Class-1 Metrics by Threshold" >
-  <img src="images/tuned_xgboost_metrics_by_threshold.png" width="48%" alt="Tuned XGBoost: Class-1 Metrics by Threshold">
+  <img src="images/rf_metrics_by_threshold_tuned.png" width="48%" alt="Tuned Random Forest: Class-1 Metrics by Threshold" >
+  <img src="images/xgb_metrics_by_threshold_tuned.png" width="48%" alt="Tuned XGBoost: Class-1 Metrics by Threshold">
 </p>
 
 ### 🏆 Final Model
@@ -236,7 +236,7 @@ Hyperparameter Values:
 - `class_weight="balanced"`
 
 **Feature Importance**: The plot highlights the top ten predictors of loan default, with income (0.22) and age (0.20) as the most influential features, followed by state default rate (0.15). Job-related features like experience (0.13), current years in the job (0.12) and job stability (0.05) also play a strong role. 
-![Final Random Forest: Feature Importance](images/final_rf_feature_importance.png)
+![Final Random Forest: Feature Importance](images/rf_feature_importance_final.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
