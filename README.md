@@ -242,8 +242,8 @@ Random Forest and XGBoost, with optimized decision thresholds, show similar perf
 - `max_features=0.13`
 - `class_weight="balanced"`
 
-**Feature Importance**:  
-The plot highlights the top ten predictors of loan default, with income (0.22) and age (0.20) as the most influential features, followed by state default rate (0.15). Job-related features like experience (0.13), current years in the job (0.12) and job stability (0.05) also play a strong role. 
+**Feature Importance**  
+The most influential features are income, age, and state default rate, indicating that financial and demographic attributes strongly predict loan defaults. Job-related features like work experience, current years in the job and job stability also play a strong role. Meanwhile, personal factors like marital status and car ownership have minimal influence.
 ![Final Random Forest: Feature Importance](images/rf_feature_importance_final.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
