@@ -226,11 +226,8 @@ Random Forest and XGBoost demonstrate the best AUC-PR.
 
 **Threshold Optimization**  
 Prioritized recall over precision, because missing a defaulter (false negative) is generally more costly than flagging a non-defaulter as risky (false positive). Determined the best threshold that optimizes the F1-score while satisfying a minimum recall of 0.80 and a minimum precision of 0.50. 
-
-<p align="center">
-  <img src="images/rf_metrics_by_threshold_tuned.png" width="48%" alt="Tuned Random Forest: Class-1 Metrics by Threshold" >
-  <img src="images/xgb_metrics_by_threshold_tuned.png" width="48%" alt="Tuned XGBoost: Class-1 Metrics by Threshold">
-</p>
+![Tuned Random Forest: Class-1 Metrics by Threshold](images/rf_metrics_by_threshold_tuned.png)
+![Tuned XGBoost: Class-1 Metrics by Threshold](images/xgb_metrics_by_threshold_tuned.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
