@@ -211,7 +211,7 @@ Identified Random Forest, XGBoost, K-Nearest Neighbors, and Decision Tree as the
 ### ⚙️ Hyperparameter Tuning  
 Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`.  
 
-**Comparison table** of evaluation metrics for hyperparameter-tuned models (no outlier handling):
+**Comparison table** of evaluation metrics for tuned models (no outlier handling):
 | Model                | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
 |----------------------|--------|------------------|----------------------|--------------------|----------|
 | K-Nearest Neighbors | 0.57   | 0.53             | 0.57                 | 0.55               | 0.89     |
@@ -219,10 +219,14 @@ Performed random search with 5-fold cross-validation using `sklearn` `Randomized
 | Random Forest       | 0.60   | 0.76             | 0.56                 | 0.64               | 0.90     |
 | XGBoost            | 0.60   | 0.79             | 0.51                 | 0.62               | 0.88     |
 
-**Precision-recall curves** of hyperparameter-tuned models (no outlier handling):  
+**Precision-recall curves** of tuned models (no outlier handling):  
 ![Precision-Recall Curves: Hyperparameter-Tuned Models](images/precision_recall_curves_tuned.png)
 
-**Class-1 metrics by threshold** (no outlier handling):
+Random Forest and XGBoost demonstrate the best AUC-PR.
+
+**Threshold Optimization**  
+Prioritized recall over precision, because missing a defaulter (false negative) is generally more costly than flagging a non-defaulter as risky (false positive). Determined the best threshold that optimizes the F1-score while satisfying a minimum recall of 0.80 and a minimum precision of 0.50. 
+
 <p align="center">
   <img src="images/rf_metrics_by_threshold_tuned.png" width="48%" alt="Tuned Random Forest: Class-1 Metrics by Threshold" >
   <img src="images/xgb_metrics_by_threshold_tuned.png" width="48%" alt="Tuned XGBoost: Class-1 Metrics by Threshold">
