@@ -229,6 +229,8 @@ Prioritized recall over precision, because missing a defaulter (false negative) 
 ![Tuned Random Forest: Class-1 Metrics by Threshold](images/rf_metrics_by_threshold_tuned.png)
 ![Tuned XGBoost: Class-1 Metrics by Threshold](images/xgb_metrics_by_threshold_tuned.png)
 
+Random Forest and XGBoost, with optimized decision thresholds, show similar performance. Selected Random Forest as the final model, given its interpretability and regulatory compliance advantages in the financial sector. 
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### 🏆 Final Model
