@@ -210,21 +210,19 @@ The top-performing models, namely Random Forest, XGBoost, K-Nearest Neighbors, a
 ### ⚙️ Hyperparameter Tuning  
 Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`.  
 
-**Comparison table** of evaluation metrics for tuned models (no outlier handling):
-| Model                | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
-|----------------------|--------|------------------|----------------------|--------------------|----------|
-| K-Nearest Neighbors | 0.57   | 0.53             | 0.57                 | 0.55               | 0.89     |
-| Decision Tree       | 0.56   | 0.00             | 0.00                 | 0.00               | 0.88     |
-| Random Forest       | 0.60   | 0.76             | 0.56                 | 0.64               | 0.90     |
-| XGBoost            | 0.60   | 0.79             | 0.51                 | 0.62               | 0.88     |
+Comparison Table: Hyperparameter-Tuned Models (No Outlier Handling)
+| Model               | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
+|---------------------|--------|------------------|---------------------|-------------------|----------|
+| K-Nearest Neighbors | 0.59   | 0.54             | 0.59                | 0.56              | 0.89     |
+| Decision Tree       | 0.52   | 0.87             | 0.46                | 0.60              | 0.86     |
+| Random Forest       | 0.62   | 0.77             | 0.57                | 0.65              | 0.90     |
+| XGBoost             | 0.61   | 0.81             | 0.53                | 0.64              | 0.89     |
 
-**Precision-recall curves** of tuned models (no outlier handling):  
+Precision-Recall Curves: Hyperparameter-Tuned Models (No Outlier Handling)  
 ![Precision-Recall Curves: Hyperparameter-Tuned Models](images/precision_recall_curves_tuned.png)
 
-Random Forest and XGBoost demonstrate the best AUC-PR.
-
 **Threshold Optimization**  
-Prioritized recall over precision, because missing a defaulter (false negative) is generally more costly than flagging a non-defaulter as risky (false positive). Determined the best threshold that optimizes the F1-score while satisfying a minimum recall of 0.80 and a minimum precision of 0.50. 
+Prioritized recall over precision, because missing a defaulter (false negative) is generally more costly than flagging a non-defaulter as risky (false positive). Determined the best threshold that optimizes the F1-score while satisfying a minimum recall of 0.80 and a minimum precision of 0.40. 
 ![Tuned Random Forest: Class-1 Metrics by Threshold](images/rf_metrics_by_threshold_tuned.png)
 ![Tuned XGBoost: Class-1 Metrics by Threshold](images/xgb_metrics_by_threshold_tuned.png)
 
