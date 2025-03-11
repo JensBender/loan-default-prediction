@@ -177,7 +177,7 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
 
 
 ## 🧠 Modeling
-Used `sklearn`, `xgboost`, and `pickle` for model training, evaluation, and saving.
+Trained and evaluated multiple models using `sklearn` and `xgboost`, then saved them with `pickle`.
 
 ### 🏗️ Baseline Models  
 - Trained eight baseline models (default hyperparameter values) with four outlier handling methods. 
@@ -187,9 +187,9 @@ Used `sklearn`, `xgboost`, and `pickle` for model training, evaluation, and savi
 
 ![AUC-PR Comparison by Baseline Model and Outlier Handling Method](images/aucpr_comparison_baseline.png)
 
-Decided to proceed without outlier handling, as it did not improve AUC-PR.
+Proceeded without outlier handling, as it did not meaningfully improve AUC-PR.
 
-**Comparison table** of evaluation metrics for all baseline models (no outlier handling):
+Comparison Table: Baseline Models (No Outlier Handling)
 | Model                  | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
 |------------------------|--------|------------------|----------------------|--------------------|----------|
 | Logistic Regression    | 0.16   | 0.00             | 0.00                 | 0.00               | 0.88     |
@@ -201,11 +201,10 @@ Decided to proceed without outlier handling, as it did not improve AUC-PR.
 | Random Forest          | 0.60   | 0.53             | 0.60                 | 0.56               | 0.90     |
 | XGBoost                | 0.54   | 0.20             | 0.64                 | 0.30               | 0.89     |
 
-**Precision-recall curves** of all baseline models (no outlier handling):  
+Precision-Recall Curves: Baseline Models (No Outlier Handling)  
 ![Precision-Recall Curves: Baseline Models](images/precision_recall_curves_baseline.png)
 
-Identified Random Forest, XGBoost, K-Nearest Neighbors, and Decision Tree as the top performers (highest AUC-PR and class-1-specific recall, precision, and f1-score) for hyperparameter tuning.
-
+The top-performing models, namely Random Forest, XGBoost, K-Nearest Neighbors, and Decision Tree were selected for hyperparameter tuning.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### ⚙️ Hyperparameter Tuning  
