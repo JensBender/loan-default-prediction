@@ -218,7 +218,7 @@ Precision-Recall Curves: Hyperparameter-Tuned Models (No Outlier Handling)
 ![Precision-Recall Curves: Hyperparameter-Tuned Models](images/precision_recall_curves_tuned.png)
 
 **Threshold Optimization**  
-Prioritized recall over precision, because missing a defaulter (false negative) is generally more costly than flagging a non-defaulter as risky (false positive). Determined the best threshold that optimizes the F1-score while satisfying a minimum recall of 0.80 and a minimum precision of 0.40. 
+Prioritized recall over precision, because missing a defaulter (false negative) is generally more costly for financial institutions than flagging a non-defaulter as risky (false positive). Determined the best threshold that optimizes the F1-score while satisfying a minimum recall of 0.80 and a minimum precision of 0.40. 
 ![Tuned Random Forest: Class-1 Metrics by Threshold](images/rf_metrics_by_threshold_tuned.png)
 ![Tuned XGBoost: Class-1 Metrics by Threshold](images/xgb_metrics_by_threshold_tuned.png)
 
@@ -227,7 +227,7 @@ Random Forest and XGBoost, with optimized decision thresholds, show similar perf
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### 🏆 Final Model
-**Random Forest** with a decision threshold of 0.26 and the following hyperparameters:
+**Random Forest** with a decision threshold of 0.29 and the following hyperparameters:
 - `n_estimators=225`
 - `max_depth=26`
 - `min_samples_split=2`
