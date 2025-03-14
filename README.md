@@ -235,6 +235,11 @@ Random Forest and XGBoost, with optimized decision thresholds, show similar perf
 - `max_features=0.13`
 - `class_weight="balanced"`
 
+**Confusion Matrix**
+| Training              | Validation            | Test                  |
+|-----------------------|-----------------------|-----------------------|
+| ![Confusion Matrix: Training](images/rf_confusion_matrix_train.png) | ![Confusion Matrix: Validation](images/rf_confusion_matrix_val.png) | ![Confusion Matrix: Test](images/rf_confusion_matrix_test.png) |
+
 **Feature Importance**  
 The most influential features are income, age, and state default rate, indicating that financial and demographic attributes strongly predict loan defaults. Job-related features like work experience, current years in the job and job stability also play a strong role. Meanwhile, personal factors like marital status and car ownership have minimal influence.
 ![Final Random Forest: Feature Importance](images/rf_feature_importance_final.png)
