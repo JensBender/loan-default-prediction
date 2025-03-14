@@ -85,15 +85,11 @@ This project enables financial institutions to reduce loan default rates and mak
 
 <!-- DATA -->
 ## 🗂️ Data
-The dataset contains information provided by customers of a financial institution during the loan application process. It is sourced from the "Loan Prediction Based on Customer Behavior" dataset by Subham Jain, available on [Kaggle](https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior). The dataset consists of three `.csv` files:
-1. `Training Data.csv`: Contains the features, target variable (`Risk Flag`), and `ID` column from the training data. 
-2. `Test Data.csv`: Contains the features and `ID` column from the test data.
-3. `Sample Prediction Dataset.csv`: Contains the target variable (`Risk Flag`) and `ID` column from the test data. 
+The dataset contains information provided by customers of a financial institution during the loan application process. It is sourced from the "Loan Prediction Based on Customer Behavior" dataset by Subham Jain, available on [Kaggle](https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior). Stored in `Training Data.csv`, it contains the features, target variable (`Risk Flag`), and `ID` column. 
 
 Dataset Statistics:
-- Training set size: 252,000 records 
-- Test set size: 28,000 records 
-- Target variable: Risk flag (training: 12.3% defaults, test: 12.8% defaults)
+- Dataset size: 252,000 records 
+- Target variable: Risk flag (12.3% defaults)
 - Features: 11 
   - Demographic: Age, married, profession
   - Financial: Income, house ownership, car ownership
@@ -102,7 +98,7 @@ Dataset Statistics:
 
 Data Overview Table:
 
-| Column | Description | Storage Type | Semantic Type | Theoretical Range | Training Data Range |
+| Column | Description | Storage Type | Semantic Type | Theoretical Range | Observed Range |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | Risk Flag | Defaulted on loan (0: No, 1: Yes) | Integer | Categorical (Binary) | [0, 1] | [0, 1] |
 | Income | Income of the applicant | Integer | Numerical | [0, ∞] | [10K, 10M] |
@@ -117,7 +113,7 @@ Data Overview Table:
 | City | City of residence | String | Categorical (Nominal) | Any city [e.g., "Mumbai", "Bangalore"] | 317 unique cities |
 | State | State of residence | String | Categorical (Nominal) | Any state [e.g., "Maharashtra", "Tamil_Nadu"] | 29 unique states |
 
-Example Training Data:
+Example Data:
 
 | Risk Flag | Income    | Age | Experience | Profession         | Married | House Ownership | Car Ownership | Current Job Years | Current House Years | City      | State         |
 | :-------- | :-------- | :-- | :--------- | :----------------- | :------ | :-------------- | :------------ | :---------------- | :------------------ | :-------- | :------------ |
@@ -127,12 +123,12 @@ Example Training Data:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+
 <!-- DATA PREPROCESSING -->
 ## 🧹 Data Preprocessing
 Used `pandas` and `sklearn` for data loading, cleaning, transformation, and saving.
-- **Loaded data** from three .csv files using `pandas` `read_csv`.
+- **Loaded data** from .csv file using `pandas` `read_csv`.
 - **Standardized column names and labels** to `snake_case` using `pandas` string methods and `apply` with custom functions.
-- **Merged datasets** using `pandas` `merge`.
 - **Handled duplicates**: No duplicate rows identified based on the ID column or all columns.
 - **Handled data types**: Converted string columns with two unique categories to boolean columns using `pandas` `map`.
 - **Train-validation-test split**: Split data into training (80%), validation (10%), and test (10%) sets using `sklearn` `train_test_split`.
