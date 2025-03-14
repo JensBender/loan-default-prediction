@@ -239,6 +239,17 @@ Random Forest and XGBoost, with optimized decision thresholds, show similar perf
 The most influential features are income, age, and state default rate, indicating that financial and demographic attributes strongly predict loan defaults. Job-related features like work experience, current years in the job and job stability also play a strong role. Meanwhile, personal factors like marital status and car ownership have minimal influence.
 ![Final Random Forest: Feature Importance](images/rf_feature_importance_final.png)
 
+**Model Prediction Examples**  
+This table illustrates model performance on test data by highlighting best examples (correct, high confidence), worst examples (incorrect, high confidence), and typical examples (average confidence).
+| Example | Income | Age | State Default Rate | Experience | Current Job Yrs | Actual Default | Predicted Default | Confidence | Misclassification |
+|---------|-----------|---- |------------|------------|----------|----------|----------|------------|------------|
+| Best    | 495,619   | 26  | 12.8%      | 1          | 1        | Yes      | Yes      | 99%        | ✅ No     |
+| Best    | 2,901,323 | 56  | 13.7%      | 2          | 2        | No       | No       | 100%       | ✅ No     |
+| Worst   | 8,290,834 | 42  | 12.8%      | 3          | 3        | Yes      | No       | 95%        | ❌ Yes    |
+| Worst   | 7,644,982 | 24  | 12.2%      | 1          | 1        | No       | Yes      | 98%        | ❌ Yes    |
+| Typical | 4,570,845 | 47  | 15.5%      | 3          | 3        | Yes      | Yes      | 94%        | ✅ No     |
+| Typical | 8,391,288 | 24  | 11.7%      | 4          | 4        | No       | No       | 94%        | ✅ No     |
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
