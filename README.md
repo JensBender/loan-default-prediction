@@ -235,6 +235,15 @@ Random Forest and XGBoost, with optimized decision thresholds, show similar perf
 - `max_features=0.13`
 - `class_weight="balanced"`
 
+**Classification Report**
+| Metric          | Precision | Recall | F1-score | Support |
+|-----------------|-----------|--------|----------|---------|
+| **Non-Defaulter** | 0.97      | 0.90   | 0.93     | 22,122  |
+| **Defaulter**     | 0.51      | 0.79   | 0.62     | 3,078   |
+| **Accuracy**      |           |        | 0.88     | 25,200  |
+| **Macro Avg**     | 0.74      | 0.84   | 0.78     | 25,200  |
+| **Weighted Avg**  | 0.91      | 0.88   | 0.89     | 25,200  |
+
 **Confusion Matrix**
 <table style="width: 100%; border-collapse: collapse;">
   <tr>
