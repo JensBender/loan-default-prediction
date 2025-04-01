@@ -172,10 +172,10 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-## 🧠 Modeling
+## 🏗️ Modeling
 Trained and evaluated multiple models using `sklearn` and `xgboost`, then saved them with `pickle`.
 
-### 🏗️ Baseline Models  
+### 🧱 Baseline Models  
 - Trained eight baseline models (default hyperparameter values) with four outlier handling methods. 
 - Evaluated model performance on the validation data: 
   - Primary metric: AUC-PR.
