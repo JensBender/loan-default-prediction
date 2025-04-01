@@ -173,12 +173,12 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
 
 
 ## 🏗️ Modeling
-Trained and evaluated multiple models using `sklearn` and `xgboost`, then saved them with `pickle`.
+Trained and evaluated multiple models using `sklearn` and `xgboost`.
 
 ### 🧱 Baseline Models  
 - Trained eight baseline models (default hyperparameter values) with four outlier handling methods. 
 - Evaluated model performance on the validation data: 
-  - Primary metric: AUC-PR.
+  - Primary metric: Area Under the Precision-Recall Curve (AUC-PR), as it suits class imbalance (12.3% defaults) with a focus on preventing defaults.
   - Secondary metrics: Class-1-specific recall, precision, and F1-score.
 
 ![AUC-PR Comparison by Baseline Model and Outlier Handling Method](images/aucpr_comparison_baseline.png)
