@@ -185,20 +185,7 @@ Trained and evaluated multiple models using `sklearn` and `xgboost`.
   - Secondary metrics: Class-1-specific recall, precision, and F1-score.
 
 ![AUC-PR Comparison by Baseline Model and Outlier Handling Method](images/aucpr_comparison_baseline.png)
-
 Proceeded without outlier handling, as it did not meaningfully improve AUC-PR.
-
-Comparison Table: Baseline Models (No Outlier Handling)
-| Model                  | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
-|------------------------|--------|------------------|----------------------|--------------------|----------|
-| Logistic Regression    | 0.16   | 0.00             | 0.00                 | 0.00               | 0.88     |
-| Elastic Net            | 0.16   | 0.00             | 0.00                 | 0.00               | 0.88     |
-| K-Nearest Neighbors    | 0.53   | 0.50             | 0.56                 | 0.53               | 0.89     |
-| Support Vector Machine | 0.13   | 0.28             | 0.13                 | 0.18               | 0.67     |
-| Neural Network         | 0.32   | 0.10             | 0.51                 | 0.17               | 0.88     |
-| Decision Tree          | 0.46   | 0.57             | 0.52                 | 0.55               | 0.88     |
-| Random Forest          | 0.60   | 0.53             | 0.60                 | 0.56               | 0.90     |
-| XGBoost                | 0.54   | 0.20             | 0.64                 | 0.30               | 0.89     |
 
 Precision-Recall Curves: Baseline Models (No Outlier Handling)  
 ![Precision-Recall Curves: Baseline Models](images/precision_recall_curves_baseline.png)
@@ -208,14 +195,6 @@ The top-performing models, namely Random Forest, XGBoost, K-Nearest Neighbors, a
 
 ### ⚙️ Hyperparameter Tuning  
 Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`.  
-
-Comparison Table: Hyperparameter-Tuned Models (No Outlier Handling)
-| Model               | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
-|---------------------|--------|------------------|---------------------|-------------------|----------|
-| K-Nearest Neighbors | 0.59   | 0.54             | 0.59                | 0.56              | 0.89     |
-| Decision Tree       | 0.52   | 0.87             | 0.46                | 0.60              | 0.86     |
-| Random Forest       | 0.62   | 0.77             | 0.57                | 0.65              | 0.90     |
-| XGBoost             | 0.61   | 0.81             | 0.53                | 0.64              | 0.89     |
 
 Precision-Recall Curves: Hyperparameter-Tuned Models (No Outlier Handling)  
 ![Precision-Recall Curves: Hyperparameter-Tuned Models](images/precision_recall_curves_tuned.png)
@@ -275,7 +254,6 @@ Note: The metrics above are calculated on the test dataset.
   </tr>
 </table>
 
-
 **Feature Importance**  
 The most influential features are income, age, and state default rate, indicating that financial and demographic attributes strongly predict loan defaults. Job-related features like work experience, current years in the job and job stability also play a strong role. Meanwhile, personal factors like marital status and car ownership have minimal influence.
 ![Final Random Forest: Feature Importance](images/rf_feature_importance_final.png)
@@ -311,7 +289,25 @@ This project was made possible with the help of the following resources:
 
 <!-- APPENDIX -->
 ## 📎 Appendix
+Comparison Table: Baseline Models (No Outlier Handling)
+| Model                  | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
+|------------------------|--------|------------------|----------------------|--------------------|----------|
+| Logistic Regression    | 0.16   | 0.00             | 0.00                 | 0.00               | 0.88     |
+| Elastic Net            | 0.16   | 0.00             | 0.00                 | 0.00               | 0.88     |
+| K-Nearest Neighbors    | 0.53   | 0.50             | 0.56                 | 0.53               | 0.89     |
+| Support Vector Machine | 0.13   | 0.28             | 0.13                 | 0.18               | 0.67     |
+| Neural Network         | 0.32   | 0.10             | 0.51                 | 0.17               | 0.88     |
+| Decision Tree          | 0.46   | 0.57             | 0.52                 | 0.55               | 0.88     |
+| Random Forest          | 0.60   | 0.53             | 0.60                 | 0.56               | 0.90     |
+| XGBoost                | 0.54   | 0.20             | 0.64                 | 0.30               | 0.89     |
 
+Comparison Table: Hyperparameter-Tuned Models (No Outlier Handling)
+| Model               | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
+|---------------------|--------|------------------|---------------------|-------------------|----------|
+| K-Nearest Neighbors | 0.59   | 0.54             | 0.59                | 0.56              | 0.89     |
+| Decision Tree       | 0.52   | 0.87             | 0.46                | 0.60              | 0.86     |
+| Random Forest       | 0.62   | 0.77             | 0.57                | 0.65              | 0.90     |
+| XGBoost             | 0.61   | 0.81             | 0.53                | 0.64              | 0.89     |
 
 <!-- MARKDOWN LINKS -->
 [Python-badge]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
