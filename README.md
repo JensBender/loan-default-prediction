@@ -301,13 +301,22 @@ Comparison Table: Baseline Models (No Outlier Handling)
 | Random Forest          | 0.60   | 0.53             | 0.60                 | 0.56               | 0.90     |
 | XGBoost                | 0.54   | 0.20             | 0.64                 | 0.30               | 0.89     |
 
-Comparison Table: Hyperparameter-Tuned Models (No Outlier Handling)
+Comparison Table: Hyperparameter-Tuned Models with Default Thresholds (No Outlier Handling)
 | Model               | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
 |---------------------|--------|------------------|---------------------|-------------------|----------|
 | K-Nearest Neighbors | 0.59   | 0.54             | 0.59                | 0.56              | 0.89     |
 | Decision Tree       | 0.52   | 0.87             | 0.46                | 0.60              | 0.86     |
 | Random Forest       | 0.62   | 0.77             | 0.57                | 0.65              | 0.90     |
 | XGBoost             | 0.61   | 0.81             | 0.53                | 0.64              | 0.89     |
+
+Comparison Table: Hyperparameter-Tuned Models with Optimized Thresholds (No Outlier Handling)
+| Model               | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
+|---------------------|--------|------------------|---------------------|-------------------|----------|
+| K-Nearest Neighbors | 0.59   | 0.81             | 0.52                | 0.63              | 0.88     |
+| Decision Tree       | 0.52   | 0.81             | 0.49                | 0.61              | 0.87     |
+| Random Forest       | 0.62   | 0.80             | 0.54                | 0.64              | 0.89     |
+| XGBoost             | 0.61   | 0.80             | 0.54                | 0.64              | 0.89     |
+
 
 <!-- MARKDOWN LINKS -->
 [Python-badge]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
