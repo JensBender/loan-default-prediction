@@ -189,10 +189,8 @@ Trained and evaluated multiple models using `sklearn` and `xgboost`.
 ![AUC-PR Comparison by Baseline Model and Outlier Handling Method](images/aucpr_comparison_baseline.png)
 Proceeded without outlier handling, as it did not meaningfully improve AUC-PR.
 
-Precision-Recall Curves: Baseline Models (No Outlier Handling)  
-![Precision-Recall Curves: Baseline Models](images/precision_recall_curves_baseline.png)
-
-The top-performing models, namely Random Forest, XGBoost, K-Nearest Neighbors, and Decision Tree were selected for hyperparameter tuning.
+![Precision-Recall Curves: Baseline Models (No Outlier Handling)](images/precision_recall_curves_baseline.png)
+The top-performing models were selected for hyperparameter tuning: Random Forest (AUC-PR: 0.62), XGBoost (0.56), K-Nearest Neighbors (0.56), and Decision Tree (0.47).
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### ⚙️ Hyperparameter Tuning  
