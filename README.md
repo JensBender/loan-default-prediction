@@ -191,12 +191,11 @@ Proceeded without outlier handling, as it did not meaningfully improve AUC-PR.
 
 ![Precision-Recall Curves: Baseline Models (No Outlier Handling)](images/precision_recall_curves_baseline.png)
 The top-performing models were selected for hyperparameter tuning: Random Forest (AUC-PR: 0.62), XGBoost (0.56), K-Nearest Neighbors (0.56), and Decision Tree (0.47).
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### ⚙️ Hyperparameter Tuning  
-Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`.  
-
-Precision-Recall Curves: Hyperparameter-Tuned Models (No Outlier Handling)  
+Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`. Evaluated the best-performing model from each algorithm using precision-recall curves on the validation data and optimized decision thresholds.  
 ![Precision-Recall Curves: Hyperparameter-Tuned Models](images/precision_recall_curves_tuned.png)
 
 **Threshold Optimization**  
