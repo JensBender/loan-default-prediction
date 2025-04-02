@@ -72,7 +72,10 @@ Predicting loan defaults is a challenging task due to the multitude of influenci
 
 **Objectives**  
 - Develop a machine learning model to predict loan defaults using customer data from loan applications.
-- Compare multiple models (e.g., Logistic Regression, Random Forest, XGBoost) using a suitable evaluation metric (such as AUC-PR).
+- Compare multiple models (e.g., Logistic Regression, Random Forest, XGBoost).
+  - Primary evaluation metric: Area Under the Precision-Recall Curve (AUC-PR), as it suits class imbalance (12.3% defaults) with a focus on preventing defaults.
+  - Secondary evaluation metrics: Class-1-specific recall, precision, and F1-score.
+  - Success criteria: Minimum class-1 recall of 0.75 and class-1 precision of 0.50 on the test data.
 - Identify key factors influencing loan default risk through feature importance analysis.
 
 **Value Proposition**  
@@ -179,10 +182,9 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
 Trained and evaluated multiple models using `sklearn` and `xgboost`.
 
 ### 🧱 Baseline Models  
-- Trained eight baseline models (default hyperparameter values) with four outlier handling methods. 
-- Evaluated model performance on the validation data: 
-  - Primary metric: Area Under the Precision-Recall Curve (AUC-PR), as it suits class imbalance (12.3% defaults) with a focus on preventing defaults.
-  - Secondary metrics: Class-1-specific recall, precision, and F1-score.
+- Trained eight baseline models with default hyperparameter values.
+- Trained each model with four outlier handling methods. 
+- Evaluated model performance on the validation data using AUC-PR (primary metric), class-1 recall, precision, and F1-score (secondary metrics), and precision-recall curves. 
 
 ![AUC-PR Comparison by Baseline Model and Outlier Handling Method](images/aucpr_comparison_baseline.png)
 Proceeded without outlier handling, as it did not meaningfully improve AUC-PR.
