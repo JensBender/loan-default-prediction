@@ -321,6 +321,19 @@ This project was made possible with the help of the following resources:
 | Random Forest       | 0.62   | 0.80             | 0.54                | 0.64              | 0.89     |
 | XGBoost             | 0.61   | 0.80             | 0.54                | 0.64              | 0.89     |
 
+### Threshold Optimization
+**Random Forest**
+![Tuned Random Forest: Class-1 Metrics by Threshold](images/rf_metrics_by_threshold_tuned.png)
+
+**XGBoost**
+![Tuned XGBoost: Class-1 Metrics by Threshold](images/xgb_metrics_by_threshold_tuned.png)
+
+**Decision Tree**
+![Tuned Decision Tree: Class-1 Metrics by Threshold](images/tree_metrics_by_threshold_tuned.png)
+
+**K-Nearest Neighbors**
+![Tuned KNN: Class-1 Metrics by Threshold](images/knn_metrics_by_threshold_tuned.png)
+
 
 <!-- MARKDOWN LINKS -->
 [Python-badge]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
