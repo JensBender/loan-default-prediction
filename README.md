@@ -46,6 +46,10 @@ Leveraged machine learning to predict loan defaults from customer application da
   </li>
   <li>
     <a href="#-appendix">Appendix</a>
+    <ul>
+      <li><a href="#comparison-tables">Comparison Tables</a></li>      
+      <li><a href="#threshold-optimization">Threshold Optimization</a></li>
+    </ul>
   </li>
 </ol>
 
@@ -199,7 +203,7 @@ Performed random search with 5-fold cross-validation using `sklearn` `Randomized
 ![Precision-Recall Curves: Hyperparameter-Tuned Models](images/precision_recall_curves_tuned.png)
 
 **Threshold Optimization**  
-The optimal decision threshold balances recall and precision to align with business requirements. In loan default prediction, recall is typically more important than precision because missing a defaulter (false negative) is generally more costly than flagging a non-defaulter as risky (false positive). Determined the optimal threshold that maximizes the F1-score while satisfying a minimum recall of 0.80 and a minimum precision of 0.40.
+Optimizing the decision threshold balances recall and precision based on business needs. For loan defaults, recall (finding actual defaulters) is often prioritized because missing a defaulter (a false negative) is typically more costly than flagging a non-defaulter as risky (a false positive). Determined the optimal thresholds that maximize the F1-score while ensuring recall ≥ 0.80 and precision ≥ 0.40. The plot below shows Random Forest optimization. For all model plots, see [Appendix: Threshold Optimization](#threshold-optimization).
 ![Tuned Random Forest: Class-1 Metrics by Threshold](images/rf_metrics_by_threshold_tuned.png)
 
 **Model Selection**  
