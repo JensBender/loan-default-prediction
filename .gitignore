@@ -9,8 +9,6 @@ images/accuracy_comparison_baseline.png
 images/f1_c1_comparison_baseline.png
 images/precision_c1_comparison_baseline.png
 images/recall_c1_comparison_baseline.png
-images/knn_metrics_by_threshold_tuned.png
-images/tree_metrics_by_threshold_tuned.png
 models/
 models/baseline_models.pkl
 models/tuned_models.pkl
