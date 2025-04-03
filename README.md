@@ -207,11 +207,10 @@ Optimizing the decision threshold balances recall and precision based on busines
 ![Tuned Random Forest: Class-1 Metrics by Threshold](images/rf_metrics_by_threshold_tuned.png)
 
 **Model Selection**  
-Selected Random Forest for its superior combination of good performance, low overfitting, and interpretability.
+Chose Random Forest for its superior combination of good performance, low overfitting, and better interpretability.
 - Performance: Matched XGBoost for the highest AUC-PR (0.62) and F1-score (0.64) while meeting minimum recall (0.80) and precision (0.54 vs. min. 0.40).  
 - Overfitting: Lowest AUC-PR difference between training and validation (0.06) compared to XGBoost (0.13), Decision Tree (0.13), and KNN (0.26).  
 - Interpretability: Higher degree of interpretability than XGBoost, crucial for transparency and regulatory compliance in finance.  
-
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -337,6 +336,8 @@ This project was made possible with the help of the following resources:
 
 **K-Nearest Neighbors**
 ![Tuned KNN: Class-1 Metrics by Threshold](images/knn_metrics_by_threshold_tuned.png)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- MARKDOWN LINKS -->
