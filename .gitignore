@@ -9,6 +9,8 @@ images/accuracy_comparison_baseline.png
 images/f1_c1_comparison_baseline.png
 images/precision_c1_comparison_baseline.png
 images/recall_c1_comparison_baseline.png
+images/rf_confusion_matrix_train.png
+images/rf_confusion_matrix_val.png
 models/
 models/baseline_models.pkl
 models/tuned_models.pkl
