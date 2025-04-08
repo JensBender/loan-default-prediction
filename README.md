@@ -252,7 +252,7 @@ Classification Report (Test)
 | Weighted Avg  | 0.91      | 0.88   | 0.89     | 25200   |
 
 Confusion Matrix (Test)  
-<img src="images/rf_confusion_matrix_test.png" width="50%" />
+<img src="images/rf_confusion_matrix_test.png" width="60%" />
 
 **Feature Importance**  
 The most influential features are income, age, and state default rate, indicating that financial and demographic attributes strongly predict loan defaults. Job-related features like work experience, current years in the job and job stability also play a strong role. Meanwhile, personal factors like marital status and car ownership have minimal influence.
