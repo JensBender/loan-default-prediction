@@ -206,6 +206,15 @@ Performed random search with 5-fold cross-validation using `sklearn` `Randomized
 Optimizing the decision threshold balances recall and precision based on business needs. For loan defaults, recall (finding actual defaulters) is often prioritized because missing a defaulter (a false negative) is typically more costly than flagging a non-defaulter as risky (a false positive). Determined the optimal thresholds that maximize the F1-score while ensuring recall ≥ 0.80 and precision ≥ 0.40. The plot below shows threshold optimization for Random Forest. For all model plots, see [Appendix: Threshold Optimization](#threshold-optimization).
 ![Tuned Random Forest: Class-1 Metrics by Threshold](images/rf_metrics_by_threshold_tuned.png)
 
+Performance of hyperparameter-tuned models with optimized decision thresholds on the validation data.
+| Model               | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
+|---------------------|--------|------------------|---------------------|-------------------|----------|
+| K-Nearest Neighbors | 0.59   | 0.81             | 0.52                | 0.63              | 0.88     |
+| Decision Tree       | 0.52   | 0.81             | 0.49                | 0.61              | 0.87     |
+| Random Forest       | 0.62   | 0.80             | 0.54                | 0.64              | 0.89     |
+| XGBoost             | 0.61   | 0.80             | 0.54                | 0.64              | 0.89     |
+
+
 **Overfitting**  
 ![Tuned Threshold Models Overfitting: Train vs. Validation AUC-PR](images/overfitting_tuned_thresholds.png)
 
