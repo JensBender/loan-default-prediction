@@ -203,7 +203,7 @@ Performed random search with 5-fold cross-validation using `sklearn` `Randomized
 ![Precision-Recall Curves: Hyperparameter-Tuned Models](images/precision_recall_curves_tuned.png)
 
 **Threshold Optimization**  
-Optimizing the decision threshold balances recall and precision based on business needs. For loan defaults, recall (finding actual defaulters) is often prioritized because missing a defaulter (a false negative) is typically more costly than flagging a non-defaulter as risky (a false positive). Determined the optimal thresholds that maximize the F1-score while ensuring recall ≥ 0.80 and precision ≥ 0.40. The plot below shows Random Forest optimization. For all model plots, see [Appendix: Threshold Optimization](#threshold-optimization).
+Optimizing the decision threshold balances recall and precision based on business needs. For loan defaults, recall (finding actual defaulters) is often prioritized because missing a defaulter (a false negative) is typically more costly than flagging a non-defaulter as risky (a false positive). Determined the optimal thresholds that maximize the F1-score while ensuring recall ≥ 0.80 and precision ≥ 0.40. The plot below shows threshold optimization for Random Forest. For all model plots, see [Appendix: Threshold Optimization](#threshold-optimization).
 ![Tuned Random Forest: Class-1 Metrics by Threshold](images/rf_metrics_by_threshold_tuned.png)
 
 **Overfitting**  
@@ -226,7 +226,7 @@ Chose Random Forest for its superior combination of good performance, low overfi
 - `max_features=0.13`
 - `class_weight="balanced"`
 
-**Classification Report**
+**Classification Report (Test Data)**
 |               | Precision | Recall | F1-Score | Samples |
 |---------------|-----------|--------|----------|---------|
 | Non-Defaulter | 0.97      | 0.90   | 0.93     | 22122   |
@@ -235,33 +235,12 @@ Chose Random Forest for its superior combination of good performance, low overfi
 | Macro Avg     | 0.74      | 0.84   | 0.78     | 25200   |
 | Weighted Avg  | 0.91      | 0.88   | 0.89     | 25200   |
 
-Note: The metrics above are calculated on the test dataset.
-
 **Confusion Matrix**
-<table style="width: 100%; border-collapse: collapse;">
-  <tr>
-    <th style="padding: 2;">Training</th>
-    <th style="padding: 2;">Validation</th>
-    <th style="padding: 2;">Test</th>
-  </tr>
-  <tr>
-    <td style="padding: 2; text-align: center;">
-      <div style="width: 100%; max-width:300px; margin: auto;">
-        <img src="images/rf_confusion_matrix_train.png" style="width: 100%; height: auto; object-fit: contain;">
-      </div>
-    </td>
-    <td style="padding: 2; text-align: center;">
-      <div style="width: 100%; max-width:300px; margin: auto;">
-        <img src="images/rf_confusion_matrix_val.png" style="width: 100%; height: auto; object-fit: contain;">
-      </div>
-    </td>
-    <td style="padding: 2; text-align: center;">
-      <div style="width: 100%; max-width:300px; margin: auto;">
-        <img src="images/rf_confusion_matrix_test.png" style="width: 100%; height: auto; object-fit: contain;">
-      </div>
-    </td>
-  </tr>
-</table>
+<p>
+  <img src="images/rf_confusion_matrix_train.png" width="32%" />
+  <img src="images/rf_confusion_matrix_val.png" width="32%" />
+  <img src="images/rf_confusion_matrix_test.png" width="32%" />
+</p>
 
 **Feature Importance**  
 The most influential features are income, age, and state default rate, indicating that financial and demographic attributes strongly predict loan defaults. Job-related features like work experience, current years in the job and job stability also play a strong role. Meanwhile, personal factors like marital status and car ownership have minimal influence.
