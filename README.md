@@ -183,7 +183,7 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
 
 
 ## 🏗️ Modeling
-Trained, optimized, and evaluated multiple models using `sklearn` and `xgboost`.
+Trained, evaluated, and optimized multiple models using `sklearn` and `xgboost`.
 
 ### 🧱 Baseline Models  
 - Trained eight baseline models with default hyperparameter values.
@@ -199,11 +199,11 @@ The top-performing models were selected for hyperparameter tuning: Random Forest
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### ⚙️ Hyperparameter Tuning  
-Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`. Evaluated the best-performing model from each algorithm using precision-recall curves on the validation data and optimized decision thresholds.  
+Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`. Evaluated the best-performing model from each algorithm using precision-recall curves on the validation data.  
 ![Precision-Recall Curves: Hyperparameter-Tuned Models](images/precision_recall_curves_tuned.png)
 
 **Threshold Optimization**  
-Optimizing the decision threshold balances recall and precision based on business needs. For loan defaults, recall (finding actual defaulters) is often prioritized because missing a defaulter (a false negative) is typically more costly than flagging a non-defaulter as risky (a false positive). Determined the optimal thresholds that maximize the F1-score while ensuring recall ≥ 0.80 and precision ≥ 0.40. The plot below shows threshold optimization for Random Forest. For all model plots, see [Appendix: Threshold Optimization](#threshold-optimization).
+Optimized decision thresholds of all tuned models to balance recall and precision based on business needs. For loan defaults, recall is often prioritized because missing a defaulter (a false negative) is costly. Determined the optimal thresholds by maximizing the F1-score while ensuring recall ≥ 0.80 and precision ≥ 0.40. The plot below shows threshold optimization for Random Forest. For all model plots, see [Appendix: Threshold Optimization](#threshold-optimization).
 ![Tuned Random Forest: Class-1 Metrics by Threshold](images/rf_metrics_by_threshold_tuned.png)
 
 Compared performance of hyperparameter-tuned models with optimized decision thresholds on the validation data.
@@ -219,8 +219,8 @@ Diagnosed overfitting of tuned models with optimized thresholds by comparing tra
 ![Tuned Threshold Models Overfitting: Train vs. Validation AUC-PR](images/overfitting_tuned_thresholds.png)
 
 **Model Selection**  
-Chose Random Forest for its superior combination of good performance, low overfitting, and better interpretability.
-- Performance: Matched XGBoost for the highest AUC-PR (0.62) and F1-score (0.64) while meeting minimum recall (0.80) and precision (0.54 vs. min. 0.40).  
+Chose Random Forest for its good performance, low overfitting, and better interpretability.
+- Performance: Highest validation AUC-PR (0.62 vs. 0.61 for XGBoost) with a matching F1-score (0.64), while meeting minimum recall (0.80) and precision (0.54 vs. min. 0.40).  
 - Overfitting: Lowest AUC-PR difference between training and validation (0.06) compared to XGBoost (0.13), Decision Tree (0.13), and KNN (0.26).  
 - Interpretability: Higher degree of interpretability than XGBoost, crucial for transparency and regulatory compliance in finance.  
 
