@@ -242,7 +242,7 @@ Compared final model evaluation metrics between training, validation, and test d
 | Validation | 0.62   | 0.80               | 0.54                | 0.64               | 0.89     |
 | Test       | 0.59   | 0.79               | 0.51                | 0.62               | 0.88     |
 
-**Classification Report (Test Data)**
+Classification Report (Test) 
 |               | Precision | Recall | F1-Score | Samples |
 |---------------|-----------|--------|----------|---------|
 | Non-Defaulter | 0.97      | 0.90   | 0.93     | 22122   |
@@ -251,12 +251,8 @@ Compared final model evaluation metrics between training, validation, and test d
 | Macro Avg     | 0.74      | 0.84   | 0.78     | 25200   |
 | Weighted Avg  | 0.91      | 0.88   | 0.89     | 25200   |
 
-**Confusion Matrix**
-<p>
-  <img src="images/rf_confusion_matrix_train.png" width="32%" />
-  <img src="images/rf_confusion_matrix_val.png" width="32%" />
-  <img src="images/rf_confusion_matrix_test.png" width="32%" />
-</p>
+Confusion Matrix (Test)  
+<img src="images/rf_confusion_matrix_test.png" width="50%" />
 
 **Feature Importance**  
 The most influential features are income, age, and state default rate, indicating that financial and demographic attributes strongly predict loan defaults. Job-related features like work experience, current years in the job and job stability also play a strong role. Meanwhile, personal factors like marital status and car ownership have minimal influence.
