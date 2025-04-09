@@ -257,7 +257,7 @@ The most influential features were income, age, and state default rate, indicati
 ![Final Random Forest: Feature Importance](images/rf_feature_importance_final.png)
 
 **Model Prediction Examples**  
-This table illustrates model performance on test data by highlighting best examples (correct, high confidence), worst examples (incorrect, high confidence), and typical examples (average confidence).
+The table below illustrates model performance on test data by highlighting best examples (correct, high confidence), worst examples (incorrect, high confidence), and typical examples (average confidence). The model demonstrated reliable predictions on typical cases but displayed problematic overconfidence on misclassified edge cases.
 | Example | Income | Age | State Default Rate | Experience | Current Job Yrs | Actual Default | Predicted Default | Confidence | Misclassification |
 |---------|-----------|---- |------------|------------|----------|----------|----------|------------|------------|
 | Best    | 495,619   | 26  | 12.8%      | 1          | 1        | Yes      | Yes      | 99%        | ✅ No     |
