@@ -215,7 +215,7 @@ Compared performance of hyperparameter-tuned models with optimized decision thre
 | XGBoost             | 0.61   | 0.80             | 0.54                | 0.64              | 0.89     |
 
 Diagnosed overfitting of optimized threshold models by comparing training and validation performance. Random Forest showed the lowest AUC-PR difference (0.06) compared to XGBoost (0.13), Decision Tree (0.13), and KNN (0.26).
-<img src="images/overfitting_tuned_thresholds.png" alt="Tuned Threshold Models Overfitting: Train vs. Validation AUC-PR" style="max-width: 600px; width: 100%;">
+<img src="images/overfitting_tuned_thresholds.png" alt="Tuned Threshold Models Overfitting: Train vs. Validation AUC-PR" width="600">
 
 **Model Selection**: Random Forest for its good performance, low overfitting, and interpretability.
 - Performance: Highest AUC-PR (0.62) and F1-score (0.64, tied with XGBoost), meeting minimum recall and precision.
@@ -249,7 +249,7 @@ Evaluated model performance on test data using a classification report and confu
 | Macro Avg              | 0.74      | 0.84   | 0.78     | 25200   |
 | Weighted Avg           | 0.91      | 0.88   | 0.89     | 25200   |
 
-<img src="images/rf_confusion_matrix_test.png" alt="Random Forest Confusion Matrix (Test Data)" style="max-width: 450px; width: 100%;">
+<img src="images/rf_confusion_matrix_test.png" alt="Random Forest Confusion Matrix (Test Data)" width="450">
 
 **Feature Importance**  
 The most influential features were income, age, and state default rate, indicating that financial stability and regional risk factors heavily influence loan defaults. Other factors like experience and current job years also contributed moderately, while demographic factors like car ownership and marital status had minimal impact.
