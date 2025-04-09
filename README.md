@@ -234,7 +234,7 @@ Chose Random Forest for its good performance, low overfitting, and interpretabil
 - `max_features=0.13`
 - `class_weight="balanced"`
 
-Compared final model evaluation metrics between training, validation, and test data.
+Compared evaluation metrics of the final Random Forest model between training, validation, and test data. The performance drop from validation to test was small, suggesting consistent model behavior on unseen data.
 | Data       | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
 |------------|--------|--------------------|---------------------|--------------------|----------|
 | Training   | 0.68   | 1.00               | 0.62                | 0.77               | 0.93     |
