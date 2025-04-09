@@ -253,7 +253,7 @@ Evaluated model performance on test data using a classification report and confu
 <img src="images/rf_confusion_matrix_test.png" width="55%" />
 
 **Feature Importance**  
-The most influential features are income, age, and state default rate, indicating that financial and demographic attributes strongly predict loan defaults. Job-related features like work experience, current years in the job and job stability also play a strong role. Meanwhile, personal factors like marital status and car ownership have minimal influence.
+The most influential features were income, age, and state default rate, indicating that financial stability and regional risk factors heavily influence loan defaults. Other factors like experience and current job years also contributed moderately, while demographic factors like car ownership and marital status had minimal impact.
 ![Final Random Forest: Feature Importance](images/rf_feature_importance_final.png)
 
 **Model Prediction Examples**  
