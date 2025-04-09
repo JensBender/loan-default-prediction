@@ -241,17 +241,16 @@ Compared evaluation metrics of the final Random Forest model between training, v
 | Validation | 0.62   | 0.80               | 0.54                | 0.64               | 0.89     |
 | Test       | 0.59   | 0.79               | 0.51                | 0.62               | 0.88     |
 
-Classification Report (Test) 
-|               | Precision | Recall | F1-Score | Samples |
-|---------------|-----------|--------|----------|---------|
-| Non-Defaulter | 0.97      | 0.90   | 0.93     | 22122   |
-| Defaulter     | 0.51      | 0.79   | 0.62     | 3078    |
-| Accuracy      |           |        | 0.88     | 25200   |
-| Macro Avg     | 0.74      | 0.84   | 0.78     | 25200   |
-| Weighted Avg  | 0.91      | 0.88   | 0.89     | 25200   |
+Evaluated model performance on test data using a classification report and confusion matrix. The model met the project-defined success criteria, achieving recall ≥ 0.75 and precision ≥ 0.50 for defaulters on unseen data.
+|                        | Precision | Recall | F1-Score | Samples |
+|------------------------|-----------|--------|----------|---------|
+| Class 0: Non-Defaulter | 0.97      | 0.90   | 0.93     | 22122   |
+| Class 1: Defaulter     | 0.51      | 0.79   | 0.62     | 3078    |
+| Accuracy               |           |        | 0.88     | 25200   |
+| Macro Avg              | 0.74      | 0.84   | 0.78     | 25200   |
+| Weighted Avg           | 0.91      | 0.88   | 0.89     | 25200   |
 
-Confusion Matrix (Test)  
-<img src="images/rf_confusion_matrix_test.png" width="60%" />
+<img src="images/rf_confusion_matrix_test.png" width="55%" />
 
 **Feature Importance**  
 The most influential features are income, age, and state default rate, indicating that financial and demographic attributes strongly predict loan defaults. Job-related features like work experience, current years in the job and job stability also play a strong role. Meanwhile, personal factors like marital status and car ownership have minimal influence.
