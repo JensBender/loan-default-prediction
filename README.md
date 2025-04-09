@@ -199,14 +199,14 @@ The top-performing models were selected for hyperparameter tuning: Random Forest
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### ⚙️ Hyperparameter Tuning  
-Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`. Evaluated the best-performing model from each algorithm using precision-recall curves on the validation data.  
+Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`. Evaluated the best-performing model from each algorithm using precision-recall curves on the validation data. Random Forest demonstrated the highest AUC-PR (0.62), followed by XGBoost (0.61).  
 ![Precision-Recall Curves: Hyperparameter-Tuned Models](images/precision_recall_curves_tuned.png)
 
 **Threshold Optimization**  
 Optimized decision thresholds of all tuned models to balance recall and precision based on business needs. For loan defaults, recall is often prioritized because missing a defaulter (a false negative) is costly. Determined the optimal thresholds by maximizing the F1-score while ensuring recall ≥ 0.80 and precision ≥ 0.40. The plot below shows threshold optimization for Random Forest. For all model plots, see [Appendix: Threshold Optimization](#threshold-optimization).
 ![Tuned Random Forest: Class-1 Metrics by Threshold](images/rf_metrics_by_threshold_tuned.png)
 
-Compared performance of hyperparameter-tuned models with optimized decision thresholds on the validation data.
+Compared performance of hyperparameter-tuned models with optimized decision thresholds on the validation data. Random Forest and XGBoost demonstrated the highest F1-score (0.64) while meeting minimum recall (0.80) and exceeding precision (0.54 vs. min. 0.40).
 | Model               | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
 |---------------------|--------|------------------|---------------------|-------------------|----------|
 | K-Nearest Neighbors | 0.59   | 0.81             | 0.52                | 0.63              | 0.88     |
@@ -214,13 +214,12 @@ Compared performance of hyperparameter-tuned models with optimized decision thre
 | Random Forest       | 0.62   | 0.80             | 0.54                | 0.64              | 0.89     |
 | XGBoost             | 0.61   | 0.80             | 0.54                | 0.64              | 0.89     |
 
-
-Diagnosed overfitting of tuned models with optimized thresholds by comparing training and validation AUC-PR. 
+Diagnosed overfitting of optimized threshold models by comparing training and validation performance. 
 ![Tuned Threshold Models Overfitting: Train vs. Validation AUC-PR](images/overfitting_tuned_thresholds.png)
 
 **Model Selection**  
-Chose Random Forest for its good performance, low overfitting, and better interpretability.
-- Performance: Highest validation AUC-PR (0.62 vs. 0.61 for XGBoost) with a matching F1-score (0.64), while meeting minimum recall (0.80) and precision (0.54 vs. min. 0.40).  
+Chose Random Forest for its good performance, low overfitting, and interpretability.
+- Performance: Highest validation AUC-PR (0.62), highest F1-score together with XGBoost (0.64), while meeting minimum recall (0.80) and precision (0.54 vs. min. 0.40).  
 - Overfitting: Lowest AUC-PR difference between training and validation (0.06) compared to XGBoost (0.13), Decision Tree (0.13), and KNN (0.26).  
 - Interpretability: Higher degree of interpretability than XGBoost, crucial for transparency and regulatory compliance in finance.  
 
