@@ -219,7 +219,7 @@ Diagnosed overfitting of optimized threshold models by comparing training and va
 
 **Model Selection**  
 Chose Random Forest for its good performance, low overfitting, and interpretability.
-- Performance: Highest validation AUC-PR (0.62), highest F1-score together with XGBoost (0.64), while meeting minimum recall (0.80) and precision (0.54 vs. min. 0.40).  
+- Performance: Highest AUC-PR (0.62) and F1-score (0.64, tied with XGBoost), meeting minimum recall and precision.
 - Overfitting: Lowest AUC-PR difference between training and validation (0.06).  
 - Interpretability: Higher degree of interpretability than XGBoost, crucial for transparency and regulatory compliance in finance.  
 
