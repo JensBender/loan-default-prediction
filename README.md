@@ -252,7 +252,7 @@ Evaluated model performance on test data using a classification report and confu
 | Macro Avg              | 0.74      | 0.84   | 0.78     | 25200   |
 | Weighted Avg           | 0.91      | 0.88   | 0.89     | 25200   |
 
-<img src="images/rf_confusion_matrix_test.png" alt="Final Random Forest: Confusion Matrix (Test)" width="450">
+<img src="images/rf_confusion_matrix_test.png" alt="Final Random Forest: Confusion Matrix (Test)" width="500">
 
 **Feature Importance**  
 The most influential features were income, age, and state default rate, indicating that financial stability and regional risk factors heavily influence loan defaults. Other factors like experience and current job years also contributed moderately, while demographic factors like car ownership and marital status had minimal impact.
