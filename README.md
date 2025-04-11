@@ -48,7 +48,7 @@ Leveraged machine learning to predict loan defaults from customer application da
     <a href="#-appendix">Appendix</a>
     <ul>
       <li><a href="#descriptive-statistics">Comparison Tables</a></li>      
-      <li><a href="#comparison-tables">Comparison Tables</a></li>      
+      <li><a href="#model-comparison-tables">Comparison Tables</a></li>      
       <li><a href="#threshold-optimization">Threshold Optimization</a></li>
     </ul>
   </li>
@@ -197,7 +197,7 @@ Trained, evaluated, and optimized multiple models using `sklearn` and `xgboost`.
 Proceeded without outlier handling, as it did not meaningfully improve AUC-PR.
 
 ![Precision-Recall Curves: Baseline Models (No Outlier Handling)](images/precision_recall_curves_baseline.png)
-The top-performing models were selected for hyperparameter tuning: Random Forest (AUC-PR: 0.62), XGBoost (0.56), K-Nearest Neighbors (0.56), and Decision Tree (0.47).
+The top-performing models were selected for hyperparameter tuning: Random Forest (AUC-PR: 0.62), XGBoost (0.56), K-Nearest Neighbors (0.56), and Decision Tree (0.47). See [Appendix: Model Comparison Tables](#model-comparison-tables).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -300,7 +300,9 @@ Training Data
 | Current House Yrs   | 201,600| 12.00         | 1.40           | 10.00    | 11.00        | 12.00        | 13.00        | 14.00      |
 | State Default Rate  | 201,600| 0.12          | 0.02           | 0.05     | 0.11         | 0.12         | 0.13         | 0.21       |
 
-### Comparison Tables
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Model Comparison Tables
 **Baseline Models (No Outlier Handling)**
 | Model                  | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
 |------------------------|--------|------------------|----------------------|--------------------|----------|
