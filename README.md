@@ -288,6 +288,15 @@ This project was made possible with the help of the following resources:
 <!-- APPENDIX -->
 ## 📎 Appendix
 ### Descriptive Statistics
+Training Data
+| Column              | Count  | Mean          | Std            | Min      | 25%          | 50%          | 75%          | Max        |
+|---------------------|--------|---------------|----------------|----------|--------------|--------------|--------------|------------|
+| Income              | 201,600| 5,000,741  | 2,880,711   | 10,310| 2,499,018 | 5,004,535 | 7,489,827 | 9,999,938|
+| Age                 | 201,600| 50.01         | 17.08          | 21.00    | 35.00        | 50.00        | 65.00        | 79.00      |
+| Experience          | 201,600| 10.09         | 6.00           | 0.00     | 5.00         | 10.00        | 15.00        | 20.00      |
+| Current Job Yrs     | 201,600| 6.33          | 3.65           | 0.00     | 3.00         | 6.00         | 9.00         | 14.00      |
+| Current House Yrs   | 201,600| 12.00         | 1.40           | 10.00    | 11.00        | 12.00        | 13.00        | 14.00      |
+| State Default Rate  | 201,600| 0.12          | 0.02           | 0.05     | 0.11         | 0.12         | 0.13         | 0.21       |
 
 ### Comparison Tables
 **Baseline Models (No Outlier Handling)**
