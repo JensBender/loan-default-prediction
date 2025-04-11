@@ -47,6 +47,7 @@ Leveraged machine learning to predict loan defaults from customer application da
   <li>
     <a href="#-appendix">Appendix</a>
     <ul>
+      <li><a href="#descriptive-statistics">Comparison Tables</a></li>      
       <li><a href="#comparison-tables">Comparison Tables</a></li>      
       <li><a href="#threshold-optimization">Threshold Optimization</a></li>
     </ul>
@@ -162,11 +163,11 @@ Used `pandas` and `sklearn` for data loading, cleaning, transformation, and savi
 Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and visualizations.
 - **Univariate EDA**:
     - **Numerical columns**:
-        - Analyzed descriptive statistics (e.g., mean, median, standard deviation) using `pandas` `describe`.
+        - Analyzed descriptive statistics (e.g., mean, median, standard deviation) using `pandas` `describe`. See [Appendix: Descriptive Statistics]().
         - Visualized distributions with histograms using `seaborn` `histplot` and `matplotlib`.
     - **Categorical columns**:
         - Examined frequencies using `pandas` `value_counts`.
-        - Visualized frequencies with bar plots using `seaborn` `barplot` and `matplotlib`. 
+        - Visualized frequency distributions with bar plots using `seaborn` `barplot` and `matplotlib`. 
 - **Bivariate EDA**:
     - **Numerical x numerical**:
         - Analyzed pairwise relationships with a correlation matrix (`pandas` `corr` and `numpy`) and visualized them with a heatmap (`seaborn` `heatmap`).
@@ -286,6 +287,8 @@ This project was made possible with the help of the following resources:
 
 <!-- APPENDIX -->
 ## 📎 Appendix
+### Descriptive Statistics
+
 ### Comparison Tables
 **Baseline Models (No Outlier Handling)**
 | Model                  | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
