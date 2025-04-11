@@ -170,7 +170,7 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
         - Visualized frequency distributions with bar plots using `seaborn` `barplot` and `matplotlib`. 
 - **Bivariate EDA**:
     - **Numerical x numerical**:
-        - Analyzed pairwise relationships with a correlation matrix (`pandas` `corr` and `numpy`) and visualized them with a heatmap (`seaborn` `heatmap`).
+        - Analyzed pairwise relationships with a correlation matrix (`pandas` `corr` and `numpy`) and visualized them with a heatmap (`seaborn` `heatmap`), see below.
         - Visualized relationships with scatterplots using `seaborn` `scatterplot` and `matplotlib`.
     - **Numerical x categorical**:
         - Explored relationships with group-wise statistics (e.g., mean or median by category) using `pandas` `groupby` and `agg`.
@@ -179,6 +179,8 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
     - **Categorical x categorical**:
         - Analyzed relationships with contingency tables using `pandas` `crosstab`.
         - Visualized relationships with grouped bar plots using `pandas` `crosstab` `plot` and `matplotlib`.
+
+![Correlation Heatmap](images/correlation_heatmap.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
