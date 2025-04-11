@@ -139,20 +139,20 @@ Example Data:
 Used `pandas` and `sklearn` for data loading, cleaning, transformation, and saving.
 - **Loaded data** from .csv file using `pandas` `read_csv`.
 - **Standardized column names and labels** to `snake_case` using `pandas` string methods and `apply` with custom functions.
-- **Handled duplicates**: No duplicate rows identified based on the ID column or all columns.
-- **Handled data types**: Converted string columns with two unique categories to boolean columns using `pandas` `map`.
+- **Handled duplicates**: Verified the absence of duplicates using both the ID column and complete row comparison.
+- **Handled data types**: Converted string columns with two categories to boolean columns using `pandas` `map`.
 - **Train-validation-test split**: Split data into training (80%), validation (10%), and test (10%) sets using `sklearn` `train_test_split`.
 - **Engineered new features**:
     - Profession-based features: Derived job stability from profession and city tier from city using mapping functions with  `pandas` `map`. 
     - Location-based features: Derived state default rate from state using target encoding.
-- **Defined semantic type** of columns (numerical, categorical, boolean).
-- **Handled missing values**: No missing values identified in any column in training, validation, and test data.
+- **Defined semantic type** for each column (numerical, categorical, boolean).
+- **Handled missing values**: Verified the absence of missing values in all columns in training, validation, and test data.
 - **Handled outliers**: Identified multivariate outliers using `sklearn` `IsolationForest` and univariate outliers using statistical methods (3SD and 1.5 IQR) with custom transformer classes that inherit from `sklearn` `BaseEstimator` and `TransformerMixin`.
 - **Feature scaling and encoding**:
     - Scaled numerical features: Used standard scaling with `sklearn` `StandardScaler`.
     - Encoded categorical features: Used one-hot encoding for nominal features (`sklearn` `OneHotEncoder`) and ordinal encoding for ordinal features (`OrdinalEncoder`).
     - Applied scaling and encoding together using `sklearn` `ColumnTransformer`.
-- **Saved the preprocessed data** as .csv files using `pandas` `to_csv`.
+- **Saved the preprocessed data** for training, validation, and test sets as .csv files using `pandas` `to_csv`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
