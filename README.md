@@ -31,9 +31,9 @@ Leveraged machine learning to predict loan defaults from customer application da
     <a href="#-exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)</a>
   </li>
   <li>
-    <a href="#-modeling">Modeling</a>
+    <a href="#️-modeling">Modeling</a>
     <ul>
-      <li><a href="#️-baseline-models">Baseline Models</a></li>      
+      <li><a href="#-baseline-models">Baseline Models</a></li>      
       <li><a href="#️-hyperparameter-tuning">Hyperparameter Tuning</a></li>
       <li><a href="#-final-model">Final Model</a></li>
     </ul>
@@ -314,6 +314,8 @@ This project was made possible with the help of the following resources:
 | Decision Tree       | 0.52   | 0.81             | 0.49                | 0.61              | 0.87     |
 | Random Forest       | 0.62   | 0.80             | 0.54                | 0.64              | 0.89     |
 | XGBoost             | 0.61   | 0.80             | 0.54                | 0.64              | 0.89     |
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Threshold Optimization
 **Random Forest**
