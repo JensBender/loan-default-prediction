@@ -310,8 +310,6 @@ Training Data
 ![Catogircal Frequencies Bar Plot Matrix](images/categorical_frequencies_barplots.png)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Model Comparison Tables
 **Baseline Models (No Outlier Handling)**
 | Model                  | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
