@@ -163,11 +163,11 @@ Used `pandas` and `sklearn` for data loading, cleaning, transformation, and savi
 Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and visualizations.
 - **Univariate EDA**:
     - **Numerical columns**:
-        - Analyzed descriptive statistics (e.g., mean, median) using `pandas` `describe`; see [Appendix](#descriptive-statistics).
-        - Visualized distributions with histograms using `seaborn` `histplot` and `matplotlib`.
+        - Analyzed [descriptive statistics](#descriptive-statistics-for-numerical-columns) (e.g., mean, median) using `pandas` `describe`.
+        - Visualized distributions with a [histogram matrix](#numerical-distributions-histograms) using `seaborn` `histplot` and `matplotlib`.
     - **Categorical columns**:
         - Examined frequencies using `pandas` `value_counts`.
-        - Visualized categorical frequencies with bar plots using `seaborn` `barplot` and `matplotlib`. 
+        - Visualized categorical frequencies with a [bar plot matrix](#categorical-frequencies-bar-plots) using `seaborn` `barplot` and `matplotlib`. 
 - **Bivariate EDA**:
     - **Numerical x numerical**:
         - Analyzed pairwise relationships with a correlation matrix (`pandas` `corr` and `numpy`) and visualized them with a heatmap (`seaborn` `heatmap`), see below.
