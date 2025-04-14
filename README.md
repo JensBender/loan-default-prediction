@@ -303,6 +303,7 @@ Training Data
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Numerical Distributions (Histograms)
+![Numerical Distributions Histogram Matrix](images/numerical_distributions_histograms.png)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Categorical Frequencies (Bar Plots)
