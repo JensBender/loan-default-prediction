@@ -47,9 +47,11 @@ Leveraged machine learning to predict loan defaults from customer application da
   <li>
     <a href="#-appendix">Appendix</a>
     <ul>
-      <li><a href="#descriptive-statistics">Descriptive Statistics</a></li>      
-      <li><a href="#model-comparison-tables">Comparison Tables</a></li>      
-      <li><a href="#threshold-optimization">Threshold Optimization</a></li>
+      <li><a href="#descriptive-statistics-for-numerical-columns">Descriptive Statistics for Numerical Columns</a></li>      
+      <li><a href="#numerical-distributions-histograms">Numerical Distributions (Histograms)</a></li>      
+      <li><a href="#categorical-frequencies-bar-plots">Categorical Frequencies (Bar Plots)</a></li>      
+      <li><a href="#model-comparison-tables">Model Comparison Tables</a></li>      
+      <li><a href="#model-threshold-optimization">Model Threshold Optimization</a></li>
     </ul>
   </li>
 </ol>
@@ -161,11 +163,11 @@ Used `pandas` and `sklearn` for data loading, cleaning, transformation, and savi
 Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and visualizations.
 - **Univariate EDA**:
     - **Numerical columns**:
-        - Analyzed descriptive statistics (e.g., mean, median, standard deviation) using `pandas` `describe`. See [Appendix: Descriptive Statistics]().
+        - Analyzed descriptive statistics (e.g., mean, median) using `pandas` `describe`; see [Appendix](#descriptive-statistics).
         - Visualized distributions with histograms using `seaborn` `histplot` and `matplotlib`.
     - **Categorical columns**:
         - Examined frequencies using `pandas` `value_counts`.
-        - Visualized frequency distributions with bar plots using `seaborn` `barplot` and `matplotlib`. 
+        - Visualized categorical frequencies with bar plots using `seaborn` `barplot` and `matplotlib`. 
 - **Bivariate EDA**:
     - **Numerical x numerical**:
         - Analyzed pairwise relationships with a correlation matrix (`pandas` `corr` and `numpy`) and visualized them with a heatmap (`seaborn` `heatmap`), see below.
@@ -204,7 +206,7 @@ Performed random search with 5-fold cross-validation using `sklearn` `Randomized
 ![Precision-Recall Curves: Hyperparameter-Tuned Models](images/precision_recall_curves_tuned.png)
 
 **Threshold Optimization**  
-Optimized decision thresholds of all tuned models to balance recall and precision based on business needs. For loan defaults, recall is often prioritized because missing a defaulter (a false negative) is costly. Determined the optimal thresholds by maximizing the F1-score while ensuring recall ≥ 0.80 and precision ≥ 0.40. The plot below shows threshold optimization for Random Forest. For all model plots, see [Appendix: Threshold Optimization](#threshold-optimization).
+Optimized decision thresholds of all tuned models to balance recall and precision based on business needs. For loan defaults, recall is often prioritized because missing a defaulter (a false negative) is costly. Determined the optimal thresholds by maximizing the F1-score while ensuring recall ≥ 0.80 and precision ≥ 0.40. The plot below shows threshold optimization for Random Forest. For all model plots, see [Appendix: Threshold Optimization](#model-threshold-optimization).
 ![Tuned Random Forest: Class-1 Metrics by Threshold](images/rf_metrics_by_threshold_tuned.png)
 
 Compared performance of hyperparameter-tuned models with optimized decision thresholds on the validation data. Random Forest and XGBoost demonstrated the highest F1-score (0.64) while meeting minimum recall (0.80) and exceeding precision (0.54 vs. min. 0.40).
@@ -287,7 +289,7 @@ This project was made possible with the help of the following resources:
 
 <!-- APPENDIX -->
 ## 📎 Appendix
-### Descriptive Statistics
+### Descriptive Statistics for Numerical Columns
 Training Data
 | Column              | Count  | Mean          | Std            | Min      | 25%          | 50%          | 75%          | Max        |
 |---------------------|--------|---------------|----------------|----------|--------------|--------------|--------------|------------|
@@ -297,6 +299,14 @@ Training Data
 | Current Job Yrs     | 201,600| 6.33          | 3.65           | 0.00     | 3.00         | 6.00         | 9.00         | 14.00      |
 | Current House Yrs   | 201,600| 12.00         | 1.40           | 10.00    | 11.00        | 12.00        | 13.00        | 14.00      |
 | State Default Rate  | 201,600| 0.12          | 0.02           | 0.05     | 0.11         | 0.12         | 0.13         | 0.21       |
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Numerical Distributions (Histograms)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Categorical Frequencies (Bar Plots)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -331,7 +341,7 @@ Training Data
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Threshold Optimization
+### Model Threshold Optimization
 **Random Forest**
 ![Tuned Random Forest: Class-1 Metrics by Threshold](images/rf_metrics_by_threshold_tuned.png)
 
