@@ -47,7 +47,7 @@ Leveraged machine learning to predict loan defaults from customer application da
   <li>
     <a href="#-appendix">Appendix</a>
     <ul>
-      <li><a href="#descriptive-statistics">Comparison Tables</a></li>      
+      <li><a href="#descriptive-statistics">Descriptive Statistics</a></li>      
       <li><a href="#model-comparison-tables">Comparison Tables</a></li>      
       <li><a href="#threshold-optimization">Threshold Optimization</a></li>
     </ul>
@@ -143,11 +143,9 @@ Used `pandas` and `sklearn` for data loading, cleaning, transformation, and savi
 - **Handled duplicates**: Verified the absence of duplicates using both the ID column and complete row comparison.
 - **Handled data types**: Converted string columns with two categories to boolean columns using `pandas` `map`.
 - **Train-validation-test split**: Split data into training (80%), validation (10%), and test (10%) sets using `sklearn` `train_test_split`.
-- **Engineered new features**:
-    - Profession-based features: Derived job stability from profession and city tier from city using mapping functions with  `pandas` `map`. 
-    - Location-based features: Derived state default rate from state using target encoding.
+- **Engineered new features**: Derived job stability from profession and city tier from city using mapping functions with  `pandas` `map`. Derived state default rate from state using target encoding.
 - **Defined semantic type** for each column (numerical, categorical, boolean).
-- **Handled missing values**: Verified the absence of missing values in all columns in training, validation, and test data.
+- **Handled missing values**: Verified the absence of missing values in all columns and datasets.
 - **Handled outliers**: Identified multivariate outliers using `sklearn` `IsolationForest` and univariate outliers using statistical methods (3SD and 1.5 IQR) with custom transformer classes that inherit from `sklearn` `BaseEstimator` and `TransformerMixin`.
 - **Feature scaling and encoding**:
     - Scaled numerical features: Used standard scaling with `sklearn` `StandardScaler`.
