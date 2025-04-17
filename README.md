@@ -51,6 +51,7 @@ Leveraged machine learning to predict loan defaults from customer application da
       <li><a href="#numerical-distributions-histograms">Numerical Distributions (Histograms)</a></li>      
       <li><a href="#categorical-frequencies-bar-plots">Categorical Frequencies (Bar Plots)</a></li>      
       <li><a href="#numerical-numerical-relationships-scatter-plot-matrix">Numerical-Numerical Relationships (Scatter Plot Matrix)</a></li>      
+      <li><a href="#numerical-categorical-relationships-bar-plot-matrix">Numerical-Categorical Relationships (Bar Plot Matrix)</a></li> 
       <li><a href="#model-comparison-tables">Model Comparison Tables</a></li>      
       <li><a href="#model-threshold-optimization">Model Threshold Optimization</a></li>
     </ul>
@@ -313,6 +314,10 @@ Training Data
 
 ### Numerical-Numerical Relationships (Scatter Plot Matrix)
 ![Numerical-Numerical Relationships (Scatter Plot Matrix)](images/numerical_relationships_scatterplots.png)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Numerical-Categorical Relationships (Bar Plot Matrix)
+![Numerical-Categorical Relationships (Bar Plot Matrix)](images/numerical_categorical_relationships_barplots.png)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Model Comparison Tables
