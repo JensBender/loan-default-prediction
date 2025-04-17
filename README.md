@@ -50,8 +50,8 @@ Leveraged machine learning to predict loan defaults from customer application da
       <li><a href="#descriptive-statistics-for-numerical-columns">Descriptive Statistics for Numerical Columns</a></li>      
       <li><a href="#numerical-distributions-histograms">Numerical Distributions (Histograms)</a></li>      
       <li><a href="#categorical-frequencies-bar-plots">Categorical Frequencies (Bar Plots)</a></li>      
-      <li><a href="#numerical-numerical-relationships-scatter-plot-matrix">Numerical-Numerical Relationships (Scatter Plot Matrix)</a></li>      
-      <li><a href="#numerical-categorical-relationships-bar-plot-matrix">Numerical-Categorical Relationships (Bar Plot Matrix)</a></li> 
+      <li><a href="#numerical-numerical-relationships-scatter-plots">Numerical-Numerical Relationships (Scatter Plots)</a></li>      
+      <li><a href="#numerical-categorical-relationships-bar-plots">Numerical-Categorical Relationships (Bar Plots)</a></li> 
       <li><a href="#model-comparison-tables">Model Comparison Tables</a></li>      
       <li><a href="#model-threshold-optimization">Model Threshold Optimization</a></li>
     </ul>
@@ -305,18 +305,18 @@ Training Data
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Numerical Distributions (Histograms)
-![Numerical Distributions Histogram Matrix](images/numerical_distributions_histograms.png)
+![Numerical Distributions (Histogram Matrix)](images/numerical_distributions_histograms.png)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Categorical Frequencies (Bar Plots)
-![Categorical Frequencies Bar Plot Matrix](images/categorical_frequencies_barplots.png)
+![Categorical Frequencies (Bar Plot Matrix)](images/categorical_frequencies_barplots.png)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Numerical-Numerical Relationships (Scatter Plot Matrix)
+### Numerical-Numerical Relationships (Scatter Plots)
 ![Numerical-Numerical Relationships (Scatter Plot Matrix)](images/numerical_relationships_scatterplots.png)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Numerical-Categorical Relationships (Bar Plot Matrix)
+### Numerical-Categorical Relationships (Bar Plots)
 ![Numerical-Categorical Relationships (Bar Plot Matrix)](images/numerical_categorical_relationships_barplots.png)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
