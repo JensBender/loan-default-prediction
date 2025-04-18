@@ -320,6 +320,10 @@ Training Data
 ![Numerical-Categorical Relationships (Bar Plot Matrix)](images/numerical_categorical_relationships_barplots.png)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Categorical-Categorical Relationships (Grouped Bar Plots)
+![Categorical-Categorical Relationships (Grouped Bar Plot Matrix)](images/categorical_relationships_groupedbarplots.png)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Model Comparison Tables
 **Baseline Models (No Outlier Handling)**
 | Model                  | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
