@@ -52,6 +52,7 @@ Leveraged machine learning to predict loan defaults from customer application da
       <li><a href="#categorical-frequencies-bar-plots">Categorical Frequencies (Bar Plots)</a></li>      
       <li><a href="#numerical-numerical-relationships-scatter-plots">Numerical-Numerical Relationships (Scatter Plots)</a></li>      
       <li><a href="#numerical-categorical-relationships-bar-plots">Numerical-Categorical Relationships (Bar Plots)</a></li> 
+      <li><a href="#categorical-categorical-relationships-grouped-bar-plots">Categorical-Categorical Relationships (Grouped Bar Plots)</a></li> 
       <li><a href="#model-comparison-tables">Model Comparison Tables</a></li>      
       <li><a href="#model-threshold-optimization">Model Threshold Optimization</a></li>
     </ul>
