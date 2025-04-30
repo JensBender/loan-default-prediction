@@ -18,3 +18,4 @@ models/tuned_models.pkl
 models/*random_search*.pkl
 loan-default-venv
 .ipynb_checkpoints
+test_loan_default_prediction.ipynb
