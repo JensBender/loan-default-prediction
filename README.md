@@ -167,21 +167,21 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
 - **Univariate EDA**:
     - **Numerical columns**:
         - Analyzed [descriptive statistics](#descriptive-statistics-for-numerical-columns) (e.g., mean, median) using `pandas` `describe`.
-        - Visualized distributions with a [histogram matrix](#numerical-distributions-histograms) using `seaborn` `histplot` and `matplotlib`.
+        - Visualized distributions with [histograms](#numerical-distributions-histograms) using `seaborn` `histplot` and `matplotlib`.
     - **Categorical columns**:
         - Examined frequencies using `pandas` `value_counts`.
-        - Visualized categorical frequencies with a [bar plot matrix](#categorical-frequencies-bar-plots) using `seaborn` `barplot` and `matplotlib`. 
+        - Visualized frequency distributions with [bar plots](#categorical-frequencies-bar-plots) using `seaborn` `barplot` and `matplotlib`. 
 - **Bivariate EDA**:
-    - **Numerical x numerical**:
+    - **Numerical vs. numerical**:
         - Analyzed pairwise relationships with a correlation matrix (`pandas` `corr` and `numpy`) and visualized them with a heatmap (`seaborn` `heatmap`), see below.
-        - Visualized relationships with scatterplots using `seaborn` `scatterplot` and `matplotlib`.
-    - **Numerical x categorical**:
+        - Visualized relationships with [scatterplots](#numerical-numerical-relationships-scatter-plots) using `seaborn` `scatterplot` and `matplotlib`.
+    - **Numerical vs. categorical**:
         - Explored relationships with group-wise statistics (e.g., mean or median by category) using `pandas` `groupby` and `agg`.
         - Quantified the magnitude of group differences with Cohen's d using a custom function.
-        - Visualized results with bar plots using `seaborn` `barplot` and `matplotlib`.
-    - **Categorical x categorical**:
+        - Visualized results with [bar plots](#numerical-categorical-relationships-bar-plots) using `seaborn` `barplot` and `matplotlib`.
+    - **Categorical vs. categorical**:
         - Analyzed relationships with contingency tables using `pandas` `crosstab`.
-        - Visualized relationships with grouped bar plots using `pandas` `crosstab` `plot` and `matplotlib`.
+        - Visualized relationships with [grouped bar plots](#categorical-categorical-relationships-grouped-bar-plots) using `pandas` `crosstab` `plot` and `matplotlib`.
 
 ![Correlation Heatmap](images/correlation_heatmap.png)
 
