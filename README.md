@@ -270,14 +270,15 @@ The most influential features were income, age, and state default rate, indicati
 
 **Model Prediction Examples**  
 The table below illustrates model performance on test data by highlighting best examples (correct, high confidence), worst examples (incorrect, high confidence), and typical examples (average confidence). The model demonstrated reliable predictions on typical cases but displayed problematic overconfidence on misclassified edge cases.
-| Example | Income | Age | State Default Rate | Experience | Current Job Yrs | Actual Default | Predicted Default | Confidence | Misclassification |
-|---------|-----------|---- |------------|------------|----------|----------|----------|------------|------------|
-| Best    | 495,619   | 26  | 12.8%      | 1          | 1        | Yes      | Yes      | 99%        | ✅ No     |
-| Best    | 2,901,323 | 56  | 13.7%      | 2          | 2        | No       | No       | 100%       | ✅ No     |
-| Worst   | 8,290,834 | 42  | 12.8%      | 3          | 3        | Yes      | No       | 95%        | ❌ Yes    |
-| Worst   | 7,644,982 | 24  | 12.2%      | 1          | 1        | No       | Yes      | 98%        | ❌ Yes    |
-| Typical | 4,570,845 | 47  | 15.5%      | 3          | 3        | Yes      | Yes      | 94%        | ✅ No     |
-| Typical | 8,391,288 | 24  | 11.7%      | 4          | 4        | No       | No       | 94%        | ✅ No     |
+
+| Example | Income    | Age | State Default Rate | Experience | Actual Default | Predicted Default | Confidence | Misclassification |
+| ------- | --------- | --- | ------------------ | ---------- | -------------- | ----------------- | ---------- | ----------------- |
+| Best    | 495,619   | 26  | 12.8%              | 1          | Yes            | Yes               | 99%        | ✅ No              |
+| Best    | 2,901,323 | 56  | 13.7%              | 2          | No             | No                | 100%       | ✅ No              |
+| Worst   | 8,290,834 | 42  | 12.8%              | 3          | Yes            | No                | 95%        | ❌ Yes             |
+| Worst   | 7,644,982 | 24  | 12.2%              | 1          | No             | Yes               | 98%        | ❌ Yes             |
+| Typical | 4,570,845 | 47  | 15.5%              | 3          | Yes            | Yes               | 94%        | ✅ No              |
+| Typical | 8,391,288 | 24  | 11.7%              | 4          | No             | No                | 94%        | ✅ No              |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
