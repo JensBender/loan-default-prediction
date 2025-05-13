@@ -194,13 +194,13 @@ Trained, evaluated, and optimized multiple models using `sklearn` and `xgboost`.
 ### 🧱 Baseline Models  
 - Trained eight baseline models with default hyperparameter values.
 - Trained each model with four outlier handling methods. 
-- Evaluated model performance on the validation data using AUC-PR (primary metric), class-1 recall, precision, and F1-score (secondary metrics), and precision-recall curves. 
+- Evaluated model performance using AUC-PR (primary metric) and class-1 recall, precision, and F1-score (secondary metrics). 
 
 ![AUC-PR Comparison by Baseline Model and Outlier Handling Method](images/aucpr_comparison_baseline.png)
-Proceeded without outlier handling, as it did not meaningfully improve AUC-PR.
+Proceeded without outlier handling, as it did not meaningfully improve AUC-PR. Plotted precision-recall curves using `matplotlib`.
 
 ![Precision-Recall Curves: Baseline Models (No Outlier Handling)](images/precision_recall_curves_baseline.png)
-The top-performing models were selected for hyperparameter tuning: Random Forest (AUC-PR: 0.62), XGBoost (0.56), K-Nearest Neighbors (0.56), and Decision Tree (0.47). See [Appendix: Model Comparison Tables](#model-comparison-tables).
+The top-performing models were selected for hyperparameter tuning: Random Forest (AUC-PR: 0.62), XGBoost (0.56), K-Nearest Neighbors (0.56), and Decision Tree (0.47). See detailed metrics in [Appendix: Model Comparison Tables](#model-comparison-tables).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
