@@ -226,27 +226,28 @@ Diagnosed overfitting of optimized threshold models by comparing training and va
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### 🏆 Final Model
-**Model Selection**: Random Forest with optimized threshold for its good performance, low overfitting, and interpretability.
+**Model Selection**  
+Random Forest with optimized threshold of 0.29 was selected for its good performance, low overfitting, and interpretability.
 - Performance: Highest AUC-PR (0.62) and F1-score (0.64, tied with XGBoost), meeting minimum recall and precision.
 - Overfitting: Lowest AUC-PR difference between training and validation (0.06).  
 - Interpretability: Higher degree of interpretability than XGBoost, crucial for transparency and regulatory compliance in finance.  
+- Hyperparameters:
+  - `n_estimators=225`
+  - `max_depth=26`
+  - `min_samples_split=2`
+  - `min_samples_leaf=1`
+  - `max_features=0.13`
+  - `class_weight="balanced"`
 
-The final model is a Random Forest with a decision threshold of 0.29 and the following hyperparameters:
-- `n_estimators=225`
-- `max_depth=26`
-- `min_samples_split=2`
-- `min_samples_leaf=1`
-- `max_features=0.13`
-- `class_weight="balanced"`
-
-Compared evaluation metrics of the final Random Forest model between training, validation, and test data. The performance drop from validation to test was small, suggesting consistent model behavior on unseen data.
+**Model Evaluation**  
+Compared metrics between training, validation, and test data. The performance drop from validation to test was small, suggesting consistent model behavior on unseen data.
 | Data       | AUC-PR | Recall (Class 1) | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
 |------------|--------|--------------------|---------------------|--------------------|----------|
 | Training   | 0.68   | 1.00               | 0.62                | 0.77               | 0.93     |
 | Validation | 0.62   | 0.80               | 0.54                | 0.64               | 0.89     |
 | Test       | 0.59   | 0.79               | 0.51                | 0.62               | 0.88     |
 
-Evaluated model performance on test data using a classification report and confusion matrix. The model met the project-defined success criteria, achieving recall ≥ 0.75 and precision ≥ 0.50 for defaulters on unseen data.
+Evaluated model performance on the test data using a classification report and a confusion matrix. The model met the project-defined success criteria, achieving recall ≥ 0.75 and precision ≥ 0.50 for defaulters on unseen data.
 |                        | Precision | Recall | F1-Score | Samples |
 |------------------------|-----------|--------|----------|---------|
 | Class 0: Non-Defaulter | 0.97      | 0.90   | 0.93     | 22122   |
