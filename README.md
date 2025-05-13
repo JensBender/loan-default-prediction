@@ -223,15 +223,15 @@ Compared performance of hyperparameter-tuned models with optimized decision thre
 Diagnosed overfitting of optimized threshold models by comparing training and validation performance. Random Forest showed the lowest AUC-PR difference (0.06) compared to XGBoost (0.13), Decision Tree (0.13), and KNN (0.26).
 <img src="images/overfitting_tuned_thresholds.png" alt="Tuned Threshold Models Overfitting: Train vs. Validation AUC-PR" width="600">
 
-**Model Selection**: Random Forest for its good performance, low overfitting, and interpretability.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### 🏆 Final Model
+**Model Selection**: Random Forest with optimized threshold for its good performance, low overfitting, and interpretability.
 - Performance: Highest AUC-PR (0.62) and F1-score (0.64, tied with XGBoost), meeting minimum recall and precision.
 - Overfitting: Lowest AUC-PR difference between training and validation (0.06).  
 - Interpretability: Higher degree of interpretability than XGBoost, crucial for transparency and regulatory compliance in finance.  
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-### 🏆 Final Model
-**Random Forest** with a decision threshold of 0.29 and the following hyperparameters:
+The final model is a Random Forest with a decision threshold of 0.29 and the following hyperparameters:
 - `n_estimators=225`
 - `max_depth=26`
 - `min_samples_split=2`
