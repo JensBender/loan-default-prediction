@@ -15,5 +15,6 @@ models/baseline_models.pkl
 models/tuned_models.pkl
 models/*random_search*.pkl
 loan-default-venv
+app-venv
 .ipynb_checkpoints
 test_loan_default_prediction.ipynb
