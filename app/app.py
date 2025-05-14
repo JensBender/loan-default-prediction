@@ -1,6 +1,18 @@
 import gradio as gr
 
-professions = ["profession_01", "profession_02", "profession_03", "profession_04", "profession_05"]
+professions = [
+    "Air_traffic_controller", "Analyst", "Architect", "Army_officer", "Artist",
+    "Aviator", "Biomedical_Engineer", "Chartered_Accountant", "Chef", "Chemical_engineer",
+    "Civil_engineer", "Civil_servant", "Comedian", "Computer_hardware_engineer", "Computer_operator",
+    "Consultant", "Dentist", "Design_Engineer", "Designer", "Drafter",
+    "Economist", "Engineer", "Fashion_Designer", "Financial_Analyst", "Firefighter",
+    "Flight_attendant", "Geologist", "Graphic_Designer", "Hotel_Manager", "Industrial_Engineer",
+    "Lawyer", "Librarian", "Magistrate", "Mechanical_engineer", "Microbiologist",
+    "Official", "Petroleum_Engineer", "Physician", "Police_officer", "Politician",
+    "Psychologist", "Scientist", "Secretary", "Software_Developer", "Statistician",
+    "Surgeon", "Surveyor", "Technical_writer", "Technician", "Technology_specialist",
+    "Web_designer"
+]
 
 
 def predict_loan_default(income, age, experience, profession):
