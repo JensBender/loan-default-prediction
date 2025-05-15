@@ -1,5 +1,6 @@
 # Imports
 import gradio as gr
+import re
 
 # List of professions, cities, and states (in same format as training data)
 professions = [
@@ -104,9 +105,9 @@ states = [state.replace("_", " ").title() for state in states]
 # Function to predict loan default based on customer application data using Random Forest Classifier
 def predict_loan_default(income, age, experience, profession, city, state):
     # Data preprocessing
-    profession = profession.lower().replace(r"[-/\s+]", "_", regex=True)  # Convert to lowercase and replace spaces and special characters with "_"
-    city = city.lower().replace(r"[-/\s+]", "_", regex=True)
-    state = state.lower().replace(r"[-/\s+]", "_", regex=True)
+    profession = re.sub(r"[-/\s]", "_", profession.lower())  # Convert to lowercase and replace "-", "/", and whitespace characters with "_"
+    city = re.sub(r"[-/\s]", "_", city.lower())
+    state = re.sub(r"[-/\s]", "_", state.lower())
     
     # Return a placeholder message for now
     return f"""
@@ -129,7 +130,7 @@ app = gr.Interface(
         gr.Number(label="Age"),
         gr.Number(label="Experience"),
         gr.Dropdown(label="Select Profession...", choices=professions, value=None),
-        gr.Dropdown(label="Select City...", choices=[city.replace("_", " ") for city in cities], value=None),
+        gr.Dropdown(label="Select City...", choices=cities, value=None),
         gr.Dropdown(label="Select State...", choices=states, value=None),
         ],
     outputs=gr.Textbox(),
