@@ -106,13 +106,16 @@ states = [state.replace("_", " ").title() for state in states]
 def predict_loan_default(income, age, experience, profession, city, state):
     try:
         # --- Data preprocessing ---
-        # Check if inputs are valid
+        # Check for missing inputs
+        missing_inputs = []
         if not profession:
-            return "Error", "Please select a profession."
+            missing_inputs.append("profession")
         if not city:
-            return "Error", "Please select a city."
+            missing_inputs.append("city")
         if not state:
-            return "Error", "Please select a state."
+            missing_inputs.append("state")
+        if missing_inputs:
+            return "Error", f"Please select: {', '.join(missing_inputs)}."
         
         # Format profession, city, and state to match expected model input
         profession = re.sub(r"[-/\s]", "_", profession.lower())  # Convert to lowercase and replace "-", "/", and whitespace characters with "_"
