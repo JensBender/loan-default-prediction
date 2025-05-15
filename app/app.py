@@ -107,11 +107,11 @@ def predict_loan_default(income, age, experience, profession, city, state):
     try:
         # --- Data preprocessing ---
         # Check if inputs are valid
-        if profession is None:
+        if not profession:
             return "Error", "Please select a profession."
-        if city is None:
+        if not city:
             return "Error", "Please select a city."
-        if state is None:
+        if not state:
             return "Error", "Please select a state."
         
         # Format profession, city, and state to match expected model input
