@@ -109,8 +109,11 @@ def predict_loan_default(income, age, experience, profession, city, state):
     city = re.sub(r"[-/\s]", "_", city.lower())
     state = re.sub(r"[-/\s]", "_", state.lower())
     
-    # Return a placeholder message for now
-    return f"""
+    # Model prediction 
+    prediction = {"Default": 0.3, "No Default": 0.7}  # Placeholder prediction for now
+
+    # Test message for now
+    test_message = f"""
     Income: {income}
     Age: {age}
     Experience: {experience}
@@ -120,6 +123,8 @@ def predict_loan_default(income, age, experience, profession, city, state):
     
     To Do: Implement loan default prediction model...
     """
+
+    return prediction, test_message
 
 
 # Gradio app interface
@@ -133,7 +138,10 @@ app = gr.Interface(
         gr.Dropdown(label="Select City...", choices=cities, value=None),
         gr.Dropdown(label="Select State...", choices=states, value=None),
         ],
-    outputs=gr.Textbox(),
+    outputs=[
+        gr.Label(),
+        gr.Textbox(),
+        ],
     title="Loan Default Prediction",
     description="An app to predict loan default based on customer application data powered by machine learning."
     )
