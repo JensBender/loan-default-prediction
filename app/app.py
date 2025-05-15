@@ -107,8 +107,13 @@ def predict_loan_default(income, age, experience, profession, city, state):
     try:
         # --- Data preprocessing ---
         # Numerical input validation
-        if not isinstance(income, (int, float)) or income <= 0:
-            return "Error", "Error! Income must be a positive number."
+        if not isinstance(income, (int, float)) or income < 0:
+            return "Error", "Error! Income can't be a negative number."
+        if not isinstance(age, (int, float)) or age <= 0:
+            return "Error", "Error! Age must be a positive number."
+        if not isinstance(experience, (int, float)) or experience < 0:
+            return "Error", "Error! Experience can't be a negative number."
+        
         # Check for missing inputs
         missing_inputs = []
         if not profession:
