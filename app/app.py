@@ -104,27 +104,31 @@ states = [state.replace("_", " ").title() for state in states]
 
 # Function to predict loan default based on customer application data using Random Forest Classifier
 def predict_loan_default(income, age, experience, profession, city, state):
-    # Data preprocessing
-    profession = re.sub(r"[-/\s]", "_", profession.lower())  # Convert to lowercase and replace "-", "/", and whitespace characters with "_"
-    city = re.sub(r"[-/\s]", "_", city.lower())
-    state = re.sub(r"[-/\s]", "_", state.lower())
+    try:
+        # Data preprocessing
+        profession = re.sub(r"[-/\s]", "_", profession.lower())  # Convert to lowercase and replace "-", "/", and whitespace characters with "_"
+        city = re.sub(r"[-/\s]", "_", city.lower())
+        state = re.sub(r"[-/\s]", "_", state.lower())
+        
+        # Model prediction 
+        prediction = {"Default": 0.3, "No Default": 0.7}  # Placeholder prediction for now
+
+        # Test message for now
+        test_message = f"""
+        Income: {income}
+        Age: {age}
+        Experience: {experience}
+        Profession: {profession}
+        City: {city}
+        State: {state}
+
+        Prediction: {prediction}
+        """
+
+        return prediction, test_message
     
-    # Model prediction 
-    prediction = {"Default": 0.3, "No Default": 0.7}  # Placeholder prediction for now
-
-    # Test message for now
-    test_message = f"""
-    Income: {income}
-    Age: {age}
-    Experience: {experience}
-    Profession: {profession}
-    City: {city}
-    State: {state}
-
-    Prediction: {prediction}
-    """
-
-    return prediction, test_message
+    except Exception as e:
+        return "Error", f"Error: {str(e)}"
 
 
 # Gradio app interface
