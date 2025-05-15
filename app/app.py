@@ -120,8 +120,8 @@ def predict_loan_default(income, age, experience, profession, city, state):
     Profession: {profession}
     City: {city}
     State: {state}
-    
-    To Do: Implement loan default prediction model...
+
+    Prediction: {prediction}
     """
 
     return prediction, test_message
@@ -139,12 +139,16 @@ app = gr.Interface(
         gr.Dropdown(label="Select State...", choices=states, value=None),
         ],
     outputs=[
-        gr.Label(),
-        gr.Textbox(),
+        gr.Label(label="Prediction"),
+        gr.Textbox(label="Test Message"),
         ],
     title="Loan Default Prediction",
-    description="An app to predict loan default based on customer application data powered by machine learning."
-    )
+    description="""
+    <div style='text-align:center'>
+        An app to predict loan default based on customer application data powered by machine learning.
+    </div>
+    """
+)
 
 # Launch the app
 if __name__ == "__main__":
