@@ -1,5 +1,7 @@
+# Imports
 import gradio as gr
 
+# List of professions, cities, and states for dropdown 
 professions = [
     "Air_traffic_controller", "Analyst", "Architect", "Army_officer", "Artist",
     "Aviator", "Biomedical_Engineer", "Chartered_Accountant", "Chef", "Chemical_engineer",
@@ -94,6 +96,7 @@ states = [
 ]
 
 
+# Function to predict loan default based on customer application data using Random Forest Classifier
 def predict_loan_default(income, age, experience, profession, city, state):
     return f"""
     Income: {income}
@@ -107,6 +110,7 @@ def predict_loan_default(income, age, experience, profession, city, state):
     """
 
 
+# Gradio app interface
 app = gr.Interface(
     fn=predict_loan_default,
     inputs=[
@@ -122,4 +126,6 @@ app = gr.Interface(
     description="An app to predict loan default based on customer application data powered by machine learning."
     )
 
-app.launch()
+# Launch the app
+if __name__ == "__main__":
+    app.launch()
