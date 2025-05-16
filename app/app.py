@@ -104,7 +104,7 @@ states = [state.replace("_", " ").title() for state in states]
 
 
 # Function to predict loan default based on customer application data using Random Forest Classifier
-def predict_loan_default(income, age, experience, profession, city, state):
+def predict_loan_default(income, age, experience, married, profession, city, state):
     try:
         # --- Input validation ---
         # Numerical input validation
@@ -134,11 +134,12 @@ def predict_loan_default(income, age, experience, profession, city, state):
 
         # Create DataFrame from inputs
         input_df = pd.DataFrame({
-            "Income": [income],
-            "Age": [age],
-            "Experience": [experience],
-            "Profession": [profession],
-            "City": [city],
+            "income": [income],
+            "age": [age],
+            "married": [married],
+            "experience": [experience],
+            "profession": [profession],
+            "city": [city],
         })   
         
         # --- Model prediction --- 
@@ -149,6 +150,7 @@ def predict_loan_default(income, age, experience, profession, city, state):
         Income: {income}
         Age: {age}
         Experience: {experience}
+        Married: {married}
         Profession: {profession}
         City: {city}
         State: {state}
@@ -171,6 +173,7 @@ app = gr.Interface(
         gr.Number(label="Income"), 
         gr.Number(label="Age"),
         gr.Number(label="Experience"),
+        gr.Dropdown(label="Marital Status", choices=["single", "married"], value=None),
         gr.Dropdown(label="Select Profession...", choices=professions, value=None),
         gr.Dropdown(label="Select City...", choices=cities, value=None),
         gr.Dropdown(label="Select State...", choices=states, value=None),
