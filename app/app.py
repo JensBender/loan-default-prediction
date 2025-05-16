@@ -1,5 +1,6 @@
 # Imports
 import gradio as gr
+import pandas as pd
 import re
 
 # List of professions, cities, and states (in same format as training data)
@@ -130,6 +131,15 @@ def predict_loan_default(income, age, experience, profession, city, state):
         profession = re.sub(r"[-/\s]", "_", profession.lower())  # Convert to lowercase and replace "-", "/", and whitespace characters with "_"
         city = re.sub(r"[-/\s]", "_", city.lower())
         state = re.sub(r"[-/\s]", "_", state.lower())
+
+        # Create DataFrame from inputs
+        input_df = pd.DataFrame({
+            "Income": [income],
+            "Age": [age],
+            "Experience": [experience],
+            "Profession": [profession],
+            "City": [city],
+        })   
         
         # --- Model prediction --- 
         prediction = {"Default": 0.3, "No Default": 0.7}  # Placeholder prediction for now
@@ -142,6 +152,8 @@ def predict_loan_default(income, age, experience, profession, city, state):
         Profession: {profession}
         City: {city}
         State: {state}
+
+        Dataframe: {input_df}
 
         Prediction: {prediction}
         """
