@@ -109,11 +109,11 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
         # --- Input validation ---
         # Numerical input validation
         if not isinstance(income, (int, float)) or income < 0:
-            return "Error", "Error! Income can't be a negative number."
+            return "Error", "Error! Income can't be a negative number.", None
         if not isinstance(age, (int, float)) or age <= 0:
-            return "Error", "Error! Age must be a positive number."
+            return "Error", "Error! Age must be a positive number.", None
         if not isinstance(experience, (int, float)) or experience < 0:
-            return "Error", "Error! Experience can't be a negative number."
+            return "Error", "Error! Experience can't be a negative number.", None
         
         # Missing input check
         missing_inputs = []
@@ -128,7 +128,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
         if not state:
             missing_inputs.append("state")
         if missing_inputs:
-            return "Error", f"Error! Please select: {', '.join(missing_inputs)}."
+            return "Error", f"Error! Please select: {', '.join(missing_inputs)}.", None
         
         # --- Data preprocessing ---
         # Format profession, city, and state to match expected model input
@@ -161,15 +161,13 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
         City: {city}
         State: {state}
 
-        Dataframe: {input_df}
-
         Prediction: {prediction}
         """
 
-        return prediction, test_message
+        return prediction, test_message, input_df
     
     except Exception as e:
-        return "Error", f"Error: {str(e)}"
+        return "Error", f"Error: {str(e)}", None
 
 
 # Gradio app interface
@@ -188,6 +186,7 @@ app = gr.Interface(
     outputs=[
         gr.Label(label="Prediction"),
         gr.Textbox(label="Test Message"),
+        gr.Dataframe(label="Input Dataframe"),
         ],
     title="Loan Default Prediction",
     description="""
