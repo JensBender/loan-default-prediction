@@ -105,7 +105,7 @@ states = [state.replace("_", " ").title() for state in states]
 # Function to predict loan default based on customer application data using Random Forest Classifier
 def predict_loan_default(income, age, experience, profession, city, state):
     try:
-        # --- Data preprocessing ---
+        # --- Input validation ---
         # Numerical input validation
         if not isinstance(income, (int, float)) or income < 0:
             return "Error", "Error! Income can't be a negative number."
@@ -114,7 +114,7 @@ def predict_loan_default(income, age, experience, profession, city, state):
         if not isinstance(experience, (int, float)) or experience < 0:
             return "Error", "Error! Experience can't be a negative number."
         
-        # Check for missing inputs
+        # Missing input check
         missing_inputs = []
         if not profession:
             missing_inputs.append("profession")
@@ -125,6 +125,7 @@ def predict_loan_default(income, age, experience, profession, city, state):
         if missing_inputs:
             return "Error", f"Error! Please select: {', '.join(missing_inputs)}."
         
+        # --- Data preprocessing ---
         # Format profession, city, and state to match expected model input
         profession = re.sub(r"[-/\s]", "_", profession.lower())  # Convert to lowercase and replace "-", "/", and whitespace characters with "_"
         city = re.sub(r"[-/\s]", "_", city.lower())
