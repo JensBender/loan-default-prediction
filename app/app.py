@@ -104,7 +104,7 @@ states = [state.replace("_", " ").title() for state in states]
 
 
 # Function to predict loan default based on customer application data using Random Forest Classifier
-def predict_loan_default(income, age, experience, married, profession, city, state):
+def predict_loan_default(income, age, experience, married, house_ownership, profession, city, state):
     try:
         # --- Input validation ---
         # Numerical input validation
@@ -117,6 +117,10 @@ def predict_loan_default(income, age, experience, married, profession, city, sta
         
         # Missing input check
         missing_inputs = []
+        if not married:
+            missing_inputs.append("married")
+        if not house_ownership:
+            missing_inputs.append("house_ownership")
         if not profession:
             missing_inputs.append("profession")
         if not city:
@@ -137,6 +141,7 @@ def predict_loan_default(income, age, experience, married, profession, city, sta
             "income": [income],
             "age": [age],
             "married": [married],
+            "house_ownership": [house_ownership],
             "experience": [experience],
             "profession": [profession],
             "city": [city],
@@ -151,6 +156,7 @@ def predict_loan_default(income, age, experience, married, profession, city, sta
         Age: {age}
         Experience: {experience}
         Married: {married}
+        House Ownership: {house_ownership}
         Profession: {profession}
         City: {city}
         State: {state}
@@ -174,6 +180,7 @@ app = gr.Interface(
         gr.Number(label="Age"),
         gr.Number(label="Experience"),
         gr.Dropdown(label="Married/Single", choices=["single", "married"], value=None),
+        gr.Dropdown(label="House Ownership", choices=["rented", "owned", "norent_noown"], value=None),
         gr.Dropdown(label="Profession", choices=professions, value=None),
         gr.Dropdown(label="City", choices=cities, value=None),
         gr.Dropdown(label="State", choices=states, value=None),
