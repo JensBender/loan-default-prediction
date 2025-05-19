@@ -111,7 +111,11 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
         for numerical_input, input_value in {"Income": income, "Age": age, "Experience": experience, "Current Job Years": current_job_yrs}.items():
             if not isinstance(input_value, (int, float)) or input_value < 0:
                 return "Error", f"Error! {numerical_input} can't be a negative number.", None
-        
+            
+        # Age validation (must be within training data range 21 to 79)
+        if age < 21 or age > 79:
+            return "Error", f"Our automated loan default prediction system is currently designed for individuals aged 21 to 79. We cannot provide an automated prediction for age {age} at this time.", None
+
         # Missing input check
         missing_inputs = []
         if not married:
