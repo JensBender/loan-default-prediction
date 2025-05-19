@@ -104,11 +104,11 @@ states = [state.replace("_", " ").title() for state in states]
 
 
 # Function to predict loan default based on customer application data using machine learning model
-def predict_loan_default(income, age, experience, married, house_ownership, profession, city, state, current_job_yrs):
+def predict_loan_default(income, age, experience, married, house_ownership, profession, city, state, current_job_yrs, current_house_yrs):
     try:
         # --- Input validation ---
         # Numerical input validation (must be non-negative integers or floats)
-        for numerical_input, input_value in {"Income": income, "Age": age, "Experience": experience, "Current Job Years": current_job_yrs}.items():
+        for numerical_input, input_value in {"Income": income, "Age": age, "Experience": experience, "Current Job Years": current_job_yrs, "Current House Years": current_house_yrs}.items():
             if not isinstance(input_value, (int, float)) or input_value < 0:
                 return "Error", f"Error! {numerical_input} can't be a negative number.", None
             
@@ -147,7 +147,8 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
             "profession": [profession],
             "city": [city],
             "state": [state],
-            "current_job_yrs": [current_job_yrs]
+            "current_job_yrs": [current_job_yrs],
+            "current_house_yrs": [current_house_yrs]
         })   
         
         # --- Model prediction --- 
@@ -164,6 +165,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
         City: {city}
         State: {state}
         Current Job Years: {current_job_yrs}
+        Current House Years: {current_house_yrs}
 
         Prediction: {prediction}
         """
@@ -187,6 +189,7 @@ app = gr.Interface(
         gr.Dropdown(label="City", choices=cities, value=None),
         gr.Dropdown(label="State", choices=states, value=None),
         gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1),
+        gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1),
         ],
     outputs=[
         gr.Label(label="Prediction"),
