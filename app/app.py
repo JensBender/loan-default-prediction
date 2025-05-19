@@ -176,7 +176,7 @@ app = gr.Interface(
     inputs=[
         gr.Number(label="Income"), 
         gr.Number(label="Age"),
-        gr.Number(label="Experience"),
+        gr.Slider(label="Experience", minimum=0, maximum=20, step=1),
         gr.Dropdown(label="Married/Single", choices=["single", "married"], value=None),
         gr.Dropdown(label="House Ownership", choices=["rented", "owned", "norent_noown"], value=None),
         gr.Dropdown(label="Profession", choices=professions, value=None),
