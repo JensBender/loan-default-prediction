@@ -104,11 +104,11 @@ states = [state.replace("_", " ").title() for state in states]
 
 
 # Function to predict loan default based on customer application data using machine learning model
-def predict_loan_default(income, age, experience, married, house_ownership, profession, city, state):
+def predict_loan_default(income, age, experience, married, house_ownership, profession, city, state, current_job_yrs):
     try:
         # --- Input validation ---
         # Numerical input validation (must be non-negative integers or floats)
-        for numerical_input, input_value in {"Income": income, "Age": age, "Experience": experience}.items():
+        for numerical_input, input_value in {"Income": income, "Age": age, "Experience": experience, "Current Job Years": current_job_yrs}.items():
             if not isinstance(input_value, (int, float)) or input_value < 0:
                 return "Error", f"Error! {numerical_input} can't be a negative number.", None
         
@@ -137,12 +137,13 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
         input_df = pd.DataFrame({
             "income": [income],
             "age": [age],
+            "experience": [experience],
             "married": [married],
             "house_ownership": [house_ownership],
-            "experience": [experience],
             "profession": [profession],
             "city": [city],
-            "state": [state]
+            "state": [state],
+            "current_job_yrs": [current_job_yrs]
         })   
         
         # --- Model prediction --- 
@@ -158,6 +159,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
         Profession: {profession}
         City: {city}
         State: {state}
+        Current Job Years: {current_job_yrs}
 
         Prediction: {prediction}
         """
@@ -180,6 +182,7 @@ app = gr.Interface(
         gr.Dropdown(label="Profession", choices=professions, value=None),
         gr.Dropdown(label="City", choices=cities, value=None),
         gr.Dropdown(label="State", choices=states, value=None),
+        gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1),
         ],
     outputs=[
         gr.Label(label="Prediction"),
@@ -196,4 +199,4 @@ app = gr.Interface(
 
 # Launch the app
 if __name__ == "__main__":
-    app.launch()
+    app.launch(debug=True)
