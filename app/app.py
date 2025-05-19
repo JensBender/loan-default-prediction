@@ -115,15 +115,15 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
         # Missing input check
         missing_inputs = []
         if not married:
-            missing_inputs.append("married")
+            missing_inputs.append("Married/Single")
         if not house_ownership:
-            missing_inputs.append("house_ownership")
+            missing_inputs.append("House Ownership")
         if not profession:
-            missing_inputs.append("profession")
+            missing_inputs.append("Profession")
         if not city:
-            missing_inputs.append("city")
+            missing_inputs.append("City")
         if not state:
-            missing_inputs.append("state")
+            missing_inputs.append("State")
         if missing_inputs:
             return "Error", f"Error! Please select: {', '.join(missing_inputs)}.", None
         
@@ -142,6 +142,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
             "experience": [experience],
             "profession": [profession],
             "city": [city],
+            "state": [state]
         })   
         
         # --- Model prediction --- 
