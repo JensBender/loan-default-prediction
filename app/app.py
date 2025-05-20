@@ -1,7 +1,6 @@
 # Imports
 import gradio as gr
 import pandas as pd
-import re
 
 # List of professions, cities, and states (in same format as training data)
 professions = [
@@ -134,10 +133,23 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
             return f"Error! Please select: {', '.join(missing_inputs)}.", "Error", None
         
         # --- Data preprocessing ---
-        # Format profession, city, and state to match expected model input
-        profession = re.sub(r"[-/\s]", "_", profession.lower())  # Convert to lowercase and replace "-", "/", and whitespace characters with "_"
-        city = re.sub(r"[-/\s]", "_", city.lower())
-        state = re.sub(r"[-/\s]", "_", state.lower())
+        # Format categorical label inputs to match expected model inputs 
+        def standardize_categorical_labels(categorical_label):
+            return (
+                categorical_label
+                .strip()  # Remove leading/trailing spaces
+                .lower()  # Convert to lowercase
+                .replace("-", "_")  # Replace hyphens with "_"
+                .replace("/", "_")  # Replace slashes with "_"
+                .replace(" ", "_")  # Replace spaces with "_"
+            )   
+
+        married = standardize_categorical_labels(married)
+        house_ownership = standardize_categorical_labels(house_ownership)
+        car_ownership = standardize_categorical_labels(car_ownership)
+        profession = standardize_categorical_labels(profession)
+        city = standardize_categorical_labels(city)
+        state = standardize_categorical_labels(state)
 
         # Create DataFrame from inputs
         input_df = pd.DataFrame({
@@ -187,9 +199,9 @@ app = gr.Interface(
         gr.Number(label="Income"), 
         gr.Number(label="Age"),
         gr.Slider(label="Experience", minimum=0, maximum=20, step=1),
-        gr.Dropdown(label="Married/Single", choices=["single", "married"], value=None),
-        gr.Dropdown(label="House Ownership", choices=["rented", "owned", "norent_noown"], value=None),
-        gr.Dropdown(label="Car Ownership", choices=["yes", "no"], value=None),
+        gr.Dropdown(label="Married/Single", choices=["Single", "Married"], value=None),
+        gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "NoRent_NoOwn"], value=None),
+        gr.Dropdown(label="Car Ownership", choices=["Yes", "No"], value=None),
         gr.Dropdown(label="Profession", choices=professions, value=None),
         gr.Dropdown(label="City", choices=cities, value=None),
         gr.Dropdown(label="State", choices=states, value=None),
