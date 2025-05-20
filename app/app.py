@@ -104,7 +104,7 @@ states = [state.replace("_", " ").title() for state in states]
 
 
 # Function to predict loan default based on customer application data using machine learning model
-def predict_loan_default(income, age, experience, married, house_ownership, profession, city, state, current_job_yrs, current_house_yrs):
+def predict_loan_default(income, age, experience, married, house_ownership, car_ownership, profession, city, state, current_job_yrs, current_house_yrs):
     try:
         # --- Input validation ---
         # Numerical input validation (must be non-negative integers or floats)
@@ -122,6 +122,8 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
             missing_inputs.append("Married/Single")
         if not house_ownership:
             missing_inputs.append("House Ownership")
+        if not car_ownership:
+            missing_inputs.append("Car Ownership")
         if not profession:
             missing_inputs.append("Profession")
         if not city:
@@ -144,6 +146,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
             "experience": [experience],
             "married": [married],
             "house_ownership": [house_ownership],
+            "car_ownership": [car_ownership],
             "profession": [profession],
             "city": [city],
             "state": [state],
@@ -161,6 +164,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
         Experience: {experience}
         Married: {married}
         House Ownership: {house_ownership}
+        Car Ownership: {car_ownership}
         Profession: {profession}
         City: {city}
         State: {state}
@@ -173,7 +177,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
         return prediction, test_message, input_df
     
     except Exception as e:
-        return "Error", f"Error: {str(e)}", None
+        return f"Error: {str(e)}", "Error", None
 
 
 # Gradio app interface
@@ -185,6 +189,7 @@ app = gr.Interface(
         gr.Slider(label="Experience", minimum=0, maximum=20, step=1),
         gr.Dropdown(label="Married/Single", choices=["single", "married"], value=None),
         gr.Dropdown(label="House Ownership", choices=["rented", "owned", "norent_noown"], value=None),
+        gr.Dropdown(label="Car Ownership", choices=["yes", "no"], value=None),
         gr.Dropdown(label="Profession", choices=professions, value=None),
         gr.Dropdown(label="City", choices=cities, value=None),
         gr.Dropdown(label="State", choices=states, value=None),
