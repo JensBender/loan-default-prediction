@@ -203,8 +203,7 @@ with gr.Blocks() as app:
     with gr.Row():
         # Two input columns
         with gr.Column(scale=2):
-            gr.Markdown("<h2 style='text-align:center'>Input</h2>")
-            gr.Markdown("<p style='text-align:center'>Please fill in the customer application data below:</p>")
+            gr.Markdown("<h2>Input</h2>")
             with gr.Row():
                 # Input column 1
                 with gr.Column():
@@ -226,8 +225,7 @@ with gr.Blocks() as app:
             predict = gr.Button("Predict")
         # Output column
         with gr.Column(scale=1):
-            gr.Markdown("<h2 style='text-align:center'>Prediction</h2>")
-            gr.Markdown("<p style='text-align:center'>The prediction will be displayed here:</p>")
+            gr.Markdown("<h2>Prediction</h2>")
             prediction = gr.Label(label="Prediction")
             test_message = gr.Textbox(label="Test Message")
             input_df = gr.Dataframe(label="Input Dataframe")
