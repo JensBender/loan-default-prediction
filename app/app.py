@@ -199,7 +199,7 @@ app = gr.Interface(
     title="Loan Default Prediction",
     description="""
     <div style='text-align:center'>
-        An app to predict loan default based on customer application data powered by machine learning.
+        An automated loan default prediction system. Submit the customer application data to receive an automated prediction powered by machine learning.
     </div>
     """
 )
