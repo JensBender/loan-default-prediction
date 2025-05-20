@@ -228,6 +228,9 @@ with gr.Blocks() as app:
             gr.Markdown("<h2>Prediction</h2>")
             prediction = gr.Label(label="Prediction")
             test_message = gr.Textbox(label="Test Message")
+    with gr.Row():
+        with gr.Column(scale=3):
+            # Input Dataframe spanning across all three columns
             input_df = gr.Dataframe(label="Input Dataframe")
 
     predict.click(
