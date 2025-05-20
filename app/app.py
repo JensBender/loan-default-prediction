@@ -169,24 +169,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         # --- Model prediction --- 
         prediction = {"Default": 0.3, "No Default": 0.7}  # Placeholder prediction for now
 
-        # Test message for now
-        test_message = f"""
-        Income: {income}
-        Age: {age}
-        Experience: {experience}
-        Married: {married}
-        House Ownership: {house_ownership}
-        Car Ownership: {car_ownership}
-        Profession: {profession}
-        City: {city}
-        State: {state}
-        Current Job Years: {current_job_yrs}
-        Current House Years: {current_house_yrs}
-
-        Prediction: {prediction}
-        """
-
-        return prediction, test_message, input_df
+        return prediction, prediction, input_df
     
     except Exception as e:
         return f"Error: {str(e)}", "Error", None
@@ -221,13 +204,12 @@ with gr.Blocks() as app:
             experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
             current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
             current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
-            # Predict button
-            predict = gr.Button("Predict")
         # Output column
         with gr.Column(scale=1):
             gr.Markdown("<h2>Prediction</h2>")
+            predict = gr.Button("Predict")
             prediction = gr.Label(label="Prediction")
-            test_message = gr.Textbox(label="Test Message")
+            model_output = gr.Textbox(label="Model Output")
     with gr.Row():
         with gr.Column(scale=3):
             # Input Dataframe spanning across all three columns
@@ -239,7 +221,7 @@ with gr.Blocks() as app:
             income, age, experience, married, house_ownership, car_ownership,
             profession, city, state, current_job_yrs, current_house_yrs
         ],
-        outputs=[prediction, test_message, input_df]
+        outputs=[prediction, model_output, input_df]
     )
 
 # Launch the app
