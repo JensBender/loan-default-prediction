@@ -190,19 +190,19 @@ with gr.Blocks() as app:
             with gr.Row():
                 # Input column 1
                 with gr.Column():
-                    income = gr.Number(label="Income")
                     age = gr.Number(label="Age")
                     married = gr.Dropdown(label="Married/Single", choices=["Single", "Married"])
-                    house_ownership = gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"])
+                    income = gr.Number(label="Income")
+                    profession = gr.Dropdown(label="Profession", choices=professions)
                     experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
                     current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
             # Input column 2
                 with gr.Column():
                     car_ownership = gr.Dropdown(label="Car Ownership", choices=["Yes", "No"])
-                    profession = gr.Dropdown(label="Profession", choices=professions)
+                    house_ownership = gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"])
+                    current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
                     city = gr.Dropdown(label="City", choices=cities)
                     state = gr.Dropdown(label="State", choices=states)
-                    current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
         # Output column
         with gr.Column(scale=1):
             gr.Markdown("<h2>Prediction</h2>")
