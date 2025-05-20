@@ -146,6 +146,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
 
         married = standardize_categorical_labels(married)
         house_ownership = standardize_categorical_labels(house_ownership.replace("Neither Rented Nor Owned", "norent_noown"))
+        car_ownership = standardize_categorical_labels(car_ownership)
         profession = standardize_categorical_labels(profession)
         city = standardize_categorical_labels(city)
         state = standardize_categorical_labels(state)
@@ -192,34 +193,54 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
 
 
 # Gradio app interface
-app = gr.Interface(
-    fn=predict_loan_default,
-    inputs=[
-        gr.Number(label="Income"), 
-        gr.Number(label="Age"),
-        gr.Slider(label="Experience", minimum=0, maximum=20, step=1),
-        gr.Dropdown(label="Married/Single", choices=["Single", "Married"], value=None),
-        gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"], value=None),
-        gr.Dropdown(label="Car Ownership", choices=["Yes", "No"], value=None),
-        gr.Dropdown(label="Profession", choices=professions, value=None),
-        gr.Dropdown(label="City", choices=cities, value=None),
-        gr.Dropdown(label="State", choices=states, value=None),
-        gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1),
-        gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1),
+with gr.Blocks() as app:
+    gr.Markdown(
+        """
+        <h1 style='text-align:center'>Loan Default Prediction</h1>
+        <p style='text-align:center'>An automated loan default prediction system. Submit the customer application data to receive an automated prediction powered by machine learning.</p>
+        """
+    )
+    with gr.Row():
+        # Two input columns
+        with gr.Column(scale=2):
+            gr.Markdown("<h2 style='text-align:center'>Input</h2>")
+            gr.Markdown("<p style='text-align:center'>Please fill in the customer application data below:</p>")
+            with gr.Row():
+                # Input column 1
+                with gr.Column():
+                    income = gr.Number(label="Income")
+                    age = gr.Number(label="Age")
+                    married = gr.Dropdown(label="Married/Single", choices=["Single", "Married"])
+                    house_ownership = gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"])
+                # Input column 2
+                with gr.Column():
+                    car_ownership = gr.Dropdown(label="Car Ownership", choices=["Yes", "No"])
+                    profession = gr.Dropdown(label="Profession", choices=professions)
+                    city = gr.Dropdown(label="City", choices=cities)
+                    state = gr.Dropdown(label="State", choices=states)
+            # Sliders spanning both input columns
+            experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
+            current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
+            current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
+            # Predict button
+            predict = gr.Button("Predict")
+        # Output column
+        with gr.Column(scale=1):
+            gr.Markdown("<h2 style='text-align:center'>Prediction</h2>")
+            gr.Markdown("<p style='text-align:center'>The prediction will be displayed here:</p>")
+            prediction = gr.Label(label="Prediction")
+            test_message = gr.Textbox(label="Test Message")
+            input_df = gr.Dataframe(label="Input Dataframe")
+
+    predict.click(
+        predict_loan_default,
+        inputs=[
+            income, age, experience, married, house_ownership, car_ownership,
+            profession, city, state, current_job_yrs, current_house_yrs
         ],
-    outputs=[
-        gr.Label(label="Prediction"),
-        gr.Textbox(label="Test Message"),
-        gr.Dataframe(label="Input Dataframe"),
-        ],
-    title="Loan Default Prediction",
-    description="""
-    <div style='text-align:center'>
-        An automated loan default prediction system. Submit the customer application data to receive an automated prediction powered by machine learning.
-    </div>
-    """
-)
+        outputs=[prediction, test_message, input_df]
+    )
 
 # Launch the app
 if __name__ == "__main__":
-    app.launch(debug=True)
+    app.launch()
