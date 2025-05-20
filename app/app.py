@@ -145,8 +145,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
             )   
 
         married = standardize_categorical_labels(married)
-        house_ownership = standardize_categorical_labels(house_ownership)
-        car_ownership = standardize_categorical_labels(car_ownership)
+        house_ownership = standardize_categorical_labels(house_ownership.replace("Neither Rented Nor Owned", "norent_noown"))
         profession = standardize_categorical_labels(profession)
         city = standardize_categorical_labels(city)
         state = standardize_categorical_labels(state)
@@ -200,7 +199,7 @@ app = gr.Interface(
         gr.Number(label="Age"),
         gr.Slider(label="Experience", minimum=0, maximum=20, step=1),
         gr.Dropdown(label="Married/Single", choices=["Single", "Married"], value=None),
-        gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "NoRent_NoOwn"], value=None),
+        gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"], value=None),
         gr.Dropdown(label="Car Ownership", choices=["Yes", "No"], value=None),
         gr.Dropdown(label="Profession", choices=professions, value=None),
         gr.Dropdown(label="City", choices=cities, value=None),
