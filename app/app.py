@@ -110,11 +110,11 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
         # Numerical input validation (must be non-negative integers or floats)
         for numerical_input, input_value in {"Income": income, "Age": age, "Experience": experience, "Current Job Years": current_job_yrs, "Current House Years": current_house_yrs}.items():
             if not isinstance(input_value, (int, float)) or input_value < 0:
-                return "Error", f"Error! {numerical_input} can't be a negative number.", None
+                return f"Error! {numerical_input} must be a non-negative number.", "Error", None
             
         # Age validation (must be within training data range 21 to 79)
         if age < 21 or age > 79:
-            return "Error", f"Our automated loan default prediction system is currently designed for individuals aged 21 to 79. We cannot provide an automated prediction for age {age} at this time.", None
+            return f"Note: The automated loan default prediction system doesn't currently support age {age}, as it is designed for applicants aged 21–79.", "Error", None
 
         # Missing input check
         missing_inputs = []
@@ -129,7 +129,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, prof
         if not state:
             missing_inputs.append("State")
         if missing_inputs:
-            return "Error", f"Error! Please select: {', '.join(missing_inputs)}.", None
+            return f"Error! Please select: {', '.join(missing_inputs)}.", "Error", None
         
         # --- Data preprocessing ---
         # Format profession, city, and state to match expected model input
