@@ -207,15 +207,13 @@ with gr.Blocks() as app:
                     city = gr.Dropdown(label="City", choices=cities)
                     state = gr.Dropdown(label="State", choices=states)
     
-    # Predict button
+    # Predict button and output
     with gr.Row():
-        predict = gr.Button("Predict")
-
-    # Output
-    with gr.Row():
-        prediction = gr.Label(label="Prediction")
-    with gr.Row():
-       model_output = gr.Textbox(label="Model Output")
+        with gr.Column(scale=0.5):
+            predict = gr.Button("Predict")
+            gr.Markdown("<h2>Output</h2>")
+            prediction = gr.Label(label="Prediction")
+            model_output = gr.Textbox(label="Model Output")
     with gr.Row():
         input_df = gr.Dataframe(label="Input Dataframe")
 
