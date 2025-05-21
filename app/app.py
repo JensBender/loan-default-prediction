@@ -213,9 +213,10 @@ with gr.Blocks() as app:
 
     # Output
     with gr.Row():
-        gr.Markdown("<h2>Prediction</h2>")
         prediction = gr.Label(label="Prediction")
-        model_output = gr.Textbox(label="Model Output")
+    with gr.Row():
+       model_output = gr.Textbox(label="Model Output")
+    with gr.Row():
         input_df = gr.Dataframe(label="Input Dataframe")
 
     # Predict button click event
