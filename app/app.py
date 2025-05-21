@@ -203,10 +203,10 @@ with gr.Blocks() as app:
                     current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
                     city = gr.Dropdown(label="City", choices=cities)
                     state = gr.Dropdown(label="State", choices=states)
+                    predict = gr.Button("Predict")
         # Output column
         with gr.Column(scale=1):
             gr.Markdown("<h2>Prediction</h2>")
-            predict = gr.Button("Predict")
             prediction = gr.Label(label="Prediction")
             model_output = gr.Textbox(label="Model Output")
     with gr.Row():
