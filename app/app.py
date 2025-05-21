@@ -175,14 +175,17 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         return f"Error: {str(e)}", "Error", None
 
 
-# Gradio app interface
+# --- Gradio app interface ---
 with gr.Blocks() as app:
+    # App title and description
     gr.Markdown(
         """
         <h1 style='text-align:center'>Loan Default Prediction</h1>
         <p style='text-align:center'>An automated loan default prediction system. Submit the customer application data to receive an automated prediction powered by machine learning.</p>
         """
     )
+    
+    # Input
     with gr.Row():
         # Two input columns
         with gr.Column(scale=2):
@@ -196,24 +199,26 @@ with gr.Blocks() as app:
                     profession = gr.Dropdown(label="Profession", choices=professions)
                     experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
                     current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
-            # Input column 2
+                # Input column 2
                 with gr.Column():
                     car_ownership = gr.Dropdown(label="Car Ownership", choices=["Yes", "No"])
                     house_ownership = gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"])
                     current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
                     city = gr.Dropdown(label="City", choices=cities)
                     state = gr.Dropdown(label="State", choices=states)
-                    predict = gr.Button("Predict")
-        # Output column
-        with gr.Column(scale=1):
-            gr.Markdown("<h2>Prediction</h2>")
-            prediction = gr.Label(label="Prediction")
-            model_output = gr.Textbox(label="Model Output")
+    
+    # Predict button
     with gr.Row():
-        with gr.Column(scale=3):
-            # Input Dataframe spanning across all three columns
-            input_df = gr.Dataframe(label="Input Dataframe")
+        predict = gr.Button("Predict")
 
+    # Output
+    with gr.Row():
+        gr.Markdown("<h2>Prediction</h2>")
+        prediction = gr.Label(label="Prediction")
+        model_output = gr.Textbox(label="Model Output")
+        input_df = gr.Dataframe(label="Input Dataframe")
+
+    # Predict button click event
     predict.click(
         predict_loan_default,
         inputs=[
@@ -222,6 +227,7 @@ with gr.Blocks() as app:
         ],
         outputs=[prediction, model_output, input_df]
     )
+
 
 # Launch the app
 if __name__ == "__main__":
