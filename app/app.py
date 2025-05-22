@@ -176,7 +176,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
 
 
 # --- Gradio app interface ---
-with gr.Blocks(css=".narrow-centered-column {max-width: 500px; width: 100%; margin-left: auto; margin-right: auto;}") as app:
+with gr.Blocks(css=".narrow-centered-column {max-width: 600px; width: 100%; margin-left: auto; margin-right: auto;}") as app:
     # App title and description
     gr.Markdown(
         """
@@ -208,9 +208,12 @@ with gr.Blocks(css=".narrow-centered-column {max-width: 500px; width: 100%; marg
     with gr.Column(elem_classes="narrow-centered-column"):
         predict = gr.Button("Predict")
         prediction = gr.Label(label="Prediction")
-        model_output = gr.Textbox(label="Model Output")
+
+    # Model input and output for testing
     with gr.Row():
-        input_df = gr.Dataframe(label="Input Dataframe")
+        input_df = gr.Dataframe(label="Model Input")
+    with gr.Row():
+        model_output = gr.Textbox(label="Model Output")
 
     # Predict button click event
     predict.click(
