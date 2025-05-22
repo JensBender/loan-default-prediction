@@ -202,14 +202,13 @@ with gr.Blocks(css=".narrow-centered-column {max-width: 500px; width: 100%; marg
         with gr.Row():
             experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
             current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
-            gr.Markdown("")
+            gr.Markdown("")  # empty space for layout
    
     # Predict button and output
-    with gr.Row():
-        with gr.Column(elem_classes="narrow-centered-column"):
-            predict = gr.Button("Predict")
-            prediction = gr.Label(label="Prediction")
-            model_output = gr.Textbox(label="Model Output")
+    with gr.Column(elem_classes="narrow-centered-column"):
+        predict = gr.Button("Predict")
+        prediction = gr.Label(label="Prediction")
+        model_output = gr.Textbox(label="Model Output")
     with gr.Row():
         input_df = gr.Dataframe(label="Input Dataframe")
 
