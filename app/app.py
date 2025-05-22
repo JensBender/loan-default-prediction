@@ -176,7 +176,10 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
 
 
 # --- Gradio app interface ---
-with gr.Blocks(css=".narrow-centered-column {max-width: 500px; width: 100%; margin-left: auto; margin-right: auto;}") as app:
+with gr.Blocks(
+        # theme=gr.themes.Default(spacing_size="sm"),
+        css=".narrow-centered-column {max-width: 500px; width: 100%; margin-left: auto; margin-right: auto;}"
+    ) as app:
     # App title and description
     gr.Markdown(
         """
@@ -186,25 +189,24 @@ with gr.Blocks(css=".narrow-centered-column {max-width: 500px; width: 100%; marg
     )
     
     # Input
-    with gr.Row():
-        # Two input columns
-        with gr.Column(scale=2):
-            with gr.Row():
-                # Input column 1
-                with gr.Column():
-                    age = gr.Number(label="Age")
-                    married = gr.Dropdown(label="Married/Single", choices=["Single", "Married"])
-                    income = gr.Number(label="Income")
-                    profession = gr.Dropdown(label="Profession", choices=professions)
-                    experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
-                    current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
-                # Input column 2
-                with gr.Column():
-                    car_ownership = gr.Dropdown(label="Car Ownership", choices=["Yes", "No"])
-                    house_ownership = gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"])
-                    current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
-                    city = gr.Dropdown(label="City", choices=cities)
-                    state = gr.Dropdown(label="State", choices=states)
+    with gr.Group():
+        with gr.Row():
+            age = gr.Number(label="Age")
+            married = gr.Dropdown(label="Married/Single", choices=["Single", "Married"])
+        with gr.Row():
+            income = gr.Number(label="Income")
+            experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
+        with gr.Row():
+            profession = gr.Dropdown(label="Profession", choices=professions)
+            current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
+        with gr.Row():
+            car_ownership = gr.Dropdown(label="Car Ownership", choices=["Yes", "No"])
+            house_ownership = gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"])
+        with gr.Row():
+            current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
+            city = gr.Dropdown(label="City", choices=cities)
+        with gr.Row():
+            state = gr.Dropdown(label="State", choices=states)
     
     # Predict button and output
     with gr.Row():
