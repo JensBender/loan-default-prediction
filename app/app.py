@@ -193,20 +193,18 @@ with gr.Blocks(
         with gr.Row():
             age = gr.Number(label="Age")
             married = gr.Dropdown(label="Married/Single", choices=["Single", "Married"])
-        with gr.Row():
             income = gr.Number(label="Income")
-            experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
-        with gr.Row():
-            profession = gr.Dropdown(label="Profession", choices=professions)
-            current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
         with gr.Row():
             car_ownership = gr.Dropdown(label="Car Ownership", choices=["Yes", "No"])
             house_ownership = gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"])
-        with gr.Row():
             current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
-            city = gr.Dropdown(label="City", choices=cities)
         with gr.Row():
+            city = gr.Dropdown(label="City", choices=cities)
             state = gr.Dropdown(label="State", choices=states)
+            profession = gr.Dropdown(label="Profession", choices=professions)
+        with gr.Row():
+            experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
+            current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
     
     # Predict button and output
     with gr.Row():
