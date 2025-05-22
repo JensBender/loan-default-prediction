@@ -176,10 +176,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
 
 
 # --- Gradio app interface ---
-with gr.Blocks(
-        # theme=gr.themes.Default(spacing_size="sm"),
-        css=".narrow-centered-column {max-width: 500px; width: 100%; margin-left: auto; margin-right: auto;}"
-    ) as app:
+with gr.Blocks(css=".narrow-centered-column {max-width: 500px; width: 100%; margin-left: auto; margin-right: auto;}") as app:
     # App title and description
     gr.Markdown(
         """
@@ -205,7 +202,8 @@ with gr.Blocks(
         with gr.Row():
             experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
             current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
-    
+            gr.Markdown("")
+   
     # Predict button and output
     with gr.Row():
         with gr.Column(elem_classes="narrow-centered-column"):
