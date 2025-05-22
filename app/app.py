@@ -189,7 +189,6 @@ with gr.Blocks(css=".narrow-centered-column {max-width: 500px; width: 100%; marg
     with gr.Row():
         # Two input columns
         with gr.Column(scale=2):
-            gr.Markdown("<h2>Input</h2>")
             with gr.Row():
                 # Input column 1
                 with gr.Column():
@@ -211,7 +210,6 @@ with gr.Blocks(css=".narrow-centered-column {max-width: 500px; width: 100%; marg
     with gr.Row():
         with gr.Column(elem_classes="narrow-centered-column"):
             predict = gr.Button("Predict")
-            gr.Markdown("<h2>Output</h2>")
             prediction = gr.Label(label="Prediction")
             model_output = gr.Textbox(label="Model Output")
     with gr.Row():
