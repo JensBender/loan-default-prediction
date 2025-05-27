@@ -141,7 +141,9 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         current_house_yrs = int(round(current_house_yrs))
 
         # Convert UI categorical labels to match training data
-        house_ownership = house_ownership.replace("Neither Rented Nor Owned", "norent_noown")
+        married = married.lower()
+        house_ownership = house_ownership.lower().replace("neither rented nor owned", "norent_noown")
+        car_ownership = car_ownership.lower()
 
         # Create DataFrame from inputs
         input_df = pd.DataFrame({
