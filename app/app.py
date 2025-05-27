@@ -133,7 +133,14 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
             return f"Error! Please select: {', '.join(missing_inputs)}.", "Error", None
         
         # --- Data preprocessing ---
-        # Convert UI categorical labels to expected format
+        # Convert numerical inputs from float (by default) to int to match training data 
+        income = int(round(income))
+        age = int(round(age))
+        experience = int(round(experience))
+        current_job_yrs = int(round(current_job_yrs))
+        current_house_yrs = int(round(current_house_yrs))
+
+        # Convert UI categorical labels to match training data
         house_ownership = house_ownership.replace("Neither Rented Nor Owned", "norent_noown")
 
         # Create DataFrame from inputs
