@@ -133,23 +133,8 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
             return f"Error! Please select: {', '.join(missing_inputs)}.", "Error", None
         
         # --- Data preprocessing ---
-        # Format categorical label inputs to match expected model inputs 
-        def standardize_categorical_labels(categorical_label):
-            return (
-                categorical_label
-                .strip()  # Remove leading/trailing spaces
-                .lower()  # Convert to lowercase
-                .replace("-", "_")  # Replace hyphens with "_"
-                .replace("/", "_")  # Replace slashes with "_"
-                .replace(" ", "_")  # Replace spaces with "_"
-            )   
-
-        married = standardize_categorical_labels(married)
-        house_ownership = standardize_categorical_labels(house_ownership.replace("Neither Rented Nor Owned", "norent_noown"))
-        car_ownership = standardize_categorical_labels(car_ownership)
-        profession = standardize_categorical_labels(profession)
-        city = standardize_categorical_labels(city)
-        state = standardize_categorical_labels(state)
+        # Convert UI categorical labels to expected format
+        house_ownership = house_ownership.replace("Neither Rented Nor Owned", "norent_noown")
 
         # Create DataFrame from inputs
         input_df = pd.DataFrame({
