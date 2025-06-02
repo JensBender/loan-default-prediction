@@ -2,6 +2,7 @@
 import gradio as gr
 import pandas as pd
 import pickle
+import os
 
 # List of professions, cities, and states (in same format as training data)
 professions = [
@@ -162,8 +163,12 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         })   
         
         # --- Model prediction --- 
+        # Get the path to the pipeline file relative to this script 
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        pipeline_path = os.path.join(base_dir, "models", "loan_default_rf_pipeline.pkl")
+
         # Load the pre-trained pipeline including data preprocessing and Random Forest Classifier model
-        with open("models/loan_default_rf_pipeline.pkl", "rb") as file:
+        with open(pipeline_path, "rb") as file:
             pipeline = pickle.load(file)
 
         # Use pipeline to predict probabilities 
