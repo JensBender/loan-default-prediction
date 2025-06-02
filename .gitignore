@@ -17,4 +17,5 @@ models/*random_search*.pkl
 loan-default-venv
 app-venv
 .ipynb_checkpoints
+app/__pycache__
 test_loan_default_prediction.ipynb
