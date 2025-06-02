@@ -181,7 +181,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
             pipeline = pickle.load(file)
 
         # Use pipeline to predict probabilities 
-        prediction = pipeline.predict_proba(input_df.iloc[0])
+        prediction = pipeline.predict_proba(input_df.head(1))
         # placeholder_prediction = {"Default": 0.3, "No Default": 0.7}  # Placeholder prediction for now
 
         return prediction, prediction, input_df
