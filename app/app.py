@@ -1,6 +1,15 @@
 # Imports
 import gradio as gr
 import pandas as pd
+from custom_transformers import (
+    MissingValueChecker,
+    CategoricalLabelStandardizer,
+    BooleanColumnTransformer,
+    JobStabilityTransformer,
+    CityTierTransformer,
+    StateDefaultRateTargetEncoder,
+    FeatureSelector
+)
 import pickle
 import os
 
@@ -165,7 +174,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         # --- Model prediction --- 
         # Get the path to the pipeline file relative to this script 
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        pipeline_path = os.path.join(base_dir, "models", "loan_default_rf_pipeline.pkl")
+        pipeline_path = os.path.join(base_dir, "..", "models", "loan_default_rf_pipeline.pkl")
 
         # Load the pre-trained pipeline including data preprocessing and Random Forest Classifier model
         with open(pipeline_path, "rb") as file:
@@ -234,4 +243,4 @@ with gr.Blocks(css=".narrow-centered-column {max-width: 600px; width: 100%; marg
 
 # Launch the app
 if __name__ == "__main__":
-    app.launch()
+    app.launch(debug=True)
