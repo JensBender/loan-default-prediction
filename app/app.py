@@ -181,16 +181,28 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         # Load the pre-trained pipeline including data preprocessing and Random Forest Classifier model
         with open(pipeline_path, "rb") as file:
             pipeline = pickle.load(file)
+        
+        # Use single-row DataFrame as input
+        pipeline_input_df = pipeline_input_df.head(1) 
 
         # Use pipeline to predict probabilities 
-        pipeline_input_df = pipeline_input_df.head(1)  # only first row of input
         pred_proba = pipeline.predict_proba(pipeline_input_df)
-        pred_proba = pred_proba[0, :]  # only first row of predictions
+
+        # Use only first row of predictions 
+        pred_proba = pred_proba[0, :] 
+
+        # Create predicted probabilities dictionary (for gr.Label output)
         pred_proba_dict = {
-            "Default": pred_proba[1],  # default is class 1
-            "No Default": pred_proba[0]  # no default is class 0
+            "Default": pred_proba[1],  # "Default" is class 1
+            "No Default": pred_proba[0]  # "No Default" is class 0
         }
-        prediction = "Placeholder prediction text."  
+
+        # Apply optimized threshold to convert probabilities to binary predictions
+        optimized_threshold = 0.29  # see training script: loan_default_prediction.ipynb
+        pred = (pred_proba[1] >= optimized_threshold).astype(int)
+
+        # Create prediction text
+        prediction = f"{pred}"  
 
         return pred_proba_dict, prediction, pipeline_input_df, pred_proba
     
