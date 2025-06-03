@@ -220,6 +220,7 @@ custom_css = """
     margin-left: auto; 
     margin-right: auto;
 }
+#prediction-text textarea {font-size: 2em;}
 #pred-proba-label {margin-top: -15px;}
 #markdown-note {margin-top: -13px;}
 """
@@ -256,7 +257,7 @@ with gr.Blocks(css=custom_css) as app:
     # Predict button and outputs
     with gr.Column(elem_classes="narrow-centered-column"):
         predict = gr.Button("Predict")
-        prediction_text = gr.Textbox(show_label=False)
+        prediction_text = gr.Textbox(show_label=False, elem_id="prediction-text")
         pred_proba = gr.Label(show_label=False, show_heading=False, elem_id="pred-proba-label")
         gr.Markdown(
             "<small>Note: Prediction uses an optimized decision threshold of 0.29 "
