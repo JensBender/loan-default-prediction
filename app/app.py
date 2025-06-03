@@ -220,7 +220,7 @@ custom_css = """
     margin-left: auto; 
     margin-right: auto;
 }
-#prediction-text textarea {font-size: 2em;}
+#prediction-text textarea {font-size: 2em; font-weight: bold; text-align: center;}
 #pred-proba-label {margin-top: -15px;}
 #markdown-note {margin-top: -13px;}
 """
