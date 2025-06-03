@@ -202,9 +202,10 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         pred = (pred_proba[1] >= optimized_threshold).astype(int)
 
         # Create prediction text
-        prediction = f"{pred}"  
+        prediction_label_map = {0: "No Default", 1: "Default"}
+        prediction_text = f"{prediction_label_map[pred]}"
 
-        return pred_proba_dict, prediction, pipeline_input_df, pred_proba
+        return pred_proba_dict, prediction_text, pipeline_input_df, pred_proba
     
     except Exception as e:
         return f"Error: {str(e)}", f"Error: {str(e)}", pd.DataFrame(), "Error"
@@ -243,7 +244,7 @@ with gr.Blocks(css=".narrow-centered-column {max-width: 600px; width: 100%; marg
     with gr.Column(elem_classes="narrow-centered-column"):
         predict = gr.Button("Predict")
         pred_proba = gr.Label(label="Predicted Probabilities")
-        prediction = gr.Textbox(label="Prediction")
+        prediction_text = gr.Textbox(label="Prediction")
 
     # Model input and output for testing
     with gr.Row():
@@ -258,7 +259,7 @@ with gr.Blocks(css=".narrow-centered-column {max-width: 600px; width: 100%; marg
             income, age, experience, married, house_ownership, car_ownership,
             profession, city, state, current_job_yrs, current_house_yrs
         ],
-        outputs=[pred_proba, prediction, pipeline_input_df, pipeline_output]
+        outputs=[pred_proba, prediction_text, pipeline_input_df, pipeline_output]
     )
 
 
