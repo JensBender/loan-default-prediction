@@ -214,7 +214,13 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
 # --- Gradio app UI ---
 # Custom CSS 
 custom_css = """
-.narrow-centered-column {max-width: 600px; width: 100%; margin-left: auto; margin-right: auto;}
+.narrow-centered-column {
+    max-width: 600px; 
+    width: 100%; 
+    margin-left: auto; 
+    margin-right: auto;
+}
+#markdown-note {margin-top: -15px;}
 """
 
 # Create Gradio app UI using Blocks
@@ -253,7 +259,8 @@ with gr.Blocks(css=custom_css) as app:
         prediction_text = gr.Textbox(label="Prediction")
         gr.Markdown(
             "<small>Note: Prediction uses an optimized decision threshold of 0.29 "
-            "(predicts 'Default' if probability ≥ 29%, otherwise 'No Default').</small>"
+            "(predicts 'Default' if probability ≥ 29%, otherwise 'No Default').</small>",
+            elem_id="markdown-note"
         )
 
     # Model input and output for testing
