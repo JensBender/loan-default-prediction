@@ -220,7 +220,8 @@ custom_css = """
     margin-left: auto; 
     margin-right: auto;
 }
-#markdown-note {margin-top: -15px;}
+#pred-proba-label {margin-top: -15px;}
+#markdown-note {margin-top: -13px;}
 """
 
 # Create Gradio app UI using Blocks
@@ -256,7 +257,7 @@ with gr.Blocks(css=custom_css) as app:
     with gr.Column(elem_classes="narrow-centered-column"):
         predict = gr.Button("Predict")
         prediction_text = gr.Textbox(show_label=False)
-        pred_proba = gr.Label(show_label=False, show_heading=False)
+        pred_proba = gr.Label(show_label=False, show_heading=False, elem_id="pred-proba-label")
         gr.Markdown(
             "<small>Note: Prediction uses an optimized decision threshold of 0.29 "
             "(predicts 'Default' if probability ≥ 29%, otherwise 'No Default').</small>",
