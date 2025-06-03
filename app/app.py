@@ -156,8 +156,8 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         house_ownership = house_ownership.lower().replace("neither rented nor owned", "norent_noown")
         car_ownership = car_ownership.lower()
 
-        # Create DataFrame from inputs
-        input_df = pd.DataFrame({
+        # Create input DataFrame for Pipeline
+        pipeline_input_df = pd.DataFrame({
             "income": [income],
             "age": [age],
             "experience": [experience],
@@ -181,8 +181,8 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
             pipeline = pickle.load(file)
 
         # Use pipeline to predict probabilities 
-        input_df = input_df.head(1)  # only first row of input
-        pred_proba = pipeline.predict_proba(input_df)
+        pipeline_input_df = pipeline_input_df.head(1)  # only first row of input
+        pred_proba = pipeline.predict_proba(pipeline_input_df)
         pred_proba = pred_proba[0, :]  # only first row of predictions
         pred_proba_dict = {
             "Default": pred_proba[1],  # default is class 1
@@ -190,7 +190,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         }
         # placeholder_prediction = {"Default": 0.3, "No Default": 0.7}  # Placeholder prediction for now
 
-        return pred_proba_dict, input_df, pred_proba_dict
+        return pred_proba_dict, pipeline_input_df, pred_proba
     
     except Exception as e:
         return f"Error: {str(e)}", None, "Error"
@@ -232,9 +232,9 @@ with gr.Blocks(css=".narrow-centered-column {max-width: 600px; width: 100%; marg
 
     # Model input and output for testing
     with gr.Row():
-        input_df = gr.Dataframe(label="Model Input")
+        pipeline_input_df = gr.Dataframe(label="Pipeline Input")
     with gr.Row():
-        model_output = gr.Textbox(label="Model Output")
+        pipeline_output = gr.Textbox(label="Pipeline Output (pred_proba)")
 
     # Predict button click event
     predict.click(
@@ -243,7 +243,7 @@ with gr.Blocks(css=".narrow-centered-column {max-width: 600px; width: 100%; marg
             income, age, experience, married, house_ownership, car_ownership,
             profession, city, state, current_job_yrs, current_house_yrs
         ],
-        outputs=[pred_proba, input_df, model_output]
+        outputs=[pred_proba, pipeline_input_df, pipeline_output]
     )
 
 
