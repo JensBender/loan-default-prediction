@@ -203,7 +203,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
 
         # Create prediction text
         prediction_label_map = {0: "No Default", 1: "Default"}
-        prediction_text = f"{prediction_label_map[pred]} ({pred_proba[1] * 100:.0f}% probability)"
+        prediction_text = f"{prediction_label_map[pred]}"
 
         return pred_proba_dict, prediction_text, pipeline_input_df, pred_proba
     
@@ -252,18 +252,18 @@ with gr.Blocks(css=custom_css) as app:
             current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
             gr.Markdown("")  # empty space for layout
    
-    # Predict button and output
+    # Predict button and outputs
     with gr.Column(elem_classes="narrow-centered-column"):
         predict = gr.Button("Predict")
-        pred_proba = gr.Label(label="Predicted Probabilities")
-        prediction_text = gr.Textbox(label="Prediction")
+        prediction_text = gr.Textbox(show_label=False)
+        pred_proba = gr.Label(show_label=False, show_heading=False)
         gr.Markdown(
             "<small>Note: Prediction uses an optimized decision threshold of 0.29 "
             "(predicts 'Default' if probability ≥ 29%, otherwise 'No Default').</small>",
             elem_id="markdown-note"
         )
 
-    # Model input and output for testing
+    # Pipeline input and output for testing
     with gr.Row():
         pipeline_input_df = gr.Dataframe(label="Pipeline Input")
     with gr.Row():
