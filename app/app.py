@@ -120,11 +120,11 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         # Numerical input validation (must be non-negative integers or floats)
         for numerical_input, input_value in {"Income": income, "Age": age, "Experience": experience, "Current Job Years": current_job_yrs, "Current House Years": current_house_yrs}.items():
             if not isinstance(input_value, (int, float)) or input_value < 0:
-                return f"Error! {numerical_input} must be a non-negative number.", "Error", None
+                return f"Error! {numerical_input} must be a non-negative number.", None, "Error"
             
         # Age validation (must be within training data range 21 to 79)
         if age < 21 or age > 79:
-            return f"Note: The automated loan default prediction system doesn't currently support age {age}, as it is designed for applicants aged 21–79.", "Error", None
+            return f"Note: The automated loan default prediction system doesn't currently support age {age}, as it is designed for applicants aged 21–79.", None, "Error"
 
         # Missing input check
         missing_inputs = []
@@ -141,7 +141,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         if not state:
             missing_inputs.append("State")
         if missing_inputs:
-            return f"Error! Please select: {', '.join(missing_inputs)}.", "Error", None
+            return f"Error! Please select: {', '.join(missing_inputs)}.", None, "Error"
         
         # --- Data preprocessing ---
         # Convert numerical inputs from float (by default) to int to match training data 
@@ -184,16 +184,16 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         input_df = input_df.head(1)  # only first row of input
         pred_proba = pipeline.predict_proba(input_df)
         pred_proba = pred_proba[0, :]  # only first row of predictions
-        prediction = {
+        pred_proba_dict = {
             "Default": pred_proba[1],  # default is class 1
             "No Default": pred_proba[0]  # no default is class 0
         }
         # placeholder_prediction = {"Default": 0.3, "No Default": 0.7}  # Placeholder prediction for now
 
-        return prediction, prediction, input_df
+        return pred_proba_dict, input_df, pred_proba_dict
     
     except Exception as e:
-        return f"Error: {str(e)}", "Error", None
+        return f"Error: {str(e)}", None, "Error"
 
 
 # --- Gradio app interface ---
@@ -228,7 +228,7 @@ with gr.Blocks(css=".narrow-centered-column {max-width: 600px; width: 100%; marg
     # Predict button and output
     with gr.Column(elem_classes="narrow-centered-column"):
         predict = gr.Button("Predict")
-        prediction = gr.Label(label="Prediction")
+        pred_proba = gr.Label(label="Predicted Probabilities")
 
     # Model input and output for testing
     with gr.Row():
@@ -243,7 +243,7 @@ with gr.Blocks(css=".narrow-centered-column {max-width: 600px; width: 100%; marg
             income, age, experience, married, house_ownership, car_ownership,
             profession, city, state, current_job_yrs, current_house_yrs
         ],
-        outputs=[prediction, model_output, input_df]
+        outputs=[pred_proba, input_df, model_output]
     )
 
 
