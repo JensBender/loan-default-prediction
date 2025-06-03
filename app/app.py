@@ -211,8 +211,14 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         return f"Error: {str(e)}", f"Error: {str(e)}", pd.DataFrame(), "Error"
 
 
-# --- Gradio app interface ---
-with gr.Blocks(css=".narrow-centered-column {max-width: 600px; width: 100%; margin-left: auto; margin-right: auto;}") as app:
+# --- Gradio app UI ---
+# Custom CSS 
+custom_css = """
+.narrow-centered-column {max-width: 600px; width: 100%; margin-left: auto; margin-right: auto;}
+"""
+
+# Create Gradio app UI using Blocks
+with gr.Blocks(css=custom_css) as app:
     # App title and description
     gr.Markdown(
         """
