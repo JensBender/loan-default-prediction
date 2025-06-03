@@ -245,6 +245,10 @@ with gr.Blocks(css=".narrow-centered-column {max-width: 600px; width: 100%; marg
         predict = gr.Button("Predict")
         pred_proba = gr.Label(label="Predicted Probabilities")
         prediction_text = gr.Textbox(label="Prediction")
+        gr.Markdown(
+            "<small>Note: Predictions use an optimized decision threshold of 0.29. "
+            "I.e., predicts 'Default' if probability ≥ 29%, otherwise 'No Default'.</small>"
+        )
 
     # Model input and output for testing
     with gr.Row():
