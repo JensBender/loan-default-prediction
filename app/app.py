@@ -147,9 +147,11 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
             missing_inputs.append("State")
         if not profession:
             missing_inputs.append("Profession")
-        if missing_inputs:
-            return f"Please select: {', '.join(missing_inputs)}.", ""
-        
+        if len(missing_inputs) == 1:
+            return f"Please select: {missing_inputs[0]}.", ""
+        if len(missing_inputs) > 1:
+            return f"Please select: {', '.join(missing_inputs[:-1])} and {missing_inputs[-1]}.", ""
+
         # --- Data preprocessing ---
         # Convert numerical inputs from float (by default) to int to match training data 
         income = int(round(income))
