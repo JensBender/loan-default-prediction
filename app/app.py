@@ -122,13 +122,11 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         # Numerical input validation (must be non-negative integers or floats)
         for numerical_input, input_value in {"Income": income, "Age": age, "Experience": experience, "Current Job Years": current_job_yrs, "Current House Years": current_house_yrs}.items():
             if not isinstance(input_value, (int, float)) or input_value < 0:
-                error_message = f"Error! {numerical_input} must be a non-negative number."
-                return error_message, "", pd.DataFrame(), "Error"
+                return f"Error! {numerical_input} must be a non-negative number.", ""
             
         # Age validation (must be within training data range 21 to 79)
         if age < 21 or age > 79:
-            error_message = f"Note: The automated loan default prediction system doesn't currently support age {age}, as it is designed for applicants aged 21–79."
-            return error_message, "", pd.DataFrame(), "Error"
+            return f"Note: The system doesn't currently support age {age}, as it is designed for applicants aged 21–79.", ""
 
         # Missing input check
         missing_inputs = []
@@ -145,7 +143,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         if not state:
             missing_inputs.append("State")
         if missing_inputs:
-            return f"Error! Please select: {', '.join(missing_inputs)}.", "", pd.DataFrame(), "Error"
+            return f"Error! Please select: {', '.join(missing_inputs)}.", ""
         
         # --- Data preprocessing ---
         # Convert numerical inputs from float (by default) to int to match training data 
@@ -207,10 +205,10 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         prediction_label_map = {0: "No Default", 1: "Default"}
         prediction_text = f"{prediction_label_map[pred]}"
 
-        return prediction_text, pred_proba_dict, pipeline_input_df, pred_proba
+        return prediction_text, pred_proba_dict
     
     except Exception as e:
-        return f"Error: {str(e)}", "", pd.DataFrame(), "Error"
+        return f"Error: {str(e)}", ""
 
 
 # --- Gradio app UI ---
@@ -237,7 +235,7 @@ with gr.Blocks(css=custom_css) as app:
         """
     )
     
-    # Input
+    # Inputs
     with gr.Group():
         with gr.Row():
             age = gr.Number(label="Age")
@@ -267,12 +265,6 @@ with gr.Blocks(css=custom_css) as app:
             elem_id="markdown-note"
         )
 
-    # Pipeline input and output for testing
-    with gr.Row():
-        pipeline_input_df = gr.Dataframe(label="Pipeline Input")
-    with gr.Row():
-        pipeline_output = gr.Textbox(label="Pipeline Output (pred_proba array)")
-
     # Predict button click event
     predict.click(
         predict_loan_default,
@@ -280,10 +272,10 @@ with gr.Blocks(css=custom_css) as app:
             income, age, experience, married, house_ownership, car_ownership,
             profession, city, state, current_job_yrs, current_house_yrs
         ],
-        outputs=[prediction_text, pred_proba, pipeline_input_df, pipeline_output]
+        outputs=[prediction_text, pred_proba]
     )
 
 
 # Launch the app
 if __name__ == "__main__":
-    app.launch(debug=True)
+    app.launch()
