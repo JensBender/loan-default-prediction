@@ -114,6 +114,14 @@ professions = [profession.replace("_", " ").title() for profession in PROFESSION
 cities = [city.replace("_", " ").title() for city in CITIES]
 states = [state.replace("_", " ").title() for state in STATES]
 
+# --- Load the pre-trained pipeline including data preprocessing and Random Forest Classifier model ---
+# Get the path to the pipeline file relative to this script
+base_dir = os.path.dirname(os.path.abspath(__file__))
+pipeline_path = os.path.join(base_dir, "..", "models", "loan_default_rf_pipeline.pkl")
+
+# Load the pipeline
+with open(pipeline_path, "rb") as file:
+    pipeline = pickle.load(file)
 
 # --- Function to predict loan default ---
 def predict_loan_default(income, age, experience, married, house_ownership, car_ownership, profession, city, state, current_job_yrs, current_house_yrs):
@@ -152,15 +160,15 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         if len(missing_inputs) > 1:
             return f"Please select: {', '.join(missing_inputs[:-1])} and {missing_inputs[-1]}.", ""
 
-        # --- Data preprocessing ---
-        # Convert numerical inputs from float (by default) to int to match training data 
+        # --- Data preprocessing before pipeline ---
+        # Convert numerical inputs from float (by default) to int to match expected pipeline input 
         income = int(round(income))
         age = int(round(age))
         experience = int(round(experience))
         current_job_yrs = int(round(current_job_yrs))
         current_house_yrs = int(round(current_house_yrs))
 
-        # Convert UI categorical labels to match training data
+        # Convert UI categorical labels to match expected pipeline input
         married = married.lower()
         house_ownership = house_ownership.lower().replace("neither rented nor owned", "norent_noown")
         car_ownership = car_ownership.lower()
@@ -179,19 +187,11 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
             "current_job_yrs": [current_job_yrs],
             "current_house_yrs": [current_house_yrs]
         })   
-        
-        # --- Model prediction --- 
-        # Get the path to the pipeline file relative to this script 
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        pipeline_path = os.path.join(base_dir, "..", "models", "loan_default_rf_pipeline.pkl")
 
-        # Load the pre-trained pipeline including data preprocessing and Random Forest Classifier model
-        with open(pipeline_path, "rb") as file:
-            pipeline = pickle.load(file)
-        
         # Use single-row DataFrame as input
         pipeline_input_df = pipeline_input_df.head(1) 
-
+        
+        # --- Pipeline prediction ---       
         # Use pipeline to predict probabilities 
         pred_proba = pipeline.predict_proba(pipeline_input_df)
 
@@ -205,7 +205,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         }
 
         # Apply optimized threshold to convert probabilities to binary predictions
-        optimized_threshold = 0.29  # see training script: loan_default_prediction.ipynb
+        optimized_threshold = 0.29  # see threshold optimization in training script: loan_default_prediction.ipynb
         pred = (pred_proba[1] >= optimized_threshold).astype(int)
 
         # Create prediction text
