@@ -132,18 +132,18 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         missing_inputs = []
         if not married:
             missing_inputs.append("Married/Single")
-        if not house_ownership:
-            missing_inputs.append("House Ownership")
         if not car_ownership:
             missing_inputs.append("Car Ownership")
-        if not profession:
-            missing_inputs.append("Profession")
+        if not house_ownership:
+            missing_inputs.append("House Ownership")
         if not city:
             missing_inputs.append("City")
         if not state:
             missing_inputs.append("State")
+        if not profession:
+            missing_inputs.append("Profession")
         if missing_inputs:
-            return f"Error! Please select: {', '.join(missing_inputs)}.", ""
+            return f"Please select: {', '.join(missing_inputs)}.", ""
         
         # --- Data preprocessing ---
         # Convert numerical inputs from float (by default) to int to match training data 
@@ -238,26 +238,26 @@ with gr.Blocks(css=custom_css) as app:
     # Inputs
     with gr.Group():
         with gr.Row():
-            age = gr.Number(label="Age")
-            married = gr.Dropdown(label="Married/Single", choices=["Single", "Married"])
-            income = gr.Number(label="Income")
+            age = gr.Number(label="Age", value=None)
+            married = gr.Dropdown(label="Married/Single", choices=["Single", "Married"], value=None)
+            income = gr.Number(label="Income", value=None)
         with gr.Row():
-            car_ownership = gr.Dropdown(label="Car Ownership", choices=["Yes", "No"])
-            house_ownership = gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"])
-            current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
+            car_ownership = gr.Dropdown(label="Car Ownership", choices=["Yes", "No"], value=None)
+            house_ownership = gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"], value=None)
+            current_house_yrs = gr.Slider(label="Current House Years", value=None, minimum=10, maximum=14, step=1)
         with gr.Row():
-            city = gr.Dropdown(label="City", choices=cities)
-            state = gr.Dropdown(label="State", choices=states)
-            profession = gr.Dropdown(label="Profession", choices=professions)
+            city = gr.Dropdown(label="City", choices=cities, value=None)
+            state = gr.Dropdown(label="State", choices=states, value=None)
+            profession = gr.Dropdown(label="Profession", choices=professions, value=None)
         with gr.Row():
-            experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
-            current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
+            experience = gr.Slider(label="Experience", value=None, minimum=0, maximum=20, step=1)
+            current_job_yrs = gr.Slider(label="Current Job Years", value=None, minimum=0, maximum=14, step=1)
             gr.Markdown("")  # empty space for layout
    
     # Predict button and outputs
     with gr.Column(elem_classes="narrow-centered-column"):
         predict = gr.Button("Predict")
-        prediction_text = gr.Textbox(show_label=False, container=False, elem_id="prediction-text")
+        prediction_text = gr.Textbox(placeholder="Prediction Result", show_label=False, container=False, elem_id="prediction-text")   
         pred_proba = gr.Label(show_label=False, show_heading=False, elem_id="pred-proba-label")
         gr.Markdown(
             "<small>Note: Prediction uses an optimized decision threshold of 0.29 "
