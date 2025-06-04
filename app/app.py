@@ -207,7 +207,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         prediction_label_map = {0: "No Default", 1: "Default"}
         prediction_text = f"{prediction_label_map[pred]}"
 
-        return pred_proba_dict, prediction_text, pipeline_input_df, pred_proba
+        return prediction_text, pred_proba_dict, pipeline_input_df, pred_proba
     
     except Exception as e:
         return f"Error: {str(e)}", "", pd.DataFrame(), "Error"
@@ -217,7 +217,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
 # Custom CSS 
 custom_css = """
 .narrow-centered-column {
-    max-width: 600px; 
+    max-width: 700px; 
     width: 100%; 
     margin-left: auto; 
     margin-right: auto;
@@ -259,7 +259,7 @@ with gr.Blocks(css=custom_css) as app:
     # Predict button and outputs
     with gr.Column(elem_classes="narrow-centered-column"):
         predict = gr.Button("Predict")
-        prediction_text = gr.Textbox(show_label=False, elem_id="prediction-text")
+        prediction_text = gr.Textbox(show_label=False, container=False, elem_id="prediction-text")
         pred_proba = gr.Label(show_label=False, show_heading=False, elem_id="pred-proba-label")
         gr.Markdown(
             "<small>Note: Prediction uses an optimized decision threshold of 0.29 "
