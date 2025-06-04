@@ -120,10 +120,15 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
     try:
         # --- Input validation ---
         # Numerical input validation (must be non-negative integers or floats)
+        invalid_numerical_inputs = []
         for numerical_input, input_value in {"Age": age, "Income": income, "Current House Years": current_house_yrs, "Experience": experience, "Current Job Years": current_job_yrs}.items():
             if not isinstance(input_value, (int, float)) or input_value < 0:
-                return f"Error! {numerical_input} must be a non-negative number.", ""
-            
+                invalid_numerical_inputs.append(numerical_input) 
+        if len(invalid_numerical_inputs) == 1:
+            return f"Error! {invalid_numerical_inputs[0]} must be a non-negative number.", ""
+        if len(invalid_numerical_inputs) > 1:
+            return f"Error! {', '.join(invalid_numerical_inputs[:-1])} and {invalid_numerical_inputs[-1]} must be non-negative numbers.", ""
+        
         # Age validation (must be within training data range 21 to 79)
         if age < 21 or age > 79:
             return f"Note: The system doesn't currently support age {age}, as it is designed for applicants aged 21–79.", ""
