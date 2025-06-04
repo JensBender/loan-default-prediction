@@ -13,8 +13,10 @@ from custom_transformers import (
 import pickle
 import os
 
+
+# --- Global variables ---
 # List of professions, cities, and states (in same format as training data)
-professions = [
+PROFESSIONS = [
     "Air_traffic_controller", "Analyst", "Architect", "Army_officer", "Artist",
     "Aviator", "Biomedical_Engineer", "Chartered_Accountant", "Chef", "Chemical_engineer",
     "Civil_engineer", "Civil_servant", "Comedian", "Computer_hardware_engineer", "Computer_operator",
@@ -28,7 +30,7 @@ professions = [
     "Web_designer"
 ]
 
-cities = [
+CITIES = [
    "Adoni", "Agartala", "Agra", "Ahmedabad", "Ahmednagar", "Aizawl",
     "Ajmer", "Akola", "Alappuzha", "Aligarh", "Allahabad", "Alwar",
     "Ambala", "Ambarnath", "Ambattur", "Amravati", "Amritsar", "Amroha",
@@ -97,7 +99,7 @@ cities = [
     "Warangal[11][12]", "Yamunanagar",    
 ]
 
-states = [
+STATES = [
     "Andhra_Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh",
     "Delhi", "Gujarat", "Haryana", "Himachal_Pradesh",
     "Jammu_and_Kashmir", "Jharkhand", "Karnataka", "Kerala",
@@ -108,12 +110,12 @@ states = [
 ]
 
 # Format professions, cities, and states for display
-professions = [profession.replace("_", " ").title() for profession in professions]
-cities = [city.replace("_", " ").title() for city in cities]
-states = [state.replace("_", " ").title() for state in states]
+professions = [profession.replace("_", " ").title() for profession in PROFESSIONS]
+cities = [city.replace("_", " ").title() for city in CITIES]
+states = [state.replace("_", " ").title() for state in STATES]
 
 
-# Function to predict loan default based on customer application data using machine learning model
+# --- Function to predict loan default ---
 def predict_loan_default(income, age, experience, married, house_ownership, car_ownership, profession, city, state, current_job_yrs, current_house_yrs):
     try:
         # --- Input validation ---
@@ -231,7 +233,7 @@ with gr.Blocks(css=custom_css) as app:
     gr.Markdown(
         """
         <h1 style='text-align:center'>Loan Default Prediction</h1>
-        <p style='text-align:center'>An automated loan default prediction system. Submit the customer application data to receive an automated prediction powered by machine learning.</p>
+        <p style='text-align:center'>Submit the customer application data to receive an automated loan default prediction powered by machine learning.</p>
         """
     )
     
