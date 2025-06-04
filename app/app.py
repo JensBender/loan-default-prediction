@@ -14,7 +14,7 @@ import pickle
 import os
 
 
-# --- Global variables ---
+# --- Global constants ---
 # List of professions, cities, and states (in same format as training data)
 PROFESSIONS = [
     "Air_traffic_controller", "Analyst", "Architect", "Army_officer", "Artist",
@@ -251,14 +251,14 @@ with gr.Blocks(css=custom_css) as app:
         with gr.Row():
             car_ownership = gr.Dropdown(label="Car Ownership", choices=["Yes", "No"], value=None)
             house_ownership = gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"], value=None)
-            current_house_yrs = gr.Slider(label="Current House Years", value=None, minimum=10, maximum=14, step=1)
+            current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
         with gr.Row():
             city = gr.Dropdown(label="City", choices=cities, value=None)
             state = gr.Dropdown(label="State", choices=states, value=None)
             profession = gr.Dropdown(label="Profession", choices=professions, value=None)
         with gr.Row():
-            experience = gr.Slider(label="Experience", value=None, minimum=0, maximum=20, step=1)
-            current_job_yrs = gr.Slider(label="Current Job Years", value=None, minimum=0, maximum=14, step=1)
+            experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
+            current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
             gr.Markdown("")  # empty space for layout
 
     # Predict button and outputs
