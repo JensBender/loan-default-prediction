@@ -120,7 +120,7 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
     try:
         # --- Input validation ---
         # Numerical input validation (must be non-negative integers or floats)
-        for numerical_input, input_value in {"Income": income, "Age": age, "Experience": experience, "Current Job Years": current_job_yrs, "Current House Years": current_house_yrs}.items():
+        for numerical_input, input_value in {"Age": age, "Income": income, "Current House Years": current_house_yrs, "Experience": experience, "Current Job Years": current_job_yrs}.items():
             if not isinstance(input_value, (int, float)) or input_value < 0:
                 return f"Error! {numerical_input} must be a non-negative number.", ""
             
@@ -231,29 +231,29 @@ with gr.Blocks(css=custom_css) as app:
     gr.Markdown(
         """
         <h1 style='text-align:center'>Loan Default Prediction</h1>
-        <p style='text-align:center'>Submit the customer application data to receive an automated loan default prediction powered by machine learning.</p>
+        <p style='text-align:center'>Submit the customer application data to receive an automated loan default prediction powered by machine learning. Fields marked with * are required.</p>
         """
     )
     
     # Inputs
     with gr.Group():
         with gr.Row():
-            age = gr.Number(label="Age", value=None)
+            age = gr.Number(label="Age *", value="")
             married = gr.Dropdown(label="Married/Single", choices=["Single", "Married"], value=None)
-            income = gr.Number(label="Income", value=None)
+            income = gr.Number(label="Income *", value="")
         with gr.Row():
             car_ownership = gr.Dropdown(label="Car Ownership", choices=["Yes", "No"], value=None)
             house_ownership = gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"], value=None)
-            current_house_yrs = gr.Slider(label="Current House Years", value=None, minimum=10, maximum=14, step=1)
+            current_house_yrs = gr.Slider(label="Current House Years *", value=None, minimum=10, maximum=14, step=1)
         with gr.Row():
-            city = gr.Dropdown(label="City", choices=cities, value=None)
-            state = gr.Dropdown(label="State", choices=states, value=None)
-            profession = gr.Dropdown(label="Profession", choices=professions, value=None)
+            city = gr.Dropdown(label="City *", choices=cities, value=None)
+            state = gr.Dropdown(label="State *", choices=states, value=None)
+            profession = gr.Dropdown(label="Profession *", choices=professions, value=None)
         with gr.Row():
-            experience = gr.Slider(label="Experience", value=None, minimum=0, maximum=20, step=1)
-            current_job_yrs = gr.Slider(label="Current Job Years", value=None, minimum=0, maximum=14, step=1)
+            experience = gr.Slider(label="Experience *", value=None, minimum=0, maximum=20, step=1)
+            current_job_yrs = gr.Slider(label="Current Job Years *", value=None, minimum=0, maximum=14, step=1)
             gr.Markdown("")  # empty space for layout
-   
+
     # Predict button and outputs
     with gr.Column(elem_classes="narrow-centered-column"):
         predict = gr.Button("Predict")
