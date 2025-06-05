@@ -1,7 +1,7 @@
 # Imports
 import gradio as gr
 import pandas as pd
-from custom_transformers import (
+from app.custom_transformers import (
     MissingValueChecker,
     CategoricalLabelStandardizer,
     BooleanColumnTransformer,
