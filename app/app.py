@@ -156,6 +156,23 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         if len(missing_inputs) > 1:
             return f"Please provide: {', '.join(missing_inputs[:-1])} and {missing_inputs[-1]}.", ""        
         
+        # Data type validation
+        wrong_type_inputs = []
+        if not isinstance(age, (int, float)):
+            wrong_type_inputs.append("Age")
+        if not isinstance(income, (int, float)):
+            wrong_type_inputs.append("Income")
+        if not isinstance(current_house_yrs, (int, float)):
+            wrong_type_inputs.append("Current House Years")
+        if not isinstance(experience, (int, float)):
+            wrong_type_inputs.append("Experience")
+        if not isinstance(current_job_yrs, (int, float)):
+            wrong_type_inputs.append("Current Job Years")
+        if len(wrong_type_inputs) == 1:
+            return f"Error! {wrong_type_inputs[0]} must be a number.", ""
+        if len(wrong_type_inputs) > 1:
+            return f"Error! {', '.join(wrong_type_inputs[:-1])} and {wrong_type_inputs[-1]} must be numbers.", ""
+
         # Numerical input validation (must be non-negative integers or floats)
         invalid_numerical_inputs = []
         for numerical_input, input_value in {"Age": age, "Income": income, "Current House Years": current_house_yrs, "Experience": experience, "Current Job Years": current_job_yrs}.items():
