@@ -127,6 +127,35 @@ with open(pipeline_path, "rb") as file:
 def predict_loan_default(income, age, experience, married, house_ownership, car_ownership, profession, city, state, current_job_yrs, current_house_yrs):
     try:
         # --- Input validation ---
+        # Missing value check
+        missing_inputs = []
+        if age is None or age == "":
+            missing_inputs.append("Age")
+        if not married:  # catches None, "", False, 0, 0.0, [], {}, ()
+            missing_inputs.append("Married/Single")
+        if income is None or income == "":  
+            missing_inputs.append("Income")
+        if not car_ownership:
+            missing_inputs.append("Car Ownership")
+        if not house_ownership:
+            missing_inputs.append("House Ownership")
+        if current_house_yrs is None:
+            missing_inputs.append("Current House Years")
+        if not city:
+            missing_inputs.append("City")
+        if not state:
+            missing_inputs.append("State")
+        if not profession:
+            missing_inputs.append("Profession")
+        if experience is None:
+            missing_inputs.append("Experience")
+        if current_job_yrs is None:
+            missing_inputs.append("Current Job Years")
+        if len(missing_inputs) == 1:
+            return f"Please provide: {missing_inputs[0]}.", ""
+        if len(missing_inputs) > 1:
+            return f"Please provide: {', '.join(missing_inputs[:-1])} and {missing_inputs[-1]}.", ""        
+        
         # Numerical input validation (must be non-negative integers or floats)
         invalid_numerical_inputs = []
         for numerical_input, input_value in {"Age": age, "Income": income, "Current House Years": current_house_yrs, "Experience": experience, "Current Job Years": current_job_yrs}.items():
@@ -140,25 +169,6 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
         # Age validation (must be within training data range 21 to 79)
         if age < 21 or age > 79:
             return f"Note: The system doesn't currently support age {age}, as it is designed for applicants aged 21–79.", ""
-
-        # Missing input check
-        missing_inputs = []
-        if not married:
-            missing_inputs.append("Married/Single")
-        if not car_ownership:
-            missing_inputs.append("Car Ownership")
-        if not house_ownership:
-            missing_inputs.append("House Ownership")
-        if not city:
-            missing_inputs.append("City")
-        if not state:
-            missing_inputs.append("State")
-        if not profession:
-            missing_inputs.append("Profession")
-        if len(missing_inputs) == 1:
-            return f"Please select: {missing_inputs[0]}.", ""
-        if len(missing_inputs) > 1:
-            return f"Please select: {', '.join(missing_inputs[:-1])} and {missing_inputs[-1]}.", ""
 
         # --- Data preprocessing before pipeline ---
         # Convert numerical inputs from float (by default) to int to match expected pipeline input 
