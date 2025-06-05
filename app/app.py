@@ -157,24 +157,43 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
             return f"Please provide: {', '.join(missing_inputs[:-1])} and {missing_inputs[-1]}.", ""        
         
         # Data type validation
-        wrong_type_numerical_inputs = []
-        wrong_type_message = "Data type error! "        
+        invalid_numerical_types = []
+        invalid_string_types = []
+        invalid_types_message = "Data type error! "        
         if not isinstance(age, (int, float)):
-            wrong_type_numerical_inputs.append("Age")
+            invalid_numerical_types.append("Age")
         if not isinstance(income, (int, float)):
-            wrong_type_numerical_inputs.append("Income")
+            invalid_numerical_types.append("Income")
         if not isinstance(current_house_yrs, (int, float)):
-            wrong_type_numerical_inputs.append("Current House Years")
+            invalid_numerical_types.append("Current House Years")
         if not isinstance(experience, (int, float)):
-            wrong_type_numerical_inputs.append("Experience")
+            invalid_numerical_types.append("Experience")
         if not isinstance(current_job_yrs, (int, float)):
-            wrong_type_numerical_inputs.append("Current Job Years")
-        if len(wrong_type_numerical_inputs) == 1:
-            wrong_type_message += f"{wrong_type_numerical_inputs[0]} must be a number."
-        if len(wrong_type_numerical_inputs) > 1:
-            wrong_type_message += f"{', '.join(wrong_type_numerical_inputs[:-1])} and {wrong_type_numerical_inputs[-1]} must be numbers."
-        if wrong_type_numerical_inputs:
-            return wrong_type_message, ""
+            invalid_numerical_types.append("Current Job Years")
+        if len(invalid_numerical_types) == 1:
+            invalid_types_message += f"{invalid_numerical_types[0]} must be a number."
+        if len(invalid_numerical_types) > 1:
+            invalid_types_message += f"{', '.join(invalid_numerical_types[:-1])} and {invalid_numerical_types[-1]} must be numbers."
+
+        if not isinstance(married, str):
+            invalid_string_types.append("Married/Single")
+        if not isinstance(house_ownership, str):
+            invalid_string_types.append("House Ownership")
+        if not isinstance(car_ownership, str):
+            invalid_string_types.append("Car Ownership")
+        if not isinstance(profession, str):
+            invalid_string_types.append("Profession")
+        if not isinstance(city, str):
+            invalid_string_types.append("City")
+        if not isinstance(state, str):
+            invalid_string_types.append("State")
+        if len(invalid_string_types) == 1:
+            invalid_types_message += f"{invalid_string_types[0]} must be a string."
+        if len(invalid_string_types) > 1:
+            invalid_types_message += f"{', '.join(invalid_string_types[:-1])} and {invalid_string_types[-1]} must be strings."
+
+        if invalid_numerical_types or invalid_string_types:
+            return invalid_types_message, ""
 
         # Numerical input validation (must be non-negative integers or floats)
         invalid_numerical_inputs = []
@@ -314,8 +333,9 @@ with gr.Blocks(css=custom_css) as app:
 
 
 if __name__ == "__main__":
-    # Test input validation
+    # Input validation tests
     print(predict_loan_default(50000, "five", 10, "Married", "Owned", "Yes", "Engineer", "Delhi", "Delhi", 5, 12)[0])
+    print(predict_loan_default("50K", "five", 10, "Married", "Owned", "Yes", "Engineer", "Delhi", "Delhi", 5, 12)[0])
     
     # Launch the app
     app.launch()
