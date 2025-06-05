@@ -157,21 +157,24 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
             return f"Please provide: {', '.join(missing_inputs[:-1])} and {missing_inputs[-1]}.", ""        
         
         # Data type validation
-        wrong_type_inputs = []
+        wrong_type_numerical_inputs = []
+        wrong_type_message = "Data type error! "        
         if not isinstance(age, (int, float)):
-            wrong_type_inputs.append("Age")
+            wrong_type_numerical_inputs.append("Age")
         if not isinstance(income, (int, float)):
-            wrong_type_inputs.append("Income")
+            wrong_type_numerical_inputs.append("Income")
         if not isinstance(current_house_yrs, (int, float)):
-            wrong_type_inputs.append("Current House Years")
+            wrong_type_numerical_inputs.append("Current House Years")
         if not isinstance(experience, (int, float)):
-            wrong_type_inputs.append("Experience")
+            wrong_type_numerical_inputs.append("Experience")
         if not isinstance(current_job_yrs, (int, float)):
-            wrong_type_inputs.append("Current Job Years")
-        if len(wrong_type_inputs) == 1:
-            return f"Error! {wrong_type_inputs[0]} must be a number.", ""
-        if len(wrong_type_inputs) > 1:
-            return f"Error! {', '.join(wrong_type_inputs[:-1])} and {wrong_type_inputs[-1]} must be numbers.", ""
+            wrong_type_numerical_inputs.append("Current Job Years")
+        if len(wrong_type_numerical_inputs) == 1:
+            wrong_type_message += f"{wrong_type_numerical_inputs[0]} must be a number."
+        if len(wrong_type_numerical_inputs) > 1:
+            wrong_type_message += f"{', '.join(wrong_type_numerical_inputs[:-1])} and {wrong_type_numerical_inputs[-1]} must be numbers."
+        if wrong_type_numerical_inputs:
+            return wrong_type_message, ""
 
         # Numerical input validation (must be non-negative integers or floats)
         invalid_numerical_inputs = []
@@ -310,6 +313,9 @@ with gr.Blocks(css=custom_css) as app:
     )
 
 
-# Launch the app
 if __name__ == "__main__":
+    # Test input validation
+    print(predict_loan_default(50000, "five", 10, "Married", "Owned", "Yes", "Engineer", "Delhi", "Delhi", 5, 12)[0])
+    
+    # Launch the app
     app.launch()
