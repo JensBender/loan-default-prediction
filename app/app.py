@@ -114,6 +114,39 @@ professions = [profession.replace("_", " ").title() for profession in PROFESSION
 cities = [city.replace("_", " ").title() for city in CITIES]
 states = [state.replace("_", " ").title() for state in STATES]
 
+
+# --- Input validation functions ---
+# Missing value check
+def check_missing_values(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
+    missing_inputs = []
+    if age is None or age == "":
+        missing_inputs.append("Age")
+    if not married:  # catches None, "", False, 0, 0.0, [], {}, ()
+        missing_inputs.append("Married/Single")
+    if income is None or income == "":  
+        missing_inputs.append("Income")
+    if not car_ownership:
+        missing_inputs.append("Car Ownership")
+    if not house_ownership:
+        missing_inputs.append("House Ownership")
+    if current_house_yrs is None:
+        missing_inputs.append("Current House Years")
+    if not city:
+        missing_inputs.append("City")
+    if not state:
+        missing_inputs.append("State")
+    if not profession:
+        missing_inputs.append("Profession")
+    if experience is None:
+        missing_inputs.append("Experience")
+    if current_job_yrs is None:
+        missing_inputs.append("Current Job Years")
+    if len(missing_inputs) == 1:
+        return f"Please provide: {missing_inputs[0]}."
+    if len(missing_inputs) > 1:
+        return f"Please provide: {', '.join(missing_inputs[:-1])} and {missing_inputs[-1]}."
+
+
 # --- Load the pre-trained pipeline including data preprocessing and Random Forest Classifier model ---
 # Get the path to the pipeline file relative to this script
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -128,33 +161,9 @@ def predict_loan_default(income, age, experience, married, house_ownership, car_
     try:
         # --- Input validation ---
         # Missing value check
-        missing_inputs = []
-        if age is None or age == "":
-            missing_inputs.append("Age")
-        if not married:  # catches None, "", False, 0, 0.0, [], {}, ()
-            missing_inputs.append("Married/Single")
-        if income is None or income == "":  
-            missing_inputs.append("Income")
-        if not car_ownership:
-            missing_inputs.append("Car Ownership")
-        if not house_ownership:
-            missing_inputs.append("House Ownership")
-        if current_house_yrs is None:
-            missing_inputs.append("Current House Years")
-        if not city:
-            missing_inputs.append("City")
-        if not state:
-            missing_inputs.append("State")
-        if not profession:
-            missing_inputs.append("Profession")
-        if experience is None:
-            missing_inputs.append("Experience")
-        if current_job_yrs is None:
-            missing_inputs.append("Current Job Years")
-        if len(missing_inputs) == 1:
-            return f"Please provide: {missing_inputs[0]}.", ""
-        if len(missing_inputs) > 1:
-            return f"Please provide: {', '.join(missing_inputs[:-1])} and {missing_inputs[-1]}.", ""        
+        missing_value_message = check_missing_values(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs)
+        if missing_value_message:
+            return missing_value_message, ""
         
         # Data type validation
         invalid_numerical_types = []
