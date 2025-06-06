@@ -24,3 +24,11 @@ def test_check_single_missing_values():
     assert check_missing_values(25, "Married", 50000, "Yes", "No", 5, "Delhi", "Delhi", None, 3, 2) == "Please provide: Profession."
     assert check_missing_values(25, "Married", 50000, "Yes", "No", 5, "Delhi", "Delhi", "Engineer", None, 2) == "Please provide: Experience."
     assert check_missing_values(25, "Married", 50000, "Yes", "No", 5, "Delhi", "Delhi", "Engineer", 3, None) == "Please provide: Current Job Years."
+
+
+def test_check_multiple_missing_values():
+    assert check_missing_values(None, None, None, None, None, None, None, None, None, None, None) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, State, Profession, Experience and Current Job Years."
+    assert check_missing_values(25, "Married", None, "Yes", "No", 5, "Delhi", "Delhi", "Engineer", 3, None) == "Please provide: Income and Current Job Years."
+    assert check_missing_values(None, "Single", 60000, None, "Yes", 10, "Mumbai", "Maharashtra", "Manager", 5, 4) == "Please provide: Age and Car Ownership."
+    assert check_missing_values(40, None, 80000, "Yes", None, 15, "Bangalore", "Karnataka", "Developer", 8, 6) == "Please provide: Married/Single and House Ownership."
+    assert check_missing_values(30, "Single", None, "No", "Yes", None, "Mumbai", "Maharashtra", "Manager", 5, 4) == "Please provide: Income and Current House Years."
