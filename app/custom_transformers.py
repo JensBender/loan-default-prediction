@@ -1,8 +1,8 @@
-import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
+import pandas as pd
 
 
-# Custom Transformer class: Check missing values 
+# Check missing values 
 class MissingValueChecker(BaseEstimator, TransformerMixin):
     def __init__(self, critical_features=None, non_critical_features=None):
         if critical_features is None or non_critical_features is None:
@@ -57,7 +57,7 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         return X_transformed
 
 
-# Custom Transformer class: Standardize categorical labels to snake_case
+# Standardize categorical labels to snake_case
 class CategoricalLabelStandardizer(BaseEstimator, TransformerMixin):
     def __init__(self, columns=None):
         self.columns = columns
@@ -87,7 +87,7 @@ class CategoricalLabelStandardizer(BaseEstimator, TransformerMixin):
         return X_transformed
 
 
-# Custom Transformer class: Convert binary categorical columns to boolean columns 
+# Convert binary categorical columns to boolean columns 
 class BooleanColumnTransformer(BaseEstimator, TransformerMixin):  
     def __init__(self, boolean_column_mappings=None):
         if boolean_column_mappings is None:
@@ -110,7 +110,7 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
         return X_transformed
 
 
-# Custom Transformer class: Derive job stability from profession 
+# Derive job stability from profession 
 class JobStabilityTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, job_stability_map=None):
         if job_stability_map is None:
@@ -132,7 +132,7 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         return X_transformed
 
 
-# Custom Transformer class: Derive city tier from city
+# Derive city tier from city
 class CityTierTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, city_tier_map=None):
         if city_tier_map is None:
@@ -154,7 +154,7 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         return X_transformed
 
 
-# Custom Transformer class: Target encoding of state default rate 
+# Target encoding of state default rate 
 class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
     def fit(self, X, y):
         # Merge X and y
@@ -177,7 +177,7 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         return X_transformed
 
 
-# Custom Transformer class: Feature selection for downstream model training and inference 
+# Feature selection for downstream model training and inference 
 class FeatureSelector(BaseEstimator, TransformerMixin):
     def __init__(self, columns_to_keep):
         self.columns_to_keep = columns_to_keep
