@@ -1,10 +1,8 @@
-# Set the system path to the root directory (one up from the current directory)
-import sys
+# Imports
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  
-
-# Import the predict_loan_default function from the app
-from app.app import predict_loan_default
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  # Add the parent directory to the path
+from app.app import predict_loan_default 
 
 # --- Input validation tests ---
 # 1 invalid numerical type
