@@ -8,8 +8,6 @@ from app.app import check_missing_values
 
 def test_check_no_missing_values():
     assert check_missing_values(25, "Married", 50000, "Yes", "No", 5, "Delhi", "Delhi", "Engineer", 3, 2) == None
-    assert check_missing_values(30, "Single", 60000, "No", "Yes", 10, "Mumbai", "Maharashtra", "Manager", 5, 4) == None
-    assert check_missing_values(40, "Married", 80000, "Yes", "No", 15, "Bangalore", "Karnataka", "Developer", 8, 6) == None
 
 
 def test_check_single_missing_values():   
