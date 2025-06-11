@@ -48,6 +48,26 @@ def test_check_single_missing_value(valid_inputs, missing_input, expected_error_
     inputs[missing_input] = None
     assert check_missing_values(**inputs) == expected_error_message
 
+def test_check_all_missing_values():
+    inputs = {
+        "age": None,
+        "married": None,
+        "income": None,
+        "car_ownership": None,
+        "house_ownership": None,
+        "current_house_yrs": None,
+        "city": None,
+        "state": None,
+        "profession": None,
+        "experience": None,
+        "current_job_yrs": None
+    }
+    expected_error_message = (
+        "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, "
+        "City, State, Profession, Experience and Current Job Years."
+        )
+    assert check_missing_values(**inputs) == expected_error_message
+
 
 def test_check_missing_values():   
     # 2 missing values
@@ -77,9 +97,6 @@ def test_check_missing_values():
     # 10 missing values
     assert check_missing_values(None, None, None, None, None, None, None, None, "Architect", None, None) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, State, Experience and Current Job Years."
  
-    # All missing values
-    assert check_missing_values(None, None, None, None, None, None, None, None, None, None, None) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, State, Profession, Experience and Current Job Years."
-
 
 # --- Inputs and their value ranges --- 
 # age
