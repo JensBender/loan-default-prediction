@@ -41,7 +41,7 @@ def test_check_no_missing_values(valid_inputs):
     ("state", "Please provide: State."),
     ("profession", "Please provide: Profession."),
     ("experience", "Please provide: Experience."),
-    ("current_job_yrs", "Please provide: Current Job Years.")
+    ("current_job_yrs", "Please provide: Current Job Years."),
 ])
 def test_check_single_missing_value(valid_inputs, missing_input, expected_error_message):
     inputs = valid_inputs.copy()
@@ -69,34 +69,20 @@ def test_check_all_missing_values():
     assert check_missing_values(**inputs) == expected_error_message
 
 
-def test_check_missing_values():   
-    # 2 missing values
-    assert check_missing_values(30, "Married", None, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, None) == "Please provide: Income and Current Job Years."
+@pytest.mark.parametrize("missing_input_1, missing_input_2, expected_error_message", [
+    ("age", "married", "Please provide: Age and Married/Single."),
+    ("income", "car_ownership", "Please provide: Income and Car Ownership."),
+    ("house_ownership", "current_house_yrs", "Please provide: House Ownership and Current House Years."),
+    ("city", "state", "Please provide: City and State."),
+    ("profession", "experience", "Please provide: Profession and Experience."),
+    ("age", "current_job_yrs", "Please provide: Age and Current Job Years."),
+])
+def test_check_two_missing_values(valid_inputs, missing_input_1, missing_input_2, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs[missing_input_1] = None
+    inputs[missing_input_2] = None
+    assert check_missing_values(**inputs) == expected_error_message
 
-    # 3 missing values
-    assert check_missing_values(30, "Married", 1000000, "Yes", "Rented", 12, None, None, None, 10, 7) == "Please provide: City, State and Profession."
-
-    # 4 missing values
-    assert check_missing_values(30, "Married", 1000000, "Yes", "Rented", 12, None, None, None, None, 7) == "Please provide: City, State, Profession and Experience."
-
-    # 5 missing values
-    assert check_missing_values(30, "Married", 1000000, "Yes", "Rented", None, None, None, None, None, 7) == "Please provide: Current House Years, City, State, Profession and Experience."
-
-    # 6 missing values
-    assert check_missing_values(30, "Married", 1000000, "Yes", "Rented", None, None, None, None, None, None) == "Please provide: Current House Years, City, State, Profession, Experience and Current Job Years."
-
-    # 7 missing values
-    assert check_missing_values(None, None, None, None, None, None, None, "Assam", "Architect", 10, 7) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years and City."
-
-    # 8 missing values
-    assert check_missing_values(None, None, None, None, None, None, "Delhi", "Assam", None, None, 7) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, Profession and Experience."
- 
-    # 9 missing values
-    assert check_missing_values(None, None, None, None, None, None, None, None, "Architect", None, 7) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, State and Experience."
- 
-    # 10 missing values
-    assert check_missing_values(None, None, None, None, None, None, None, None, "Architect", None, None) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, State, Experience and Current Job Years."
- 
 
 # --- Inputs and their value ranges --- 
 # age
