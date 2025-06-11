@@ -1,11 +1,13 @@
 # Imports
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)  # suppress deprecation warnings
 import pytest
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  # Add the parent directory to the path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  # add the parent directory to the path
 from app.app import check_missing_values
 
-# --- Inputs and value ranges --- 
+# --- Inputs and their value ranges --- 
 # age
 # married ["Single", "Married"]
 # income
