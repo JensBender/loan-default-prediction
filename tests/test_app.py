@@ -30,7 +30,10 @@ def test_check_no_missing_values(valid_inputs):
     assert check_missing_values(**valid_inputs) == None
 
 
-def test_check_single_missing_value(valid_inputs, missing_input="age", expected_error_message="Please provide: Age."):
+@pytest.mark.parametrize("missing_input, expected_error_message", [
+    ("age", "Please provide: Age.")
+])
+def test_check_single_missing_value(valid_inputs, missing_input, expected_error_message):
     inputs = valid_inputs.copy()
     inputs[missing_input] = None
     assert check_missing_values(**inputs) == expected_error_message
