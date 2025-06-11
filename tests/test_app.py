@@ -26,10 +26,11 @@ def valid_inputs():
     }
 
 
-def test_check_missing_values():   
-    # No missing values
-    assert check_missing_values(30, "Married", 1000000, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, 7) == None
+def test_check_no_missing_values(valid_inputs):
+    assert check_missing_values(**valid_inputs) == None
 
+
+def test_check_missing_values():   
     # 1 missing value
     assert check_missing_values(None, "Married", 1000000, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, 7) == "Please provide: Age."
     assert check_missing_values(30, None, 1000000, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, 7) == "Please provide: Married/Single."
