@@ -48,6 +48,22 @@ def test_check_single_missing_value(valid_inputs, missing_input, expected_error_
     inputs[missing_input] = None
     assert check_missing_values(**inputs) == expected_error_message
 
+
+@pytest.mark.parametrize("missing_input_1, missing_input_2, expected_error_message", [
+    ("age", "married", "Please provide: Age and Married/Single."),
+    ("income", "car_ownership", "Please provide: Income and Car Ownership."),
+    ("house_ownership", "current_house_yrs", "Please provide: House Ownership and Current House Years."),
+    ("city", "state", "Please provide: City and State."),
+    ("profession", "experience", "Please provide: Profession and Experience."),
+    ("age", "current_job_yrs", "Please provide: Age and Current Job Years."),
+])
+def test_check_two_missing_values(valid_inputs, missing_input_1, missing_input_2, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs[missing_input_1] = None
+    inputs[missing_input_2] = None
+    assert check_missing_values(**inputs) == expected_error_message
+
+
 def test_check_all_missing_values():
     inputs = {
         "age": None,
@@ -69,22 +85,13 @@ def test_check_all_missing_values():
     assert check_missing_values(**inputs) == expected_error_message
 
 
-@pytest.mark.parametrize("missing_input_1, missing_input_2, expected_error_message", [
-    ("age", "married", "Please provide: Age and Married/Single."),
-    ("income", "car_ownership", "Please provide: Income and Car Ownership."),
-    ("house_ownership", "current_house_yrs", "Please provide: House Ownership and Current House Years."),
-    ("city", "state", "Please provide: City and State."),
-    ("profession", "experience", "Please provide: Profession and Experience."),
-    ("age", "current_job_yrs", "Please provide: Age and Current Job Years."),
-])
-def test_check_two_missing_values(valid_inputs, missing_input_1, missing_input_2, expected_error_message):
+def test_check_zero_as_missing_value(valid_inputs):
     inputs = valid_inputs.copy()
-    inputs[missing_input_1] = None
-    inputs[missing_input_2] = None
-    assert check_missing_values(**inputs) == expected_error_message
+    inputs["age"] = 0
+    assert check_missing_values(**inputs) == None  # zero is not considered a missing value for numerical inputs
 
 
-# --- Inputs and their value ranges --- 
+# --- Inputs and their value ranges ---
 # age
 # married ["Single", "Married"]
 # income
