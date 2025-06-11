@@ -31,7 +31,17 @@ def test_check_no_missing_values(valid_inputs):
 
 
 @pytest.mark.parametrize("missing_input, expected_error_message", [
-    ("age", "Please provide: Age.")
+    ("age", "Please provide: Age."),
+    ("married", "Please provide: Married/Single."),
+    ("income", "Please provide: Income."),
+    ("car_ownership", "Please provide: Car Ownership."),
+    ("house_ownership", "Please provide: House Ownership."),
+    ("current_house_yrs", "Please provide: Current House Years."),
+    ("city", "Please provide: City."),
+    ("state", "Please provide: State."),
+    ("profession", "Please provide: Profession."),
+    ("experience", "Please provide: Experience."),
+    ("current_job_yrs", "Please provide: Current Job Years.")
 ])
 def test_check_single_missing_value(valid_inputs, missing_input, expected_error_message):
     inputs = valid_inputs.copy()
@@ -40,19 +50,6 @@ def test_check_single_missing_value(valid_inputs, missing_input, expected_error_
 
 
 def test_check_missing_values():   
-    # 1 missing value
-    assert check_missing_values(None, "Married", 1000000, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, 7) == "Please provide: Age."
-    assert check_missing_values(30, None, 1000000, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, 7) == "Please provide: Married/Single."
-    assert check_missing_values(30, "Married", None, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, 7) == "Please provide: Income."
-    assert check_missing_values(30, "Married", 1000000, None, "Rented", 12, "Delhi", "Assam", "Architect", 10, 7) == "Please provide: Car Ownership."
-    assert check_missing_values(30, "Married", 1000000, "Yes", None, 12, "Delhi", "Assam", "Architect", 10, 7) == "Please provide: House Ownership."
-    assert check_missing_values(30, "Married", 1000000, "Yes", "Rented", None, "Delhi", "Assam", "Architect", 10, 7) == "Please provide: Current House Years."
-    assert check_missing_values(30, "Married", 1000000, "Yes", "Rented", 12, None, "Assam", "Architect", 10, 7) == "Please provide: City."
-    assert check_missing_values(30, "Married", 1000000, "Yes", "Rented", 12, "Delhi", None, "Architect", 10, 7) == "Please provide: State."
-    assert check_missing_values(30, "Married", 1000000, "Yes", "Rented", 12, "Delhi", "Assam", None, 10, 7) == "Please provide: Profession."
-    assert check_missing_values(30, "Married", 1000000, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", None, 7) == "Please provide: Experience."
-    assert check_missing_values(30, "Married", 1000000, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, None) == "Please provide: Current Job Years."
-
     # 2 missing values
     assert check_missing_values(30, "Married", None, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, None) == "Please provide: Income and Current Job Years."
 
