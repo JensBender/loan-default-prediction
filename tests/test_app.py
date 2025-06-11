@@ -8,6 +8,24 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))) 
 from app.app import check_missing_values, validate_data_types
 
 
+# Define valid input values for testing as dictionary
+@pytest.fixture
+def valid_inputs():
+    return {
+        "age": 30,
+        "married": "Married",
+        "income": 1000000,
+        "car_ownership": "Yes",
+        "house_ownership": "Rented",
+        "current_house_yrs": 12,
+        "city": "Delhi",
+        "state": "Assam",
+        "profession": "Architect",
+        "experience": 10,
+        "current_job_yrs": 7
+    }
+
+
 def test_check_missing_values():   
     # No missing values
     assert check_missing_values(30, "Married", 1000000, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, 7) == None
