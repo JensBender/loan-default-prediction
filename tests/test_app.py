@@ -5,20 +5,7 @@ import pytest
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  # add the parent directory to the path
-from app.app import check_missing_values
-
-# --- Inputs and their value ranges --- 
-# age
-# married ["Single", "Married"]
-# income
-# car_ownership ["Yes", "No"] 
-# house_ownership ["Rented", "Owned", "Neither Rented Nor Owned"] 
-# current_house_yrs [10-14]
-# city ["Adoni", "Agartala", "Agra", "Ahmedabad", "Ahmednagar", ...]
-# state ["Andhra_Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Delhi", ...]
-# profession ["Air_traffic_controller", "Analyst", "Architect", "Army_officer", "Artist", ...]
-# experience [0-20]
-# current_job_yrs [0-14]
+from app.app import check_missing_values, validate_data_types
 
 
 def test_check_missing_values():   
@@ -67,3 +54,22 @@ def test_check_missing_values():
  
     # All missing values
     assert check_missing_values(None, None, None, None, None, None, None, None, None, None, None) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, State, Profession, Experience and Current Job Years."
+
+
+# --- Inputs and their value ranges --- 
+# age
+# married ["Single", "Married"]
+# income
+# car_ownership ["Yes", "No"] 
+# house_ownership ["Rented", "Owned", "Neither Rented Nor Owned"] 
+# current_house_yrs [10-14]
+# city ["Adoni", "Agartala", "Agra", "Ahmedabad", "Ahmednagar", ...]
+# state ["Andhra_Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Delhi", ...]
+# profession ["Air_traffic_controller", "Analyst", "Architect", "Army_officer", "Artist", ...]
+# experience [0-20]
+# current_job_yrs [0-14]
+
+
+def test_validate_numerical_inputs():
+    # No invalid data types
+    assert validate_data_types(30, "Married", 1000000, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, 7) == None
