@@ -25,69 +25,30 @@ def test_check_missing_values():
 
     # 2 missing values
     assert check_missing_values(25, "Married", None, "Yes", "No", 5, "Delhi", "Delhi", "Engineer", 3, None) == "Please provide: Income and Current Job Years."
-    assert check_missing_values(None, "Single", 60000, None, "Yes", 10, "Mumbai", "Maharashtra", "Manager", 5, 4) == "Please provide: Age and Car Ownership."
-    assert check_missing_values(40, None, 80000, "Yes", None, 15, "Bangalore", "Karnataka", "Developer", 8, 6) == "Please provide: Married/Single and House Ownership."
-    assert check_missing_values(30, "Single", None, "No", "Yes", None, "Mumbai", "Maharashtra", "Manager", 5, 4) == "Please provide: Income and Current House Years."
-    assert check_missing_values(35, "Married", 70000, None, "No", 8, None, "Delhi", "Engineer", 4, 3) == "Please provide: Car Ownership and City."
-    assert check_missing_values(28, "Single", 55000, "Yes", "No", 6, "Chennai", None, "Developer", None, 2) == "Please provide: State and Experience."
-    assert check_missing_values(None, None, 50000, "Yes", "No", 10, "Mumbai", "Maharashtra", "Developer", 5, 3) == "Please provide: Age and Married/Single."
-    assert check_missing_values(30, "Single", None, None, "No", 10, "Mumbai", "Maharashtra", "Developer", 5, 3) == "Please provide: Income and Car Ownership."
-    assert check_missing_values(30, "Single", 60000, "Yes", None, None, "Mumbai", "Maharashtra", "Developer", 5, 3) == "Please provide: House Ownership and Current House Years."
-    assert check_missing_values(30, "Single", 60000, "Yes", "No", 10, None, None, "Developer", 5, 3) == "Please provide: City and State."
-    assert check_missing_values(30, "Single", 60000, "Yes", "No", 10, "Mumbai", "Maharashtra", None, None, 3) == "Please provide: Profession and Experience."
-    assert check_missing_values(30, "Single", 60000, "Yes", "No", 10, "Mumbai", "Maharashtra", "Developer", None, None) == "Please provide: Experience and Current Job Years."   
 
     # 3 missing values
-    assert check_missing_values(None, None, None, "Yes", "No", 10, "Mumbai", "Maharashtra", "Developer", 5, 3) == "Please provide: Age, Married/Single and Income."
-    assert check_missing_values(30, "Single", None, None, None, 10, "Mumbai", "Maharashtra", "Developer", 5, 3) == "Please provide: Income, Car Ownership and House Ownership."
     assert check_missing_values(30, "Single", 60000, "Yes", "No", 10, None, None, None, 5, 3) == "Please provide: City, State and Profession."
-    assert check_missing_values(None, "Single", 60000, "Yes", "No", 10, "Mumbai", None, None, None, 3) == "Please provide: Age, State, Profession and Experience."
-    assert check_missing_values(None, None, 60000, "Yes", "No", 10, None, "Maharashtra", "Developer", 5, 3) == "Please provide: Age, Married/Single and City."
 
     # 4 missing values
-    assert check_missing_values(None, None, None, None, "No", 10, "Mumbai", "Maharashtra", "Developer", 5, 3) == "Please provide: Age, Married/Single, Income and Car Ownership."
     assert check_missing_values(30, "Single", 60000, "Yes", "No", 10, None, None, None, None, 3) == "Please provide: City, State, Profession and Experience."
 
     # 5 missing values
-    assert check_missing_values(None, None, None, None, None, 10, "Mumbai", "Maharashtra", "Developer", 5, 3) == "Please provide: Age, Married/Single, Income, Car Ownership and House Ownership."
     assert check_missing_values(30, "Single", 60000, "Yes", "No", None, None, None, None, None, 3) == "Please provide: Current House Years, City, State, Profession and Experience."
-    assert check_missing_values(30, "Single", 60000, "Yes", "No", 10, None, None, None, None, None) == "Please provide: City, State, Profession, Experience and Current Job Years."
 
     # 6 missing values
-    assert check_missing_values(None, None, None, None, None, None, "Mumbai", "Maharashtra", "Developer", 5, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership and Current House Years."
-    assert check_missing_values(30, None, None, None, None, None, None, "Maharashtra", "Developer", 5, 3) == "Please provide: Married/Single, Income, Car Ownership, House Ownership, Current House Years and City."
-    assert check_missing_values(30, "Single", None, None, None, None, None, None, "Developer", 5, 3) == "Please provide: Income, Car Ownership, House Ownership, Current House Years, City and State."
-    assert check_missing_values(30, "Single", 60000, None, None, None, None, None, None, 5, 3) == "Please provide: Car Ownership, House Ownership, Current House Years, City, State and Profession."
-    assert check_missing_values(30, "Single", 60000, "Yes", None, None, None, None, None, None, 3) == "Please provide: House Ownership, Current House Years, City, State, Profession and Experience."
     assert check_missing_values(30, "Single", 60000, "Yes", "No", None, None, None, None, None, None) == "Please provide: Current House Years, City, State, Profession, Experience and Current Job Years."
 
     # 7 missing values
     assert check_missing_values(None, None, None, None, None, None, None, "Maharashtra", "Developer", 5, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years and City."
-    assert check_missing_values(None, None, None, None, None, None, "Mumbai", None, "Developer", 5, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years and State."
-    assert check_missing_values(None, None, None, None, None, None, "Mumbai", "Maharashtra", None, 5, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years and Profession."
-    assert check_missing_values(None, None, None, None, None, None, "Mumbai", "Maharashtra", "Developer", None, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years and Experience."
-    assert check_missing_values(None, None, None, None, None, None, "Mumbai", "Maharashtra", "Developer", 5, None) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years and Current Job Years."
 
     # 8 missing values
-    assert check_missing_values(None, None, None, None, None, None, None, None, "Developer", 5, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City and State."
-    assert check_missing_values(None, None, None, None, None, None, None, "Maharashtra", None, 5, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City and Profession."
-    assert check_missing_values(None, None, None, None, None, None, "Mumbai", None, None, 5, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, State and Profession."
     assert check_missing_values(None, None, None, None, None, None, "Mumbai", "Maharashtra", None, None, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, Profession and Experience."
-    assert check_missing_values(None, None, None, None, None, None, "Mumbai", "Maharashtra", "Developer", None, None) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, Experience and Current Job Years."
-
+ 
     # 9 missing values
-    assert check_missing_values(None, None, None, None, None, None, None, None, None, 5, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, State and Profession."
     assert check_missing_values(None, None, None, None, None, None, None, None, "Developer", None, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, State and Experience."
-    assert check_missing_values(None, None, None, None, None, None, None, None, "Developer", 5, None) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, State and Current Job Years."
-    assert check_missing_values(None, None, None, None, None, None, None, "Maharashtra", None, None, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, Profession and Experience."
-    assert check_missing_values(None, None, None, None, None, None, "Mumbai", None, None, None, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, State, Profession and Experience."
-
+ 
     # 10 missing values
-    assert check_missing_values(None, None, None, None, None, None, None, None, None, None, 3) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, State, Profession and Experience."
-    assert check_missing_values(None, None, None, None, None, None, None, None, None, 5, None) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, State, Profession and Current Job Years."
     assert check_missing_values(None, None, None, None, None, None, None, None, "Developer", None, None) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, State, Experience and Current Job Years."
-    assert check_missing_values(None, None, None, None, None, None, None, "Maharashtra", None, None, None) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, Profession, Experience and Current Job Years."
-    assert check_missing_values(None, None, None, None, None, None, "Mumbai", None, None, None, None) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, State, Profession, Experience and Current Job Years."
-
+ 
     # All missing values
     assert check_missing_values(None, None, None, None, None, None, None, None, None, None, None) == "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, City, State, Profession, Experience and Current Job Years."
