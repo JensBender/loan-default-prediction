@@ -30,6 +30,12 @@ def test_check_no_missing_values(valid_inputs):
     assert check_missing_values(**valid_inputs) == None
 
 
+def test_check_single_missing_value(valid_inputs, missing_input="age", expected_error_message="Please provide: Age."):
+    inputs = valid_inputs.copy()
+    inputs[missing_input] = None
+    assert check_missing_values(**inputs) == expected_error_message
+
+
 def test_check_missing_values():   
     # 1 missing value
     assert check_missing_values(None, "Married", 1000000, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, 7) == "Please provide: Age."
