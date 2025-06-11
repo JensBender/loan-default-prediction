@@ -116,7 +116,6 @@ states = [state.replace("_", " ").title() for state in STATES]
 
 
 # --- Input validation functions ---
-# Missing value check
 def check_missing_values(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
     missing_inputs = []
     if age is None or age == "":
@@ -145,9 +144,10 @@ def check_missing_values(age, married, income, car_ownership, house_ownership, c
         return f"Please provide: {missing_inputs[0]}."
     if len(missing_inputs) > 1:
         return f"Please provide: {', '.join(missing_inputs[:-1])} and {missing_inputs[-1]}."
+    return None  # no missing values
 
 
-# --- Load the pre-trained pipeline including data preprocessing and Random Forest Classifier model ---
+# --- Load the pre-trained pipeline (including data preprocessing and Random Forest Classifier model) ---
 # Get the path to the pipeline file relative to this script
 base_dir = os.path.dirname(os.path.abspath(__file__))
 pipeline_path = os.path.join(base_dir, "..", "models", "loan_default_rf_pipeline.pkl")
