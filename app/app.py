@@ -147,6 +147,50 @@ def check_missing_values(age, married, income, car_ownership, house_ownership, c
     return None  # no missing values
 
 
+def validate_data_types(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
+    invalid_numbers = []
+    invalid_strings = []
+    invalid_datatype_message = "Data type error! "   
+
+    # Validate numerical inputs     
+    if not isinstance(age, (int, float)):
+        invalid_numbers.append("Age")
+    if not isinstance(income, (int, float)):
+        invalid_numbers.append("Income")
+    if not isinstance(current_house_yrs, (int, float)):
+        invalid_numbers.append("Current House Years")
+    if not isinstance(experience, (int, float)):
+        invalid_numbers.append("Experience")
+    if not isinstance(current_job_yrs, (int, float)):
+        invalid_numbers.append("Current Job Years")
+    if len(invalid_numbers) == 1:
+        invalid_datatype_message += f"{invalid_numbers[0]} must be a number."
+    if len(invalid_numbers) > 1:
+        invalid_datatype_message += f"{', '.join(invalid_numbers[:-1])} and {invalid_numbers[-1]} must be numbers."
+    
+    # Validate string inputs
+    if not isinstance(married, str):
+        invalid_strings.append("Married/Single")
+    if not isinstance(house_ownership, str):
+        invalid_strings.append("House Ownership")
+    if not isinstance(car_ownership, str):
+        invalid_strings.append("Car Ownership")
+    if not isinstance(profession, str):
+        invalid_strings.append("Profession")
+    if not isinstance(city, str):
+        invalid_strings.append("City")
+    if not isinstance(state, str):
+        invalid_strings.append("State")
+    if len(invalid_strings) == 1:
+        invalid_datatype_message += f"{invalid_strings[0]} must be a string."
+    if len(invalid_strings) > 1:
+        invalid_datatype_message += f"{', '.join(invalid_strings[:-1])} and {invalid_strings[-1]} must be strings."
+
+    if invalid_numbers or invalid_strings:
+        return invalid_datatype_message
+    return None  # no invalid data types
+
+
 # --- Load the pre-trained pipeline (including data preprocessing and Random Forest Classifier model) ---
 # Get the path to the pipeline file relative to this script
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -166,43 +210,9 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
             return missing_value_message, ""
         
         # Data type validation
-        invalid_numerical_types = []
-        invalid_string_types = []
-        invalid_types_message = "Data type error! "        
-        if not isinstance(age, (int, float)):
-            invalid_numerical_types.append("Age")
-        if not isinstance(income, (int, float)):
-            invalid_numerical_types.append("Income")
-        if not isinstance(current_house_yrs, (int, float)):
-            invalid_numerical_types.append("Current House Years")
-        if not isinstance(experience, (int, float)):
-            invalid_numerical_types.append("Experience")
-        if not isinstance(current_job_yrs, (int, float)):
-            invalid_numerical_types.append("Current Job Years")
-        if len(invalid_numerical_types) == 1:
-            invalid_types_message += f"{invalid_numerical_types[0]} must be a number."
-        if len(invalid_numerical_types) > 1:
-            invalid_types_message += f"{', '.join(invalid_numerical_types[:-1])} and {invalid_numerical_types[-1]} must be numbers."
-
-        if not isinstance(married, str):
-            invalid_string_types.append("Married/Single")
-        if not isinstance(house_ownership, str):
-            invalid_string_types.append("House Ownership")
-        if not isinstance(car_ownership, str):
-            invalid_string_types.append("Car Ownership")
-        if not isinstance(profession, str):
-            invalid_string_types.append("Profession")
-        if not isinstance(city, str):
-            invalid_string_types.append("City")
-        if not isinstance(state, str):
-            invalid_string_types.append("State")
-        if len(invalid_string_types) == 1:
-            invalid_types_message += f"{invalid_string_types[0]} must be a string."
-        if len(invalid_string_types) > 1:
-            invalid_types_message += f"{', '.join(invalid_string_types[:-1])} and {invalid_string_types[-1]} must be strings."
-
-        if invalid_numerical_types or invalid_string_types:
-            return invalid_types_message, ""
+        invalid_datatype_message = validate_data_types(age, income, current_house_yrs, experience, current_job_yrs, married, house_ownership, car_ownership, profession, city, state)
+        if invalid_datatype_message:
+            return invalid_datatype_message, ""
 
         # Numerical input validation (must be non-negative integers or floats)
         invalid_numerical_inputs = []
