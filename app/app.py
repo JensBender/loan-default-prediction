@@ -118,17 +118,17 @@ states = [state.replace("_", " ").title() for state in STATES]
 # --- Input validation functions ---
 def check_missing_values(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
     missing_inputs = []
-    if age in [None, "", False, [], {}, ()]:
+    if age in [None, "", [], {}, ()]:
         missing_inputs.append("Age")
-    if not married:  # catches None, 0, 0.0, "", False, [], {}, ()
+    if not married:  # catches None, "", 0, 0.0, False, [], {}, ()
         missing_inputs.append("Married/Single")
-    if income in [None, "", False, [], {}, ()]:
+    if income in [None, "", [], {}, ()]:
         missing_inputs.append("Income")
     if not car_ownership:
         missing_inputs.append("Car Ownership")
     if not house_ownership:
         missing_inputs.append("House Ownership")
-    if current_house_yrs in [None, "", False, [], {}, ()]:
+    if current_house_yrs in [None, "", [], {}, ()]:
         missing_inputs.append("Current House Years")
     if not city:
         missing_inputs.append("City")
@@ -136,9 +136,9 @@ def check_missing_values(age, married, income, car_ownership, house_ownership, c
         missing_inputs.append("State")
     if not profession:
         missing_inputs.append("Profession")
-    if experience in [None, "", False, [], {}, ()]:
+    if experience in [None, "", [], {}, ()]:
         missing_inputs.append("Experience")
-    if current_job_yrs in [None, "", False, [], {}, ()]:
+    if current_job_yrs in [None, "", [], {}, ()]:
         missing_inputs.append("Current Job Years")
     if len(missing_inputs) == 1:
         return f"Please provide: {missing_inputs[0]}."
