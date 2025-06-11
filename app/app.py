@@ -157,7 +157,7 @@ with open(pipeline_path, "rb") as file:
     pipeline = pickle.load(file)
 
 # --- Function to predict loan default ---
-def predict_loan_default(income, age, experience, married, house_ownership, car_ownership, profession, city, state, current_job_yrs, current_house_yrs):
+def predict_loan_default(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
     try:
         # --- Input validation ---
         # Missing value check
@@ -299,7 +299,7 @@ with gr.Blocks(css=custom_css) as app:
         <p style='text-align:center'>Submit the customer application data to receive an automated loan default prediction powered by machine learning.</p>
         """
     )
-    
+
     # Inputs
     with gr.Group():
         with gr.Row():
@@ -329,13 +329,12 @@ with gr.Blocks(css=custom_css) as app:
             "(predicts 'Default' if probability ≥ 29%, otherwise 'No Default').</small>",
             elem_id="markdown-note"
         )
-
     # Predict button click event
     predict.click(
         predict_loan_default,
         inputs=[
-            income, age, experience, married, house_ownership, car_ownership,
-            profession, city, state, current_job_yrs, current_house_yrs
+            age, married, income, car_ownership, house_ownership, current_house_yrs, 
+            city, state, profession, experience, current_job_yrs
         ],
         outputs=[prediction_text, pred_proba]
     )
