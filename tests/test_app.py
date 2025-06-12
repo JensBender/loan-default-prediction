@@ -108,17 +108,18 @@ def test_zero_is_missing_for_string_inputs(valid_inputs):
 
 # Test the logic: if numerical_input in [None, "", [], {}, ()]
 @pytest.mark.parametrize("missing_value_type", [None, "", [], {}, ()])
-@pytest.mark.parametrize("numerical_input, expected_text", [
+@pytest.mark.parametrize("numerical_input, expected_error_message_component", [
     ("age", "Age"),
     ("income", "Income"),
     ("current_house_yrs", "Current House Years"),
     ("current_job_yrs", "Current Job Years")
 ])
-def test_missing_value_types_for_numerical_inputs(valid_inputs, missing_value_type, numerical_input, expected_text):
+def test_missing_value_types_for_numerical_inputs(valid_inputs, missing_value_type, numerical_input, expected_error_message_component):
     inputs = valid_inputs.copy()
     inputs[numerical_input] = missing_value_type
-    assert check_missing_values(**inputs) is not None, f"Expected an error message for {numerical_input}='{missing_value_type}'."
-    assert expected_text in check_missing_values(**inputs), f"Expected error message to contain '{expected_text}' for {numerical_input}='{missing_value_type}'."
+    error_message = check_missing_values(**inputs)
+    assert error_message is not None, f"Expected an error message for {numerical_input}='{missing_value_type}'."
+    assert expected_error_message_component in error_message, f"Expected error message to contain '{expected_error_message_component}' for {numerical_input}='{missing_value_type}'."
 
 
 # --- Inputs and their value ranges ---
