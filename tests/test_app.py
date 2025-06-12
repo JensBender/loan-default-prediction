@@ -130,6 +130,6 @@ def test_error_message_for_two_missing_inputs(valid_inputs, missing_input_1, mis
 
 
 # --- validate_data_types() function ---
-def test_validate_numerical_inputs():
-    # No invalid data types
-    assert validate_data_types(30, "Married", 1000000, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, 7) == None
+# No invalid data types
+def test_no_invalid_data_types(valid_inputs):
+    assert validate_data_types(**valid_inputs) == None
