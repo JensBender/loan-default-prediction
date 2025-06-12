@@ -27,44 +27,11 @@ def valid_inputs():
 
 
 # --- check_missing_values() function ---
+# Test no missing inputs
 def test_no_missing_values(valid_inputs):
     assert check_missing_values(**valid_inputs) == None
 
-
-@pytest.mark.parametrize("missing_input, expected_error_message", [
-    ("age", "Please provide: Age."),
-    ("married", "Please provide: Married/Single."),
-    ("income", "Please provide: Income."),
-    ("car_ownership", "Please provide: Car Ownership."),
-    ("house_ownership", "Please provide: House Ownership."),
-    ("current_house_yrs", "Please provide: Current House Years."),
-    ("city", "Please provide: City."),
-    ("state", "Please provide: State."),
-    ("profession", "Please provide: Profession."),
-    ("experience", "Please provide: Experience."),
-    ("current_job_yrs", "Please provide: Current Job Years."),
-])
-def test_single_missing_value(valid_inputs, missing_input, expected_error_message):
-    inputs = valid_inputs.copy()
-    inputs[missing_input] = None
-    assert check_missing_values(**inputs) == expected_error_message
-
-
-@pytest.mark.parametrize("missing_input_1, missing_input_2, expected_error_message", [
-    ("age", "married", "Please provide: Age and Married/Single."),
-    ("income", "car_ownership", "Please provide: Income and Car Ownership."),
-    ("house_ownership", "current_house_yrs", "Please provide: House Ownership and Current House Years."),
-    ("city", "state", "Please provide: City and State."),
-    ("profession", "experience", "Please provide: Profession and Experience."),
-    ("age", "current_job_yrs", "Please provide: Age and Current Job Years."),
-])
-def test_two_missing_values(valid_inputs, missing_input_1, missing_input_2, expected_error_message):
-    inputs = valid_inputs.copy()
-    inputs[missing_input_1] = None
-    inputs[missing_input_2] = None
-    assert check_missing_values(**inputs) == expected_error_message
-
-
+# Test all missing inputs
 def test_all_missing_values():
     inputs = {
         "age": None,
@@ -86,7 +53,24 @@ def test_all_missing_values():
     assert check_missing_values(**inputs) == expected_error_message
 
 
-# Test missing value logic to treat 0 as a valid numerical input
+@pytest.mark.parametrize("missing_input_1, missing_input_2, expected_error_message", [
+    ("age", "married", "Please provide: Age and Married/Single."),
+    ("income", "car_ownership", "Please provide: Income and Car Ownership."),
+    ("house_ownership", "current_house_yrs", "Please provide: House Ownership and Current House Years."),
+    ("city", "state", "Please provide: City and State."),
+    ("profession", "experience", "Please provide: Profession and Experience."),
+    ("age", "current_job_yrs", "Please provide: Age and Current Job Years."),
+])
+def test_two_missing_values(valid_inputs, missing_input_1, missing_input_2, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs[missing_input_1] = None
+    inputs[missing_input_2] = None
+    assert check_missing_values(**inputs) == expected_error_message
+
+
+
+
+# Test treating 0 as a valid value for numerical inputs
 @pytest.mark.parametrize("numerical_input", ["age", "income", "current_house_yrs", "experience", "current_job_yrs"])
 def test_zero_is_valid_for_numerical_inputs(valid_inputs, numerical_input):
     inputs = valid_inputs.copy()
@@ -94,7 +78,7 @@ def test_zero_is_valid_for_numerical_inputs(valid_inputs, numerical_input):
     assert check_missing_values(**inputs) == None  
 
 
-# Test missing value logic for numerical inputs: `if numerical_input in [None, "", [], {}, ()]`
+# Test single missing value for numerical inputs: `if numerical_input in [None, "", [], {}, ()]`
 @pytest.mark.parametrize("missing_value_type", [None, "", [], {}, ()])
 @pytest.mark.parametrize("numerical_input, expected_error_message_component", [
     ("age", "Age"),
@@ -110,9 +94,9 @@ def test_missing_value_types_for_numerical_inputs(valid_inputs, missing_value_ty
     assert expected_error_message_component in error_message, f"Expected error message to contain '{expected_error_message_component}' for {numerical_input}='{missing_value_type}'."
 
 
-# Test missing value logic for string inputs: `if not string_input`, which catches [None, "", [], {}, (), 0, 0.0, False]
+# Test single missing value for string inputs: `if not string_input`, which catches [None, "", [], {}, (), 0, 0.0, False]
 @pytest.mark.parametrize("missing_value_type", [None, "", [], {}, (), 0, 0.0, False])
-@pytest.mark.parametrize("string_input, expected_error_message_component", [
+@pytest.mark.parametrize("string_input, expected_partial_error_message", [
     ("married", "Married/Single"),
     ("car_ownership", "Car Ownership"),
     ("house_ownership", "House Ownership"),
@@ -120,12 +104,14 @@ def test_missing_value_types_for_numerical_inputs(valid_inputs, missing_value_ty
     ("state", "State"),
     ("profession", "Profession"),
 ])
-def test_missing_value_types_for_string_inputs(valid_inputs, missing_value_type, string_input, expected_error_message_component):
+def test_missing_value_types_for_string_inputs(valid_inputs, missing_value_type, string_input, expected_partial_error_message):
     inputs = valid_inputs.copy()
     inputs[string_input] = missing_value_type
     error_message = check_missing_values(**inputs)
+    # Check presence of error message
     assert error_message is not None, f"Expected an error message for {string_input}='{missing_value_type}'"
-    assert expected_error_message_component in error_message, f"Expected error message to contain '{expected_error_message_component}' for {string_input}='{missing_value_type}'"
+    # Check exact error message text
+    assert error_message == f"Please provide: {expected_partial_error_message}.", f"Expected exact error message: 'Please provide: {expected_partial_error_message}.' for {string_input}='{missing_value_type}'"
 
 
 # --- Inputs and their value ranges ---
