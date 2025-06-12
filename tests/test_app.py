@@ -107,14 +107,17 @@ def test_zero_is_missing_for_string_inputs(valid_inputs):
 
 
 @pytest.mark.parametrize("missing_value_type", ["", [], {}, ()])
-def test_missing_value_types_for_numerical_inputs(valid_inputs, missing_value_type):
+@pytest.mark.parametrize("numerical_input, expected_error_message", [
+    ("age", "Please provide: Age."),
+    ("income", "Please provide: Income."),
+    ("current_house_yrs", "Please provide: Current House Years."),
+    ("current_job_yrs", "Please provide: Current Job Years.")
+])
+def test_missing_value_types_for_numerical_inputs(valid_inputs, missing_value_type, numerical_input, expected_error_message):
     # test the logic: if numerical_input in [None, "", [], {}, ()]
     inputs = valid_inputs.copy()
-    inputs["age"] = missing_value_type
-    inputs["income"] = missing_value_type
-    inputs["current_house_yrs"] = missing_value_type
-    inputs["current_job_yrs"] = missing_value_type
-    assert check_missing_values(**inputs) == "Please provide: Age, Income, Current House Years and Current Job Years."
+    inputs[numerical_input] = missing_value_type
+    assert check_missing_values(**inputs) == expected_error_message
 
 
 # --- Inputs and their value ranges ---
