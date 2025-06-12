@@ -26,7 +26,8 @@ def valid_inputs():
     }
 
 
-def test_check_no_missing_values(valid_inputs):
+# --- check_missing_values() function ---
+def test_no_missing_values(valid_inputs):
     assert check_missing_values(**valid_inputs) == None
 
 
@@ -43,7 +44,7 @@ def test_check_no_missing_values(valid_inputs):
     ("experience", "Please provide: Experience."),
     ("current_job_yrs", "Please provide: Current Job Years."),
 ])
-def test_check_single_missing_value(valid_inputs, missing_input, expected_error_message):
+def test_single_missing_value(valid_inputs, missing_input, expected_error_message):
     inputs = valid_inputs.copy()
     inputs[missing_input] = None
     assert check_missing_values(**inputs) == expected_error_message
@@ -57,14 +58,14 @@ def test_check_single_missing_value(valid_inputs, missing_input, expected_error_
     ("profession", "experience", "Please provide: Profession and Experience."),
     ("age", "current_job_yrs", "Please provide: Age and Current Job Years."),
 ])
-def test_check_two_missing_values(valid_inputs, missing_input_1, missing_input_2, expected_error_message):
+def test_two_missing_values(valid_inputs, missing_input_1, missing_input_2, expected_error_message):
     inputs = valid_inputs.copy()
     inputs[missing_input_1] = None
     inputs[missing_input_2] = None
     assert check_missing_values(**inputs) == expected_error_message
 
 
-def test_check_all_missing_values():
+def test_all_missing_values():
     inputs = {
         "age": None,
         "married": None,
@@ -141,6 +142,7 @@ def test_missing_value_types_for_string_inputs(valid_inputs, missing_value_type,
 # current_job_yrs [0-14]
 
 
+# --- validate_data_types() function ---
 def test_validate_numerical_inputs():
     # No invalid data types
     assert validate_data_types(30, "Married", 1000000, "Yes", "Rented", 12, "Delhi", "Assam", "Architect", 10, 7) == None
