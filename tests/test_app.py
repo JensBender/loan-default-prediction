@@ -106,6 +106,16 @@ def test_zero_is_missing_for_string_inputs(valid_inputs):
     assert check_missing_values(**inputs) == "Please provide: Married/Single, Car Ownership, House Ownership, City, State and Profession."
 
 
+def test_missing_value_types_for_numerical_inputs(valid_inputs):
+    # test the logic: if numerical_input in [None, "", [], {}, ()]
+    inputs = valid_inputs.copy()
+    inputs["age"] = ""
+    inputs["income"] = []
+    inputs["current_house_yrs"] = {}
+    inputs["current_job_yrs"] = ()
+    assert check_missing_values(**inputs) == "Please provide: Age, Income, Current House Years and Current Job Years."
+
+
 # --- Inputs and their value ranges ---
 # age
 # married ["Single", "Married"]
