@@ -95,18 +95,7 @@ def test_zero_is_valid_for_numerical_inputs(valid_inputs):
     assert check_missing_values(**inputs) == None  # treat 0 as valid value for numerical inputs
 
 
-def test_zero_is_missing_for_string_inputs(valid_inputs):
-    inputs = valid_inputs.copy()
-    inputs["married"] = 0
-    inputs["car_ownership"] = 0
-    inputs["house_ownership"] = 0
-    inputs["city"] = 0
-    inputs["state"] = 0
-    inputs["profession"] = 0
-    assert check_missing_values(**inputs) == "Please provide: Married/Single, Car Ownership, House Ownership, City, State and Profession."
-
-
-# Test the logic: if numerical_input in [None, "", [], {}, ()]
+# Test missing value logic for numerical inputs: `if numerical_input in [None, "", [], {}, ()]`
 @pytest.mark.parametrize("missing_value_type", [None, "", [], {}, ()])
 @pytest.mark.parametrize("numerical_input, expected_error_message_component", [
     ("age", "Age"),
@@ -122,7 +111,7 @@ def test_missing_value_types_for_numerical_inputs(valid_inputs, missing_value_ty
     assert expected_error_message_component in error_message, f"Expected error message to contain '{expected_error_message_component}' for {numerical_input}='{missing_value_type}'."
 
 
-# Test the logic: if not string_input (catches None, "", [], {}, (), 0, 0.0, False)
+# Test missing value logic for string inputs: `if not string_input`, which catches [None, "", [], {}, (), 0, 0.0, False]
 @pytest.mark.parametrize("missing_value_type", [None, "", [], {}, (), 0, 0.0, False])
 @pytest.mark.parametrize("string_input, expected_error_message_component", [
     ("married", "Married/Single"),
