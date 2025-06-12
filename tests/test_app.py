@@ -88,6 +88,10 @@ def test_check_all_missing_values():
 def test_check_zero_as_missing_value(valid_inputs):
     inputs = valid_inputs.copy()
     inputs["age"] = 0
+    inputs["income"] = 0
+    inputs["current_house_yrs"] = 0
+    inputs["experience"] = 0
+    inputs["current_job_yrs"] = 0
     assert check_missing_values(**inputs) == None  # zero is not considered a missing value for numerical inputs
 
 
