@@ -85,14 +85,25 @@ def test_check_all_missing_values():
     assert check_missing_values(**inputs) == expected_error_message
 
 
-def test_check_zero_as_missing_value(valid_inputs):
+def test_zero_is_valid_for_numerical_inputs(valid_inputs):
     inputs = valid_inputs.copy()
     inputs["age"] = 0
     inputs["income"] = 0
     inputs["current_house_yrs"] = 0
     inputs["experience"] = 0
     inputs["current_job_yrs"] = 0
-    assert check_missing_values(**inputs) == None  # zero is not considered a missing value for numerical inputs
+    assert check_missing_values(**inputs) == None  # treat 0 as valid value for numerical inputs
+
+
+def test_zero_is_missing_for_string_inputs(valid_inputs):
+    inputs = valid_inputs.copy()
+    inputs["married"] = 0
+    inputs["car_ownership"] = 0
+    inputs["house_ownership"] = 0
+    inputs["city"] = 0
+    inputs["state"] = 0
+    inputs["profession"] = 0
+    assert check_missing_values(**inputs) == "Please provide: Married/Single, Car Ownership, House Ownership, City, State and Profession."
 
 
 # --- Inputs and their value ranges ---
