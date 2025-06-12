@@ -85,14 +85,12 @@ def test_check_all_missing_values():
     assert check_missing_values(**inputs) == expected_error_message
 
 
-def test_zero_is_valid_for_numerical_inputs(valid_inputs):
+# Test missing value logic to treat 0 as a valid numerical input
+@pytest.mark.parametrize("numerical_input", ["age", "income", "current_house_yrs", "experience", "current_job_yrs"])
+def test_zero_is_valid_for_numerical_inputs(valid_inputs, numerical_input):
     inputs = valid_inputs.copy()
-    inputs["age"] = 0
-    inputs["income"] = 0
-    inputs["current_house_yrs"] = 0
-    inputs["experience"] = 0
-    inputs["current_job_yrs"] = 0
-    assert check_missing_values(**inputs) == None  # treat 0 as valid value for numerical inputs
+    inputs[numerical_input] = 0
+    assert check_missing_values(**inputs) == None  
 
 
 # Test missing value logic for numerical inputs: `if numerical_input in [None, "", [], {}, ()]`
