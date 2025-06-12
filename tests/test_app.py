@@ -106,13 +106,14 @@ def test_zero_is_missing_for_string_inputs(valid_inputs):
     assert check_missing_values(**inputs) == "Please provide: Married/Single, Car Ownership, House Ownership, City, State and Profession."
 
 
-def test_missing_value_types_for_numerical_inputs(valid_inputs):
+@pytest.mark.parametrize("missing_value_type", ["", [], {}, ()])
+def test_missing_value_types_for_numerical_inputs(valid_inputs, missing_value_type):
     # test the logic: if numerical_input in [None, "", [], {}, ()]
     inputs = valid_inputs.copy()
-    inputs["age"] = ""
-    inputs["income"] = []
-    inputs["current_house_yrs"] = {}
-    inputs["current_job_yrs"] = ()
+    inputs["age"] = missing_value_type
+    inputs["income"] = missing_value_type
+    inputs["current_house_yrs"] = missing_value_type
+    inputs["current_job_yrs"] = missing_value_type
     assert check_missing_values(**inputs) == "Please provide: Age, Income, Current House Years and Current Job Years."
 
 
