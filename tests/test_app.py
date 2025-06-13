@@ -29,7 +29,7 @@ def valid_inputs():
 # --- check_missing_values() function ---
 # No missing inputs
 def test_no_missing_values(valid_inputs):
-    assert check_missing_values(**valid_inputs) == None
+    assert check_missing_values(valid_inputs) == None
 
 # All missing inputs
 def test_error_message_for_all_values_missing():
@@ -50,7 +50,7 @@ def test_error_message_for_all_values_missing():
         "Please provide: Age, Married/Single, Income, Car Ownership, House Ownership, Current House Years, "
         "City, State, Profession, Experience and Current Job Years."
         )
-    assert check_missing_values(**inputs) == expected_error_message
+    assert check_missing_values(inputs) == expected_error_message
 
 
 # Single missing numerical input: `if numerical_input in [None, "", [], {}, ()]`
@@ -64,7 +64,7 @@ def test_error_message_for_all_values_missing():
 def test_error_message_for_single_missing_numerical_input(valid_inputs, missing_value_type, numerical_input, expected_partial_error_message):
     inputs = valid_inputs.copy()
     inputs[numerical_input] = missing_value_type
-    error_message = check_missing_values(**inputs)
+    error_message = check_missing_values(inputs)
     # Check presence of error message
     assert error_message is not None, f"Expected an error message for {numerical_input}='{missing_value_type}'."
     # Check exact error message text
@@ -76,7 +76,7 @@ def test_error_message_for_single_missing_numerical_input(valid_inputs, missing_
 def test_zero_is_valid_numerical_input(valid_inputs, numerical_input):
     inputs = valid_inputs.copy()
     inputs[numerical_input] = 0
-    assert check_missing_values(**inputs) == None  
+    assert check_missing_values(inputs) == None  
 
 
 # Single missing string input: `if not string_input`, which catches None, "", [], {}, (), 0, 0.0, False
@@ -92,7 +92,7 @@ def test_zero_is_valid_numerical_input(valid_inputs, numerical_input):
 def test_error_message_for_single_missing_string_input(valid_inputs, missing_value_type, string_input, expected_partial_error_message):
     inputs = valid_inputs.copy()
     inputs[string_input] = missing_value_type
-    error_message = check_missing_values(**inputs)
+    error_message = check_missing_values(inputs)
     # Check presence of error message
     assert error_message is not None, f"Expected an error message for {string_input}='{missing_value_type}'"
     # Check exact error message text
@@ -112,7 +112,7 @@ def test_error_message_for_two_missing_inputs(valid_inputs, missing_input_1, mis
     inputs = valid_inputs.copy()
     inputs[missing_input_1] = None
     inputs[missing_input_2] = None
-    assert check_missing_values(**inputs) == expected_error_message
+    assert check_missing_values(inputs) == expected_error_message
 
 
 # --- Inputs and their value ranges ---
