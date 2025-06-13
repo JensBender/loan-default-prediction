@@ -117,10 +117,10 @@ states = [state.replace("_", " ").title() for state in STATES]
 
 # Function to strip whitespace in inputs
 def strip_whitespace(inputs_dict):
-    for key, value in inputs_dict.items():
-        if isinstance(value, str):
-            inputs_dict[key] = value.strip()
-    return inputs_dict
+    return {
+        key: value.strip() if isinstance(value, str) else value 
+        for key, value in inputs_dict.items()
+    }
 
 
 # --- Input validation functions ---
