@@ -194,17 +194,17 @@ def test_no_invalid_data_types(valid_inputs):
 # All invalid data types
 def test_invalid_datatype_message_for_all_inputs():
     inputs = {
-        "age": "thirty",
-        "married": 123,
-        "income": "one million",
+        "age": "invalid string",
+        "married": 12345,
+        "income": ["invalid", "list"],
         "car_ownership": 1,
         "house_ownership": 0.0,
-        "current_house_yrs": "twelve",
-        "city": 456,
+        "current_house_yrs": ("invalid", "tuple"),
+        "city": {"invalid": "dictionary"},
         "state": True,
-        "profession": None,
-        "experience": [],
-        "current_job_yrs": {}
+        "profession": 12345.67,
+        "experience": "invalid string",
+        "current_job_yrs": ["invalid", "list"]
     }
     expected_error_message = (
         "Data type error! Age, Income, Current House Years, Experience and Current Job Years must be numbers."
