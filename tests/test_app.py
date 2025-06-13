@@ -26,7 +26,9 @@ def valid_inputs():
     }
 
 
-# Whitespace in strings
+
+# --- strip_whitespace() function ---
+# Remove whitespace in strings
 def test_strip_whitespace():
     whitespace_inputs = {
         "age": 30,
@@ -56,6 +58,12 @@ def test_strip_whitespace():
     }
     cleaned_inputs = strip_whitespace(whitespace_inputs)
     assert cleaned_inputs == expected_cleaned_inputs
+
+
+# Ensure clean inputs remain unchanged by strip_whitespace()
+def test_strip_whitespace_clean_inputs_remain_unchanged(valid_inputs):
+    cleaned_inputs = strip_whitespace(valid_inputs)
+    assert cleaned_inputs == valid_inputs
 
 
 # --- check_missing_values() function ---
