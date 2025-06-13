@@ -155,21 +155,21 @@ def check_missing_values(inputs_dict):
     return None  # no missing values
 
 
-def validate_data_types(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
+def validate_data_types(inputs_dict):
     invalid_numbers = []
     invalid_strings = []
     invalid_datatype_message = "Data type error! "   
 
     # Validate numerical inputs     
-    if not isinstance(age, (int, float)):
+    if not isinstance(inputs_dict["age"], (int, float)):
         invalid_numbers.append("Age")
-    if not isinstance(income, (int, float)):
+    if not isinstance(inputs_dict["income"], (int, float)):
         invalid_numbers.append("Income")
-    if not isinstance(current_house_yrs, (int, float)):
+    if not isinstance(inputs_dict["current_house_yrs"], (int, float)):
         invalid_numbers.append("Current House Years")
-    if not isinstance(experience, (int, float)):
+    if not isinstance(inputs_dict["experience"], (int, float)):
         invalid_numbers.append("Experience")
-    if not isinstance(current_job_yrs, (int, float)):
+    if not isinstance(inputs_dict["current_job_yrs"], (int, float)):
         invalid_numbers.append("Current Job Years")
     if len(invalid_numbers) == 1:
         invalid_datatype_message += f"{invalid_numbers[0]} must be a number."
@@ -177,17 +177,17 @@ def validate_data_types(age, married, income, car_ownership, house_ownership, cu
         invalid_datatype_message += f"{', '.join(invalid_numbers[:-1])} and {invalid_numbers[-1]} must be numbers."
     
     # Validate string inputs
-    if not isinstance(married, str):
+    if not isinstance(inputs_dict["married"], str):
         invalid_strings.append("Married/Single")
-    if not isinstance(house_ownership, str):
+    if not isinstance(inputs_dict["house_ownership"], str):
         invalid_strings.append("House Ownership")
-    if not isinstance(car_ownership, str):
+    if not isinstance(inputs_dict["car_ownership"], str):
         invalid_strings.append("Car Ownership")
-    if not isinstance(profession, str):
+    if not isinstance(inputs_dict["profession"], str):
         invalid_strings.append("Profession")
-    if not isinstance(city, str):
+    if not isinstance(inputs_dict["city"], str):
         invalid_strings.append("City")
-    if not isinstance(state, str):
+    if not isinstance(inputs_dict["state"], str):
         invalid_strings.append("State")
     if len(invalid_strings) == 1:
         invalid_datatype_message += f"{invalid_strings[0]} must be a string."
@@ -236,7 +236,7 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
             return missing_value_message, ""
         
         # Data type validation
-        invalid_datatype_message = validate_data_types(age, income, current_house_yrs, experience, current_job_yrs, married, house_ownership, car_ownership, profession, city, state)
+        invalid_datatype_message = validate_data_types(inputs)
         if invalid_datatype_message:
             return invalid_datatype_message, ""
 
