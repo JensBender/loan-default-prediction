@@ -221,6 +221,21 @@ def test_no_invalid_value_ranges(valid_inputs):
     assert validate_value_ranges(valid_inputs) == None
 
 
+# All invalid value ranges
+def test_value_range_error_message_for_all_inputs(valid_inputs):
+    inputs = valid_inputs.copy()
+    inputs["age"] = 150  # Out of range age
+    inputs["income"] = -1000  # Out of range income
+    inputs["current_house_yrs"] = 20  # Out of range current house years
+    inputs["experience"] = -5  # Out of range experience
+    inputs["current_job_yrs"] = 15  # Out of range current job years
+    expected_error_message = (
+        "Value range error! The system is designed for applicants with age 21-79, a non-negative income, "
+        "10-14 current house years, 0-20 years of experience and 0-14 current job years."
+    )
+    assert validate_value_ranges(inputs) == expected_error_message
+
+
 # --- Inputs and their value ranges ---
 # age
 # married ["Single", "Married"]
