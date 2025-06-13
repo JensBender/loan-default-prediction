@@ -203,6 +203,26 @@ with open(pipeline_path, "rb") as file:
 # --- Function to predict loan default ---
 def predict_loan_default(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
     try:
+        # Create inputs dictionary 
+        inputs = {
+            "age": age,
+            "married": married,
+            "income": income, 
+            "car_ownership": car_ownership,
+            "house_ownership": house_ownership,
+            "current_house_yrs": current_house_yrs,
+            "city": city,
+            "state": state,
+            "profession": profession,
+            "experience": experience,
+            "current_job_yrs": current_job_yrs
+        }
+        
+        # Strip whitespace in inputs
+        for key, value in inputs.items():
+            if isinstance(value, str):
+                inputs[key] = value.strip()
+
         # --- Input validation ---
         # Missing value check
         missing_value_message = check_missing_values(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs)
