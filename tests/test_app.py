@@ -211,3 +211,11 @@ def test_invalid_datatype_message_for_all_inputs():
         "Married/Single, House Ownership, Car Ownership, Profession, City and State must be strings."
     )
     assert validate_data_types(inputs) == expected_error_message
+
+
+# Single invalid data type in a numerical input
+@pytest.mark.parametrize("invalid_data_type", ["invalid string", ["invalid", "list"], ("invalid", "tuple"), {"invalid": "dictionary"}])
+def test_invalid_datatype_message_for_single_numerical_input(valid_inputs, invalid_data_type):
+    inputs = valid_inputs.copy()
+    inputs["age"] = invalid_data_type  # age represents all numerical inputs
+    assert validate_data_types(inputs) == "Data type error! Age must be a number."
