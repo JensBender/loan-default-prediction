@@ -115,6 +115,14 @@ cities = [city.replace("_", " ").title() for city in CITIES]
 states = [state.replace("_", " ").title() for state in STATES]
 
 
+# Function to strip whitespace in inputs
+def strip_whitespace(inputs_dict):
+    for key, value in inputs_dict.items():
+        if isinstance(value, str):
+            inputs_dict[key] = value.strip()
+    return inputs_dict
+
+
 # --- Input validation functions ---
 def check_missing_values(inputs_dict):
     missing_inputs = []
@@ -219,9 +227,7 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         }
         
         # Strip whitespace in inputs
-        for key, value in inputs.items():
-            if isinstance(value, str):
-                inputs[key] = value.strip()
+        inputs = strip_whitespace(inputs)
 
         # --- Input validation ---
         # Missing value check
