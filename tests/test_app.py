@@ -116,6 +116,21 @@ def test_error_message_for_two_missing_inputs(valid_inputs, missing_input_1, mis
     assert check_missing_values(inputs) == expected_error_message
 
 
+# Three missing inputs
+@pytest.mark.parametrize("missing_input_1, missing_input_2, missing_input_3, expected_error_message", [
+    ("age", "married", "income", "Please provide: Age, Married/Single and Income."),
+    ("car_ownership", "house_ownership", "current_house_yrs", "Please provide: Car Ownership, House Ownership and Current House Years."),
+    ("city", "state", "profession", "Please provide: City, State and Profession."),
+    ("age", "experience", "current_job_yrs", "Please provide: Age, Experience and Current Job Years."),
+])
+def test_error_message_for_three_missing_inputs(valid_inputs, missing_input_1, missing_input_2, missing_input_3, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs[missing_input_1] = None
+    inputs[missing_input_2] = None
+    inputs[missing_input_3] = None
+    assert check_missing_values(inputs) == expected_error_message
+
+
 # --- Inputs and their value ranges ---
 # age
 # married ["Single", "Married"]
