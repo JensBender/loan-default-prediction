@@ -5,7 +5,7 @@ import pytest
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  # add the parent directory to the path
-from app.app import check_missing_values, validate_data_types
+from app.app import strip_whitespace, check_missing_values, validate_data_types
 
 
 # Define valid input values for testing as dictionary
@@ -24,6 +24,38 @@ def valid_inputs():
         "experience": 10,
         "current_job_yrs": 7
     }
+
+
+# Whitespace in strings
+def test_strip_whitespace():
+    whitespace_inputs = {
+        "age": 30,
+        "married": " Married",
+        "income": 1000000,
+        "car_ownership": " Yes  ",
+        "house_ownership": "Rented\t",
+        "current_house_yrs": 12,
+        "city": "\nDelhi",
+        "state": " Assam \t \n ",
+        "profession": "\t\t Architect ",
+        "experience": 10,
+        "current_job_yrs": 7
+    }
+    expected_cleaned_inputs = {
+        "age": 30,
+        "married": "Married",
+        "income": 1000000,
+        "car_ownership": "Yes",
+        "house_ownership": "Rented",
+        "current_house_yrs": 12,
+        "city": "Delhi",
+        "state": "Assam",
+        "profession": "Architect",
+        "experience": 10,
+        "current_job_yrs": 7
+    }
+    cleaned_inputs = strip_whitespace(whitespace_inputs)
+    assert cleaned_inputs == expected_cleaned_inputs
 
 
 # --- check_missing_values() function ---
