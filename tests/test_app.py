@@ -188,4 +188,26 @@ def test_error_message_for_three_missing_inputs(valid_inputs, missing_input_1, m
 # --- validate_data_types() function ---
 # No invalid data types
 def test_no_invalid_data_types(valid_inputs):
-    assert validate_data_types(**valid_inputs) == None
+    assert validate_data_types(valid_inputs) == None
+
+
+# All invalid data types
+def test_invalid_datatype_message_for_all_inputs():
+    inputs = {
+        "age": "thirty",
+        "married": 123,
+        "income": "one million",
+        "car_ownership": 1,
+        "house_ownership": 0.0,
+        "current_house_yrs": "twelve",
+        "city": 456,
+        "state": True,
+        "profession": None,
+        "experience": [],
+        "current_job_yrs": {}
+    }
+    expected_error_message = (
+        "Data type error! Age, Income, Current House Years, Experience and Current Job Years must be numbers."
+        "Married/Single, House Ownership, Car Ownership, Profession, City and State must be strings."
+    )
+    assert validate_data_types(inputs) == expected_error_message
