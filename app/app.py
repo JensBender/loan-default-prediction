@@ -199,6 +199,17 @@ def validate_data_types(inputs_dict):
     return None  # no invalid data types
 
 
+def validate_value_ranges(inputs_dict):
+    out_of_range_inputs = []
+    if inputs_dict["age"] < 21 or inputs_dict["age"] > 79:
+        out_of_range_inputs.append("age 21-79")
+    if len(out_of_range_inputs) == 1:
+        return f"Value range error! The system is designed for applicants with {out_of_range_inputs[0]}."
+    if len(out_of_range_inputs) > 1:
+        return f"Value range error! The system is designed for applicants with {', '.join(out_of_range_inputs[:-1])} and {out_of_range_inputs[-1]}."
+    return None  # no out of range inputs
+
+
 # --- Load the pre-trained pipeline (including data preprocessing and Random Forest Classifier model) ---
 # Get the path to the pipeline file relative to this script
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -207,6 +218,7 @@ pipeline_path = os.path.join(base_dir, "..", "models", "loan_default_rf_pipeline
 # Load the pipeline
 with open(pipeline_path, "rb") as file:
     pipeline = pickle.load(file)
+
 
 # --- Function to predict loan default ---
 def predict_loan_default(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
@@ -240,19 +252,10 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         if invalid_datatype_message:
             return invalid_datatype_message, ""
 
-        # Numerical input validation (must be non-negative integers or floats)
-        invalid_numerical_inputs = []
-        for numerical_input, input_value in {"Age": age, "Income": income, "Current House Years": current_house_yrs, "Experience": experience, "Current Job Years": current_job_yrs}.items():
-            if not isinstance(input_value, (int, float)) or input_value < 0:
-                invalid_numerical_inputs.append(numerical_input) 
-        if len(invalid_numerical_inputs) == 1:
-            return f"Error! {invalid_numerical_inputs[0]} must be a non-negative number.", ""
-        if len(invalid_numerical_inputs) > 1:
-            return f"Error! {', '.join(invalid_numerical_inputs[:-1])} and {invalid_numerical_inputs[-1]} must be non-negative numbers.", ""
-        
-        # Age validation (must be within training data range 21 to 79)
-        if age < 21 or age > 79:
-            return f"Note: The system doesn't currently support age {age}, as it is designed for applicants aged 21–79.", ""
+        # Value range validation
+        value_range_error_message = validate_value_ranges(inputs)
+        if value_range_error_message:
+            return value_range_error_message, ""
 
         # --- Data preprocessing before pipeline ---
         # Convert numerical inputs from float (by default) to int to match expected pipeline input 
