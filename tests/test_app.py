@@ -27,7 +27,7 @@ def valid_inputs():
 
 
 
-# --- strip_whitespace() function ---
+# --- Test strip_whitespace() function ---
 # Remove whitespace in strings
 def test_strip_whitespace():
     whitespace_inputs = {
@@ -66,7 +66,7 @@ def test_strip_whitespace_clean_inputs_remain_unchanged(valid_inputs):
     assert cleaned_inputs == valid_inputs
 
 
-# --- check_missing_values() function ---
+# --- Test check_missing_values() function ---
 # No missing inputs
 def test_no_missing_values(valid_inputs):
     assert check_missing_values(valid_inputs) == None
@@ -171,21 +171,7 @@ def test_error_message_for_three_missing_inputs(valid_inputs, missing_input_1, m
     assert check_missing_values(inputs) == expected_error_message
 
 
-# --- Inputs and their value ranges ---
-# age
-# married ["Single", "Married"]
-# income
-# car_ownership ["Yes", "No"] 
-# house_ownership ["Rented", "Owned", "Neither Rented Nor Owned"] 
-# current_house_yrs [10-14]
-# city ["Adoni", "Agartala", "Agra", "Ahmedabad", "Ahmednagar", ...]
-# state ["Andhra_Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Delhi", ...]
-# profession ["Air_traffic_controller", "Analyst", "Architect", "Army_officer", "Artist", ...]
-# experience [0-20]
-# current_job_yrs [0-14]
-
-
-# --- validate_data_types() function ---
+# --- Test validate_data_types() function ---
 # No invalid data types
 def test_no_invalid_data_types(valid_inputs):
     assert validate_data_types(valid_inputs) == None
@@ -223,7 +209,21 @@ def test_invalid_datatype_message_for_single_numerical_input(valid_inputs, inval
 
 # Single invalid data type in a string input
 @pytest.mark.parametrize("invalid_string_data_type", [123, 123.45, False, ["invalid", "list"], ("invalid", "tuple"), {"invalid": "dictionary"}])
-def test_invalid_datatype_message_for_single_numerical_input(valid_inputs, invalid_string_data_type):
+def test_invalid_datatype_message_for_single_string_input(valid_inputs, invalid_string_data_type):
     inputs = valid_inputs.copy()
     inputs["married"] = invalid_string_data_type  # married represents all string inputs
     assert validate_data_types(inputs) == "Data type error! Married/Single must be a string."
+
+
+# --- Inputs and their value ranges ---
+# age
+# married ["Single", "Married"]
+# income
+# car_ownership ["Yes", "No"] 
+# house_ownership ["Rented", "Owned", "Neither Rented Nor Owned"] 
+# current_house_yrs [10-14]
+# city ["Adoni", "Agartala", "Agra", "Ahmedabad", "Ahmednagar", ...]
+# state ["Andhra_Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Delhi", ...]
+# profession ["Air_traffic_controller", "Analyst", "Architect", "Army_officer", "Artist", ...]
+# experience [0-20]
+# current_job_yrs [0-14]
