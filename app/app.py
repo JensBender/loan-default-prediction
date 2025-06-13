@@ -116,29 +116,29 @@ states = [state.replace("_", " ").title() for state in STATES]
 
 
 # --- Input validation functions ---
-def check_missing_values(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
+def check_missing_values(inputs_dict):
     missing_inputs = []
-    if age in [None, "", [], {}, ()]:
+    if inputs_dict["age"] in [None, "", [], {}, ()]:
         missing_inputs.append("Age")
-    if not married:  # catches None, "", 0, 0.0, False, [], {}, ()
+    if not inputs_dict["married"]:  # catches None, "", 0, 0.0, False, [], {}, ()
         missing_inputs.append("Married/Single")
-    if income in [None, "", [], {}, ()]:
+    if inputs_dict["income"] in [None, "", [], {}, ()]:
         missing_inputs.append("Income")
-    if not car_ownership:
+    if not inputs_dict["car_ownership"]:
         missing_inputs.append("Car Ownership")
-    if not house_ownership:
+    if not inputs_dict["house_ownership"]:
         missing_inputs.append("House Ownership")
-    if current_house_yrs in [None, "", [], {}, ()]:
+    if inputs_dict["current_house_yrs"] in [None, "", [], {}, ()]:
         missing_inputs.append("Current House Years")
-    if not city:
+    if not inputs_dict["city"]:
         missing_inputs.append("City")
-    if not state:
+    if not inputs_dict["state"]:
         missing_inputs.append("State")
-    if not profession:
+    if not inputs_dict["profession"]:
         missing_inputs.append("Profession")
-    if experience in [None, "", [], {}, ()]:
+    if inputs_dict["experience"] in [None, "", [], {}, ()]:
         missing_inputs.append("Experience")
-    if current_job_yrs in [None, "", [], {}, ()]:
+    if inputs_dict["current_job_yrs"] in [None, "", [], {}, ()]:
         missing_inputs.append("Current Job Years")
     if len(missing_inputs) == 1:
         return f"Please provide: {missing_inputs[0]}."
@@ -225,7 +225,7 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
 
         # --- Input validation ---
         # Missing value check
-        missing_value_message = check_missing_values(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs)
+        missing_value_message = check_missing_values(inputs)
         if missing_value_message:
             return missing_value_message, ""
         
