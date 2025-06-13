@@ -59,6 +59,7 @@ def test_error_message_for_all_values_missing():
     ("age", "Age"),
     ("income", "Income"),
     ("current_house_yrs", "Current House Years"),
+    ("experience", "Experience"),
     ("current_job_yrs", "Current Job Years"),
 ])
 def test_error_message_for_single_missing_numerical_input(valid_inputs, missing_value_type, numerical_input, expected_partial_error_message):
