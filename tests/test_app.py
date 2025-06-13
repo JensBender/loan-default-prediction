@@ -5,7 +5,7 @@ import pytest
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  # add the parent directory to the path
-from app.app import strip_whitespace, check_missing_values, validate_data_types
+from app.app import strip_whitespace, check_missing_values, validate_data_types, validate_value_ranges
 
 
 # Define valid input values for testing as dictionary
@@ -213,6 +213,12 @@ def test_invalid_datatype_message_for_single_string_input(valid_inputs, invalid_
     inputs = valid_inputs.copy()
     inputs["married"] = invalid_string_data_type  # married represents all string inputs
     assert validate_data_types(inputs) == "Data type error! Married/Single must be a string."
+
+
+# --- Test validate_value_ranges() function ---
+# No invalid value ranges
+def test_no_invalid_value_ranges(valid_inputs):
+    assert validate_value_ranges(valid_inputs) == None
 
 
 # --- Inputs and their value ranges ---
