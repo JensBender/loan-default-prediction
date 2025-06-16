@@ -235,14 +235,16 @@ def test_error_message_for_all_out_of_range_values(valid_inputs):
     assert check_out_of_range_values(inputs) == expected_error_message
 
 
-# Single out-of-range value
-def test_error_message_for_single_out_of_range_value(valid_inputs):
+# Age out-of-range
+@pytest.mark.parametrize("value", [-50, 20, 21, 79, 80, 1000])
+def test_error_message_for_age_out_of_range(valid_inputs, value):
     inputs = valid_inputs.copy()
-    out_of_range_input = "age"
-    out_of_range_value = 20
-    partial_error_message = "age 21-79"
-    inputs[out_of_range_input] = out_of_range_value
-    assert check_out_of_range_values(inputs) == f"Out-of-range value error! The system is designed for applicants with {partial_error_message}."
+    inputs["age"] = value
+    if value == 21 or value == 79:
+        assert check_out_of_range_values(inputs) == None
+    else:
+        assert check_out_of_range_values(inputs) == "Out-of-range value error! The system is designed for applicants with age 21-79."
+
 
 # --- Inputs and their value ranges ---
 # age
