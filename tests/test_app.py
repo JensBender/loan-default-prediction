@@ -216,12 +216,12 @@ def test_invalid_datatype_message_for_single_string_input(valid_inputs, invalid_
 
 # --- Test check_out_of_range_values() function ---
 # No out-of-range values
-def test_no_invalid_value_ranges(valid_inputs):
+def test_no_out_of_range_values(valid_inputs):
     assert check_out_of_range_values(valid_inputs) == None
 
 
-# All invalid value ranges
-def test_value_range_error_message_for_all_inputs(valid_inputs):
+# All out-of-range values
+def test_error_message_for_all_out_of_range_values(valid_inputs):
     inputs = valid_inputs.copy()
     inputs["age"] = 150  # Out of range age
     inputs["income"] = -1000  # Out of range income
@@ -234,6 +234,15 @@ def test_value_range_error_message_for_all_inputs(valid_inputs):
     )
     assert check_out_of_range_values(inputs) == expected_error_message
 
+
+# Single out-of-range value
+def test_error_message_for_single_out_of_range_value(valid_inputs):
+    inputs = valid_inputs.copy()
+    out_of_range_input = "age"
+    out_of_range_value = 20
+    partial_error_message = "age 21-79"
+    inputs[out_of_range_input] = out_of_range_value
+    assert check_out_of_range_values(inputs) == f"Out-of-range value error! The system is designed for applicants with {partial_error_message}."
 
 # --- Inputs and their value ranges ---
 # age
