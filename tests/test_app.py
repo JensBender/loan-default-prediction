@@ -266,6 +266,22 @@ def test_error_message_for_income_out_of_range(valid_inputs, income_value, expec
     assert check_out_of_range_values(inputs) == expected_error_message
 
 
+# Current house years out-of-range
+@pytest.mark.parametrize("current_house_yrs_value, expected_error_message", [
+    (-50, "Out-of-range value error! The system is designed for applicants with 10-14 current house years."), 
+    (0, "Out-of-range value error! The system is designed for applicants with 10-14 current house years."), 
+    (9, "Out-of-range value error! The system is designed for applicants with 10-14 current house years."), 
+    (10, None), 
+    (14, None), 
+    (15, "Out-of-range value error! The system is designed for applicants with 10-14 current house years."), 
+    (1000, "Out-of-range value error! The system is designed for applicants with 10-14 current house years.")
+])
+def test_error_message_for_current_house_yrs_out_of_range(valid_inputs, current_house_yrs_value, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs["current_house_yrs"] = current_house_yrs_value
+    assert check_out_of_range_values(inputs) == expected_error_message
+
+
 # --- Inputs and their value ranges ---
 # age
 # married ["Single", "Married"]
