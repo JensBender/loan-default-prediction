@@ -236,14 +236,18 @@ def test_error_message_for_all_out_of_range_values(valid_inputs):
 
 
 # Age out-of-range
-@pytest.mark.parametrize("value", [-50, 20, 21, 79, 80, 1000])
-def test_error_message_for_age_out_of_range(valid_inputs, value):
+@pytest.mark.parametrize("age_value, expected_error_message", [
+    (-50, "Out-of-range value error! The system is designed for applicants with age 21-79."), 
+    (20, "Out-of-range value error! The system is designed for applicants with age 21-79."), 
+    (21, None), 
+    (79, None), 
+    (80, "Out-of-range value error! The system is designed for applicants with age 21-79."),
+    (1000, "Out-of-range value error! The system is designed for applicants with age 21-79.")
+])
+def test_error_message_for_age_out_of_range(valid_inputs, age_value, expected_error_message):
     inputs = valid_inputs.copy()
-    inputs["age"] = value
-    if value == 21 or value == 79:
-        assert check_out_of_range_values(inputs) == None
-    else:
-        assert check_out_of_range_values(inputs) == "Out-of-range value error! The system is designed for applicants with age 21-79."
+    inputs["age"] = age_value
+    assert check_out_of_range_values(inputs) == expected_error_message
 
 
 # --- Inputs and their value ranges ---
