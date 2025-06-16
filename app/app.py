@@ -199,7 +199,7 @@ def validate_data_types(inputs_dict):
     return None  # no invalid data types
 
 
-def validate_value_ranges(inputs_dict):
+def check_out_of_range_values(inputs_dict):
     out_of_range_inputs = []
     if inputs_dict["age"] < 21 or inputs_dict["age"] > 79:
         out_of_range_inputs.append("age 21-79")
@@ -212,10 +212,10 @@ def validate_value_ranges(inputs_dict):
     if inputs_dict["current_job_yrs"] < 0 or inputs_dict["current_job_yrs"] > 14:
         out_of_range_inputs.append("0-14 current job years")
     if len(out_of_range_inputs) == 1:
-        return f"Value range error! The system is designed for applicants with {out_of_range_inputs[0]}."
+        return f"Out-of-range value error! The system is designed for applicants with {out_of_range_inputs[0]}."
     if len(out_of_range_inputs) > 1:
-        return f"Value range error! The system is designed for applicants with {', '.join(out_of_range_inputs[:-1])} and {out_of_range_inputs[-1]}."
-    return None  # no out of range inputs
+        return f"Out-of-range value error! The system is designed for applicants with {', '.join(out_of_range_inputs[:-1])} and {out_of_range_inputs[-1]}."
+    return None  # no out-of-range inputs
 
 
 # --- Load the pre-trained pipeline (including data preprocessing and Random Forest Classifier model) ---
