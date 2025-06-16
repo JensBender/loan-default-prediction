@@ -297,6 +297,21 @@ def test_error_message_for_experience_out_of_range(valid_inputs, experience_valu
     assert check_out_of_range_values(inputs) == expected_error_message
 
 
+# Current job years out-of-range
+@pytest.mark.parametrize("current_job_yrs_value, expected_error_message", [
+    (-50, "Out-of-range value error! The system is designed for applicants with 0-14 current job years."), 
+    (-1, "Out-of-range value error! The system is designed for applicants with 0-14 current job years."), 
+    (0, None), 
+    (14, None), 
+    (15, "Out-of-range value error! The system is designed for applicants with 0-14 current job years."), 
+    (1000, "Out-of-range value error! The system is designed for applicants with 0-14 current job years.")
+])
+def test_error_message_for_current_job_yrs_out_of_range(valid_inputs, current_job_yrs_value, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs["current_job_yrs"] = current_job_yrs_value
+    assert check_out_of_range_values(inputs) == expected_error_message
+
+
 # --- Inputs and their value ranges ---
 # age
 # married ["Single", "Married"]
