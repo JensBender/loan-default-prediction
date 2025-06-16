@@ -5,7 +5,7 @@ import pytest
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  # add the parent directory to the path
-from app.app import strip_whitespace, check_missing_values, validate_data_types, validate_value_ranges
+from app.app import strip_whitespace, check_missing_values, validate_data_types, check_out_of_range_values
 
 
 # Define valid input as dictionary for testing 
@@ -214,10 +214,10 @@ def test_invalid_datatype_message_for_single_string_input(valid_inputs, invalid_
     assert validate_data_types(inputs) == "Data type error! Married/Single must be a string."
 
 
-# --- Test validate_value_ranges() function ---
-# No invalid value ranges
+# --- Test check_out_of_range_values() function ---
+# No out-of-range values
 def test_no_invalid_value_ranges(valid_inputs):
-    assert validate_value_ranges(valid_inputs) == None
+    assert check_out_of_range_values(valid_inputs) == None
 
 
 # All invalid value ranges
@@ -229,10 +229,10 @@ def test_value_range_error_message_for_all_inputs(valid_inputs):
     inputs["experience"] = -5  # Out of range experience
     inputs["current_job_yrs"] = 15  # Out of range current job years
     expected_error_message = (
-        "Value range error! The system is designed for applicants with age 21-79, a non-negative income, "
+        "Out-of-range value error! The system is designed for applicants with age 21-79, a non-negative income, "
         "10-14 current house years, 0-20 years of experience and 0-14 current job years."
     )
-    assert validate_value_ranges(inputs) == expected_error_message
+    assert check_out_of_range_values(inputs) == expected_error_message
 
 
 # --- Inputs and their value ranges ---
