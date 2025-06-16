@@ -282,6 +282,21 @@ def test_error_message_for_current_house_yrs_out_of_range(valid_inputs, current_
     assert check_out_of_range_values(inputs) == expected_error_message
 
 
+# Experience out-of-range
+@pytest.mark.parametrize("experience_value, expected_error_message", [
+    (-50, "Out-of-range value error! The system is designed for applicants with 0-20 years of experience."), 
+    (-1, "Out-of-range value error! The system is designed for applicants with 0-20 years of experience."), 
+    (0, None), 
+    (20, None), 
+    (21, "Out-of-range value error! The system is designed for applicants with 0-20 years of experience."), 
+    (1000, "Out-of-range value error! The system is designed for applicants with 0-20 years of experience.")
+])
+def test_error_message_for_experience_out_of_range(valid_inputs, experience_value, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs["experience"] = experience_value
+    assert check_out_of_range_values(inputs) == expected_error_message
+
+
 # --- Inputs and their value ranges ---
 # age
 # married ["Single", "Married"]
