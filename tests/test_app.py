@@ -251,6 +251,21 @@ def test_error_message_for_age_out_of_range(valid_inputs, age_value, expected_er
     assert check_out_of_range_values(inputs) == expected_error_message
 
 
+# Income out-of-range
+@pytest.mark.parametrize("income_value, expected_error_message", [
+    (-1000, "Out-of-range value error! The system is designed for applicants with a non-negative income."), 
+    (-50, "Out-of-range value error! The system is designed for applicants with a non-negative income."), 
+    (-1, "Out-of-range value error! The system is designed for applicants with a non-negative income."), 
+    (-0.001, "Out-of-range value error! The system is designed for applicants with a non-negative income."), 
+    (0, None), 
+    (1000, None), 
+])
+def test_error_message_for_income_out_of_range(valid_inputs, income_value, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs["income"] = income_value
+    assert check_out_of_range_values(inputs) == expected_error_message
+
+
 # --- Inputs and their value ranges ---
 # age
 # married ["Single", "Married"]
