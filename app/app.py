@@ -261,9 +261,9 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
             return invalid_datatype_message, ""
 
         # Value range validation
-        value_range_error_message = validate_value_ranges(inputs)
-        if value_range_error_message:
-            return value_range_error_message, ""
+        out_of_range_value_message = check_out_of_range_values(inputs)
+        if out_of_range_value_message:
+            return out_of_range_value_message, ""
 
         # --- Data preprocessing before pipeline ---
         # Convert numerical inputs from float (by default) to int to match expected pipeline input 
