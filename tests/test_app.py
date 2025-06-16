@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))) 
 from app.app import strip_whitespace, check_missing_values, validate_data_types, validate_value_ranges
 
 
-# Define valid input values for testing as dictionary
+# Define valid input as dictionary for testing 
 @pytest.fixture
 def valid_inputs():
     return {
@@ -26,9 +26,8 @@ def valid_inputs():
     }
 
 
-
 # --- Test strip_whitespace() function ---
-# Remove whitespace in strings
+# Remove various types of whitespace in string inputs
 def test_strip_whitespace():
     whitespace_inputs = {
         "age": 30,
@@ -112,7 +111,7 @@ def test_error_message_for_single_missing_numerical_input(valid_inputs, missing_
     assert error_message == f"Please provide: {expected_partial_error_message}.", f"Expected exact error message: 'Please provide: {expected_partial_error_message}.' for {numerical_input}='{missing_value_type}'"
 
 
-# 0 is a valid numerical input
+# Ensure 0 is a valid numerical input that does not trigger an error
 @pytest.mark.parametrize("numerical_input", ["age", "income", "current_house_yrs", "experience", "current_job_yrs"])
 def test_zero_is_valid_numerical_input(valid_inputs, numerical_input):
     inputs = valid_inputs.copy()
