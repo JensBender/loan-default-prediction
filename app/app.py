@@ -252,8 +252,8 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
             "current_job_yrs": current_job_yrs
         }
         
-        # Strip whitespace in inputs
-        inputs = strip_whitespace(inputs)
+        # Standardize inputs
+        inputs = standardize_inputs(inputs)
 
         # --- Input validation ---
         # Missing value check
@@ -280,24 +280,10 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         current_house_yrs = int(round(current_house_yrs))
 
         # Convert UI categorical labels to match expected pipeline input
-        married = married.lower()
-        house_ownership = house_ownership.lower().replace("neither rented nor owned", "norent_noown")
-        car_ownership = car_ownership.lower()
+        inputs["house_ownership"] = inputs["house_ownership"].replace("neither_rented_nor_owned", "norent_noown")
 
         # Create input DataFrame for Pipeline
-        pipeline_input_df = pd.DataFrame({
-            "income": [income],
-            "age": [age],
-            "experience": [experience],
-            "married": [married],
-            "house_ownership": [house_ownership],
-            "car_ownership": [car_ownership],
-            "profession": [profession],
-            "city": [city],
-            "state": [state],
-            "current_job_yrs": [current_job_yrs],
-            "current_house_yrs": [current_house_yrs]
-        })   
+        pipeline_input_df = pd.DataFrame({key: [value] for key, value in inputs.items()})   
 
         # Use single-row DataFrame as input
         pipeline_input_df = pipeline_input_df.head(1) 
