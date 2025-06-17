@@ -16,7 +16,11 @@ import re
 
 # --- Global constants ---
 # Lists of categorical string labels (in format expected by the model)
-PROFESSIONS = [
+MARRIED_LABELS = ["single", "married"]
+CAR_OWNERSHIP_LABELS = ["yes", "no"]
+HOUSE_OWNERSHIP_LABELS = ["rented", "owned", "norent_noown"]  # "Neither Rented Nor Owned" is the display label for "norent_noown"
+
+PROFESSION_LABELS = [
     "air_traffic_controller", "analyst", "architect", "army_officer", "artist", "aviator",
     "biomedical_engineer", "chartered_accountant", "chef", "chemical_engineer", "civil_engineer",
     "civil_servant", "comedian", "computer_hardware_engineer", "computer_operator", "consultant",
@@ -29,7 +33,7 @@ PROFESSIONS = [
     "technician", "technology_specialist", "web_designer"
 ]
 
-CITIES = [
+CITY_LABELS = [
     "adoni", "agartala", "agra", "ahmedabad", "ahmednagar", "aizawl", "ajmer", "akola", "alappuzha", "aligarh",
     "allahabad", "alwar", "ambala", "ambarnath", "ambattur", "amravati", "amritsar", "amroha", "anand", "anantapur",
     "anantapuram[24]", "arrah", "asansol", "aurangabad", "aurangabad[39]", "avadi", "bahraich", "ballia", "bally",
@@ -70,7 +74,7 @@ CITIES = [
     "vijayawada", "vijayanagaram", "visakhapatnam[4]", "warangal[11][12]", "yamunanagar"
 ]
 
-STATES = [
+STATE_LABELS = [
     "andhra_pradesh", "assam", "bihar", "chandigarh", "chhattisgarh",
     "delhi", "gujarat", "haryana", "himachal_pradesh", "jammu_and_kashmir",
     "jharkhand", "karnataka", "kerala", "madhya_pradesh", "maharashtra",
@@ -80,9 +84,9 @@ STATES = [
 ]
 
 # Format professions, cities, and states for display
-professions = [profession.replace("_", " ").title() for profession in PROFESSIONS]
-cities = [city.replace("_", " ").title() for city in CITIES]
-states = [state.replace("_", " ").title() for state in STATES]
+profession_display_labels = [profession.replace("_", " ").title() for profession in PROFESSION_LABELS]
+city_display_labels = [city.replace("_", " ").title() for city in CITY_LABELS]
+state_display_labels = [state.replace("_", " ").title() for state in STATE_LABELS]
 
 
 # Function to standardize string input values
