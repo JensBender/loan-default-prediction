@@ -61,36 +61,35 @@ def test_standardize_string(input_value, expected_output):
 
 
 # --- Test standardize_inputs() function ---
-# Remove various types of whitespace in string inputs within inputs dictionary
+# Remove leading/trailing whitespace, convert to lowercase, and replace inner whitespaces with underscores
 def test_standardize_inputs():
-    whitespace_inputs = {
+    raw_inputs = {
         "age": 30,
-        "married": " Married",
+        "married": " Married  ",
         "income": 1000000,
-        "car_ownership": " Yes  ",
-        "house_ownership": "Rented\t",
+        "car_ownership": "\t\tYes  ",
+        "house_ownership": "Neither \t Rented \n Nor  Owned",
         "current_house_yrs": 12,
-        "city": "\nDelhi",
-        "state": " Assam \t \n ",
-        "profession": "\t\t Architect ",
+        "city": "\nSangli-Miraj_&_Kupwad",
+        "state": " Uttar_Pradesh \t \n ",
+        "profession": "Hotel_Manager ",
         "experience": 10,
         "current_job_yrs": 7
     }
-    expected_cleaned_inputs = {
+    expected_standardized_inputs = {
         "age": 30,
-        "married": "Married",
+        "married": "married",
         "income": 1000000,
-        "car_ownership": "Yes",
-        "house_ownership": "Rented",
+        "car_ownership": "yes",
+        "house_ownership": "neither_rented_nor_owned",
         "current_house_yrs": 12,
-        "city": "Delhi",
-        "state": "Assam",
-        "profession": "Architect",
+        "city": "sangli-miraj_&_kupwad",
+        "state": "uttar_pradesh",
+        "profession": "hotel_manager",
         "experience": 10,
         "current_job_yrs": 7
     }
-    cleaned_inputs = standardize_inputs(whitespace_inputs)
-    assert cleaned_inputs == expected_cleaned_inputs
+    assert standardize_inputs(raw_inputs) == expected_standardized_inputs
 
 
 # Ensure standardized inputs remain unchanged by standardize_inputs()
