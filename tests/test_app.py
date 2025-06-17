@@ -7,7 +7,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  # add the parent directory to the path
 from app.app import (
     standardize_string, 
-    strip_whitespace, 
+    standardize_inputs, 
     check_missing_values, 
     validate_data_types, 
     check_out_of_range_values
@@ -60,9 +60,9 @@ def test_standardize_string(input_value, expected_output):
     assert standardize_string(input_value) == expected_output
 
 
-# --- Test strip_whitespace() function ---
-# Remove various types of whitespace in string inputs
-def test_strip_whitespace():
+# --- Test standardize_inputs() function ---
+# Remove various types of whitespace in string inputs within inputs dictionary
+def test_standardize_inputs():
     whitespace_inputs = {
         "age": 30,
         "married": " Married",
@@ -89,14 +89,26 @@ def test_strip_whitespace():
         "experience": 10,
         "current_job_yrs": 7
     }
-    cleaned_inputs = strip_whitespace(whitespace_inputs)
+    cleaned_inputs = standardize_inputs(whitespace_inputs)
     assert cleaned_inputs == expected_cleaned_inputs
 
 
-# Ensure clean inputs remain unchanged by strip_whitespace()
-def test_strip_whitespace_clean_inputs_remain_unchanged(valid_inputs):
-    cleaned_inputs = strip_whitespace(valid_inputs)
-    assert cleaned_inputs == valid_inputs
+# Ensure standardized inputs remain unchanged by standardize_inputs()
+def test_standardized_inputs_remain_unchanged():
+    standardized_inputs = {
+        "age": 30,
+        "married": "married",
+        "income": 1000000,
+        "car_ownership": "yes",
+        "house_ownership": "rented",
+        "current_house_yrs": 12,
+        "city": "delhi",
+        "state": "assam",
+        "profession": "architect",
+        "experience": 10,
+        "current_job_yrs": 7
+    }   
+    assert standardize_inputs(standardized_inputs) == standardized_inputs
 
 
 # --- Test check_missing_values() function ---
