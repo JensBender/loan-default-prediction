@@ -124,12 +124,9 @@ def standardize_string(value):
     return value  # return non-string values unchanged
 
 
-# Function to strip whitespace in inputs
-def strip_whitespace(inputs_dict):
-    return {
-        key: value.strip() if isinstance(value, str) else value 
-        for key, value in inputs_dict.items()
-    }
+# Function to standardize inputs
+def standardize_inputs(inputs_dict):
+    return {key: standardize_string(value) for key, value in inputs_dict.items()}
 
 
 # --- Input validation functions ---
