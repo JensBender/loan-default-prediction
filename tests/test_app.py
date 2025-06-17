@@ -100,11 +100,11 @@ def test_standardized_inputs_remain_unchanged():
         "married": "married",
         "income": 1000000,
         "car_ownership": "yes",
-        "house_ownership": "rented",
+        "house_ownership": "neither_rented_nor_owned",
         "current_house_yrs": 12,
-        "city": "delhi",
-        "state": "assam",
-        "profession": "architect",
+        "city": "sangli-miraj_&_kupwad",
+        "state": "uttar_pradesh",
+        "profession": "hotel_manager",
         "experience": 10,
         "current_job_yrs": 7
     }   
