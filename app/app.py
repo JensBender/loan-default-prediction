@@ -16,7 +16,7 @@ import re
 
 
 # --- Global constants ---
-# List of professions, cities, and states (in same format as training data)
+# Lists of categorical string labels (in format expected by the model)
 PROFESSIONS = [
     "Air_traffic_controller", "Analyst", "Architect", "Army_officer", "Artist",
     "Aviator", "Biomedical_Engineer", "Chartered_Accountant", "Chef", "Chemical_engineer",
@@ -119,8 +119,8 @@ states = [state.replace("_", " ").title() for state in STATES]
 # Function to standardize string input values
 def standardize_string(value):
     if isinstance(value, str):
-        # Remove leading/trailing whitespace, convert to lowercase, and replace inner whitespace with underscores
-        return re.sub(r"\s+", "_", value.strip().lower())
+        # Remove leading/trailing whitespace, convert to lowercase, and replace hyphens, forward slashes, and inner whitespaces with an underscore
+        return re.sub(r"[-/\s]+", "_", value.strip().lower())
     return value  # return non-string values unchanged
 
 
@@ -209,6 +209,8 @@ def check_out_of_range_values(inputs_dict):
     out_of_range_inputs = []
     if inputs_dict["age"] < 21 or inputs_dict["age"] > 79:
         out_of_range_inputs.append("age 21-79")
+    if inputs_dict["married"] not in ["Single", "Married"]:
+        out_of_range_inputs.append("a valid marital status (Single or Married)")
     if inputs_dict["income"] < 0:
         out_of_range_inputs.append("a non-negative income")
     if inputs_dict["current_house_yrs"] < 10 or inputs_dict["current_house_yrs"] > 14:
@@ -266,7 +268,7 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         if invalid_datatype_message:
             return invalid_datatype_message, ""
 
-        # Value range validation
+        # Out-of-range values check
         out_of_range_value_message = check_out_of_range_values(inputs)
         if out_of_range_value_message:
             return out_of_range_value_message, ""
