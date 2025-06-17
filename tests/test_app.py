@@ -5,7 +5,13 @@ import pytest
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  # add the parent directory to the path
-from app.app import strip_whitespace, check_missing_values, validate_data_types, check_out_of_range_values
+from app.app import (
+    standardize_string, 
+    strip_whitespace, 
+    check_missing_values, 
+    validate_data_types, 
+    check_out_of_range_values
+)
 
 
 # Define valid input as dictionary for testing 
@@ -24,6 +30,34 @@ def valid_inputs():
         "experience": 10,
         "current_job_yrs": 7
     }
+
+
+# --- Test standardize_string() function ---
+@pytest.mark.parametrize("input_value, expected_output", [
+    ("   leading spaces", "leading_spaces"),
+    ("trailing spaces   ", "trailing_spaces"),
+    ("  Leading and Trailing Spaces  ", "leading_and_trailing_spaces"),
+    ("\tLeading tab and trailing linebreak\n", "leading_tab_and_trailing_linebreak"),
+    ("\n\t", ""),
+    ("Multiple  Inner   Spaces", "multiple_inner_spaces"),
+    ("Title Case", "title_case"),
+    ("MiXeD CaSe", "mixed_case"),
+    ("", ""),
+    ("   ", ""),
+    ("innner\ttab", "innner_tab"),
+    ("inner\nnewline", "inner_newline"),
+    ("with-mixed_chars 123", "with-mixed_chars_123"),
+    ("singleword", "singleword"),
+    (123, 123),
+    (123.45, 123.45),
+    (True, True),
+    (None, None),
+    (["a", "list"], ["a", "list"]),
+    (("a", "tuple"), ("a", "tuple")),
+    ({"a": "dictionary"}, {"a": "dictionary"}),
+])
+def test_standardize_string(input_value, expected_output):
+    assert standardize_string(input_value) == expected_output
 
 
 # --- Test strip_whitespace() function ---
