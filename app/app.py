@@ -12,6 +12,7 @@ from app.custom_transformers import (
 )
 import pickle
 import os
+import re
 
 
 # --- Global constants ---
@@ -113,6 +114,14 @@ STATES = [
 professions = [profession.replace("_", " ").title() for profession in PROFESSIONS]
 cities = [city.replace("_", " ").title() for city in CITIES]
 states = [state.replace("_", " ").title() for state in STATES]
+
+
+# Function to standardize string input values
+def standardize_string(value):
+    if isinstance(value, str):
+        # Remove leading/trailing whitespace, convert to lowercase, and replace inner whitespace with underscores
+        return re.sub(r"\s+", "_", value.strip().lower())
+    return value  # return non-string values unchanged
 
 
 # Function to strip whitespace in inputs
