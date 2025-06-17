@@ -273,11 +273,11 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
 
         # --- Data preprocessing before pipeline ---
         # Convert numerical inputs from float (by default) to int to match expected pipeline input 
-        income = int(round(income))
-        age = int(round(age))
-        experience = int(round(experience))
-        current_job_yrs = int(round(current_job_yrs))
-        current_house_yrs = int(round(current_house_yrs))
+        inputs["income"] = int(round(inputs["income"]))
+        inputs["age"] = int(round(inputs["age"]))
+        inputs["experience"] = int(round(inputs["experience"]))
+        inputs["current_job_yrs"] = int(round(inputs["current_job_yrs"]))
+        inputs["current_house_yrs"] = int(round(inputs["current_house_yrs"]))
 
         # Convert UI categorical labels to match expected pipeline input
         inputs["house_ownership"] = inputs["house_ownership"].replace("neither_rented_nor_owned", "norent_noown")
