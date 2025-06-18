@@ -348,6 +348,23 @@ def test_error_message_for_car_ownership_out_of_range(valid_inputs, car_ownershi
     assert check_out_of_range_values(inputs) == expected_error_message  
 
 
+# House ownership out-of-range
+@pytest.mark.parametrize("house_ownership_value, expected_error_message", [
+    ("maybe", "Out-of-range value error: house ownership must be 'rented', 'owned', or 'norent_noown'."),
+    ("yes", "Out-of-range value error: house ownership must be 'rented', 'owned', or 'norent_noown'."),
+    ("no", "Out-of-range value error: house ownership must be 'rented', 'owned', or 'norent_noown'."),
+    ("mortgaged", "Out-of-range value error: house ownership must be 'rented', 'owned', or 'norent_noown'."),
+    ("hopefully_in_the_future", "Out-of-range value error: house ownership must be 'rented', 'owned', or 'norent_noown'."),
+    ("owned", None),
+    ("rented", None),
+    ("norent_noown", None)
+])
+def test_error_message_for_house_ownership_out_of_range(valid_inputs, house_ownership_value, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs["house_ownership"] = house_ownership_value
+    assert check_out_of_range_values(inputs) == expected_error_message
+
+
 # Current house years out-of-range
 @pytest.mark.parametrize("current_house_yrs_value, expected_error_message", [
     (-50, "Out-of-range value error: current house years must be 10-14."), 
