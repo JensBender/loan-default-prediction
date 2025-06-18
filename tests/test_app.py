@@ -297,6 +297,20 @@ def test_error_message_for_age_out_of_range(valid_inputs, age_value, expected_er
     assert check_out_of_range_values(inputs) == expected_error_message
 
 
+# Married out-of-range
+@pytest.mark.parametrize("married_value, expected_error_message", [
+    ("divorced", "Out-of-range value error: married must be 'single' or 'married'."),
+    ("yes", "Out-of-range value error: married must be 'single' or 'married'."),
+    ("no", "Out-of-range value error: married must be 'single' or 'married'."),
+    ("single", None),
+    ("married", None)
+])
+def test_error_message_for_married_out_of_range(valid_inputs, married_value, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs["married"] = married_value
+    assert check_out_of_range_values(inputs) == expected_error_message
+
+
 # Income out-of-range
 @pytest.mark.parametrize("income_value, expected_error_message", [
     (-1000, "Out-of-range value error: income must be a non-negative number."), 
