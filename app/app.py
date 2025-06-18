@@ -190,8 +190,18 @@ def check_out_of_range_values(inputs_dict):
         out_of_range_inputs.append("married must be 'single' or 'married'")
     if inputs_dict["income"] < 0:
         out_of_range_inputs.append("income must be a non-negative number")
+    if inputs_dict["car_ownership"] not in CAR_OWNERSHIP_LABELS:
+        out_of_range_inputs.append("car ownership must be 'yes' or 'no'")
+    if inputs_dict["house_ownership"] not in HOUSE_OWNERSHIP_LABELS:
+        out_of_range_inputs.append("house ownership must be 'rented', 'owned', or 'norent_noown'")
     if inputs_dict["current_house_yrs"] < 10 or inputs_dict["current_house_yrs"] > 14:
         out_of_range_inputs.append("current house years must be 10-14")
+    if inputs_dict["city"] not in CITY_LABELS:
+        out_of_range_inputs.append("city must be one of the predefined cities")
+    if inputs_dict["state"] not in STATE_LABELS:
+        out_of_range_inputs.append("state must be one of the predefined states")
+    if inputs_dict["profession"] not in PROFESSION_LABELS:
+        out_of_range_inputs.append("profession must be one of the predefined professions")
     if inputs_dict["experience"] < 0 or inputs_dict["experience"] > 20:
         out_of_range_inputs.append("experience must be 0-20 years")
     if inputs_dict["current_job_yrs"] < 0 or inputs_dict["current_job_yrs"] > 14:
