@@ -397,6 +397,21 @@ def test_error_message_for_city_out_of_range(valid_inputs, city_value, expected_
     assert check_out_of_range_values(inputs) == expected_error_message
 
 
+# State out-of-range
+@pytest.mark.parametrize("state_value, expected_error_message", [
+    ("unknown", "Out-of-range value error: state must be one of the predefined states."),
+    ("India", "Out-of-range value error: state must be one of the predefined states."),
+    ("california", "Out-of-range value error: state must be one of the predefined states."),
+    ("jammu_and_kashmir", None),
+    ("gujarat", None),
+    ("maharashtra", None)
+])
+def test_error_message_for_state_out_of_range(valid_inputs, state_value, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs["state"] = state_value
+    assert check_out_of_range_values(inputs) == expected_error_message
+
+
 # Experience out-of-range
 @pytest.mark.parametrize("experience_value, expected_error_message", [
     (-50, "Out-of-range value error: experience must be 0-20 years."), 
