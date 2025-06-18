@@ -19,14 +19,14 @@ from app.app import (
 def valid_inputs():
     return {
         "age": 30,
-        "married": "Married",
+        "married": "married",
         "income": 1000000,
-        "car_ownership": "Yes",
-        "house_ownership": "Rented",
+        "car_ownership": "yes",
+        "house_ownership": "rented",
         "current_house_yrs": 12,
-        "city": "Delhi",
-        "state": "Assam",
-        "profession": "Architect",
+        "city": "delhi",
+        "state": "assam",
+        "profession": "architect",
         "experience": 10,
         "current_job_yrs": 7
     }
@@ -268,27 +268,28 @@ def test_no_out_of_range_values(valid_inputs):
 # All out-of-range values
 def test_error_message_for_all_out_of_range_values(valid_inputs):
     inputs = valid_inputs.copy()
-    inputs["age"] = 150  # Out of range age
-    inputs["income"] = -1000  # Out of range income
-    inputs["current_house_yrs"] = 20  # Out of range current house years
-    inputs["experience"] = -5  # Out of range experience
-    inputs["current_job_yrs"] = 15  # Out of range current job years
+    inputs["age"] = 150  
+    inputs["married"] = "divorced" 
+    inputs["income"] = -1000  
+    inputs["current_house_yrs"] = 20  
+    inputs["experience"] = -5  
+    inputs["current_job_yrs"] = 15  
     expected_error_message = (
-        "Out-of-range value error! The system is designed for applicants with age 21-79, a non-negative income, "
-        "10-14 current house years, 0-20 years of experience and 0-14 current job years."
+        "Out-of-range value error: age must be 21-79, married must be 'single' or 'married', income must be a non-negative number, "
+        "current house years must be 10-14, experience must be 0-20 years and current job years must be 0-14."
     )
     assert check_out_of_range_values(inputs) == expected_error_message
 
 
 # Age out-of-range
 @pytest.mark.parametrize("age_value, expected_error_message", [
-    (-50, "Out-of-range value error! The system is designed for applicants with age 21-79."), 
-    (0, "Out-of-range value error! The system is designed for applicants with age 21-79."), 
-    (20, "Out-of-range value error! The system is designed for applicants with age 21-79."), 
+    (-50, "Out-of-range value error: age must be 21-79."), 
+    (0, "Out-of-range value error: age must be 21-79."), 
+    (20, "Out-of-range value error: age must be 21-79."), 
     (21, None), 
     (79, None), 
-    (80, "Out-of-range value error! The system is designed for applicants with age 21-79."),
-    (1000, "Out-of-range value error! The system is designed for applicants with age 21-79.")
+    (80, "Out-of-range value error: age must be 21-79."),
+    (1000, "Out-of-range value error: age must be 21-79.")
 ])
 def test_error_message_for_age_out_of_range(valid_inputs, age_value, expected_error_message):
     inputs = valid_inputs.copy()
@@ -298,10 +299,10 @@ def test_error_message_for_age_out_of_range(valid_inputs, age_value, expected_er
 
 # Income out-of-range
 @pytest.mark.parametrize("income_value, expected_error_message", [
-    (-1000, "Out-of-range value error! The system is designed for applicants with a non-negative income."), 
-    (-50, "Out-of-range value error! The system is designed for applicants with a non-negative income."), 
-    (-1, "Out-of-range value error! The system is designed for applicants with a non-negative income."), 
-    (-0.001, "Out-of-range value error! The system is designed for applicants with a non-negative income."), 
+    (-1000, "Out-of-range value error: income must be a non-negative number."), 
+    (-50, "Out-of-range value error: income must be a non-negative number."), 
+    (-1, "Out-of-range value error: income must be a non-negative number."), 
+    (-0.001, "Out-of-range value error: income must be a non-negative number."), 
     (0, None), 
     (1000, None), 
 ])
@@ -313,13 +314,13 @@ def test_error_message_for_income_out_of_range(valid_inputs, income_value, expec
 
 # Current house years out-of-range
 @pytest.mark.parametrize("current_house_yrs_value, expected_error_message", [
-    (-50, "Out-of-range value error! The system is designed for applicants with 10-14 current house years."), 
-    (0, "Out-of-range value error! The system is designed for applicants with 10-14 current house years."), 
-    (9, "Out-of-range value error! The system is designed for applicants with 10-14 current house years."), 
+    (-50, "Out-of-range value error: current house years must be 10-14."), 
+    (0, "Out-of-range value error: current house years must be 10-14."), 
+    (9, "Out-of-range value error: current house years must be 10-14."), 
     (10, None), 
     (14, None), 
-    (15, "Out-of-range value error! The system is designed for applicants with 10-14 current house years."), 
-    (1000, "Out-of-range value error! The system is designed for applicants with 10-14 current house years.")
+    (15, "Out-of-range value error: current house years must be 10-14."), 
+    (1000, "Out-of-range value error: current house years must be 10-14.")
 ])
 def test_error_message_for_current_house_yrs_out_of_range(valid_inputs, current_house_yrs_value, expected_error_message):
     inputs = valid_inputs.copy()
@@ -329,12 +330,12 @@ def test_error_message_for_current_house_yrs_out_of_range(valid_inputs, current_
 
 # Experience out-of-range
 @pytest.mark.parametrize("experience_value, expected_error_message", [
-    (-50, "Out-of-range value error! The system is designed for applicants with 0-20 years of experience."), 
-    (-1, "Out-of-range value error! The system is designed for applicants with 0-20 years of experience."), 
+    (-50, "Out-of-range value error: experience must be 0-20 years."), 
+    (-1, "Out-of-range value error: experience must be 0-20 years."), 
     (0, None), 
     (20, None), 
-    (21, "Out-of-range value error! The system is designed for applicants with 0-20 years of experience."), 
-    (1000, "Out-of-range value error! The system is designed for applicants with 0-20 years of experience.")
+    (21, "Out-of-range value error: experience must be 0-20 years."), 
+    (1000, "Out-of-range value error: experience must be 0-20 years.")
 ])
 def test_error_message_for_experience_out_of_range(valid_inputs, experience_value, expected_error_message):
     inputs = valid_inputs.copy()
@@ -344,28 +345,14 @@ def test_error_message_for_experience_out_of_range(valid_inputs, experience_valu
 
 # Current job years out-of-range
 @pytest.mark.parametrize("current_job_yrs_value, expected_error_message", [
-    (-50, "Out-of-range value error! The system is designed for applicants with 0-14 current job years."), 
-    (-1, "Out-of-range value error! The system is designed for applicants with 0-14 current job years."), 
+    (-50, "Out-of-range value error: current job years must be 0-14."), 
+    (-1, "Out-of-range value error: current job years must be 0-14."), 
     (0, None), 
     (14, None), 
-    (15, "Out-of-range value error! The system is designed for applicants with 0-14 current job years."), 
-    (1000, "Out-of-range value error! The system is designed for applicants with 0-14 current job years.")
+    (15, "Out-of-range value error: current job years must be 0-14."), 
+    (1000, "Out-of-range value error: current job years must be 0-14.")
 ])
 def test_error_message_for_current_job_yrs_out_of_range(valid_inputs, current_job_yrs_value, expected_error_message):
     inputs = valid_inputs.copy()
     inputs["current_job_yrs"] = current_job_yrs_value
     assert check_out_of_range_values(inputs) == expected_error_message
-
-
-# --- Inputs and their value ranges ---
-# age
-# married ["Single", "Married"]
-# income
-# car_ownership ["Yes", "No"] 
-# house_ownership ["Rented", "Owned", "Neither Rented Nor Owned"] 
-# current_house_yrs [10-14]
-# city ["Adoni", "Agartala", "Agra", "Ahmedabad", "Ahmednagar", ...]
-# state ["Andhra_Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Delhi", ...]
-# profession ["Air_traffic_controller", "Analyst", "Architect", "Army_officer", "Artist", ...]
-# experience [0-20]
-# current_job_yrs [0-14]
