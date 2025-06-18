@@ -412,6 +412,21 @@ def test_error_message_for_state_out_of_range(valid_inputs, state_value, expecte
     assert check_out_of_range_values(inputs) == expected_error_message
 
 
+# Profession out-of-range
+@pytest.mark.parametrize("profession_value, expected_error_message", [
+    ("unknown", "Out-of-range value error: profession must be one of the predefined professions."),
+    ("princess", "Out-of-range value error: profession must be one of the predefined professions."),
+    ("divorce_lawyer", "Out-of-range value error: profession must be one of the predefined professions."),
+    ("architect", None),
+    ("lawyer", None),
+    ("air_traffic_controller", None)
+])
+def test_error_message_for_profession_out_of_range(valid_inputs, profession_value, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs["profession"] = profession_value
+    assert check_out_of_range_values(inputs) == expected_error_message
+
+
 # Experience out-of-range
 @pytest.mark.parametrize("experience_value, expected_error_message", [
     (-50, "Out-of-range value error: experience must be 0-20 years."), 
