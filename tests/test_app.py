@@ -24,7 +24,7 @@ def valid_inputs():
         "car_ownership": "yes",
         "house_ownership": "rented",
         "current_house_yrs": 12,
-        "city": "delhi",
+        "city": "delhi_city",
         "state": "assam",
         "profession": "architect",
         "experience": 10,
@@ -266,17 +266,25 @@ def test_no_out_of_range_values(valid_inputs):
 
 
 # All out-of-range values
-def test_error_message_for_all_out_of_range_values(valid_inputs):
-    inputs = valid_inputs.copy()
-    inputs["age"] = 150  
-    inputs["married"] = "divorced" 
-    inputs["income"] = -1000  
-    inputs["current_house_yrs"] = 20  
-    inputs["experience"] = -5  
-    inputs["current_job_yrs"] = 15  
+def test_error_message_for_all_out_of_range_values():
+    inputs = {
+        "age": 150,
+        "married": "divorced",
+        "income": -1000,
+        "car_ownership": "maybe",
+        "house_ownership": "hopefully_in_the_future",
+        "current_house_yrs": 20,
+        "city": "gotham_city",
+        "state": "wakanda",
+        "profession": "jedi_knight",
+        "experience": -5,
+        "current_job_yrs": 15
+    }
     expected_error_message = (
         "Out-of-range value error: age must be 21-79, married must be 'single' or 'married', income must be a non-negative number, "
-        "current house years must be 10-14, experience must be 0-20 years and current job years must be 0-14."
+        "car ownership must be 'yes' or 'no', house ownership must be 'rented', 'owned', or 'norent_noown', "
+        "current house years must be 10-14, city must be one of the predefined cities, state must be one of the predefined states, "
+        "profession must be one of the predefined professions, experience must be 0-20 years and current job years must be 0-14."
     )
     assert check_out_of_range_values(inputs) == expected_error_message
 
