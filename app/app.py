@@ -185,21 +185,21 @@ def validate_data_types(inputs_dict):
 def check_out_of_range_values(inputs_dict):
     out_of_range_inputs = []
     if inputs_dict["age"] < 21 or inputs_dict["age"] > 79:
-        out_of_range_inputs.append("age 21-79")
-    if inputs_dict["married"] not in ["Single", "Married"]:
-        out_of_range_inputs.append("a valid marital status (Single or Married)")
+        out_of_range_inputs.append("age must be 21-79")
+    if inputs_dict["married"] not in MARRIED_LABELS:
+        out_of_range_inputs.append("married must be 'single' or 'married'")
     if inputs_dict["income"] < 0:
-        out_of_range_inputs.append("a non-negative income")
+        out_of_range_inputs.append("income must be a non-negative number")
     if inputs_dict["current_house_yrs"] < 10 or inputs_dict["current_house_yrs"] > 14:
-        out_of_range_inputs.append("10-14 current house years")
+        out_of_range_inputs.append("current house years must be 10-14")
     if inputs_dict["experience"] < 0 or inputs_dict["experience"] > 20:
-        out_of_range_inputs.append("0-20 years of experience")
+        out_of_range_inputs.append("experience must be 0-20 years")
     if inputs_dict["current_job_yrs"] < 0 or inputs_dict["current_job_yrs"] > 14:
-        out_of_range_inputs.append("0-14 current job years")
+        out_of_range_inputs.append("current job years must be 0-14")
     if len(out_of_range_inputs) == 1:
-        return f"Out-of-range value error! The system is designed for applicants with {out_of_range_inputs[0]}."
+        return f"Out-of-range value error: {out_of_range_inputs[0]}."
     if len(out_of_range_inputs) > 1:
-        return f"Out-of-range value error! The system is designed for applicants with {', '.join(out_of_range_inputs[:-1])} and {out_of_range_inputs[-1]}."
+        return f"Out-of-range value error: {', '.join(out_of_range_inputs[:-1])} and {out_of_range_inputs[-1]}."
     return None  # no out-of-range inputs
 
 
