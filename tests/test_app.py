@@ -381,6 +381,22 @@ def test_error_message_for_current_house_yrs_out_of_range(valid_inputs, current_
     assert check_out_of_range_values(inputs) == expected_error_message
 
 
+# City out-of-range
+@pytest.mark.parametrize("city_value, expected_error_message", [
+    ("unknown", "Out-of-range value error: city must be one of the predefined cities."),
+    ("metropolis", "Out-of-range value error: city must be one of the predefined cities."),
+    ("new_york", "Out-of-range value error: city must be one of the predefined cities."),
+    ("tokyo", "Out-of-range value error: city must be one of the predefined cities."),
+    ("kolkata", None),
+    ("tiruvottiyur", None),
+    ("surendranagar_dudhrej", None)
+])
+def test_error_message_for_city_out_of_range(valid_inputs, city_value, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs["city"] = city_value
+    assert check_out_of_range_values(inputs) == expected_error_message
+
+
 # Experience out-of-range
 @pytest.mark.parametrize("experience_value, expected_error_message", [
     (-50, "Out-of-range value error: experience must be 0-20 years."), 
