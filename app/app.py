@@ -92,15 +92,16 @@ CITY_DISPLAY_LABELS = [label.replace("_", " ").title() for label in CITY_LABELS]
 STATE_DISPLAY_LABELS = [label.replace("_", " ").title() for label in STATE_LABELS]
 
 
-# Function to standardize string input values
+# --- Input transformation functions ---
+# Function to standardize a single string input value
 def standardize_string(value):
     if isinstance(value, str):
-        # Remove leading/trailing whitespace, convert to lowercase, and replace hyphens, forward slashes, and inner whitespaces with an underscore
+        # Remove leading/trailing whitespace, convert to lowercase, and replace single or multiple hyphens, forward slashes, and inner whitespaces with a single underscore
         return re.sub(r"[-/\s]+", "_", value.strip().lower())
     return value  # return non-string values unchanged
 
 
-# Function to standardize inputs
+# Function to standardize all string inputs in a dictionary
 def standardize_inputs(inputs_dict):
     return {key: standardize_string(value) for key, value in inputs_dict.items()}
 
