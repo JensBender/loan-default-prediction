@@ -322,16 +322,16 @@ with gr.Blocks(css=custom_css) as app:
     with gr.Group():
         with gr.Row():
             age = gr.Number(label="Age", value="")
-            married = gr.Dropdown(label="Married/Single", choices=["Single", "Married"], value=None)
+            married = gr.Dropdown(label="Married/Single", choices=MARRIED_DISPLAY_LABELS, value=None)
             income = gr.Number(label="Income", value="")
         with gr.Row():
-            car_ownership = gr.Dropdown(label="Car Ownership", choices=["Yes", "No"], value=None)
-            house_ownership = gr.Dropdown(label="House Ownership", choices=["Rented", "Owned", "Neither Rented Nor Owned"], value=None)
+            car_ownership = gr.Dropdown(label="Car Ownership", choices=CAR_OWNERSHIP_DISPLAY_LABELS, value=None)
+            house_ownership = gr.Dropdown(label="House Ownership", choices=HOUSE_OWNERSHIP_DISPLAY_LABELS, value=None)
             current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
         with gr.Row():
-            city = gr.Dropdown(label="City", choices=cities, value=None)
-            state = gr.Dropdown(label="State", choices=states, value=None)
-            profession = gr.Dropdown(label="Profession", choices=professions, value=None)
+            city = gr.Dropdown(label="City", choices=CITY_DISPLAY_LABELS, value=None)
+            state = gr.Dropdown(label="State", choices=STATE_DISPLAY_LABELS, value=None)
+            profession = gr.Dropdown(label="Profession", choices=PROFESSION_DISPLAY_LABELS, value=None)
         with gr.Row():
             experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
             current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
