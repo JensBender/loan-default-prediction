@@ -334,6 +334,20 @@ def test_error_message_for_income_out_of_range(valid_inputs, income_value, expec
     assert check_out_of_range_values(inputs) == expected_error_message
 
 
+# Car ownership out-of-range
+@pytest.mark.parametrize("car_ownership_value, expected_error_message", [
+    ("maybe", "Out-of-range value error: car ownership must be 'yes' or 'no'."),
+    ("lamborghini", "Out-of-range value error: car ownership must be 'yes' or 'no'."),
+    ("soon", "Out-of-range value error: car ownership must be 'yes' or 'no'."),
+    ("yes", None),
+    ("no", None)
+])
+def test_error_message_for_car_ownership_out_of_range(valid_inputs, car_ownership_value, expected_error_message):
+    inputs = valid_inputs.copy()
+    inputs["car_ownership"] = car_ownership_value
+    assert check_out_of_range_values(inputs) == expected_error_message  
+
+
 # Current house years out-of-range
 @pytest.mark.parametrize("current_house_yrs_value, expected_error_message", [
     (-50, "Out-of-range value error: current house years must be 10-14."), 
