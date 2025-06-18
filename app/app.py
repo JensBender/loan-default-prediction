@@ -18,7 +18,7 @@ import re
 # Lists of categorical string labels (in format expected by the model)
 MARRIED_LABELS = ["single", "married"]
 CAR_OWNERSHIP_LABELS = ["yes", "no"]
-HOUSE_OWNERSHIP_LABELS = ["rented", "owned", "norent_noown"]  # "Neither Rented Nor Owned" is the display label for "norent_noown"
+HOUSE_OWNERSHIP_LABELS = ["rented", "owned", "norent_noown"]  
 
 PROFESSION_LABELS = [
     "air_traffic_controller", "analyst", "architect", "army_officer", "artist", "aviator",
@@ -83,10 +83,13 @@ STATE_LABELS = [
     "uttar_pradesh[5]", "uttarakhand", "west_bengal"
 ]
 
-# Format professions, cities, and states for display
-profession_display_labels = [profession.replace("_", " ").title() for profession in PROFESSION_LABELS]
-city_display_labels = [city.replace("_", " ").title() for city in CITY_LABELS]
-state_display_labels = [state.replace("_", " ").title() for state in STATE_LABELS]
+# Format categorical string labels for display in UI
+MARRIED_DISPLAY_LABELS = [label.title() for label in MARRIED_LABELS]
+CAR_OWNERSHIP_DISPLAY_LABELS = [label.title() for label in CAR_OWNERSHIP_LABELS]
+HOUSE_OWNERSHIP_DISPLAY_LABELS = [label.replace("norent_noown", "Neither Rented Nor Owned").title() for label in HOUSE_OWNERSHIP_LABELS]
+PROFESSION_DISPLAY_LABELS = [label.replace("_", " ").title() for label in PROFESSION_LABELS]
+CITY_DISPLAY_LABELS = [label.replace("_", " ").title() for label in CITY_LABELS]
+STATE_DISPLAY_LABELS = [label.replace("_", " ").title() for label in STATE_LABELS]
 
 
 # Function to standardize string input values
