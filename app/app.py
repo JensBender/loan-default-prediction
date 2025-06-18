@@ -230,7 +230,10 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
             "experience": experience,
             "current_job_yrs": current_job_yrs
         }
-        
+
+        # Reformat specific display labels        
+        inputs["house_ownership"] = inputs["house_ownership"].replace("Neither Rented Nor Owned", "norent_noown")  
+
         # Standardize inputs
         inputs = standardize_inputs(inputs)
 
