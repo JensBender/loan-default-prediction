@@ -9,6 +9,7 @@ from app.app import (
     standardize_string, 
     standardize_inputs, 
     prepare_house_ownership_for_pipeline,
+    convert_float_to_int,
     check_missing_values, 
     validate_data_types, 
     check_out_of_range_values
@@ -119,6 +120,30 @@ def test_standardized_inputs_remain_unchanged():
 ])
 def test_prepare_house_ownership_for_pipeline(display_label, expected_pipeline_label):
     assert prepare_house_ownership_for_pipeline(display_label) == expected_pipeline_label
+
+
+# --- Test convert_float_to_int() function ---
+@pytest.mark.parametrize("input_value, expected_output", [
+    (0.0, 0),
+    (1.0, 1),
+    (1.49, 1),
+    (1.5, 2),
+    (2.5, 2),
+    (2.51, 3),
+    (-1.0, -1),
+    (-1.49, -1),
+    (-1.5, -2),
+    (-2.5, -2),
+    (-2.51, -3),
+    (4, 4),
+    (100, 100),
+    (100.5, 100),
+    (100.51, 101),
+])
+def test_convert_float_to_int(input_value, expected_output):
+    output = convert_float_to_int(input_value)
+    assert output == expected_output
+    assert isinstance(output, int)
 
 
 # --- Test check_missing_values() function ---
