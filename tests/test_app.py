@@ -1,10 +1,18 @@
-# Imports
-import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)  # suppress deprecation warnings
-import pytest
+# Standard library imports
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  # add the parent directory to the path
+import warnings
+
+# Third-party library imports
+import pytest
+
+# Suppress deprecation warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)  
+
+# Add the parent directory to the path (for local imports)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  
+
+# Local imports
 from app.app import (
     standardize_string, 
     standardize_inputs, 
