@@ -92,7 +92,7 @@ CITY_DISPLAY_LABELS = [label.replace("_", " ").title() for label in CITY_LABELS]
 STATE_DISPLAY_LABELS = [label.replace("_", " ").title() for label in STATE_LABELS]
 
 
-# --- Input transformation functions ---
+# --- Input preprocessing functions ---
 # Function to standardize a single string input value
 def standardize_string(value):
     if isinstance(value, str):
@@ -106,12 +106,13 @@ def standardize_inputs(inputs_dict):
     return {key: standardize_string(value) for key, value in inputs_dict.items()}
 
 
-# Function to replace house ownership display label with label expected by the ML pipeline
+# Function to replace house ownership display label with expected pipeline input label
 def prepare_house_ownership_for_pipeline(display_label):
     return display_label.replace("neither_rented_nor_owned", "norent_noown")
 
 
 # --- Input validation functions ---
+# Function to return error message for missing values in the inputs dictionary
 def check_missing_values(inputs_dict):
     missing_inputs = []
     if inputs_dict["age"] in [None, "", [], {}, ()]:
@@ -143,6 +144,7 @@ def check_missing_values(inputs_dict):
     return None  # no missing values
 
 
+# Function to return error message for invalid data types in the inputs dictionary
 def validate_data_types(inputs_dict):
     invalid_numbers = []
     invalid_strings = []
@@ -187,6 +189,7 @@ def validate_data_types(inputs_dict):
     return None  # no invalid data types
 
 
+# Function to return error message for out-of-range values in the inputs dictionary
 def check_out_of_range_values(inputs_dict):
     out_of_range_inputs = []
     if inputs_dict["age"] < 21 or inputs_dict["age"] > 79:
@@ -231,6 +234,7 @@ with open(pipeline_path, "rb") as file:
 # --- Function to predict loan default ---
 def predict_loan_default(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
     try:
+        # --- Input preprocessing (part 1) ---
         # Create inputs dictionary 
         inputs = {
             "age": age,
@@ -249,9 +253,6 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         # Standardize inputs
         inputs = standardize_inputs(inputs)
 
-        # Replace house ownership display label with label expected by the ML pipeline
-        inputs["house_ownership"] = prepare_house_ownership_for_pipeline(inputs["house_ownership"])
-
         # --- Input validation ---
         # Missing value check
         missing_value_message = check_missing_values(inputs)
@@ -268,7 +269,7 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         if out_of_range_value_message:
             return out_of_range_value_message, ""
 
-        # --- Data preprocessing before pipeline ---
+        # --- Input preprocessing (part 2) ---
         # Convert numerical inputs from float (by default) to int to match expected pipeline input 
         inputs["income"] = int(round(inputs["income"]))
         inputs["age"] = int(round(inputs["age"]))
@@ -276,8 +277,8 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         inputs["current_job_yrs"] = int(round(inputs["current_job_yrs"]))
         inputs["current_house_yrs"] = int(round(inputs["current_house_yrs"]))
 
-        # Convert UI categorical labels to match expected pipeline input
-        inputs["house_ownership"] = inputs["house_ownership"].replace("neither_rented_nor_owned", "norent_noown")
+        # Replace house ownership display label with expected pipeline input label
+        inputs["house_ownership"] = prepare_house_ownership_for_pipeline(inputs["house_ownership"])
 
         # Create input DataFrame for Pipeline
         pipeline_input_df = pd.DataFrame({key: [value] for key, value in inputs.items()})   
