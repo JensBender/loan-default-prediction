@@ -113,6 +113,8 @@ def prepare_house_ownership_for_pipeline(display_label):
 
 # Function to convert float to int (pipeline expects int inputs)
 def convert_float_to_int(value):
+    if isinstance(value, bool):
+        raise TypeError()  # otherwise Python would treat True as 1 and False as 0 not raising a TypeError 
     return int(round(value)) 
 
 
