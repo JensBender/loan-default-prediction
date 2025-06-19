@@ -8,6 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))) 
 from app.app import (
     standardize_string, 
     standardize_inputs, 
+    prepare_house_ownership_for_pipeline,
     check_missing_values, 
     validate_data_types, 
     check_out_of_range_values
@@ -108,6 +109,16 @@ def test_standardized_inputs_remain_unchanged():
         "current_job_yrs": 7
     }   
     assert standardize_inputs(standardized_inputs) == standardized_inputs
+
+
+# --- Test prepare_house_ownership_for_pipeline() function ---
+@pytest.mark.parametrize("display_label, expected_pipeline_label", [
+    ("neither_rented_nor_owned", "norent_noown"),
+    ("rented", "rented"),
+    ("owned", "owned")
+])
+def test_prepare_house_ownership_for_pipeline(display_label, expected_pipeline_label):
+    assert prepare_house_ownership_for_pipeline(display_label) == expected_pipeline_label
 
 
 # --- Test check_missing_values() function ---
