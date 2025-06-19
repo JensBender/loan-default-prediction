@@ -111,6 +111,11 @@ def prepare_house_ownership_for_pipeline(display_label):
     return display_label.replace("neither_rented_nor_owned", "norent_noown")
 
 
+# Function to convert float to int (pipeline expects int inputs)
+def convert_float_to_int(value):
+    return int(round(value)) 
+
+
 # --- Input validation functions ---
 # Function to return error message for missing values in the inputs dictionary
 def check_missing_values(inputs_dict):
@@ -270,12 +275,12 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
             return out_of_range_value_message, ""
 
         # --- Input preprocessing (part 2) ---
-        # Convert numerical inputs from float (by default) to int to match expected pipeline input 
-        inputs["income"] = int(round(inputs["income"]))
-        inputs["age"] = int(round(inputs["age"]))
-        inputs["experience"] = int(round(inputs["experience"]))
-        inputs["current_job_yrs"] = int(round(inputs["current_job_yrs"]))
-        inputs["current_house_yrs"] = int(round(inputs["current_house_yrs"]))
+        # Convert float inputs to int (pipeline expects int inputs)
+        inputs["income"] = convert_float_to_int(inputs["income"])
+        inputs["age"] = convert_float_to_int(inputs["age"])
+        inputs["experience"] = convert_float_to_int(inputs["experience"])
+        inputs["current_job_yrs"] = convert_float_to_int(inputs["current_job_yrs"])
+        inputs["current_house_yrs"] = convert_float_to_int(inputs["current_house_yrs"])
 
         # Replace house ownership display label with expected pipeline input label
         inputs["house_ownership"] = prepare_house_ownership_for_pipeline(inputs["house_ownership"])
