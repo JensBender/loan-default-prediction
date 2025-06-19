@@ -106,6 +106,11 @@ def standardize_inputs(inputs_dict):
     return {key: standardize_string(value) for key, value in inputs_dict.items()}
 
 
+# Function to replace house ownership display label with label expected by the ML pipeline
+def prepare_house_ownership_for_pipeline(display_label):
+    return display_label.replace("neither_rented_nor_owned", "norent_noown")
+
+
 # --- Input validation functions ---
 def check_missing_values(inputs_dict):
     missing_inputs = []
@@ -244,8 +249,8 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         # Standardize inputs
         inputs = standardize_inputs(inputs)
 
-        # Reformat specific display labels        
-        inputs["house_ownership"] = inputs["house_ownership"].replace("neither_rented_nor_owned", "norent_noown")  
+        # Replace house ownership display label with label expected by the ML pipeline
+        inputs["house_ownership"] = prepare_house_ownership_for_pipeline(inputs["house_ownership"])
 
         # --- Input validation ---
         # Missing value check
