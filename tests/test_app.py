@@ -123,7 +123,8 @@ def test_prepare_house_ownership_for_pipeline(display_label, expected_pipeline_l
 
 
 # --- Test convert_float_to_int() function ---
-@pytest.mark.parametrize("input_value, expected_output", [
+# Test a variety of valid inputs (float and int) 
+@pytest.mark.parametrize("valid_input_value, expected_output", [
     (0.0, 0),
     (1.0, 1),
     (1.49, 1),
@@ -140,10 +141,24 @@ def test_prepare_house_ownership_for_pipeline(display_label, expected_pipeline_l
     (100.5, 100),
     (100.51, 101),
 ])
-def test_convert_float_to_int(input_value, expected_output):
-    output = convert_float_to_int(input_value)
+def test_convert_float_to_int(valid_input_value, expected_output):
+    output = convert_float_to_int(valid_input_value)
     assert output == expected_output
     assert isinstance(output, int)
+
+# Test invalid inputs that should raise TypeError
+@pytest.mark.parametrize("invalid_input_value", [
+    "a string",
+    "1.23",
+    None,
+    False,
+    ["a", "list"],
+    {"a": "dictionary"},
+    ("a", "tuple")
+])
+def test_convert_float_to_int_raises_type_error_for_invalid_inputs(invalid_input_value):
+    with pytest.raises(TypeError):
+        convert_float_to_int(invalid_input_value)
 
 
 # --- Test check_missing_values() function ---
