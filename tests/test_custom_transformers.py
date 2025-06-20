@@ -20,6 +20,14 @@ from app.custom_transformers import (
    FeatureSelector
 )
 
+from app.global_constants import (
+   CRITICAL_FEATURES,
+   NON_CRITICAL_FEATURES,
+   BOOLEAN_COLUMN_MAPPINGS,
+   JOB_STABILITY_MAP,
+   CITY_TIER_MAP
+)
+
 
 # Fixture to provide sample pandas DataFrame that mirrors the real data for testing
 @pytest.fixture
