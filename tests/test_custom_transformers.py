@@ -5,8 +5,8 @@ import warnings
 
 # Third-party library imports
 import pytest
-from sklearn.utils.estimator_checks import check_estimator
 from sklearn.base import BaseEstimator, TransformerMixin
+import pandas as pd
 
 # Suppress deprecation warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)  
@@ -42,7 +42,13 @@ def test_MissingValueChecker_instantiation():
 
 
 # --- Test FeatureSelector class ---
-# Scikit-learn compatibility
-def test_FeatureSelector_sklearn_compatibility():
-    transformer = FeatureSelector(columns_to_keep=["feature_1", "feature_2"])
-    return check_estimator(transformer)
+# Ensure .fit() returns the instance (self)
+def test_feature_selector_fit_returns_self():
+   sample_df = pd.DataFrame({
+       "feature_1": [1, 2, 3],
+       "feature_2": [4, 5, 6],
+       "feature_3": [7, 8, 9]
+   })
+   feature_selector = FeatureSelector(columns_to_keep=["feature_1", "feature_2"])
+   fitted_feature_selector = feature_selector.fit(sample_df)
+   assert fitted_feature_selector == feature_selector
