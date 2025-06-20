@@ -1,3 +1,4 @@
+import numpy as np
 
 # --- Global constants for data preprocessing and model pipeline ---
 # Define critical vs. non-critical features (for custom MissingValueChecker)
