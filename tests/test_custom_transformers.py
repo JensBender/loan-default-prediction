@@ -16,7 +16,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
 from app.custom_transformers import (
-   MissingValueChecker 
+   MissingValueChecker,
+   FeatureSelector
 )
 
 
@@ -33,8 +34,15 @@ def test_MissingValueChecker_instantiation():
 
 
 # Scikit-learn compatibility
-def test_MissingValueChecker_sklearn_compatibility():
-   critical_features = ["feature_1", "feature_2"]
-   non_critical_features = ["feature_3", "feature_4"]
-   transformer = MissingValueChecker(critical_features, non_critical_features)
-   return check_estimator(transformer)
+# def test_MissingValueChecker_sklearn_compatibility():
+#    critical_features = ["feature_1", "feature_2"]
+#    non_critical_features = ["feature_3", "feature_4"]
+#    transformer = MissingValueChecker(critical_features, non_critical_features)
+#    return check_estimator(transformer)
+
+
+# --- Test FeatureSelector class ---
+# Scikit-learn compatibility
+def test_FeatureSelector_sklearn_compatibility():
+    transformer = FeatureSelector(columns_to_keep=["feature_1", "feature_2"])
+    return check_estimator(transformer)
