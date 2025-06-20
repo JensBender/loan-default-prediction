@@ -43,14 +43,6 @@ def test_MissingValueChecker_instantiation():
    assert transformer.non_critical_features == non_critical_features
 
 
-# Scikit-learn compatibility
-# def test_MissingValueChecker_sklearn_compatibility():
-#    critical_features = ["feature_1", "feature_2"]
-#    non_critical_features = ["feature_3", "feature_4"]
-#    transformer = MissingValueChecker(critical_features, non_critical_features)
-#    return check_estimator(transformer)
-
-
 # --- Test FeatureSelector class ---
 # Ensure .fit() returns the instance (self)
 def test_feature_selector_fit_returns_self(sample_df):
