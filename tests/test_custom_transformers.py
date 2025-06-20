@@ -21,6 +21,16 @@ from app.custom_transformers import (
 )
 
 
+# Fixture to provide sample pandas DataFrame for testing
+@pytest.fixture
+def sample_df():
+    return pd.DataFrame({
+        "feature_1": [1, 2, 3],
+        "feature_2": [4, 5, 6],
+        "feature_3": [7, 8, 9]
+    })
+
+
 # --- Test MissingValueChecker class ---
 # Class instantiation 
 def test_MissingValueChecker_instantiation():
@@ -43,12 +53,7 @@ def test_MissingValueChecker_instantiation():
 
 # --- Test FeatureSelector class ---
 # Ensure .fit() returns the instance (self)
-def test_feature_selector_fit_returns_self():
-   sample_df = pd.DataFrame({
-       "feature_1": [1, 2, 3],
-       "feature_2": [4, 5, 6],
-       "feature_3": [7, 8, 9]
-   })
+def test_feature_selector_fit_returns_self(sample_df):
    feature_selector = FeatureSelector(columns_to_keep=["feature_1", "feature_2"])
    fitted_feature_selector = feature_selector.fit(sample_df)
    assert fitted_feature_selector == feature_selector
