@@ -166,6 +166,12 @@ ORDINAL_COLUMN_ORDERS = [
     ["unknown", "tier_3", "tier_2", "tier_1"]  # Order for city_tier
 ]
 
+# Define the columns to keep after preprocessing as model input (for FeatureSelector)
+COLUMNS_TO_KEEP = [
+    "income", "age", "experience", "current_job_yrs", "current_house_yrs", "state_default_rate", "house_ownership_owned", 
+    "house_ownership_rented", "job_stability", "city_tier", "married", "car_ownership"
+]
+
 # Store the best Random Forest hyperparameter values identified with random search (for RandomForestClassifier)
 RF_BEST_PARAMS = {
   "n_estimators": 225,
