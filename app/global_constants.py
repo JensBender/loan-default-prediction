@@ -1,6 +1,7 @@
+# --- Global constants for data preprocessing and model pipeline ---
+# Imports
 import numpy as np
 
-# --- Global constants for data preprocessing and model pipeline ---
 # Define critical vs. non-critical features (for custom MissingValueChecker)
 CRITICAL_FEATURES = ["income", "age", "experience", "profession", "city", "state", "current_job_yrs", "current_house_yrs"]
 NON_CRITICAL_FEATURES = ["married", "car_ownership", "house_ownership"]
