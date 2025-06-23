@@ -29,7 +29,7 @@ from app.global_constants import (
 )
 
 
-# Fixture to provide sample pandas DataFrame that mirrors the real data for testing
+# Fixture to provide sample pandas DataFrame that mirrors real data for testing
 @pytest.fixture
 def sample_df():
    return pd.DataFrame({
@@ -51,13 +51,11 @@ def sample_df():
 # --- Test MissingValueChecker class ---
 # Class instantiation 
 def test_MissingValueChecker_instantiation():
-   critical_features = ["feature_1", "feature_2"]
-   non_critical_features = ["feature_3", "feature_4"]
-   transformer = MissingValueChecker(critical_features, non_critical_features)
+   transformer = MissingValueChecker(CRITICAL_FEATURES, NON_CRITICAL_FEATURES)
    assert isinstance(transformer, BaseEstimator)
    assert isinstance(transformer, TransformerMixin)
-   assert transformer.critical_features == critical_features
-   assert transformer.non_critical_features == non_critical_features
+   assert transformer.critical_features == CRITICAL_FEATURES
+   assert transformer.non_critical_features == NON_CRITICAL_FEATURES
 
 
 # --- Test FeatureSelector class ---
