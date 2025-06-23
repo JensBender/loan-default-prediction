@@ -125,15 +125,6 @@ def test_feature_selector_transform_output_shape(X_input_for_feature_selector):
    X_transformed = feature_selector.fit_transform(X)
    assert X_transformed.shape == expected_shape
 
-# Ensure transform() returns DataFrame with expected columns
-def test_feature_selector_transform_returns_expected_df(X_input_for_feature_selector):
-   X = X_input_for_feature_selector.copy()
-   X_expected = X[COLUMNS_TO_KEEP].copy()
-   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
-   X_transformed = feature_selector.fit_transform(X)
-   assert list(X_transformed.columns) == list(COLUMNS_TO_KEEP)
-   assert_frame_equal(X_transformed, X_expected)
-
 # Ensure transformer can be cloned, which is important for sklearn Pipeline compatibility
 def test_feature_selector_is_clonable(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
@@ -148,3 +139,16 @@ def test_feature_selector_is_clonable(X_input_for_feature_selector):
    cloned_feature_selector.columns_to_keep.append("added_column")
    # ... doesn't change the original's parameters
    assert feature_selector.columns_to_keep == COLUMNS_TO_KEEP
+
+# Ensure transform() returns DataFrame with expected columns
+def test_feature_selector_transform_returns_expected_df(X_input_for_feature_selector):
+   X = X_input_for_feature_selector.copy()
+   X_expected = X[COLUMNS_TO_KEEP].copy()
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+   X_transformed = feature_selector.fit_transform(X)
+   # Check that the output is a pandas DataFrame
+   assert isinstance(X_transformed, pd.DataFrame)
+   # Check that the column names of the output DataFrame are as expected
+   assert list(X_transformed.columns) == list(COLUMNS_TO_KEEP)
+   # Check that the content and structure of the output DataFrame is as expected
+   assert_frame_equal(X_transformed, X_expected)
