@@ -140,6 +140,15 @@ def test_feature_selector_is_clonable(X_input_for_feature_selector):
    # ... doesn't change the original's parameters
    assert feature_selector.columns_to_keep == COLUMNS_TO_KEEP
 
+# Ensure transform() raises KeyError if a column is missing in the input DataFrame
+def test_feature_selector_error_for_missing_column(X_input_for_feature_selector):
+   X = X_input_for_feature_selector.copy()
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+   feature_selector.fit(X)
+   X_with_missing_column = X.drop(columns="income")
+   with pytest.raises(KeyError):
+      feature_selector.transform(X_with_missing_column)
+
 # Ensure transform() returns DataFrame with expected columns
 def test_feature_selector_transform_returns_expected_df(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
