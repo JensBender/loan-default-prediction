@@ -107,3 +107,11 @@ def test_feature_selector_transform_is_idempotent(X_input_for_feature_selector):
    X_transformed_1 = feature_selector.transform(X)
    X_transformed_2 = feature_selector.transform(X)
    assert_frame_equal(X_transformed_1, X_transformed_2)
+
+# Ensure transform() preserves number of rows
+def test_feature_selector_transform_preserves_rows(X_input_for_feature_selector):
+   X = X_input_for_feature_selector.copy()
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+   feature_selector.fit(X)
+   X_transformed = feature_selector.transform(X)
+   assert X_transformed.shape[0] == X.shape[0]
