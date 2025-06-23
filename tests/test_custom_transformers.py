@@ -108,21 +108,21 @@ def test_feature_selector_transform_is_idempotent(X_input_for_feature_selector):
    X_transformed_2 = feature_selector.transform(X)
    assert_frame_equal(X_transformed_1, X_transformed_2)
 
-# Ensure transform() preserves number of rows
-def test_feature_selector_transform_preserves_rows(X_input_for_feature_selector):
+# Ensure transform() outputs DataFrame with correct number of rows and columns
+def test_feature_selector_transform_output_shape(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
+   expected_n_rows = X.shape[0]
+   expected_n_columns = len(COLUMNS_TO_KEEP)
+   expected_shape = (expected_n_rows, expected_n_columns)
    feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
-   feature_selector.fit(X)
-   X_transformed = feature_selector.transform(X)
-   assert X_transformed.shape[0] == X.shape[0]
+   X_transformed = feature_selector.fit_transform(X)
+   assert X_transformed.shape == expected_shape
 
 # Ensure transform() returns DataFrame with expected columns
-def test_feature_selector_returns_expected_df(X_input_for_feature_selector):
+def test_feature_selector_transform_returns_expected_df(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
    X_expected = X[COLUMNS_TO_KEEP].copy()
    feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
-   feature_selector.fit(X)
-   X_transformed = feature_selector.transform(X)
+   X_transformed = feature_selector.fit_transform(X)
    assert list(X_transformed.columns) == list(COLUMNS_TO_KEEP)
    assert_frame_equal(X_transformed, X_expected)
-   
