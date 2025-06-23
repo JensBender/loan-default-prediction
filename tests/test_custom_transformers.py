@@ -68,9 +68,51 @@ def test_feature_selector_fit_returns_self(sample_df):
    assert fitted_feature_selector == feature_selector
 
 # Ensure equal output of .fit().transform() and .fit_transform()
-def test_feature_selector_fit_transform_equivalence(sample_df):
+def test_feature_selector_fit_transform_equivalence():
+   X = pd.DataFrame({
+      "income": [-0.82, 1.55, -1.47, 0.51, 1.39, -0.61],
+      "age": [-0.64, -0.52, -0.29, -0.52, 0.23, 0.46],
+      "experience": [-1.68, -0.84, -1.51, -1.68, 1.31, -0.18],
+      "current_job_yrs": [-1.73, -0.36, -1.46, -1.73, -0.36, 0.73],
+      "current_house_yrs": [-0.71, 0.71, -0.71, 1.43, 0.71, -0.71],
+      "state_default_rate": [-1.08, -1.24, 0.32, -0.31, -0.14, -0.38],
+      "house_ownership_owned": [0.0, 0.0, 0.0, 0.0, 1.0, 0.0],
+      "house_ownership_rented": [1.0, 0.0, 1.0, 1.0, 0.0, 1.0],
+      "job_stability": [1.0, 0.0, 2.0, 3.0, 0.0, 3.0],
+      "city_tier": [0.0, 2.0, 0.0, 1.0, 0.0, 3.0],
+      "married": [False, False, True, False, True, False],
+      "car_ownership": [False, True, False, False, True, True],
+      "profession": ["computer_hardware_engineer", "web_designer", "lawyer", "firefighter", "artist", "librarian"],
+      "city": ["vellore", "bidar", "nizamabad", "farrukhabad", "sikar", "hindupur"],
+      "state": ["tamil_nadu", "karnataka", "telangana", "uttar_pradesh", "rajasthan", "andhra_pradesh"]
+   })
    feature_selector_1 = FeatureSelector(COLUMNS_TO_KEEP)
    feature_selector_2 = FeatureSelector(COLUMNS_TO_KEEP)
-   X_fit_then_transform = feature_selector_1.fit(sample_df).transform(sample_df) 
-   X_fit_transform = feature_selector_2.fit_transform(sample_df)
+   X_fit_then_transform = feature_selector_1.fit(X).transform(X) 
+   X_fit_transform = feature_selector_2.fit_transform(X)
    assert_frame_equal(X_fit_then_transform, X_fit_transform)
+
+# Ensure transform() is idempotent, i.e., calling it multiple times with the same input returns the same output
+def test_feature_selector_transform_is_idempotent():
+   X = pd.DataFrame({
+      "income": [-0.82, 1.55, -1.47, 0.51, 1.39, -0.61],
+      "age": [-0.64, -0.52, -0.29, -0.52, 0.23, 0.46],
+      "experience": [-1.68, -0.84, -1.51, -1.68, 1.31, -0.18],
+      "current_job_yrs": [-1.73, -0.36, -1.46, -1.73, -0.36, 0.73],
+      "current_house_yrs": [-0.71, 0.71, -0.71, 1.43, 0.71, -0.71],
+      "state_default_rate": [-1.08, -1.24, 0.32, -0.31, -0.14, -0.38],
+      "house_ownership_owned": [0.0, 0.0, 0.0, 0.0, 1.0, 0.0],
+      "house_ownership_rented": [1.0, 0.0, 1.0, 1.0, 0.0, 1.0],
+      "job_stability": [1.0, 0.0, 2.0, 3.0, 0.0, 3.0],
+      "city_tier": [0.0, 2.0, 0.0, 1.0, 0.0, 3.0],
+      "married": [False, False, True, False, True, False],
+      "car_ownership": [False, True, False, False, True, True],
+      "profession": ["computer_hardware_engineer", "web_designer", "lawyer", "firefighter", "artist", "librarian"],
+      "city": ["vellore", "bidar", "nizamabad", "farrukhabad", "sikar", "hindupur"],
+      "state": ["tamil_nadu", "karnataka", "telangana", "uttar_pradesh", "rajasthan", "andhra_pradesh"]
+   })
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+   feature_selector.fit(X)
+   X_transformed_1 = feature_selector.transform(X)
+   X_transformed_2 = feature_selector.transform(X)
+   assert_frame_equal(X_transformed_1, X_transformed_2)
