@@ -25,7 +25,8 @@ from app.global_constants import (
    NON_CRITICAL_FEATURES,
    BOOLEAN_COLUMN_MAPPINGS,
    JOB_STABILITY_MAP,
-   CITY_TIER_MAP
+   CITY_TIER_MAP,
+   COLUMNS_TO_KEEP
 )
 
 
@@ -61,6 +62,6 @@ def test_MissingValueChecker_instantiation():
 # --- Test FeatureSelector class ---
 # Ensure .fit() returns the instance (self)
 def test_feature_selector_fit_returns_self(sample_df):
-   feature_selector = FeatureSelector(columns_to_keep=["feature_1", "feature_2"])
+   feature_selector = FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP)
    fitted_feature_selector = feature_selector.fit(sample_df)
    assert fitted_feature_selector == feature_selector
