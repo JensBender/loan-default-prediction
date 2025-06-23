@@ -5,7 +5,7 @@ import warnings
 
 # Third-party library imports
 import pytest
-from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.base import BaseEstimator, TransformerMixin, clone
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
@@ -126,3 +126,18 @@ def test_feature_selector_transform_returns_expected_df(X_input_for_feature_sele
    X_transformed = feature_selector.fit_transform(X)
    assert list(X_transformed.columns) == list(COLUMNS_TO_KEEP)
    assert_frame_equal(X_transformed, X_expected)
+
+# Ensure transformer can be cloned, which is important for sklearn Pipeline compatibility
+def test_feature_selector_is_clonable(X_input_for_feature_selector):
+   X = X_input_for_feature_selector.copy()
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+   feature_selector.fit(X)
+   cloned_feature_selector = clone(feature_selector)
+   # Check that it's a new object, not a pointer to the old one
+   assert cloned_feature_selector is not feature_selector
+   # Check that the clone has the same parameters
+   assert cloned_feature_selector.get_params() == feature_selector.get_params()
+   # Check that modifying the clone's parameters (add column to list)...
+   cloned_feature_selector.columns_to_keep.append("added_column")
+   # ... doesn't change the original's parameters
+   assert feature_selector.columns_to_keep == COLUMNS_TO_KEEP
