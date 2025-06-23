@@ -83,6 +83,13 @@ def test_MissingValueChecker_instantiation():
 
 
 # --- Test FeatureSelector class ---
+# Class instantiation 
+def test_feature_selector_instantiation():
+   feature_selector = FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP)   
+   assert isinstance(feature_selector, BaseEstimator)
+   assert isinstance(feature_selector, TransformerMixin)
+   assert feature_selector.columns_to_keep == COLUMNS_TO_KEEP
+
 # Ensure .fit() returns the instance (self)
 def test_feature_selector_fit_returns_self(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
