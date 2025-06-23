@@ -1,3 +1,5 @@
+# --- Custom transformer classes for data preprocessing and model pipeline ---
+# Imports
 from sklearn.base import BaseEstimator, TransformerMixin
 import pandas as pd
 
