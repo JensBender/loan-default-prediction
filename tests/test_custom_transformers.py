@@ -115,3 +115,14 @@ def test_feature_selector_transform_preserves_rows(X_input_for_feature_selector)
    feature_selector.fit(X)
    X_transformed = feature_selector.transform(X)
    assert X_transformed.shape[0] == X.shape[0]
+
+# Ensure transform() returns DataFrame with expected columns
+def test_feature_selector_returns_expected_df(X_input_for_feature_selector):
+   X = X_input_for_feature_selector.copy()
+   X_expected = X[COLUMNS_TO_KEEP].copy()
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+   feature_selector.fit(X)
+   X_transformed = feature_selector.transform(X)
+   assert list(X_transformed.columns) == list(COLUMNS_TO_KEEP)
+   assert_frame_equal(X_transformed, X_expected)
+   
