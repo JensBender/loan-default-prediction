@@ -74,7 +74,7 @@ def X_input_for_feature_selector():
 
 # --- Test MissingValueChecker class ---
 # Class instantiation 
-def test_MissingValueChecker_instantiation():
+def test_missing_value_checker_instantiation():
    transformer = MissingValueChecker(CRITICAL_FEATURES, NON_CRITICAL_FEATURES)
    assert isinstance(transformer, BaseEstimator)
    assert isinstance(transformer, TransformerMixin)
