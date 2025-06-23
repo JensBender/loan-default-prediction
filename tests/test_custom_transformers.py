@@ -7,6 +7,7 @@ import warnings
 import pytest
 from sklearn.base import BaseEstimator, TransformerMixin
 import pandas as pd
+from pandas.testing import assert_frame_equal
 
 # Suppress deprecation warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)  
@@ -65,3 +66,11 @@ def test_feature_selector_fit_returns_self(sample_df):
    feature_selector = FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP)
    fitted_feature_selector = feature_selector.fit(sample_df)
    assert fitted_feature_selector == feature_selector
+
+# Ensure equal output of .fit().transform() and .fit_transform()
+def test_feature_selector_fit_transform_equivalence(sample_df):
+   feature_selector_1 = FeatureSelector(COLUMNS_TO_KEEP)
+   feature_selector_2 = FeatureSelector(COLUMNS_TO_KEEP)
+   X_fit_then_transform = feature_selector_1.fit(sample_df).transform(sample_df) 
+   X_fit_transform = feature_selector_2.fit_transform(sample_df)
+   assert_frame_equal(X_fit_then_transform, X_fit_transform)
