@@ -1,6 +1,7 @@
 # --- Custom transformer classes for data preprocessing and model pipeline ---
 # Imports
 from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.utils.validation import check_is_fitted
 import pandas as pd
 
 
@@ -198,9 +199,16 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
         if missing_columns:
             raise ValueError(f"Input X is missing the following columns: {', '.join(list(missing_columns))}.")
             
-        return self  # No fitting needed
+        # Store input feature number and names as learned attributes
+        self.n_features_in_ = X.shape[1]
+        self.feature_names_in_ = X.columns.tolist()
+
+        return self  
 
     def transform(self, X):
+        # Ensure .fit() happened before
+        check_is_fitted(self)
+
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")
