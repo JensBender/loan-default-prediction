@@ -134,12 +134,13 @@ def test_feature_selector_transform_output_shape(X_input_for_feature_selector):
 
 # Ensure transform() raises KeyError if a column is missing in the input DataFrame
 @pytest.mark.unit
-def test_feature_selector_error_for_missing_column(X_input_for_feature_selector):
+@pytest.mark.parametrize("missing_columns", ["income", "age", "experience"])
+def test_feature_selector_error_for_missing_column_in_fit(X_input_for_feature_selector, missing_columns):
    X = X_input_for_feature_selector.copy()
    feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
    feature_selector.fit(X)
-   X_with_missing_column = X.drop(columns="income")
-   with pytest.raises(KeyError):
+   X_with_missing_column = X.drop(columns=missing_columns)
+   with pytest.raises(ValueError):
       feature_selector.transform(X_with_missing_column)
 
 # Ensure transform() returns DataFrame with expected columns
