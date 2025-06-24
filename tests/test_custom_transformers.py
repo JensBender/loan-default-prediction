@@ -74,6 +74,7 @@ def X_input_for_feature_selector():
 
 # --- Test MissingValueChecker class ---
 # Class instantiation 
+@pytest.mark.unit
 def test_missing_value_checker_instantiation():
    transformer = MissingValueChecker(CRITICAL_FEATURES, NON_CRITICAL_FEATURES)
    assert isinstance(transformer, BaseEstimator)
@@ -84,6 +85,7 @@ def test_missing_value_checker_instantiation():
 
 # --- Test FeatureSelector class ---
 # Class instantiation 
+@pytest.mark.unit
 def test_feature_selector_instantiation():
    feature_selector = FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP)   
    assert isinstance(feature_selector, BaseEstimator)
@@ -91,6 +93,7 @@ def test_feature_selector_instantiation():
    assert feature_selector.columns_to_keep == COLUMNS_TO_KEEP
 
 # Ensure .fit() returns the instance (self)
+@pytest.mark.unit
 def test_feature_selector_fit_returns_self(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
    feature_selector = FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP)
@@ -98,6 +101,7 @@ def test_feature_selector_fit_returns_self(X_input_for_feature_selector):
    assert fitted_feature_selector == feature_selector
 
 # Ensure equal output of .fit().transform() and .fit_transform()
+@pytest.mark.unit
 def test_feature_selector_fit_transform_equivalence(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
    feature_selector_1 = FeatureSelector(COLUMNS_TO_KEEP)
@@ -107,6 +111,7 @@ def test_feature_selector_fit_transform_equivalence(X_input_for_feature_selector
    assert_frame_equal(X_fit_then_transform, X_fit_transform)
 
 # Ensure transform() is idempotent, i.e., calling it multiple times with the same input returns the same output
+@pytest.mark.unit
 def test_feature_selector_transform_is_idempotent(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
    feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
@@ -116,6 +121,7 @@ def test_feature_selector_transform_is_idempotent(X_input_for_feature_selector):
    assert_frame_equal(X_transformed_1, X_transformed_2)
 
 # Ensure transform() outputs DataFrame with correct number of rows and columns
+@pytest.mark.unit
 def test_feature_selector_transform_output_shape(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
    expected_n_rows = X.shape[0]
@@ -126,6 +132,7 @@ def test_feature_selector_transform_output_shape(X_input_for_feature_selector):
    assert X_transformed.shape == expected_shape
 
 # Ensure transformer can be cloned, which is important for sklearn Pipeline compatibility
+@pytest.mark.unit
 def test_feature_selector_is_clonable(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
    feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
@@ -141,6 +148,7 @@ def test_feature_selector_is_clonable(X_input_for_feature_selector):
    assert feature_selector.columns_to_keep == COLUMNS_TO_KEEP
 
 # Ensure transform() raises KeyError if a column is missing in the input DataFrame
+@pytest.mark.unit
 def test_feature_selector_error_for_missing_column(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
    feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
@@ -150,6 +158,7 @@ def test_feature_selector_error_for_missing_column(X_input_for_feature_selector)
       feature_selector.transform(X_with_missing_column)
 
 # Ensure transform() returns DataFrame with expected columns
+@pytest.mark.unit
 def test_feature_selector_transform_returns_expected_df(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
    X_expected = X[COLUMNS_TO_KEEP].copy()
