@@ -189,14 +189,19 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
         self.columns_to_keep = columns_to_keep
 
     def fit(self, X, y=None):
-        # Validate data type
+        # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
+        
+        # Validate input DataFrame contains all columns_to_keep
+        missing_columns = set(self.columns_to_keep) - set(X.columns)
+        if missing_columns:
+            raise ValueError(f"Input X is missing the following columns: {', '.join(list(missing_columns))}.")
             
         return self  # No fitting needed
 
     def transform(self, X):
-        # Validate data type
+        # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")
             
