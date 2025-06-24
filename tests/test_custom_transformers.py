@@ -142,13 +142,23 @@ def test_feature_selector_transform_output_shape(X_input_for_feature_selector):
    ["state_default_rate", "house_ownership_owned", "house_ownership_rented"],
    ["job_stability", "city_tier", "married", "car_ownership"]
 ])
-def test_feature_selector_error_for_missing_columns_in_fit(X_input_for_feature_selector, missing_columns):
+def test_feature_selector_transform_raises_error_for_missing_columns(X_input_for_feature_selector, missing_columns):
    X = X_input_for_feature_selector.copy()
    feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
    feature_selector.fit(X)
    X_with_missing_column = X.drop(columns=missing_columns)
    with pytest.raises(ValueError):
       feature_selector.transform(X_with_missing_column)
+
+# Ensure transform() raises ValueError if columns are in wrong order
+@pytest.mark.unit
+def test_feature_selector_transform_raises_error_for_wrong_column_order(X_input_for_feature_selector):
+    X = X_input_for_feature_selector.copy()
+    feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+    feature_selector.fit(X)
+    X_with_wrong_column_order = X[COLUMNS_TO_KEEP[::-1]].copy()  # reverse order as an example
+    with pytest.raises(ValueError):
+        feature_selector.transform(X_with_wrong_column_order)
 
 # Ensure transform() returns DataFrame with expected columns
 @pytest.mark.unit
