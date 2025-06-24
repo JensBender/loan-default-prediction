@@ -132,6 +132,55 @@ def test_feature_selector_transform_output_shape(X_input_for_feature_selector):
    X_transformed = feature_selector.fit_transform(X)
    assert X_transformed.shape == expected_shape
 
+# Ensure transform() returns DataFrame with expected columns
+@pytest.mark.unit
+def test_feature_selector_transform_returns_expected_df(X_input_for_feature_selector):
+   X = X_input_for_feature_selector.copy()
+   X_expected = X[COLUMNS_TO_KEEP].copy()
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+   X_transformed = feature_selector.fit_transform(X)
+   # Check that the output is a pandas DataFrame
+   assert isinstance(X_transformed, pd.DataFrame)
+   # Check that the column names of the output DataFrame are as expected
+   assert list(X_transformed.columns) == list(COLUMNS_TO_KEEP)
+   # Check that the content and structure of the output DataFrame is as expected
+   assert_frame_equal(X_transformed, X_expected)
+   
+# Ensure transformer can be cloned, which is important for sklearn Pipeline compatibility
+@pytest.mark.unit
+def test_feature_selector_is_clonable(X_input_for_feature_selector):
+   X = X_input_for_feature_selector.copy()
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+   feature_selector.fit(X)
+   cloned_feature_selector = clone(feature_selector)
+   # Check that it's a new object, not a pointer to the old one
+   assert cloned_feature_selector is not feature_selector
+   # Check that the clone has the same parameters
+   assert cloned_feature_selector.get_params() == feature_selector.get_params()
+   # Check that modifying the clone's parameters (add column to list)...
+   cloned_feature_selector.columns_to_keep.append("added_column")
+   # ... doesn't change the original's parameters
+   assert feature_selector.columns_to_keep == COLUMNS_TO_KEEP
+
+# Ensure transformer can be pickled and unpickled without losing its attributes and functionality
+def test_feature_selector_can_be_pickled(X_input_for_feature_selector):
+   X = X_input_for_feature_selector.copy()
+   # Instantiate and fit 
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+   feature_selector.fit(X)
+   # Pickle and unpickle
+   pickled_feature_selector = pickle.dumps(feature_selector)
+   unpickled_feature_selector = pickle.loads(pickled_feature_selector)
+   # Ensure that hyperparameters are preserved
+   assert feature_selector.columns_to_keep == unpickled_feature_selector.columns_to_keep
+   # Ensure that learned attributes are preserved
+   assert feature_selector.n_features_in_ == unpickled_feature_selector.n_features_in_
+   assert feature_selector.feature_names_in_ == unpickled_feature_selector.feature_names_in_
+   # Ensure that unpickled feature selector produces identical output
+   X_transformed = feature_selector.transform(X)
+   unpickled_X_transformed = unpickled_feature_selector.transform(X)
+   assert_frame_equal(unpickled_X_transformed, X_transformed)
+
 # Ensure __init__() raises ValueError if columns_to_keep is not a list
 @pytest.mark.unit
 @pytest.mark.parametrize("invalid_columns_to_keep", [
@@ -191,54 +240,4 @@ def test_feature_selector_transform_raises_error_for_wrong_column_order(X_input_
     X_with_wrong_column_order = X[COLUMNS_TO_KEEP[::-1]].copy()  # reverse order as an example
     with pytest.raises(ValueError):
         feature_selector.transform(X_with_wrong_column_order)
-
-# Ensure transform() returns DataFrame with expected columns
-@pytest.mark.unit
-def test_feature_selector_transform_returns_expected_df(X_input_for_feature_selector):
-   X = X_input_for_feature_selector.copy()
-   X_expected = X[COLUMNS_TO_KEEP].copy()
-   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
-   X_transformed = feature_selector.fit_transform(X)
-   # Check that the output is a pandas DataFrame
-   assert isinstance(X_transformed, pd.DataFrame)
-   # Check that the column names of the output DataFrame are as expected
-   assert list(X_transformed.columns) == list(COLUMNS_TO_KEEP)
-   # Check that the content and structure of the output DataFrame is as expected
-   assert_frame_equal(X_transformed, X_expected)
-
-   
-# Ensure transformer can be cloned, which is important for sklearn Pipeline compatibility
-@pytest.mark.unit
-def test_feature_selector_is_clonable(X_input_for_feature_selector):
-   X = X_input_for_feature_selector.copy()
-   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
-   feature_selector.fit(X)
-   cloned_feature_selector = clone(feature_selector)
-   # Check that it's a new object, not a pointer to the old one
-   assert cloned_feature_selector is not feature_selector
-   # Check that the clone has the same parameters
-   assert cloned_feature_selector.get_params() == feature_selector.get_params()
-   # Check that modifying the clone's parameters (add column to list)...
-   cloned_feature_selector.columns_to_keep.append("added_column")
-   # ... doesn't change the original's parameters
-   assert feature_selector.columns_to_keep == COLUMNS_TO_KEEP
-
-# Ensure transformer can be pickled and unpickled without losing its functionality
-def test_feature_selector_can_be_pickled(X_input_for_feature_selector):
-   X = X_input_for_feature_selector.copy()
-   # Instantiate and fit 
-   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
-   feature_selector.fit(X)
-   # Pickle and unpickle
-   pickled_feature_selector = pickle.dumps(feature_selector)
-   unpickled_feature_selector = pickle.loads(pickled_feature_selector)
-   # Ensure that hyperparameters are preserved
-   assert feature_selector.columns_to_keep == unpickled_feature_selector.columns_to_keep
-   # Ensure that learned attributes are preserved
-   assert feature_selector.n_features_in_ == unpickled_feature_selector.n_features_in_
-   assert feature_selector.feature_names_in_ == unpickled_feature_selector.feature_names_in_
-   # Ensure that unpickled feature selector produces identical output
-   X_transformed = feature_selector.transform(X)
-   unpickled_X_transformed = unpickled_feature_selector.transform(X)
-   assert_frame_equal(unpickled_X_transformed, X_transformed)
 
