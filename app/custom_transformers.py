@@ -212,7 +212,14 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")
-            
+        
+        # Ensure X input feature names are the same as during .fit()
+        if X.columns.tolist() != self.feature_names_in_:
+            raise ValueError(
+                "Feature names of input X must match those seen during fit. "
+                "Ensure that the columns are in the same order and have the same names as during training."
+            )      
+              
         X_transformed = X[self.columns_to_keep].copy()
         
         return X_transformed 
