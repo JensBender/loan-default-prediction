@@ -182,7 +182,9 @@ def test_feature_selector_can_be_pickled(X_input_for_feature_selector):
    # Pickle and unpickle
    pickled_feature_selector = pickle.dumps(feature_selector)
    unpickled_feature_selector = pickle.loads(pickled_feature_selector)
-   # Check that the unpickled feature selector transforms data identically
+   # Ensure that hyperparameters are preserved
+   assert feature_selector.columns_to_keep == unpickled_feature_selector.columns_to_keep
+   # Ensure that unpickled feature selector produces identical output
    X_transformed = feature_selector.transform(X)
    unpickled_X_transformed = unpickled_feature_selector.transform(X)
    assert_frame_equal(unpickled_X_transformed, X_transformed)
