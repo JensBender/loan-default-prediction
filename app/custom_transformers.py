@@ -182,12 +182,21 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
 # Feature selection for downstream model training and inference 
 class FeatureSelector(BaseEstimator, TransformerMixin):
     def __init__(self, columns_to_keep):
+        # Validate data type
+        if not isinstance(columns_to_keep, list):
+            raise ValueError("columns_to_keep must be a list.")
+        
         self.columns_to_keep = columns_to_keep
 
     def fit(self, X, y=None):
+        # Validate data type
+        if not isinstance(X, pd.DataFrame):
+            raise TypeError("Input X must be a pandas DataFrame.")   
+            
         return self  # No fitting needed
 
     def transform(self, X):
+        # Validate data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")
             
