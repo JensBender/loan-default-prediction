@@ -132,6 +132,21 @@ def test_feature_selector_transform_output_shape(X_input_for_feature_selector):
    X_transformed = feature_selector.fit_transform(X)
    assert X_transformed.shape == expected_shape
 
+# Ensure __init__() raises ValueError if columns_to_keep is not a list
+@pytest.mark.unit
+@pytest.mark.parametrize("invalid_columns_to_keep", [
+    "a string",
+    {"a": "dictionary"},
+    ("a", "tuple"),
+    1,
+    1.23,
+    False,
+    None
+])
+def test_feature_selector_init_raises_error_for_invalid_columns_to_keep(invalid_columns_to_keep):
+   with pytest.raises(ValueError):
+      FeatureSelector(invalid_columns_to_keep)
+
 # Ensure fit() raises ValueError if one or more columns are missing in the input DataFrame
 @pytest.mark.unit
 @pytest.mark.parametrize("missing_columns", [
