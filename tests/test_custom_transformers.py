@@ -8,6 +8,7 @@ import pytest
 from sklearn.base import BaseEstimator, TransformerMixin, clone
 import pandas as pd
 from pandas.testing import assert_frame_equal
+import numpy as np
 import pickle
 
 # Suppress deprecation warnings
@@ -184,17 +185,34 @@ def test_feature_selector_can_be_pickled(X_input_for_feature_selector):
 # Ensure __init__() raises ValueError if columns_to_keep is not a list
 @pytest.mark.unit
 @pytest.mark.parametrize("invalid_columns_to_keep", [
-    "a string",
-    {"a": "dictionary"},
-    ("a", "tuple"),
-    1,
-    1.23,
-    False,
-    None
+   "a string",
+   {"a": "dictionary"},
+   ("a", "tuple"),
+   1,
+   1.23,
+   False,
+   None
 ])
 def test_feature_selector_init_raises_error_for_invalid_columns_to_keep(invalid_columns_to_keep):
    with pytest.raises(ValueError):
       FeatureSelector(invalid_columns_to_keep)
+
+# Ensure fit() raises TypeError if input X is not a pandas DataFrame
+@pytest.mark.unit
+@pytest.mark.parametrize("invalid_input_X", [
+   np.array([[1, 2], [3, 4]]), 
+   "a string",
+   {"a": "dictionary"},
+   ("a", "tuple"),
+   1,
+   1.23,
+   False,
+   None
+])
+def test_feature_selector_fit_raises_error_for_invalid_input_type(invalid_input_X):
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+   with pytest.raises(TypeError):
+      feature_selector.fit(invalid_input_X)
 
 # Ensure fit() raises ValueError if one or more columns are missing in the input DataFrame
 @pytest.mark.unit
