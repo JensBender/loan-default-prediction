@@ -234,6 +234,9 @@ def test_feature_selector_can_be_pickled(X_input_for_feature_selector):
    unpickled_feature_selector = pickle.loads(pickled_feature_selector)
    # Ensure that hyperparameters are preserved
    assert feature_selector.columns_to_keep == unpickled_feature_selector.columns_to_keep
+   # Ensure that learned attributes are preserved
+   assert feature_selector.n_features_in_ == unpickled_feature_selector.n_features_in_
+   assert feature_selector.feature_names_in_ == unpickled_feature_selector.feature_names_in_
    # Ensure that unpickled feature selector produces identical output
    X_transformed = feature_selector.transform(X)
    unpickled_X_transformed = unpickled_feature_selector.transform(X)
