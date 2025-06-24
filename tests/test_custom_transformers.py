@@ -132,6 +132,23 @@ def test_feature_selector_transform_output_shape(X_input_for_feature_selector):
    X_transformed = feature_selector.fit_transform(X)
    assert X_transformed.shape == expected_shape
 
+# Ensure fit() raises ValueError if one or more columns are missing in the input DataFrame
+@pytest.mark.unit
+@pytest.mark.parametrize("missing_columns", [
+   "income", 
+   "age", 
+   "experience",
+   ["current_job_yrs", "current_house_yrs"],
+   ["state_default_rate", "house_ownership_owned", "house_ownership_rented"],
+   ["job_stability", "city_tier", "married", "car_ownership"]
+])
+def test_feature_selector_fit_raises_error_for_missing_columns(X_input_for_feature_selector, missing_columns):
+   X = X_input_for_feature_selector.copy()
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+   X_with_missing_columns = X.drop(columns=missing_columns)
+   with pytest.raises(ValueError):
+      feature_selector.fit(X_with_missing_columns)
+
 # Ensure transform() raises ValueError if one or more columns are missing in the input DataFrame
 @pytest.mark.unit
 @pytest.mark.parametrize("missing_columns", [
@@ -146,9 +163,9 @@ def test_feature_selector_transform_raises_error_for_missing_columns(X_input_for
    X = X_input_for_feature_selector.copy()
    feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
    feature_selector.fit(X)
-   X_with_missing_column = X.drop(columns=missing_columns)
+   X_with_missing_columns = X.drop(columns=missing_columns)
    with pytest.raises(ValueError):
-      feature_selector.transform(X_with_missing_column)
+      feature_selector.transform(X_with_missing_columns)
 
 # Ensure transform() raises ValueError if columns are in wrong order
 @pytest.mark.unit
