@@ -112,7 +112,7 @@ def test_feature_selector_fit_transform_equivalence(X_input_for_feature_selector
    X_fit_transform = feature_selector_2.fit_transform(X)
    assert_frame_equal(X_fit_then_transform, X_fit_transform)
 
-# Ensure transform() is idempotent, i.e., calling it multiple times with the same input returns the same output
+# Ensure .transform() is idempotent, i.e., calling it multiple times with the same input returns the same output
 @pytest.mark.unit
 def test_feature_selector_transform_is_idempotent(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
@@ -122,7 +122,7 @@ def test_feature_selector_transform_is_idempotent(X_input_for_feature_selector):
    X_transformed_2 = feature_selector.transform(X)
    assert_frame_equal(X_transformed_1, X_transformed_2)
 
-# Ensure transform() outputs DataFrame with correct number of rows and columns
+# Ensure .transform() outputs DataFrame with correct number of rows and columns
 @pytest.mark.unit
 def test_feature_selector_transform_output_shape(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
@@ -133,37 +133,37 @@ def test_feature_selector_transform_output_shape(X_input_for_feature_selector):
    X_transformed = feature_selector.fit_transform(X)
    assert X_transformed.shape == expected_shape
 
-# Ensure transform() returns DataFrame with expected columns
+# Ensure .transform() returns DataFrame with correct column names, content and structure
 @pytest.mark.unit
 def test_feature_selector_transform_returns_expected_df(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
    X_expected = X[COLUMNS_TO_KEEP].copy()
    feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
    X_transformed = feature_selector.fit_transform(X)
-   # Check that the output is a pandas DataFrame
+   # Ensure the output is a pandas DataFrame
    assert isinstance(X_transformed, pd.DataFrame)
-   # Check that the column names of the output DataFrame are as expected
+   # Ensure the column names of the output DataFrame are as expected
    assert list(X_transformed.columns) == list(COLUMNS_TO_KEEP)
-   # Check that the content and structure of the output DataFrame is as expected
+   # Ensure the content and structure of the output DataFrame is as expected
    assert_frame_equal(X_transformed, X_expected)
    
-# Ensure transformer can be cloned, which is important for sklearn Pipeline compatibility
+# Ensure instance can be cloned, which is important for sklearn Pipeline compatibility
 @pytest.mark.unit
 def test_feature_selector_is_clonable(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
    feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
    feature_selector.fit(X)
    cloned_feature_selector = clone(feature_selector)
-   # Check that it's a new object, not a pointer to the old one
+   # Ensure it's a new object, not a pointer to the old one
    assert cloned_feature_selector is not feature_selector
-   # Check that the clone has the same parameters
+   # Ensure the clone has the same parameters
    assert cloned_feature_selector.get_params() == feature_selector.get_params()
-   # Check that modifying the clone's parameters (add column to list)...
+   # Ensure that modifying the clone's parameters (add column to list)...
    cloned_feature_selector.columns_to_keep.append("added_column")
    # ... doesn't change the original's parameters
    assert feature_selector.columns_to_keep == COLUMNS_TO_KEEP
 
-# Ensure transformer can be pickled and unpickled without losing its attributes and functionality
+# Ensure instance can be pickled and unpickled without losing its attributes and functionality
 def test_feature_selector_can_be_pickled(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
    # Instantiate and fit 
@@ -172,17 +172,17 @@ def test_feature_selector_can_be_pickled(X_input_for_feature_selector):
    # Pickle and unpickle
    pickled_feature_selector = pickle.dumps(feature_selector)
    unpickled_feature_selector = pickle.loads(pickled_feature_selector)
-   # Ensure that hyperparameters are preserved
+   # Ensure hyperparameters are preserved
    assert feature_selector.columns_to_keep == unpickled_feature_selector.columns_to_keep
-   # Ensure that learned attributes are preserved
+   # Ensure learned attributes are preserved
    assert feature_selector.n_features_in_ == unpickled_feature_selector.n_features_in_
    assert feature_selector.feature_names_in_ == unpickled_feature_selector.feature_names_in_
-   # Ensure that unpickled feature selector produces identical output
+   # Ensure that unpickled feature selector produces identical output as original
    X_transformed = feature_selector.transform(X)
    unpickled_X_transformed = unpickled_feature_selector.transform(X)
    assert_frame_equal(unpickled_X_transformed, X_transformed)
 
-# Ensure __init__() raises ValueError if columns_to_keep is not a list
+# Ensure __init__() raises ValueError for invalid data types of columns_to_keep (must be a list)
 @pytest.mark.unit
 @pytest.mark.parametrize("invalid_columns_to_keep", [
    "a string",
@@ -197,7 +197,7 @@ def test_feature_selector_init_raises_error_for_invalid_columns_to_keep(invalid_
    with pytest.raises(ValueError):
       FeatureSelector(invalid_columns_to_keep)
 
-# Ensure fit() raises TypeError if input X is not a pandas DataFrame
+# Ensure .fit() raises TypeError for invalid input data type (must be a pandas DataFrame)
 @pytest.mark.unit
 @pytest.mark.parametrize("invalid_input_X", [
    np.array([[1, 2], [3, 4]]), 
@@ -214,7 +214,7 @@ def test_feature_selector_fit_raises_error_for_invalid_input_type(invalid_input_
    with pytest.raises(TypeError):
       feature_selector.fit(invalid_input_X)
 
-# Ensure fit() raises ValueError if one or more columns are missing in the input DataFrame
+# Ensure .fit() raises ValueError for missing columns in the input DataFrame
 @pytest.mark.unit
 @pytest.mark.parametrize("missing_columns", [
    "income", 
@@ -231,7 +231,11 @@ def test_feature_selector_fit_raises_error_for_missing_columns(X_input_for_featu
    with pytest.raises(ValueError):
       feature_selector.fit(X_with_missing_columns)
 
-# Ensure transform() raises ValueError if one or more columns are missing in the input DataFrame
+# Ensure .transform() raises error if instance has not been fitted yet
+
+# Ensure .transform() raises TypeError for invalid input data type (must be a pandas DataFrame)
+
+# Ensure .transform() raises ValueError for missing columns in the input DataFrame
 @pytest.mark.unit
 @pytest.mark.parametrize("missing_columns", [
    "income", 
@@ -249,7 +253,7 @@ def test_feature_selector_transform_raises_error_for_missing_columns(X_input_for
    with pytest.raises(ValueError):
       feature_selector.transform(X_with_missing_columns)
 
-# Ensure transform() raises ValueError if columns are in wrong order
+# Ensure .transform() raises ValueError if columns are in wrong order
 @pytest.mark.unit
 def test_feature_selector_transform_raises_error_for_wrong_column_order(X_input_for_feature_selector):
     X = X_input_for_feature_selector.copy()
