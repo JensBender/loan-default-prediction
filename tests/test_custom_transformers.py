@@ -103,6 +103,17 @@ def test_feature_selector_fit_returns_self(X_input_for_feature_selector):
    fitted_feature_selector = feature_selector.fit(X)
    assert fitted_feature_selector == feature_selector
 
+# Ensure .fit() ignores extra columns not in columns_to_keep
+@pytest.mark.unit
+def test_feature_selector_fit_ignores_extra_columns(X_input_for_feature_selector):
+   X = X_input_for_feature_selector.copy()
+   X["extra_column"] = "extra_value"  # extra column that is not in COLUMNS_TO_KEEP
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)  
+   feature_selector.fit(X)  # should fit without raising an error
+   # Ensure the learned feature number and names are same as in input DataFrame
+   assert feature_selector.n_features_in_ == X.shape[1]
+   assert feature_selector.feature_names_in_ == X.columns.tolist()
+
 # Ensure equal output of .fit().transform() and .fit_transform()
 @pytest.mark.unit
 def test_feature_selector_fit_transform_equivalence(X_input_for_feature_selector):
