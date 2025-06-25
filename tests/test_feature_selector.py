@@ -15,17 +15,40 @@ from app.global_constants import COLUMNS_TO_KEEP
 from tests.base_transformer_tests import BaseTransformerTests
 
 
+# --- Fixtures ---
 # Fixture to create instance of FeatureSelector class
 @pytest.fixture
 def transformer():
     return FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP)
 
+# Fixture to create X input DataFrame
+@pytest.fixture
+def X_input():
+    return pd.DataFrame({
+      "income": [-0.82, 1.55, -1.47, 0.51, 1.39, -0.61],
+      "age": [-0.64, -0.52, -0.29, -0.52, 0.23, 0.46],
+      "experience": [-1.68, -0.84, -1.51, -1.68, 1.31, -0.18],
+      "current_job_yrs": [-1.73, -0.36, -1.46, -1.73, -0.36, 0.73],
+      "current_house_yrs": [-0.71, 0.71, -0.71, 1.43, 0.71, -0.71],
+      "state_default_rate": [-1.08, -1.24, 0.32, -0.31, -0.14, -0.38],
+      "house_ownership_owned": [0.0, 0.0, 0.0, 0.0, 1.0, 0.0],
+      "house_ownership_rented": [1.0, 0.0, 1.0, 1.0, 0.0, 1.0],
+      "job_stability": [1.0, 0.0, 2.0, 3.0, 0.0, 3.0],
+      "city_tier": [0.0, 2.0, 0.0, 1.0, 0.0, 3.0],
+      "married": [False, False, True, False, True, False],
+      "car_ownership": [False, True, False, False, True, True],
+      "profession": ["computer_hardware_engineer", "web_designer", "lawyer", "firefighter", "artist", "librarian"],
+      "city": ["vellore", "bidar", "nizamabad", "farrukhabad", "sikar", "hindupur"],
+      "state": ["tamil_nadu", "karnataka", "telangana", "uttar_pradesh", "rajasthan", "andhra_pradesh"]
+   })
 
-# Define TestFeatureSelector class (which inherits from BaseTransformerTests)
+
+# --- TestFeatureSelector class ---
+# Define class and inherit from BaseTransformerTests
 class TestFeatureSelector(BaseTransformerTests):
     def test_instantiation(self, transformer):
         # First, run the .test_instantiation() method from the parent class BaseTransformerTests
-        super().test_instantiation(transformer)
+        super().test_instantiation(transformer)  # asserts transformer is BaseEstimator and TransformerMixin
         # Then, add assertions specific to the FeatureSelector class
         assert isinstance(transformer, FeatureSelector)
         assert transformer.columns_to_keep == COLUMNS_TO_KEEP
