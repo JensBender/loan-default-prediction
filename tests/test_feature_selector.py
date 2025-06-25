@@ -16,12 +16,12 @@ from tests.base_transformer_tests import BaseTransformerTests
 
 
 # --- Fixtures ---
-# Fixture to create instance of FeatureSelector class
+# Fixture to instantiate FeatureSelector class for use in tests
 @pytest.fixture
 def transformer():
     return FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP)
 
-# Fixture to create X input DataFrame
+# Fixture to create X input DataFrame for use in tests
 @pytest.fixture
 def X_input():
     return pd.DataFrame({
@@ -46,9 +46,21 @@ def X_input():
 # --- TestFeatureSelector class ---
 # Define class and inherit from BaseTransformerTests
 class TestFeatureSelector(BaseTransformerTests):
+    # Class instantiation 
+    @pytest.mark.unit
     def test_instantiation(self, transformer):
         # First, run the .test_instantiation() method from the parent class BaseTransformerTests
         super().test_instantiation(transformer)  # asserts transformer is BaseEstimator and TransformerMixin
         # Then, add assertions specific to the FeatureSelector class
         assert isinstance(transformer, FeatureSelector)
         assert transformer.columns_to_keep == COLUMNS_TO_KEEP
+
+    # Ensure .fit() ignores extra columns not in columns_to_keep
+    @pytest.mark.unit
+    def test_fit_ignores_extra_columns(self, transformer, X_input):
+        X = X_input.copy()
+        X["extra_column"] = "extra_value"  # extra column that is not in COLUMNS_TO_KEEP
+        transformer.fit(X)  # should fit without raising an error
+        # Ensure the learned feature number and names are same as in input DataFrame
+        assert transformer.n_features_in_ == X.shape[1]
+        assert transformer.feature_names_in_ == X.columns.tolist()
