@@ -183,7 +183,7 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
 # Feature selection for downstream model training and inference 
 class FeatureSelector(BaseEstimator, TransformerMixin):
     def __init__(self, columns_to_keep):
-        # Validate data type
+        # Validate input data type
         if not isinstance(columns_to_keep, list):
             raise ValueError("columns_to_keep must be a list.")
         
@@ -194,7 +194,7 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
         
-        # Validate input DataFrame contains all columns_to_keep
+        # Ensure input DataFrame contains all columns_to_keep
         missing_columns = set(self.columns_to_keep) - set(X.columns)
         if missing_columns:
             raise ValueError(f"Input X is missing the following columns: {', '.join(list(missing_columns))}.")
@@ -212,14 +212,15 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")
-        
-        # Ensure X input feature names are the same as during .fit()
+
+        # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
             raise ValueError(
                 "Feature names of input X must match those seen during fit. "
                 "Ensure that the columns are in the same order and have the same names as during training."
             )      
-              
+        
+        # Create transformed DataFrame with only the selected features
         X_transformed = X[self.columns_to_keep].copy()
         
         return X_transformed 
