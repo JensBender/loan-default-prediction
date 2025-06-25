@@ -234,6 +234,22 @@ def test_feature_selector_fit_raises_error_for_missing_columns(X_input_for_featu
 # Ensure .transform() raises error if instance has not been fitted yet
 
 # Ensure .transform() raises TypeError for invalid input data type (must be a pandas DataFrame)
+@pytest.mark.unit
+@pytest.mark.parametrize("invalid_input_X", [
+   np.array([[1, 2], [3, 4]]), 
+   "a string",
+   {"a": "dictionary"},
+   ("a", "tuple"),
+   1,
+   1.23,
+   False,
+   None
+])
+def test_feature_selector_transform_raises_error_for_invalid_input_type(X_input_for_feature_selector, invalid_input_X):
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+   feature_selector.fit(X_input_for_feature_selector)
+   with pytest.raises(TypeError):
+      feature_selector.transform(invalid_input_X)
 
 # Ensure .transform() raises ValueError for missing columns in the input DataFrame
 @pytest.mark.unit
