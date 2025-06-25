@@ -101,7 +101,18 @@ def test_feature_selector_fit_returns_self(X_input_for_feature_selector):
    X = X_input_for_feature_selector.copy()
    feature_selector = FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP)
    fitted_feature_selector = feature_selector.fit(X)
-   assert fitted_feature_selector == feature_selector
+   assert fitted_feature_selector is feature_selector
+
+# Ensure .fit() stores learned attributes correctly (feature number and names of the input DataFrame) 
+@pytest.mark.unit
+def test_feature_selector_fit_learns_attributes(X_input_for_feature_selector):
+   X = X_input_for_feature_selector.copy()
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)  
+   feature_selector.fit(X)  
+   assert hasattr(feature_selector, "n_features_in_")
+   assert hasattr(feature_selector, "feature_names_in_")
+   assert feature_selector.n_features_in_ == X.shape[1]
+   assert feature_selector.feature_names_in_ == X.columns.tolist()
 
 # Ensure .fit() ignores extra columns not in columns_to_keep
 @pytest.mark.unit
