@@ -6,6 +6,7 @@ import warnings
 # Third-party library imports
 import pytest
 from sklearn.base import BaseEstimator, TransformerMixin, clone
+from sklearn.exceptions import NotFittedError
 import pandas as pd
 from pandas.testing import assert_frame_equal
 import numpy as np
@@ -231,7 +232,13 @@ def test_feature_selector_fit_raises_error_for_missing_columns(X_input_for_featu
    with pytest.raises(ValueError):
       feature_selector.fit(X_with_missing_columns)
 
-# Ensure .transform() raises error if instance has not been fitted yet
+# Ensure .transform() raises NotFittedError if instance has not been fitted yet
+def test_feature_selector_transform_raises_error_if_unfitted(X_input_for_feature_selector):
+   X = X_input_for_feature_selector.copy()
+   feature_selector = FeatureSelector(COLUMNS_TO_KEEP)
+   # .fit() is intentionally not called here
+   with pytest.raises(NotFittedError):
+      feature_selector.transform(X)
 
 # Ensure .transform() raises TypeError for invalid input data type (must be a pandas DataFrame)
 @pytest.mark.unit
