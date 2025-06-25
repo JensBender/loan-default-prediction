@@ -23,4 +23,9 @@ def transformer():
 
 # Define TestFeatureSelector class (which inherits from BaseTransformerTests)
 class TestFeatureSelector(BaseTransformerTests):
-    pass
+    def test_instantiation(self, transformer):
+        # First, run the .test_instantiation() method from the parent class BaseTransformerTests
+        super().test_instantiation(transformer)
+        # Then, add assertions specific to the FeatureSelector class
+        assert isinstance(transformer, FeatureSelector)
+        assert transformer.columns_to_keep == COLUMNS_TO_KEEP
