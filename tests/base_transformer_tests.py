@@ -1,5 +1,6 @@
 import pytest
-from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.base import BaseEstimator, TransformerMixin, clone
+from pandas.testing import assert_frame_equal
 
 
 # Base tests for custom sklearn transformer classes (that individual test classes can inherit from)
@@ -26,3 +27,19 @@ class BaseTransformerTests:
         assert hasattr(transformer, "feature_names_in_")
         assert transformer.n_features_in_ == X.shape[1]
         assert transformer.feature_names_in_ == X.columns.tolist()
+
+    # Ensure equal output of .fit().transform() and .fit_transform()
+    @pytest.mark.unit
+    def test_fit_transform_equivalence(self, transformer, X_input):
+        X = X_input.copy()
+        # Create two transformer instances
+        transformer_1 = clone(transformer)
+        transformer_2 = clone(transformer)
+        # Ensure they are different objects in memory
+        assert transformer_1 is not transformer_2
+        # Perform .fit().transform() vs .fit_transform()
+        X_fit_then_transform = transformer_1.fit(X).transform(X) 
+        X_fit_transform = transformer_2.fit_transform(X)
+        # Ensure the output DataFrames are identical
+        assert_frame_equal(X_fit_then_transform, X_fit_transform)
+
