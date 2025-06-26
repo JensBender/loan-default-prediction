@@ -51,6 +51,9 @@ def X_input():
 # .test_instance_can_be_cloned()
 # .test_fit_transform_equivalence()
 # .test_instance_can_be_pickled()
+# .test_fit_raises_type_error_for_invalid_input()
+# .test_transform_raises_not_fitted_error_if_unfitted()
+# .test_transform_raises_type_error_for_invalid_input()
 class TestFeatureSelector(BaseTransformerTests):
     # Class instantiation 
     @pytest.mark.unit
@@ -101,3 +104,20 @@ class TestFeatureSelector(BaseTransformerTests):
         X_with_missing_columns = X.drop(columns=missing_columns)
         with pytest.raises(ValueError):
             transformer.fit(X_with_missing_columns)
+
+    # Ensure .transform() raises ValueError for missing columns in the input DataFrame
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_columns", [
+        "income", 
+        "age", 
+        "experience",
+        ["current_job_yrs", "current_house_yrs"],
+        ["state_default_rate", "house_ownership_owned", "house_ownership_rented"],
+        ["job_stability", "city_tier", "married", "car_ownership"]
+    ])
+    def test_transform_raises_value_error_for_missing_columns(self, transformer, X_input, missing_columns):
+        X = X_input.copy()
+        transformer.fit(X)
+        X_with_missing_columns = X.drop(columns=missing_columns)
+        with pytest.raises(ValueError):
+            transformer.transform(X_with_missing_columns)
