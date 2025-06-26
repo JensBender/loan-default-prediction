@@ -1,6 +1,7 @@
 import pytest
 from sklearn.base import BaseEstimator, TransformerMixin, clone
 from pandas.testing import assert_frame_equal
+import pickle
 
 
 # Base tests for custom sklearn transformer classes (that individual test classes can inherit from)
@@ -54,3 +55,19 @@ class BaseTransformerTests:
         # Ensure the output DataFrames are identical
         assert_frame_equal(X_fit_then_transform, X_fit_transform)
 
+    # Ensure instance can be pickled and unpickled without losing its attributes and functionality
+    def test_instance_can_be_pickled(self, transformer, X_input):
+        X = X_input.copy()
+        transformer.fit(X)
+        # Pickle and unpickle
+        pickled_transformer = pickle.dumps(transformer)
+        unpickled_transformer = pickle.loads(pickled_transformer)
+        # Ensure hyperparameters are preserved
+        assert transformer.get_params() == unpickled_transformer.get_params()
+        # Ensure learned attributes are preserved
+        assert transformer.n_features_in_ == unpickled_transformer.n_features_in_
+        assert transformer.feature_names_in_ == unpickled_transformer.feature_names_in_
+        # Ensure that unpickled transformer produces identical output as original
+        X_transformed = transformer.transform(X)
+        unpickled_X_transformed = unpickled_transformer.transform(X)
+        assert_frame_equal(unpickled_X_transformed, X_transformed)
