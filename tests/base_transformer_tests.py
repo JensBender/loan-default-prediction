@@ -1,5 +1,6 @@
 import pytest
 from sklearn.base import BaseEstimator, TransformerMixin, clone
+from sklearn.exceptions import NotFittedError
 from pandas.testing import assert_frame_equal
 import numpy as np
 import pickle
@@ -88,3 +89,10 @@ class BaseTransformerTests:
     def test_fit_raises_type_error_for_invalid_input(self, transformer, invalid_input_X):
         with pytest.raises(TypeError):
             transformer.fit(invalid_input_X)
+
+    # Ensure .transform() raises NotFittedError if instance has not been fitted yet
+    def test_transform_raises_not_fitted_error_if_unfitted(self, transformer, X_input):
+        X = X_input.copy()
+        # .fit() is intentionally not called here
+        with pytest.raises(NotFittedError):
+            transformer.transform(X)
