@@ -85,3 +85,19 @@ class TestFeatureSelector(BaseTransformerTests):
     def test_init_raises_value_error_for_invalid_columns_to_keep(self, invalid_columns_to_keep):
         with pytest.raises(ValueError):
             FeatureSelector(invalid_columns_to_keep)
+
+    # Ensure .fit() raises ValueError for missing columns in the input DataFrame
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_columns", [
+        "income", 
+        "age", 
+        "experience",
+        ["current_job_yrs", "current_house_yrs"],
+        ["state_default_rate", "house_ownership_owned", "house_ownership_rented"],
+        ["job_stability", "city_tier", "married", "car_ownership"]
+    ])
+    def test_fit_raises_value_error_for_missing_columns(self, transformer, X_input, missing_columns):
+        X = X_input.copy()
+        X_with_missing_columns = X.drop(columns=missing_columns)
+        with pytest.raises(ValueError):
+            transformer.fit(X_with_missing_columns)
