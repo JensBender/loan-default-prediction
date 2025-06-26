@@ -113,3 +113,13 @@ class BaseTransformerTests:
         transformer.fit(X_input)
         with pytest.raises(TypeError):
             transformer.transform(invalid_X_input)
+ 
+    # Ensure .transform() raises ValueError if columns are in wrong order
+    @pytest.mark.unit
+    def test_transform_raises_value_error_for_wrong_column_order(self, transformer, X_input):
+        X = X_input.copy()
+        transformer.fit(X)
+        reversed_columns = X.columns[::-1]  # reverse order as an example
+        X_with_wrong_column_order = X[reversed_columns]  
+        with pytest.raises(ValueError):
+            transformer.transform(X_with_wrong_column_order)
