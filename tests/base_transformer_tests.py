@@ -28,6 +28,17 @@ class BaseTransformerTests:
         assert transformer.n_features_in_ == X.shape[1]
         assert transformer.feature_names_in_ == X.columns.tolist()
 
+    # Ensure instance can be cloned (important for scikit-learn compatibility)
+    @pytest.mark.unit
+    def test_instance_can_be_cloned(self, transformer, X_input):
+        X = X_input.copy()
+        transformer.fit(X)
+        cloned_transformer = clone(transformer)
+        # Ensure it's a new object, not a pointer to the old one
+        assert cloned_transformer is not transformer
+        # Ensure the clone has the same parameters
+        assert cloned_transformer.get_params() == transformer.get_params()
+
     # Ensure equal output of .fit().transform() and .fit_transform()
     @pytest.mark.unit
     def test_fit_transform_equivalence(self, transformer, X_input):
