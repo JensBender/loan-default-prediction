@@ -44,10 +44,13 @@ def X_input():
 
 
 # --- TestFeatureSelector class ---
-# Define class and inherit from BaseTransformerTests which adds the following tests:
+# Inherits from BaseTransformerTests which adds the following tests:
 # .test_instantiation()
 # .test_fit_returns_self()
 # .test_fit_learns_attributes()
+# .test_instance_can_be_cloned()
+# .test_fit_transform_equivalence()
+# .test_instance_can_be_pickled()
 class TestFeatureSelector(BaseTransformerTests):
     # Class instantiation 
     @pytest.mark.unit
