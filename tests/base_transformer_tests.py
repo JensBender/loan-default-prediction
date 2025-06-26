@@ -1,6 +1,7 @@
 import pytest
 from sklearn.base import BaseEstimator, TransformerMixin, clone
 from pandas.testing import assert_frame_equal
+import numpy as np
 import pickle
 
 
@@ -71,3 +72,19 @@ class BaseTransformerTests:
         X_transformed = transformer.transform(X)
         unpickled_X_transformed = unpickled_transformer.transform(X)
         assert_frame_equal(unpickled_X_transformed, X_transformed)
+
+    # Ensure .fit() raises TypeError for invalid input data type (must be a pandas DataFrame)
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_input_X", [
+        np.array([[1, 2], [3, 4]]), 
+        "a string",
+        {"a": "dictionary"},
+        ("a", "tuple"),
+        1,
+        1.23,
+        False,
+        None
+    ])
+    def test_fit_raises_type_error_for_invalid_input(self, transformer, invalid_input_X):
+        with pytest.raises(TypeError):
+            transformer.fit(invalid_input_X)
