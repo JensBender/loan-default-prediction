@@ -96,3 +96,20 @@ class BaseTransformerTests:
         # .fit() is intentionally not called here
         with pytest.raises(NotFittedError):
             transformer.transform(X)
+
+    # Ensure .transform() raises TypeError for invalid input data type (must be a pandas DataFrame)
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_X_input", [
+        np.array([[1, 2], [3, 4]]), 
+        "a string",
+        {"a": "dictionary"},
+        ("a", "tuple"),
+        1,
+        1.23,
+        False,
+        None
+    ])
+    def test_transform_raises_type_error_for_invalid_input(self, transformer, X_input, invalid_X_input):
+        transformer.fit(X_input)
+        with pytest.raises(TypeError):
+            transformer.transform(invalid_X_input)
