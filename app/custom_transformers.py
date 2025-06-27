@@ -34,6 +34,11 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         if missing_columns:
             raise ValueError(f"Input X is missing the following columns: {', '.join(list(missing_columns))}.")
 
+        # Ensure input DataFrame doesn't contain any unexpected columns
+        unexpected_columns = input_columns - required_columns
+        if unexpected_columns:
+            raise ValueError(f"Input X contains the following columns that are neither defined in 'critical_features' nor 'non_critical_features: {', '.join(list(unexpected_columns))}.")
+        
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
