@@ -18,7 +18,15 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         self.non_critical_features = non_critical_features
     
     def fit(self, X, y=None):
-        return self  # No fitting needed
+        # Validate input data type
+        if not isinstance(X, pd.DataFrame):
+            raise TypeError("Input X must be a pandas DataFrame.")   
+        
+        # Store input feature number and names as learned attributes
+        self.n_features_in_ = X.shape[1]
+        self.feature_names_in_ = X.columns.tolist()
+
+        return self 
 
     def transform(self, X):
         if not isinstance(X, pd.DataFrame):
