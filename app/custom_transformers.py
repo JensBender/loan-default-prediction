@@ -36,6 +36,10 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
         
+        # Ensure input feature names and feature order is the same as during .fit()
+        if X.columns.tolist() != self.feature_names_in_:
+            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
+
         X_transformed = X.copy()
         
         # --- Critical features ---
@@ -99,6 +103,10 @@ class CategoricalLabelStandardizer(BaseEstimator, TransformerMixin):
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
             
+        # Ensure input feature names and feature order is the same as during .fit()
+        if X.columns.tolist() != self.feature_names_in_:
+            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
+
         X_transformed = X.copy()
         columns = self.columns if self.columns else X_transformed.columns  # Use provided columns, otherwise all columns
         for column in columns:
@@ -144,6 +152,10 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
                     
+        # Ensure input feature names and feature order is the same as during .fit()
+        if X.columns.tolist() != self.feature_names_in_:
+            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
+
         X_transformed = X.copy()
         for column, mapping in self.boolean_column_mappings.items():
             if column in X_transformed.columns:
@@ -175,6 +187,10 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
         
+        # Ensure input feature names and feature order is the same as during .fit()
+        if X.columns.tolist() != self.feature_names_in_:
+            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
+
         # Create job stability column by mapping professions to job stability tiers (default to "moderate" for unknown professions)
         X_transformed = X.copy()
         X_transformed["job_stability"] = X_transformed["profession"].map(self.job_stability_map).fillna("moderate")
@@ -209,6 +225,10 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
         
+        # Ensure input feature names and feature order is the same as during .fit()
+        if X.columns.tolist() != self.feature_names_in_:
+            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
+
         # Create city tier column by mapping cities to city tiers (default to "unknown" for unknown cities)
         X_transformed = X.copy()
         X_transformed["city_tier"] = X_transformed["city"].map(self.city_tier_map).fillna("unknown")
@@ -243,6 +263,10 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.") 
+
+        # Ensure input feature names and feature order is the same as during .fit()
+        if X.columns.tolist() != self.feature_names_in_:
+            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
 
         # Create state default rate column by mapping the state to its corresponding default rate
         X_transformed = X.copy()
@@ -286,10 +310,7 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
 
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
-            raise ValueError(
-                "Feature names of input X must match those seen during fit. "
-                "Ensure that the columns are in the same order and have the same names as during training."
-            )      
+            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
         
         # Create transformed DataFrame with only the selected features
         X_transformed = X[self.columns_to_keep].copy()
