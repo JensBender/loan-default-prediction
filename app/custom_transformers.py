@@ -32,9 +32,10 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         # Ensure .fit() happened before
         check_is_fitted(self)
         
+        # Validate input data type
         if not isinstance(X, pd.DataFrame):
-            raise TypeError("Input X must be a pandas DataFrame.")
-
+            raise TypeError("Input X must be a pandas DataFrame.")   
+        
         X_transformed = X.copy()
         
         # --- Critical features ---
@@ -80,14 +81,19 @@ class CategoricalLabelStandardizer(BaseEstimator, TransformerMixin):
         self.columns = columns
     
     def fit(self, X, y=None):
+        # Validate input data type
+        if not isinstance(X, pd.DataFrame):
+            raise TypeError("Input X must be a pandas DataFrame.")   
+        
         return self  # No fitting needed
 
     def transform(self, X):
         # Ensure .fit() happened before
         check_is_fitted(self)
         
+        # Validate input data type
         if not isinstance(X, pd.DataFrame):
-            raise TypeError("Input X must be a pandas DataFrame.")
+            raise TypeError("Input X must be a pandas DataFrame.")   
             
         X_transformed = X.copy()
         columns = self.columns if self.columns else X_transformed.columns  # Use provided columns, otherwise all columns
@@ -116,15 +122,20 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
         self.boolean_column_mappings = boolean_column_mappings 
             
     def fit(self, X, y=None):  
+        # Validate input data type
+        if not isinstance(X, pd.DataFrame):
+            raise TypeError("Input X must be a pandas DataFrame.")   
+        
         return self  # No fitting needed
 
     def transform(self, X):
         # Ensure .fit() happened before
         check_is_fitted(self)
         
+        # Validate input data type
         if not isinstance(X, pd.DataFrame):
-            raise TypeError("Input X must be a pandas DataFrame.")
-            
+            raise TypeError("Input X must be a pandas DataFrame.")   
+                    
         X_transformed = X.copy()
         for column, mapping in self.boolean_column_mappings.items():
             if column in X_transformed.columns:
@@ -148,9 +159,10 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         # Ensure .fit() happened before
         check_is_fitted(self)
         
+        # Validate input data type
         if not isinstance(X, pd.DataFrame):
-            raise TypeError("Input X must be a pandas DataFrame.")
-
+            raise TypeError("Input X must be a pandas DataFrame.")   
+        
         # Create job stability column by mapping professions to job stability tiers (default to "moderate" for unknown professions)
         X_transformed = X.copy()
         X_transformed["job_stability"] = X_transformed["profession"].map(self.job_stability_map).fillna("moderate")
@@ -167,15 +179,20 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         self.city_tier_map = city_tier_map 
 
     def fit(self, X, y=None):
+        # Validate input data type
+        if not isinstance(X, pd.DataFrame):
+            raise TypeError("Input X must be a pandas DataFrame.")   
+        
         return self  # No fitting needed
 
     def transform(self, X):        
         # Ensure .fit() happened before
         check_is_fitted(self)
         
+        # Validate input data type
         if not isinstance(X, pd.DataFrame):
-            raise TypeError("Input X must be a pandas DataFrame.")
-
+            raise TypeError("Input X must be a pandas DataFrame.")   
+        
         # Create city tier column by mapping cities to city tiers (default to "unknown" for unknown cities)
         X_transformed = X.copy()
         X_transformed["city_tier"] = X_transformed["city"].map(self.city_tier_map).fillna("unknown")
@@ -186,6 +203,10 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
 # Target encoding of state default rate 
 class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
     def fit(self, X, y):
+        # Validate input data type
+        if not isinstance(X, pd.DataFrame):
+            raise TypeError("Input X must be a pandas DataFrame.")   
+        
         # Merge X and y
         df = X.copy()
         df["target"] = y.values
@@ -199,8 +220,9 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         # Ensure .fit() happened before
         check_is_fitted(self)
 
+        # Validate input data type
         if not isinstance(X, pd.DataFrame):
-            raise TypeError("Input X must be a pandas DataFrame.")
+            raise TypeError("Input X must be a pandas DataFrame.") 
 
         # Create state default rate column by mapping the state to its corresponding default rate
         X_transformed = X.copy()
