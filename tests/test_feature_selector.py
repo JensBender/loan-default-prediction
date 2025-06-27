@@ -40,7 +40,7 @@ def X_input():
       "profession": ["computer_hardware_engineer", "web_designer", "lawyer", "firefighter", "artist", "librarian"],
       "city": ["vellore", "bidar", "nizamabad", "farrukhabad", "sikar", "hindupur"],
       "state": ["tamil_nadu", "karnataka", "telangana", "uttar_pradesh", "rajasthan", "andhra_pradesh"]
-   })
+    })
 
 
 # --- TestFeatureSelector class ---
