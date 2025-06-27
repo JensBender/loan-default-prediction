@@ -27,6 +27,13 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
         
+        # Ensure input DataFrame contains all required columns
+        input_columns = set(X.columns)
+        required_columns = set(self.critical_features + self.non_critical_features)
+        missing_columns = required_columns - input_columns 
+        if missing_columns:
+            raise ValueError(f"Input X is missing the following columns: {', '.join(list(missing_columns))}.")
+
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
