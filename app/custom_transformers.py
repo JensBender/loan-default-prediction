@@ -85,7 +85,11 @@ class CategoricalLabelStandardizer(BaseEstimator, TransformerMixin):
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
         
-        return self  # No fitting needed
+        # Store input feature number and names as learned attributes
+        self.n_features_in_ = X.shape[1]
+        self.feature_names_in_ = X.columns.tolist()
+        
+        return self  
 
     def transform(self, X):
         # Ensure .fit() happened before
@@ -126,7 +130,11 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
         
-        return self  # No fitting needed
+        # Store input feature number and names as learned attributes
+        self.n_features_in_ = X.shape[1]
+        self.feature_names_in_ = X.columns.tolist()
+        
+        return self  
 
     def transform(self, X):
         # Ensure .fit() happened before
@@ -153,7 +161,11 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         self.job_stability_map = job_stability_map 
         
     def fit(self, X, y=None):
-        return self  # No fitting needed
+        # Store input feature number and names as learned attributes
+        self.n_features_in_ = X.shape[1]
+        self.feature_names_in_ = X.columns.tolist()
+        
+        return self  
 
     def transform(self, X):  
         # Ensure .fit() happened before
@@ -182,8 +194,12 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
+    
+        # Store input feature number and names as learned attributes
+        self.n_features_in_ = X.shape[1]
+        self.feature_names_in_ = X.columns.tolist()
         
-        return self  # No fitting needed
+        return self  
 
     def transform(self, X):        
         # Ensure .fit() happened before
@@ -206,7 +222,11 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
-        
+
+        # Store input feature number and names as learned attributes
+        self.n_features_in_ = X.shape[1]
+        self.feature_names_in_ = X.columns.tolist()
+
         # Merge X and y
         df = X.copy()
         df["target"] = y.values
@@ -214,7 +234,7 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         # Calculate default rate by state 
         self.default_rate_by_state_ = df.groupby("state")["target"].mean()
         
-        return self
+        return self  
 
     def transform(self, X):
         # Ensure .fit() happened before
