@@ -5,6 +5,11 @@ from sklearn.utils.validation import check_is_fitted
 import pandas as pd
 
 
+# Custom error class (for MissingValueChecker)
+class MissingValueError(ValueError):
+    pass
+
+
 # Check missing values 
 class MissingValueChecker(BaseEstimator, TransformerMixin):
     def __init__(self, critical_features, non_critical_features):
@@ -53,7 +58,7 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         if n_missing_total_critical > 0:
             values = "value" if n_missing_total_critical == 1 else "values"
             rows = "row" if n_missing_rows_critical == 1 else "rows"
-            raise ValueError(
+            raise MissingValueError(
                 f"{n_missing_total_critical} missing {values} found in critical features "
                 f"across {n_missing_rows_critical} {rows}. Please provide missing {values}.\n"
                 f"Missing values by column: {n_missing_by_column_critical}"
