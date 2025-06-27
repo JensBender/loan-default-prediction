@@ -7,13 +7,12 @@ import pandas as pd
 
 # Check missing values 
 class MissingValueChecker(BaseEstimator, TransformerMixin):
-    def __init__(self, critical_features=None, non_critical_features=None):
-        if critical_features is None or non_critical_features is None:
-            raise ValueError("'critical_features' and 'non_critical_features' cannot be None. Provide both lists.")
-
+    def __init__(self, critical_features, non_critical_features):
         # Validate input data type
-        if not isinstance(critical_features, list) or not isinstance(non_critical_features, list):
-            raise TypeError("")
+        if not isinstance(critical_features, list):
+            raise TypeError("'critical_features' must be a list of column names.")
+        if not isinstance(non_critical_features, list):
+            raise TypeError("'non_critical_features' must be a list of column names.")
 
         self.critical_features = critical_features
         self.non_critical_features = non_critical_features
