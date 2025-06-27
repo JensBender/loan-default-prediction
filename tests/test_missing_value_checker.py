@@ -28,7 +28,7 @@ def transformer():
 @pytest.fixture
 def X_input():
     return pd.DataFrame({
-        "income": [9121364, 2636544, 9470213, 6558967, 6245331, None],
+        "income": [9121364, 2636544, 9470213, 6558967, 6245331, 154867],
         "age": [70, 39, 41, 41, 65, 64],
         "experience": [18, 0, 5, 10, 6, 1],
         "married": ["single", "single", "single", "married", "single", "single"],
