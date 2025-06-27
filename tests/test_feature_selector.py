@@ -75,7 +75,7 @@ class TestFeatureSelector(BaseTransformerTests):
         assert transformer.n_features_in_ == X.shape[1]
         assert transformer.feature_names_in_ == X.columns.tolist()
 
-    # Ensure __init__() raises ValueError for invalid data types of columns_to_keep (must be a list)
+    # Ensure __init__() raises TypeError for invalid data types of columns_to_keep (must be a list)
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_columns_to_keep", [
         "a string",
@@ -86,8 +86,8 @@ class TestFeatureSelector(BaseTransformerTests):
         False,
         None
     ])
-    def test_init_raises_value_error_for_invalid_columns_to_keep(self, invalid_columns_to_keep):
-        with pytest.raises(ValueError):
+    def test_init_raises_type_error_for_invalid_columns_to_keep(self, invalid_columns_to_keep):
+        with pytest.raises(TypeError):
             FeatureSelector(invalid_columns_to_keep)
 
     # Ensure .fit() raises ValueError for missing columns in the input DataFrame
