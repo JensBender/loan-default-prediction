@@ -11,6 +11,10 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         if critical_features is None or non_critical_features is None:
             raise ValueError("'critical_features' and 'non_critical_features' cannot be None. Provide both lists.")
 
+        # Validate input data type
+        if not isinstance(critical_features, list) or not isinstance(non_critical_features, list):
+            raise TypeError("")
+
         self.critical_features = critical_features
         self.non_critical_features = non_critical_features
     
@@ -185,7 +189,7 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
     def __init__(self, columns_to_keep):
         # Validate input data type
         if not isinstance(columns_to_keep, list):
-            raise ValueError("columns_to_keep must be a list.")
+            raise TypeError("columns_to_keep must be a list.")
         
         self.columns_to_keep = columns_to_keep
 
