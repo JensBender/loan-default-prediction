@@ -29,6 +29,9 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         return self 
 
     def transform(self, X):
+        # Ensure .fit() happened before
+        check_is_fitted(self)
+        
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")
 
@@ -80,6 +83,9 @@ class CategoricalLabelStandardizer(BaseEstimator, TransformerMixin):
         return self  # No fitting needed
 
     def transform(self, X):
+        # Ensure .fit() happened before
+        check_is_fitted(self)
+        
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")
             
@@ -113,6 +119,9 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
         return self  # No fitting needed
 
     def transform(self, X):
+        # Ensure .fit() happened before
+        check_is_fitted(self)
+        
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")
             
@@ -136,6 +145,9 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         return self  # No fitting needed
 
     def transform(self, X):  
+        # Ensure .fit() happened before
+        check_is_fitted(self)
+        
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")
 
@@ -158,6 +170,9 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         return self  # No fitting needed
 
     def transform(self, X):        
+        # Ensure .fit() happened before
+        check_is_fitted(self)
+        
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")
 
@@ -181,6 +196,9 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X):
+        # Ensure .fit() happened before
+        check_is_fitted(self)
+
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")
 
