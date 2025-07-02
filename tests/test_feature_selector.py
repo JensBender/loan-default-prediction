@@ -65,16 +65,6 @@ class TestFeatureSelector(BaseTransformerTests):
         assert isinstance(transformer, FeatureSelector)
         assert transformer.columns_to_keep == COLUMNS_TO_KEEP
 
-    # Ensure .fit() ignores extra columns not in columns_to_keep
-    @pytest.mark.unit
-    def test_fit_ignores_extra_columns(self, transformer, X_input):
-        X = X_input.copy()
-        X["extra_column"] = "extra_value"  # extra column that is not in COLUMNS_TO_KEEP
-        transformer.fit(X)  # should fit without raising an error
-        # Ensure the learned feature number and names are same as in input DataFrame
-        assert transformer.n_features_in_ == X.shape[1]
-        assert transformer.feature_names_in_ == X.columns.tolist()
-
     # Ensure __init__() raises TypeError for invalid data types of columns_to_keep (must be a list)
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_columns_to_keep", [
@@ -105,6 +95,16 @@ class TestFeatureSelector(BaseTransformerTests):
         X_with_missing_columns = X.drop(columns=missing_columns)
         with pytest.raises(ValueError):
             transformer.fit(X_with_missing_columns)
+
+    # Ensure .fit() ignores extra columns not in columns_to_keep
+    @pytest.mark.unit
+    def test_fit_ignores_extra_columns(self, transformer, X_input):
+        X = X_input.copy()
+        X["extra_column"] = "extra_value"  # extra column that is not in COLUMNS_TO_KEEP
+        transformer.fit(X)  # should fit without raising an error
+        # Ensure the learned feature number and names are same as in input DataFrame
+        assert transformer.n_features_in_ == X.shape[1]
+        assert transformer.feature_names_in_ == X.columns.tolist()
 
     # Ensure .transform() raises ValueError for missing columns in the input DataFrame
     @pytest.mark.unit
