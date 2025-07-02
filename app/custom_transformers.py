@@ -314,7 +314,7 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
         # Ensure input DataFrame contains all columns_to_keep
         missing_columns = set(self.columns_to_keep) - set(X.columns)
         if missing_columns:
-            raise ValueError(f"Input X is missing the following columns: {', '.join(list(missing_columns))}.")
+            raise ColumnMismatchError(f"Input X is missing the following columns: {', '.join(missing_columns)}.")
             
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
