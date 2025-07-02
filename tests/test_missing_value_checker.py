@@ -79,3 +79,18 @@ class TestMissingValueChecker(BaseTransformerTests):
         expected_error_message = "'critical_features' must be a list of column names."
         with pytest.raises(TypeError, match=expected_error_message):
             MissingValueChecker(invalid_critical_features, NON_CRITICAL_FEATURES)
+
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_non_critical_features", [
+        "a string",
+        {"a": "dictionary"},
+        ("a", "tuple"),
+        1,
+        1.23,
+        False,
+        None        
+    ])
+    def test_init_raises_type_error_for_invalid_non_critical_features(self, invalid_non_critical_features):
+        expected_error_message = "'non_critical_features' must be a list of column names."
+        with pytest.raises(TypeError, match=expected_error_message):
+            MissingValueChecker(CRITICAL_FEATURES, invalid_non_critical_features)
