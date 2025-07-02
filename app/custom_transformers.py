@@ -9,12 +9,12 @@ import pandas as pd
 class MissingValueError(ValueError):
     pass
 
-# For when X input DataFrame columns do not match the expected columns
+# For mistmatch between expected and actual X input DataFrame columns 
 class ColumnMismatchError(ValueError):
     pass
 
 
-# --- Custom transformer classes for data preprocessing and model pipeline ---
+# --- Custom transformer classes for data preprocessing pipeline ---
 # Check missing values 
 class MissingValueChecker(BaseEstimator, TransformerMixin):
     def __init__(self, critical_features, non_critical_features):
@@ -37,12 +37,12 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         required_columns = set(self.critical_features + self.non_critical_features)
         missing_columns = required_columns - input_columns 
         if missing_columns:
-            raise ColumnMismatchError(f"Input X is missing the following columns: {', '.join(list(missing_columns))}.")
+            raise ColumnMismatchError(f"Input X is missing the following columns: {', '.join(missing_columns)}.")
 
         # Ensure input DataFrame doesn't contain any unexpected columns
         unexpected_columns = input_columns - required_columns
         if unexpected_columns:
-            raise ColumnMismatchError(f"Input X contains the following columns that are neither defined in 'critical_features' nor 'non_critical_features: {', '.join(list(unexpected_columns))}.")
+            raise ColumnMismatchError(f"Input X contains the following columns that are neither defined in 'critical_features' nor 'non_critical_features: {', '.join(unexpected_columns)}.")
         
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
