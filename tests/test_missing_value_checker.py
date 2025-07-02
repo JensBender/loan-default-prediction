@@ -56,6 +56,7 @@ def X_input():
 # .test_transform_raises_type_error_for_invalid_input()
 # .test_transform_raises_value_error_for_wrong_column_order()
 class TestMissingValueChecker(BaseTransformerTests):
+    # Class instantiation 
     @pytest.mark.unit
     def test_instantiation(self, transformer):
         # First, run the .test_instantiation() method from the parent class BaseTransformerTests
@@ -65,6 +66,7 @@ class TestMissingValueChecker(BaseTransformerTests):
         assert transformer.critical_features == CRITICAL_FEATURES
         assert transformer.non_critical_features == NON_CRITICAL_FEATURES
 
+    # Ensure __init__() raises TypeError for invalid critical_features data type (must be a list)
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_critical_features", [
         "a string",
@@ -80,6 +82,7 @@ class TestMissingValueChecker(BaseTransformerTests):
         with pytest.raises(TypeError, match=expected_error_message):
             MissingValueChecker(invalid_critical_features, NON_CRITICAL_FEATURES)
 
+    # Ensure __init__() raises TypeError for invalid non_critical_features data type (must be a list)
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_non_critical_features", [
         "a string",
@@ -95,6 +98,7 @@ class TestMissingValueChecker(BaseTransformerTests):
         with pytest.raises(TypeError, match=expected_error_message):
             MissingValueChecker(CRITICAL_FEATURES, invalid_non_critical_features)
 
+    # Ensure .fit() raises ColumnMismatchError for missing columns in the input DataFrame
     @pytest.mark.unit
     @pytest.mark.parametrize("missing_columns", [
         "income", 
@@ -110,6 +114,7 @@ class TestMissingValueChecker(BaseTransformerTests):
         with pytest.raises(ColumnMismatchError):
             transformer.fit(X_with_missing_columns)
 
+    # Ensure .fit() raises ColumnMismatchError for unexpected columns in the input DataFrame
     @pytest.mark.unit
     @pytest.mark.parametrize("unexpected_columns", [
         ["unexpected_column_1"],
