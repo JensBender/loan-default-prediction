@@ -10,7 +10,7 @@ import pandas as pd
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import MissingValueChecker
+from app.custom_transformers import MissingValueChecker, ColumnMismatchError
 from app.global_constants import CRITICAL_FEATURES, NON_CRITICAL_FEATURES
 from tests.base_transformer_tests import BaseTransformerTests
 
@@ -94,3 +94,18 @@ class TestMissingValueChecker(BaseTransformerTests):
         expected_error_message = "'non_critical_features' must be a list of column names."
         with pytest.raises(TypeError, match=expected_error_message):
             MissingValueChecker(CRITICAL_FEATURES, invalid_non_critical_features)
+
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_columns", [
+        "income", 
+        "age", 
+        ["experience", "married"],
+        ["house_ownership", "car_ownership"],
+        ["profession", "city", "state"],
+        ["current_job_yrs", "current_house_yrs"],
+    ])
+    def test_fit_raises_column_mismatch_error_for_missing_columns(self, transformer, X_input, missing_columns):
+        X = X_input.copy()
+        X_with_missing_columns = X.drop(columns=missing_columns)
+        with pytest.raises(ColumnMismatchError):
+            transformer.fit(X_with_missing_columns)
