@@ -5,12 +5,13 @@ import sys
 # Third-party library imports
 import pytest
 import pandas as pd
+import numpy as np
 
 # Add the parent directory to the path (for local imports)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import MissingValueChecker, ColumnMismatchError
+from app.custom_transformers import MissingValueChecker, MissingValueError, ColumnMismatchError
 from app.global_constants import CRITICAL_FEATURES, NON_CRITICAL_FEATURES
 from tests.base_transformer_tests import BaseTransformerTests
 
@@ -128,3 +129,14 @@ class TestMissingValueChecker(BaseTransformerTests):
         with pytest.raises(ColumnMismatchError):
             transformer.fit(X_with_unexpected_columns)
 
+    # Ensure .transform() raises MissingValueError for missing values in critical features
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    @pytest.mark.parametrize("critical_feature", CRITICAL_FEATURES)
+    def test_transform_raises_missing_value_error_for_critical_features(self, transformer, X_input, missing_value, critical_feature):
+        X = X_input.copy()
+        transformer.fit(X)
+        X_with_missing_value = X_input.copy()
+        X_with_missing_value[critical_feature] = missing_value
+        with pytest.raises(MissingValueError):
+            transformer.transform(X_with_missing_value)
