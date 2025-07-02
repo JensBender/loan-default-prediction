@@ -42,6 +42,7 @@ def X_input():
         "current_house_yrs": [11, 11, 13, 12, 12, 12],
     })
 
+
 # --- TestMissingValueChecker class ---
 # Inherits from BaseTransformerTests which adds the following tests:
 # .test_instantiation()
@@ -64,3 +65,16 @@ class TestMissingValueChecker(BaseTransformerTests):
         assert transformer.critical_features == CRITICAL_FEATURES
         assert transformer.non_critical_features == NON_CRITICAL_FEATURES
 
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_critical_features", [
+        "a string",
+        {"a": "dictionary"},
+        ("a", "tuple"),
+        1,
+        1.23,
+        False,
+        None        
+    ])
+    def test_init_raises_type_error_for_invalid_critical_features(self, invalid_critical_features):
+        with pytest.raises(TypeError):
+            MissingValueChecker(invalid_critical_features, NON_CRITICAL_FEATURES)
