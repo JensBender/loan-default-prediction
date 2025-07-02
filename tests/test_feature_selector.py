@@ -10,7 +10,7 @@ import pandas as pd
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  
 
 # Local imports
-from app.custom_transformers import FeatureSelector
+from app.custom_transformers import FeatureSelector, ColumnMismatchError
 from app.global_constants import COLUMNS_TO_KEEP
 from tests.base_transformer_tests import BaseTransformerTests
 
@@ -80,7 +80,7 @@ class TestFeatureSelector(BaseTransformerTests):
         with pytest.raises(TypeError):
             FeatureSelector(invalid_columns_to_keep)
 
-    # Ensure .fit() raises ValueError for missing columns in the input DataFrame
+    # Ensure .fit() raises ColumnMismatchError for missing columns in the input DataFrame
     @pytest.mark.unit
     @pytest.mark.parametrize("missing_columns", [
         "income", 
@@ -90,10 +90,10 @@ class TestFeatureSelector(BaseTransformerTests):
         ["state_default_rate", "house_ownership_owned", "house_ownership_rented"],
         ["job_stability", "city_tier", "married", "car_ownership"]
     ])
-    def test_fit_raises_value_error_for_missing_columns(self, transformer, X_input, missing_columns):
+    def test_fit_raises_column_mismatch_error_for_missing_columns(self, transformer, X_input, missing_columns):
         X = X_input.copy()
         X_with_missing_columns = X.drop(columns=missing_columns)
-        with pytest.raises(ValueError):
+        with pytest.raises(ColumnMismatchError):
             transformer.fit(X_with_missing_columns)
 
     # Ensure .fit() ignores extra columns not in columns_to_keep
