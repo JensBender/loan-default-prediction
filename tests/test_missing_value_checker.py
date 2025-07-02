@@ -109,3 +109,17 @@ class TestMissingValueChecker(BaseTransformerTests):
         X_with_missing_columns = X.drop(columns=missing_columns)
         with pytest.raises(ColumnMismatchError):
             transformer.fit(X_with_missing_columns)
+
+    @pytest.mark.unit
+    @pytest.mark.parametrize("unexpected_columns", [
+        ["unexpected_column_1"],
+        ["unexpected_column_1", "unexpected_column_2"],
+        ["unexpected_column_1", "unexpected_column_2", "unexpected_column_3"]
+    ])
+    def test_fit_raises_column_mismatch_error_for_unexpected_columns(self, transformer, X_input, unexpected_columns):
+        X_with_unexpected_columns = X_input.copy()
+        for unexpected_column in unexpected_columns:
+            X_with_unexpected_columns[unexpected_column] = 5 
+        with pytest.raises(ColumnMismatchError):
+            transformer.fit(X_with_unexpected_columns)
+
