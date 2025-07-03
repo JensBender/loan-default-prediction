@@ -54,9 +54,25 @@ def X_input():
 # .test_transform_raises_value_error_for_wrong_column_order()
 class TestSnakeCaseFormatter(BaseTransformerTests):
     # Class instantiation 
+    @pytest.mark.unit
     def test_instantiation(self, transformer):
         # First, run the .test_instantiation() method from the parent class BaseTransformerTests
         super().test_instantiation(transformer)
         # Then, add assertions specific to the SnakeCaseFormatter class
         assert isinstance(transformer, SnakeCaseFormatter)
         assert transformer.columns == COLUMNS_FOR_SNAKE_CASING
+
+    # Ensure __init__() raises TypeError for invalid columns data type (must be a list or None)
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_columns", [
+        "a string",
+        {"a": "dictionary"},
+        ("a", "tuple"),
+        1,
+        1.23,
+        False
+    ])
+    def test_init_raises_type_error_for_invalid_columns(self, invalid_columns):
+        expected_error_message = "'columns' must be a list of column names or None. If None, all columns will be used."
+        with pytest.raises(TypeError, match=expected_error_message):
+            SnakeCaseFormatter(columns=invalid_columns)
