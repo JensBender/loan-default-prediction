@@ -103,3 +103,15 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         # Ensure the learned feature number and names are same as in input DataFrame
         assert transformer.n_features_in_ == X_with_extra_column.shape[1]
         assert transformer.feature_names_in_ == X_with_extra_column.columns.tolist()
+    
+    # Ensure .transform() raises ValueError for extra column not seen during .fit()
+    @pytest.mark.unit
+    def test_transform_raises_value_error_for_unexpected_column(self, transformer, X_input):
+        X = X_input.copy()
+        X_with_extra_column = X_input.copy()
+        X_with_extra_column["extra_column"] = "extra_value"   
+        # Fit with extra column
+        transformer.fit(X_with_extra_column)
+        # Ensure .transform() without extra column raises ValueError
+        with pytest.raises(ValueError, match="Feature names and feature order of input X must be the same as during .fit()."):
+            transformer.transform(X)
