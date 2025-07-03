@@ -113,10 +113,6 @@ class SnakeCaseFormatter(BaseEstimator, TransformerMixin):
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
-        
-        # Store input feature number and names as learned attributes
-        self.n_features_in_ = X.shape[1]
-        self.feature_names_in_ = X.columns.tolist()
 
         # Determine columns to be transformed (all if none provided)
         if self.columns is None:
@@ -127,7 +123,11 @@ class SnakeCaseFormatter(BaseEstimator, TransformerMixin):
             missing_columns = set(self.columns_) - set(X.columns)
             if missing_columns:
                 raise ColumnMismatchError(f"Input X is missing the following columns: {', '.join(missing_columns)}.")
-            
+        
+        # Store input feature number and names as learned attributes
+        self.n_features_in_ = X.shape[1]
+        self.feature_names_in_ = X.columns.tolist()
+                    
         return self  
 
     def transform(self, X):
