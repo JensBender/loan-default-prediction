@@ -5,6 +5,7 @@ import sys
 # Third-party library imports
 import pytest
 import pandas as pd
+from pandas.testing import assert_frame_equal
 
 # Add the parent directory to the path (for local imports)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -115,3 +116,20 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         # Ensure .transform() without extra column raises ValueError
         with pytest.raises(ValueError, match="Feature names and feature order of input X must be the same as during .fit()."):
             transformer.transform(X)
+
+    # Ensure .transform() returns snake case
+    @pytest.mark.unit
+    @pytest.mark.parametrize("input_value, expected_output_value", [
+        (" leading space", "leading_space"),
+        ("trailing space ", "trailing_space"),
+        ("   three leading spaces and two trailing spaces  ", "three_leading_spaces_and_two_trailing_spaces"),
+    ])
+    def test_transform_formats_strings_in_snake_case(self, transformer, X_input, input_value, expected_output_value):
+        X = X_input.copy()
+        # Modify first row of "city" column as a representative example
+        X.loc[0, "city"] = input_value 
+        # Fit and transform
+        transformer.fit(X)
+        X_transformed = transformer.transform(X)
+        # Ensure value is formatted in snake case
+        assert X_transformed.loc[0, "city"] == expected_output_value
