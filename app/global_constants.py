@@ -6,6 +6,9 @@ import numpy as np
 CRITICAL_FEATURES = ["income", "age", "experience", "profession", "city", "state", "current_job_yrs", "current_house_yrs"]
 NON_CRITICAL_FEATURES = ["married", "car_ownership", "house_ownership"]
 
+# Define columns for standardizing categorical labels (for custom CategoricalLabelStandardizer)
+COLUMNS_TO_STANDARDIZE_LABELS = ["profession", "city", "state"]
+
 # Map binary categorical columns to boolean (for custom BooleanColumnTransformer)
 BOOLEAN_COLUMN_MAPPINGS = {
     "married": {"married": True, "single": False},
@@ -166,7 +169,7 @@ ORDINAL_COLUMN_ORDERS = [
     ["unknown", "tier_3", "tier_2", "tier_1"]  # Order for city_tier
 ]
 
-# Define the columns to keep after preprocessing as model input (for FeatureSelector)
+# Define the columns to keep after preprocessing as model input (for custom FeatureSelector)
 COLUMNS_TO_KEEP = [
     "income", "age", "experience", "current_job_yrs", "current_house_yrs", "state_default_rate", "house_ownership_owned", 
     "house_ownership_rented", "job_stability", "city_tier", "married", "car_ownership"
