@@ -91,3 +91,15 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         X_with_missing_columns = X.drop(columns=missing_columns)
         with pytest.raises(ColumnMismatchError):
             transformer.fit(X_with_missing_columns)
+
+    # Ensure .fit() ignores extra columns not provided in columns hyperparameter
+    @pytest.mark.unit
+    def test_fit_ignores_extra_column(self, transformer, X_input):
+        X_with_extra_column = X_input.copy()
+        # Add extra column that is not in COLUMNS_FOR_SNAKE_CASING
+        X_with_extra_column["extra_column"] = "extra_value" 
+        # .fit() should not raise an error 
+        transformer.fit(X_with_extra_column)  
+        # Ensure the learned feature number and names are same as in input DataFrame
+        assert transformer.n_features_in_ == X_with_extra_column.shape[1]
+        assert transformer.feature_names_in_ == X_with_extra_column.columns.tolist()
