@@ -123,6 +123,11 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         (" leading space", "leading_space"),
         ("trailing space ", "trailing_space"),
         ("   three leading spaces and two trailing spaces  ", "three_leading_spaces_and_two_trailing_spaces"),
+        ("Title Case With Inner Spaces", "title_case_with_inner_spaces"),
+        ("lower-case-with-hyphens", "lower_case_with_hyphens"),
+        ("Title/Case/With/Slashes", "title_case_with_slashes"),
+        ("ALL-CAPS/AND SLASH", "all_caps_and_slash"),
+        ("  Leading spaces and Mixed Case and-hypen and/slash", "leading_spaces_and_mixed_case_and_hypen_and_slash"),
     ])
     def test_transform_formats_strings_in_snake_case(self, transformer, X_input, input_value, expected_output_value):
         X = X_input.copy()
