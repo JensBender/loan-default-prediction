@@ -5,7 +5,7 @@ import sys
 # Third-party library imports
 import pytest
 import pandas as pd
-from pandas.testing import assert_frame_equal
+import numpy as np
 
 # Add the parent directory to the path (for local imports)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -138,3 +138,21 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         X_transformed = transformer.transform(X)
         # Ensure value is formatted in snake case
         assert X_transformed.loc[0, "city"] == expected_output_value
+
+    # Ensure .transform() leaves non-string values untouched
+    @pytest.mark.unit
+    @pytest.mark.parametrize("non_string_value", [
+        1,
+        1.23,
+        False,
+        None,
+    ])
+    def test_transform_ignores_non_string_values(self, transformer, X_input, non_string_value):
+        X = X_input.copy()
+        # Modify first row of "city" column as a representative example
+        X.loc[0, "city"] = non_string_value 
+        # Fit and transform
+        transformer.fit(X)
+        X_transformed = transformer.transform(X)
+        # Ensure non-string value remains untouched
+        assert X_transformed.loc[0, "city"] == non_string_value
