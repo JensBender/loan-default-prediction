@@ -10,7 +10,7 @@ import pandas as pd
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import SnakeCaseFormatter
+from app.custom_transformers import SnakeCaseFormatter, ColumnMismatchError
 from app.global_constants import COLUMNS_FOR_SNAKE_CASING
 from tests.base_transformer_tests import BaseTransformerTests
 
@@ -76,3 +76,18 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         expected_error_message = "'columns' must be a list of column names or None. If None, all columns will be used."
         with pytest.raises(TypeError, match=expected_error_message):
             SnakeCaseFormatter(columns=invalid_columns)
+
+    # Ensure .fit() raises ColumnMismatchError for missing columns in the input DataFrame
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_columns", [
+        "profession", 
+        "city", 
+        "state", 
+        ["profession", "city"],
+        ["profession", "city", "state"],
+    ])
+    def test_fit_raises_column_mismatch_error_for_missing_columns(self, transformer, X_input, missing_columns):
+        X = X_input.copy()
+        X_with_missing_columns = X.drop(columns=missing_columns)
+        with pytest.raises(ColumnMismatchError):
+            transformer.fit(X_with_missing_columns)
