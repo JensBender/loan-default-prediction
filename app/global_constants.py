@@ -6,8 +6,8 @@ import numpy as np
 CRITICAL_FEATURES = ["income", "age", "experience", "profession", "city", "state", "current_job_yrs", "current_house_yrs"]
 NON_CRITICAL_FEATURES = ["married", "car_ownership", "house_ownership"]
 
-# Define columns for standardizing categorical labels (for custom CategoricalLabelStandardizer)
-COLUMNS_TO_STANDARDIZE_LABELS = ["profession", "city", "state"]
+# Define columns to format categorical labels as snake case (for custom SnakeCaseFormatter)
+COLUMNS_FOR_SNAKE_CASING = ["profession", "city", "state"]
 
 # Map binary categorical columns to boolean (for custom BooleanColumnTransformer)
 BOOLEAN_COLUMN_MAPPINGS = {
