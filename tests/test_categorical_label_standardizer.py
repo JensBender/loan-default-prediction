@@ -11,6 +11,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
 from app.custom_transformers import CategoricalLabelStandardizer
+from app.global_constants import COLUMNS_TO_STANDARDIZE_LABELS
 from tests.base_transformer_tests import BaseTransformerTests
 
 
@@ -18,7 +19,7 @@ from tests.base_transformer_tests import BaseTransformerTests
 # Fixture to instantiate CategoricalLabelStandardizer class for use in tests
 @pytest.fixture
 def transformer():
-    return CategoricalLabelStandardizer()
+    return CategoricalLabelStandardizer(columns=COLUMNS_TO_STANDARDIZE_LABELS)
 
 # Fixture to create X input DataFrame for use in tests
 @pytest.fixture
@@ -52,4 +53,10 @@ def X_input():
 # .test_transform_raises_type_error_for_invalid_input()
 # .test_transform_raises_value_error_for_wrong_column_order()
 class TestCategoricalLabelStandardizer(BaseTransformerTests):
-    pass
+    # Class instantiation 
+    def test_instantiation(self, transformer):
+        # First, run the .test_instantiation() method from the parent class BaseTransformerTests
+        super().test_instantiation(transformer)
+        # Then, add assertions specific to the CategoricalLabelStandardizer class
+        assert isinstance(transformer, CategoricalLabelStandardizer)
+        assert transformer.columns == COLUMNS_TO_STANDARDIZE_LABELS
