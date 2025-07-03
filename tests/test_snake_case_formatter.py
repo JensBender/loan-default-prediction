@@ -10,8 +10,8 @@ import pandas as pd
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import CategoricalLabelStandardizer
-from app.global_constants import COLUMNS_TO_STANDARDIZE_LABELS
+from app.custom_transformers import SnakeCaseFormatter
+from app.global_constants import COLUMNS_FOR_SNAKE_CASING
 from tests.base_transformer_tests import BaseTransformerTests
 
 
@@ -19,7 +19,7 @@ from tests.base_transformer_tests import BaseTransformerTests
 # Fixture to instantiate CategoricalLabelStandardizer class for use in tests
 @pytest.fixture
 def transformer():
-    return CategoricalLabelStandardizer(columns=COLUMNS_TO_STANDARDIZE_LABELS)
+    return SnakeCaseFormatter(columns=COLUMNS_FOR_SNAKE_CASING)
 
 # Fixture to create X input DataFrame for use in tests
 @pytest.fixture
@@ -52,11 +52,11 @@ def X_input():
 # .test_transform_raises_not_fitted_error_if_unfitted()
 # .test_transform_raises_type_error_for_invalid_input()
 # .test_transform_raises_value_error_for_wrong_column_order()
-class TestCategoricalLabelStandardizer(BaseTransformerTests):
+class TestSnakeCaseFormatter(BaseTransformerTests):
     # Class instantiation 
     def test_instantiation(self, transformer):
         # First, run the .test_instantiation() method from the parent class BaseTransformerTests
         super().test_instantiation(transformer)
-        # Then, add assertions specific to the CategoricalLabelStandardizer class
-        assert isinstance(transformer, CategoricalLabelStandardizer)
-        assert transformer.columns == COLUMNS_TO_STANDARDIZE_LABELS
+        # Then, add assertions specific to the SnakeCaseFormatter class
+        assert isinstance(transformer, SnakeCaseFormatter)
+        assert transformer.columns == COLUMNS_FOR_SNAKE_CASING
