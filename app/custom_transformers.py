@@ -102,7 +102,7 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
 
 
 # Standardize categorical labels to snake_case
-class CategoricalLabelStandardizer(BaseEstimator, TransformerMixin):
+class SnakeCaseFormatter(BaseEstimator, TransformerMixin):
     def __init__(self, columns=None):
         if not isinstance(columns, list) and columns is not None:
             raise TypeError("'columns' must be a list of column names or None. If None, all columns will be used.")
