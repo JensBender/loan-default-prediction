@@ -101,7 +101,7 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         return X_transformed
 
 
-# Standardize categorical labels to snake_case
+# Format categorical labels in snake_case
 class SnakeCaseFormatter(BaseEstimator, TransformerMixin):
     def __init__(self, columns=None):
         if not isinstance(columns, list) and columns is not None:
@@ -123,7 +123,11 @@ class SnakeCaseFormatter(BaseEstimator, TransformerMixin):
             self.columns_ = X.columns.tolist()
         else:
             self.columns_ = self.columns
-        
+            # Ensure input DataFrame contains all required columns
+            missing_columns = set(self.columns_) - set(X.columns)
+            if missing_columns:
+                raise ColumnMismatchError(f"Input X is missing the following columns: {', '.join(missing_columns)}.")
+            
         return self  
 
     def transform(self, X):
