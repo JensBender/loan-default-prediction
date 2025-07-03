@@ -114,6 +114,12 @@ class CategoricalLabelStandardizer(BaseEstimator, TransformerMixin):
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
+
+        # Determine columns to be transformed (all if none provided)
+        if self.columns is None:
+            self.columns_ = X.columns.tolist()
+        else:
+            self.columns_ = self.columns
         
         return self  
 
@@ -130,8 +136,8 @@ class CategoricalLabelStandardizer(BaseEstimator, TransformerMixin):
             raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
 
         X_transformed = X.copy()
-        columns = self.columns if self.columns else X_transformed.columns  # Use provided columns, otherwise all columns
-        for column in columns:
+        
+        for column in self.columns_:
             X_transformed[column] = X_transformed[column].apply(
                 lambda categorical_label: (
                     categorical_label
