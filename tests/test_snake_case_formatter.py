@@ -164,3 +164,7 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         X_transformed = transformer.transform(X)
         # Ensure non-string value remains untouched
         assert X_transformed.at[0, "city"] == non_string_value
+
+    # Ensure .transform() formats multiple string columns in snake case
+
+    # Ensure .transform() formats all string columns in snake case by default (columns=None)
