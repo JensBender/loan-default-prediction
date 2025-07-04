@@ -128,6 +128,11 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         ("Title/Case/With/Slashes", "title_case_with_slashes"),
         ("ALL-CAPS/AND SLASH", "all_caps_and_slash"),
         ("  Leading spaces and Mixed Case and-hypen and/slash", "leading_spaces_and_mixed_case_and_hypen_and_slash"),
+        ("already_in_snake_case", "already_in_snake_case"),
+        ("", ""),
+        ("   ", ""),
+        ("multiple--hypens and//slashes and inner   spaces", "multiple__hypens_and__slashes_and_inner___spaces"),
+        ("version 2.0!", "version_2.0!"),
     ])
     def test_transform_formats_strings_in_snake_case(self, transformer, X_input, input_value, expected_output_value):
         X = X_input.copy()
