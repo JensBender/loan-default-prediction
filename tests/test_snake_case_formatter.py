@@ -5,7 +5,7 @@ import sys
 # Third-party library imports
 import pytest
 import pandas as pd
-import numpy as np
+from pandas.testing import assert_frame_equal
 
 # Add the parent directory to the path (for local imports)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -117,7 +117,7 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         with pytest.raises(ValueError, match="Feature names and feature order of input X must be the same as during .fit()."):
             transformer.transform(X)
 
-    # Ensure .transform() returns snake case
+    # Ensure .transform() formats single string column in snake case
     @pytest.mark.unit
     @pytest.mark.parametrize("input_value, expected_output_value", [
         (" leading space", "leading_space"),
@@ -134,7 +134,7 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         ("multiple--hypens and//slashes and inner   spaces", "multiple__hypens_and__slashes_and_inner___spaces"),
         ("version 2.0!", "version_2.0!"),
     ])
-    def test_transform_formats_strings_in_snake_case(self, transformer, X_input, input_value, expected_output_value):
+    def test_transform_formats_single_string_column_in_snake_case(self, transformer, X_input, input_value, expected_output_value):
         X = X_input.copy()
         # Modify first row of "city" column as a representative example
         X.loc[0, "city"] = input_value 
@@ -144,6 +144,33 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         # Ensure value is formatted in snake case
         assert X_transformed.loc[0, "city"] == expected_output_value
 
+    # Ensure .transform() formats multiple string columns in snake case
+    @pytest.mark.unit 
+    def test_transform_formats_multiple_string_columns_in_snake_case(self, transformer, X_input):
+        X = X_input.copy()
+        # Expected output DataFrame
+        expected_X_transformed = pd.DataFrame({
+            "income": [9121364, 2636544, 9470213, 6558967, 6245331, 154867],
+            "age": [70, 39, 41, 41, 65, 64],
+            "experience": [18, 0, 5, 10, 6, 1],
+            "married": ["single", "single", "single", "married", "single", "single"],
+            "house_ownership": ["rented", "rented", "norent_noown", "rented", "rented", "owned"],
+            "car_ownership": ["no", "no", "yes", "no", "no", "no"],
+            "profession": ["artist", "computer_hardware_engineer", "web_designer", "comedian", 
+                           "financial_analyst", "statistician"],
+            "city": ["sikar", "vellore", "bidar", "bongaigaon", "eluru", "danapur"],
+            "state": ["rajasthan", "tamil_nadu", "karnataka", "assam", "andhra_pradesh", "bihar"],
+            "current_job_yrs": [3, 0, 5, 10, 6, 1],
+            "current_house_yrs": [11, 11, 13, 12, 12, 12],
+        })
+        # Fit and transform
+        transformer.fit(X)
+        X_transformed = transformer.transform(X)
+        # Ensure actual and expected output DataFrame are identical
+        assert_frame_equal(X_transformed, expected_X_transformed)
+
+    # Ensure .transform() formats all string columns in snake case by default (columns=None)
+    
     # Ensure .transform() leaves non-string values untouched
     @pytest.mark.unit
     @pytest.mark.parametrize("non_string_value", [
@@ -158,13 +185,9 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
     def test_transform_ignores_non_string_values(self, transformer, X_input, non_string_value):
         X = X_input.copy()
         # Modify first row of "city" column as a representative example
-        X.at[0, "city"] = non_string_value 
+        X.at[0, "city"] = non_string_value  # .at (not .loc) works with list, tuple, and dictionary
         # Fit and transform
         transformer.fit(X)
         X_transformed = transformer.transform(X)
         # Ensure non-string value remains untouched
         assert X_transformed.at[0, "city"] == non_string_value
-
-    # Ensure .transform() formats multiple string columns in snake case
-
-    # Ensure .transform() formats all string columns in snake case by default (columns=None)
