@@ -210,17 +210,23 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
     
     # Ensure .transform() handels mixed data types in the same column correctly
     @pytest.mark.unit
-    def test_transform_handles_mixed_data_types_in_same_column(self, transformer):
+    @pytest.mark.parametrize("non_string_value", [
+        1,
+        1.23,
+        False,
+        None,
+    ])
+    def test_transform_handles_mixed_data_types_in_same_column(self, transformer, non_string_value):
         # Input DataFrame
         X = pd.DataFrame({
             "profession": ["First Profession", "Second Profession"],
-            "city": ["First City", None],
+            "city": ["First City", non_string_value],
             "state": ["First State", "Second State"]
         })
         # Expected output DataFrame
         expected_X_transformed = pd.DataFrame({
             "profession": ["first_profession", "second_profession"],
-            "city": ["first_city", None],
+            "city": ["first_city", non_string_value],
             "state": ["first_state", "second_state"]
         })
         # Fit and transform
