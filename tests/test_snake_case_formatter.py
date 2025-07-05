@@ -187,29 +187,8 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         X_transformed = transformer.transform(X)
         # Ensure actual and expected output DataFrame are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
-    
-    # Ensure .transform() leaves non-string values untouched
-    @pytest.mark.unit
-    @pytest.mark.parametrize("non_string_value", [
-        1,
-        1.23,
-        False,
-        None,
-        ["a", "list"],
-        ("a", "tuple"),
-        {"a": "dictionary"},
-    ])
-    def test_transform_ignores_non_string_values(self, transformer, X_input, non_string_value):
-        X = X_input.copy()
-        # Modify first row of "city" column as a representative example
-        X.at[0, "city"] = non_string_value  # .at (not .loc) works with list, tuple, and dictionary
-        # Fit and transform
-        transformer.fit(X)
-        X_transformed = transformer.transform(X)
-        # Ensure non-string value remains untouched
-        assert X_transformed.at[0, "city"] == non_string_value
-    
-    # Ensure .transform() handels mixed data types in the same column correctly
+      
+    # Ensure .transform() ignores non-string data types
     @pytest.mark.unit
     @pytest.mark.parametrize("non_string_value", [
         1,
@@ -221,7 +200,7 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         ("a", "tuple"),
         {"a": "dict"}
     ])
-    def test_transform_handles_mixed_data_types_in_same_column(self, transformer, non_string_value):
+    def test_transform_ignores_non_string_types(self, transformer, non_string_value):
         # Input DataFrame
         X = pd.DataFrame({
             "profession": ["First Profession", "Second Profession"],
