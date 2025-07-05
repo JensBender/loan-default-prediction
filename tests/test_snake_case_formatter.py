@@ -149,8 +149,19 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
     @pytest.mark.parametrize(
         "columns_for_snake_casing, expected_output",
         [
+            # Format two columns in snake case
             (
-                ["profession", "city", "state"],
+                ["profession", "city"],
+                {
+                    "profession": ["some_profession"],
+                    "city": ["some_city"],
+                    "state": ["Some State"],
+                    "income": [100000],
+                },
+            ),
+            # Format all string columns in snake case by default (when columns=None)
+            (
+                None,
                 {
                     "profession": ["some_profession"],
                     "city": ["some_city"],
@@ -174,8 +185,6 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         X_transformed = transformer.transform(X)
         # Ensure actual and expected output DataFrame are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
-
-    # Ensure .transform() formats all string columns in snake case by default (columns=None)
     
     # Ensure .transform() leaves non-string values untouched
     @pytest.mark.unit
