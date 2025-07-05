@@ -144,7 +144,7 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         X_transformed = transformer.transform(X)
         # Ensure value is formatted in snake case
         assert X_transformed.loc[0, "city"] == expected_output_value
-
+  
     # Ensure .transform() formats multiple string columns in snake case
     @pytest.mark.unit
     @pytest.mark.parametrize(
@@ -207,3 +207,24 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         X_transformed = transformer.transform(X)
         # Ensure non-string value remains untouched
         assert X_transformed.at[0, "city"] == non_string_value
+    
+    # Ensure .transform() handels mixed data types in the same column correctly
+    @pytest.mark.unit
+    def test_transform_handles_mixed_data_types_in_same_column(self, transformer):
+        # Input DataFrame
+        X = pd.DataFrame({
+            "profession": ["First Profession", "Second Profession"],
+            "city": ["First City", None],
+            "state": ["First State", "Second State"]
+        })
+        # Expected output DataFrame
+        expected_X_transformed = pd.DataFrame({
+            "profession": ["first_profession", "second_profession"],
+            "city": ["first_city", None],
+            "state": ["first_state", "second_state"]
+        })
+        # Fit and transform
+        transformer.fit(X) 
+        X_transformed = transformer.transform(X)
+        # Ensure actual and expected output DataFrame are identical
+        assert_frame_equal(X_transformed, expected_X_transformed)
