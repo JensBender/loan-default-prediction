@@ -51,6 +51,7 @@ def X_input():
 # .test_fit_learns_attributes()
 # .test_instance_can_be_cloned()
 # .test_fit_transform_equivalence()
+# .test_transform_does_not_modify_input_df()
 # .test_instance_can_be_pickled()
 # .test_fit_raises_type_error_for_invalid_input()
 # .test_transform_raises_not_fitted_error_if_unfitted()
