@@ -174,6 +174,13 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
         
+        # Ensure input DataFrame contains all required columns
+        input_columns = set(X.columns)
+        required_columns = set(self.boolean_column_mappings.keys())
+        missing_columns = required_columns - input_columns 
+        if missing_columns:
+            raise ColumnMismatchError(f"Input X is missing the following columns: {', '.join(missing_columns)}.")
+
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
