@@ -201,8 +201,7 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
 
         X_transformed = X.copy()
         for column, mapping in self.boolean_column_mappings.items():
-            if column in X_transformed.columns:
-                X_transformed[column] = X_transformed[column].map(mapping)
+            X_transformed[column] = X_transformed[column].map(mapping)
 
         return X_transformed
 
