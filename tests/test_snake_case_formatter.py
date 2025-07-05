@@ -145,21 +145,29 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         assert X_transformed.loc[0, "city"] == expected_output_value
 
     # Ensure .transform() formats multiple string columns in snake case
-    @pytest.mark.unit 
-    def test_transform_formats_multiple_string_columns_in_snake_case(self, transformer):
+    @pytest.mark.unit
+    @pytest.mark.parametrize(
+        "columns_for_snake_casing, expected_output",
+        [
+            (
+                ["profession", "city", "state"],
+                {
+                    "profession": ["some_profession"],
+                    "city": ["some_city"],
+                    "state": ["some_state"],
+                    "income": [100000],
+                },
+            ),
+        ],
+    )
+    def test_transform_formats_multiple_string_columns_in_snake_case(self, transformer, columns_for_snake_casing, expected_output):
         X = pd.DataFrame({
-            "income": [100000],
             "profession": ["Some Profession"],
             "city": ["Some City"],
             "state": ["Some State"],
-        })
-        # Expected output DataFrame
-        expected_X_transformed = pd.DataFrame({
             "income": [100000],
-            "profession": ["some_profession"],
-            "city": ["some_city"],
-            "state": ["some_state"],
         })
+        expected_X_transformed = pd.DataFrame(expected_output)
         # Fit and transform
         transformer.fit(X)
         X_transformed = transformer.transform(X)
