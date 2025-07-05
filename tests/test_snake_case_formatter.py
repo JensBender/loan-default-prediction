@@ -160,7 +160,8 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
             ),
         ],
     )
-    def test_transform_formats_multiple_string_columns_in_snake_case(self, transformer, columns_for_snake_casing, expected_output):
+    def test_transform_formats_multiple_string_columns_in_snake_case(self, columns_for_snake_casing, expected_output):
+        transformer = SnakeCaseFormatter(columns=columns_for_snake_casing)
         X = pd.DataFrame({
             "profession": ["Some Profession"],
             "city": ["Some City"],
