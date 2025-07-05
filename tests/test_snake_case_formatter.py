@@ -6,6 +6,7 @@ import sys
 import pytest
 import pandas as pd
 from pandas.testing import assert_frame_equal
+import numpy as np
 
 # Add the parent directory to the path (for local imports)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -215,6 +216,10 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         1.23,
         False,
         None,
+        np.nan,
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a": "dict"}
     ])
     def test_transform_handles_mixed_data_types_in_same_column(self, transformer, non_string_value):
         # Input DataFrame
