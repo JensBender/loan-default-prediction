@@ -146,22 +146,19 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
 
     # Ensure .transform() formats multiple string columns in snake case
     @pytest.mark.unit 
-    def test_transform_formats_multiple_string_columns_in_snake_case(self, transformer, X_input):
-        X = X_input.copy()
+    def test_transform_formats_multiple_string_columns_in_snake_case(self, transformer):
+        X = pd.DataFrame({
+            "income": [100000],
+            "profession": ["Some Profession"],
+            "city": ["Some City"],
+            "state": ["Some State"],
+        })
         # Expected output DataFrame
         expected_X_transformed = pd.DataFrame({
-            "income": [9121364, 2636544, 9470213, 6558967, 6245331, 154867],
-            "age": [70, 39, 41, 41, 65, 64],
-            "experience": [18, 0, 5, 10, 6, 1],
-            "married": ["single", "single", "single", "married", "single", "single"],
-            "house_ownership": ["rented", "rented", "norent_noown", "rented", "rented", "owned"],
-            "car_ownership": ["no", "no", "yes", "no", "no", "no"],
-            "profession": ["artist", "computer_hardware_engineer", "web_designer", "comedian", 
-                           "financial_analyst", "statistician"],
-            "city": ["sikar", "vellore", "bidar", "bongaigaon", "eluru", "danapur"],
-            "state": ["rajasthan", "tamil_nadu", "karnataka", "assam", "andhra_pradesh", "bihar"],
-            "current_job_yrs": [3, 0, 5, 10, 6, 1],
-            "current_house_yrs": [11, 11, 13, 12, 12, 12],
+            "income": [100000],
+            "profession": ["some_profession"],
+            "city": ["some_city"],
+            "state": ["some_state"],
         })
         # Fit and transform
         transformer.fit(X)
