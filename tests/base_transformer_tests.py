@@ -57,6 +57,14 @@ class BaseTransformerTests:
         # Ensure the output DataFrames are identical
         assert_frame_equal(X_fit_then_transform, X_fit_transform)
 
+    # Ensure .transform() does not modify the X input DataFrame
+    @pytest.mark.unit
+    def test_transform_does_not_modify_input_df(self, transformer, X_input):
+        X_original = X_input.copy()
+        transformer.fit(X_original)
+        transformer.transform(X_original)
+        assert_frame_equal(X_original, X_input)
+
     # Ensure instance can be pickled and unpickled without losing its attributes and functionality
     def test_instance_can_be_pickled(self, transformer, X_input):
         X = X_input.copy()
