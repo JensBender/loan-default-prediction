@@ -10,7 +10,7 @@ import pandas as pd
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import BooleanColumnTransformer, ColumnMismatchError
+from app.custom_transformers import BooleanColumnTransformer, ColumnMismatchError, CategoricalLabelError
 from app.global_constants import BOOLEAN_COLUMN_MAPPINGS
 from tests.base_transformer_tests import BaseTransformerTests
 
@@ -110,4 +110,16 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         })
         expected_error_message = "The mapping for 'car_ownership' must be a dictionary."
         with pytest.raises(TypeError, match=expected_error_message):
+            transformer.fit(X)
+
+    # Ensure .fit() raises CategoricalLabelError for invalid labels of "married" column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_categorical_label", ["divorced", "yes", "no"])
+    def test_fit_raises_categorical_label_error_for_invalid_married_labels(self, transformer, invalid_categorical_label):
+        X = pd.DataFrame({
+            "married": ["single", "married", invalid_categorical_label],
+            "car_ownership": ["no", "yes", "no"],
+        })
+        expected_error_message = f"Column 'married' contains labels that are not specified in the mapping: {invalid_categorical_label}."
+        with pytest.raises(CategoricalLabelError, match=expected_error_message):
             transformer.fit(X)
