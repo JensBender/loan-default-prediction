@@ -112,14 +112,22 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         with pytest.raises(TypeError, match=expected_error_message):
             transformer.fit(X)
 
-    # Ensure .fit() raises CategoricalLabelError for invalid labels of "married" column
+    # Ensure .fit() raises CategoricalLabelError for labels not specified in the mappings
     @pytest.mark.unit
-    @pytest.mark.parametrize("invalid_categorical_label", ["divorced", "yes", "no"])
-    def test_fit_raises_categorical_label_error_for_invalid_married_labels(self, transformer, invalid_categorical_label):
+    @pytest.mark.parametrize("boolean_column, unspecified_label", [
+        ("married", "divorced"), 
+        ("married", "yes"), 
+        ("married", "no"),
+        ("car_ownership", "maybe"),
+        ("car_ownership", "lamborghini"),
+        ("car_ownership", "soon"),
+    ])
+    def test_fit_raises_categorical_label_error_for_unspecified_labels(self, transformer, boolean_column, unspecified_label):
         X = pd.DataFrame({
-            "married": ["single", "married", invalid_categorical_label],
+            "married": ["single", "married", "single"],
             "car_ownership": ["no", "yes", "no"],
         })
-        expected_error_message = f"Column 'married' contains labels that are not specified in the mapping: {invalid_categorical_label}."
+        X.loc[0, boolean_column] = unspecified_label  # modify first row as a representative example
+        expected_error_message = f"Column '{boolean_column}' contains labels that are not specified in the mapping: {unspecified_label}."
         with pytest.raises(CategoricalLabelError, match=expected_error_message):
             transformer.fit(X)
