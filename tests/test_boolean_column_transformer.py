@@ -161,21 +161,10 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         # Fit and transform
         transformer.fit(X)
         X_transformed = transformer.transform(X)
-        # Expected output
-        expected_X_transformed = pd.DataFrame({
-            "income": [9121364, 2636544, 9470213, 6558967, 6245331, 154867],
-            "age": [70, 39, 41, 41, 65, 64],
-            "experience": [18, 0, 5, 10, 6, 1],
-            "married": [False, False, False, True, False, False],
-            "house_ownership": ["rented", "rented", "norent_noown", "rented", "rented", "owned"],
-            "car_ownership": [False, False, True, False, False, False],
-            "profession": ["artist", "computer_hardware_engineer", "web_designer", "comedian", 
-                        "financial_analyst", "statistician"],
-            "city": ["sikar", "vellore", "bidar", "bongaigaon", "eluru[25]", "danapur"],
-            "state": ["rajasthan", "tamil_nadu", "karnataka", "assam", "andhra_pradesh", "bihar"],
-            "current_job_yrs": [3, 0, 5, 10, 6, 1],
-            "current_house_yrs": [11, 11, 13, 12, 12, 12],
-        })
+        # Create expected output
+        expected_X_transformed = X_input.copy()
+        expected_X_transformed["married"] = [False, False, False, True, False, False]
+        expected_X_transformed["car_ownership"] = [False, False, True, False, False, False]
         # Ensure transformed columns are boolean data type
         assert X_transformed["married"].dtype == "bool"
         assert X_transformed["car_ownership"].dtype == "bool"
