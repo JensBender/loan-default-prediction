@@ -145,7 +145,10 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         # Modify first row as a representative example
         X.loc[0, boolean_column] = missing_value
         # .fit() should not raise an error 
-        transformer.fit(X)
+        try:
+            transformer.fit(X)
+        except Exception as e:
+            pytest.fail(f".fit() raised an unexpected exception for '{missing_value}' in '{boolean_column}' column: {e}")
         # Ensure the learned feature number and names are same as in input DataFrame
         assert transformer.n_features_in_ == X.shape[1]
         assert transformer.feature_names_in_ == X.columns.tolist()
