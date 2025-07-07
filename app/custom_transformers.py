@@ -191,8 +191,9 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
             specified_labels = set(mapping.keys())
             input_labels = set(X[column].unique())
             unspecified_labels = input_labels- specified_labels
-            if unspecified_labels:
-                raise ValueError(f"Column '{column}' contains labels that are not specified in the mapping: {', '.join(unspecified_labels)}.")
+            unspecified_labels_notna = {label for label in unspecified_labels if pd.notna(label)}  # allow missing values to pass through
+            if unspecified_labels_notna:
+                raise ValueError(f"Column '{column}' contains labels that are not specified in the mapping: {', '.join(unspecified_labels_notna)}.")
 
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
