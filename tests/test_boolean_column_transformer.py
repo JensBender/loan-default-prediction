@@ -90,3 +90,24 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         X_with_missing_columns = X.drop(columns=missing_columns)
         with pytest.raises(ColumnMismatchError):
             transformer.fit(X_with_missing_columns)
+
+    # Ensure .fit() raises TypeError if any individual mapping within the boolean_column_mappings is not a dictionary
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_mapping", [
+        "a string",
+        ["a", "list"],
+        ("a", "tuple"),
+        1,
+        1.23,
+        False,
+        None
+    ])
+    def test_fit_raises_type_error_for_invalid_mapping(self, X_input, invalid_mapping):
+        X = X_input.copy()
+        transformer = BooleanColumnTransformer(boolean_column_mappings={
+            "married": {"married": True, "single": False},
+            "car_ownership": invalid_mapping    
+        })
+        expected_error_message = "The mapping for 'car_ownership' must be a dictionary."
+        with pytest.raises(TypeError, match=expected_error_message):
+            transformer.fit(X)
