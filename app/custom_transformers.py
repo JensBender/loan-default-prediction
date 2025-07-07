@@ -13,6 +13,10 @@ class MissingValueError(ValueError):
 class ColumnMismatchError(ValueError):
     pass
 
+# For invalid categorical labels (in BooleanColumnTransformer)
+class CategoricalLabelError(ValueError):
+    pass
+
 
 # --- Custom transformer classes for data preprocessing pipeline ---
 # Check missing values 
@@ -193,7 +197,7 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
             unspecified_labels = input_labels- specified_labels
             unspecified_labels_notna = {label for label in unspecified_labels if pd.notna(label)}  # allow missing values to pass through
             if unspecified_labels_notna:
-                raise ValueError(f"Column '{column}' contains labels that are not specified in the mapping: {', '.join(unspecified_labels_notna)}.")
+                raise CategoricalLabelError(f"Column '{column}' contains labels that are not specified in the mapping: {', '.join(unspecified_labels_notna)}.")
 
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
