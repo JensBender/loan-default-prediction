@@ -5,6 +5,7 @@ import sys
 # Third-party library imports
 import pytest
 import pandas as pd
+import numpy as np
 
 # Add the parent directory to the path (for local imports)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -133,11 +134,16 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
             transformer.fit(X)
 
     # Ensure .fit() ignores missing values in boolean columns
-    def test_fit_ignores_missing_values_in_boolean_columns(self, transformer):
+    @pytest.mark.unit
+    @pytest.mark.parametrize("boolean_column", ["married", "car_ownership"])
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_fit_ignores_missing_values_in_boolean_columns(self, transformer, boolean_column, missing_value):
         X = pd.DataFrame({
-            "married": ["single", "married", None],
-            "car_ownership": ["no", "yes", None],
+            "married": ["single", "married", "single"],
+            "car_ownership": ["no", "yes", "no"],
         })
+        # Modify first row as a representative example
+        X.loc[0, boolean_column] = missing_value
         # .fit() should not raise an error 
         transformer.fit(X)
         # Ensure the learned feature number and names are same as in input DataFrame
