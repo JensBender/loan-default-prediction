@@ -61,3 +61,20 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         # Then, add assertions specific to the BooleanColumnTransformer class
         assert isinstance(transformer, BooleanColumnTransformer)
         assert transformer.boolean_column_mappings == BOOLEAN_COLUMN_MAPPINGS
+
+    # Ensure __init__() raises TypeError for invalid boolean_column_mappings data type (must be a dictionary)
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_boolean_column_mappings", [
+        "a string",
+        ["a", "list"],
+        ("a", "tuple"),
+        1,
+        1.23,
+        False,
+        None
+    ])
+    def test_init_raises_type_error_for_invalid_boolean_column_mappings(self, invalid_boolean_column_mappings):
+        expected_error_message = "'boolean_column_mappings' must be a dictionary specifying the mappings."
+        with pytest.raises(TypeError, match=expected_error_message):
+            BooleanColumnTransformer(boolean_column_mappings=invalid_boolean_column_mappings)
+    
