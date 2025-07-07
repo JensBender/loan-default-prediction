@@ -181,6 +181,19 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
         if missing_columns:
             raise ColumnMismatchError(f"Input X is missing the following columns: {', '.join(missing_columns)}.")
 
+        # Ensure all binary columns contain only labels specified in the mappings
+        for column, mapping in self.boolean_column_mappings.items():
+            # Ensure the mapping itself is also a dictionary
+            if not isinstance(mapping, dict):
+                raise TypeError(f"The mapping for '{column}' must be a dictionary.")
+            
+            # Ensure the current binary column contains only labels specified in the mappings
+            specified_labels = set(mapping.keys())
+            input_labels = set(X[column].unique())
+            unspecified_labels = input_labels- specified_labels
+            if unspecified_labels:
+                raise ValueError(f"Column '{column}' contains labels that are not specified in the mapping: {', '.join(unspecified_labels)}.")
+
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
