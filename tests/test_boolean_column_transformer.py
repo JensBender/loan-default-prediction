@@ -131,3 +131,16 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         expected_error_message = f"Column '{boolean_column}' contains labels that are not specified in the mapping: {unspecified_label}."
         with pytest.raises(CategoricalLabelError, match=expected_error_message):
             transformer.fit(X)
+
+    # Ensure .fit() ignores missing values in boolean columns
+    def test_fit_ignores_missing_values_in_boolean_columns(self, transformer):
+        X = pd.DataFrame({
+            "married": ["single", "married", None],
+            "car_ownership": ["no", "yes", None],
+        })
+        # .fit() should not raise an error 
+        transformer.fit(X)
+        # Ensure the learned feature number and names are same as in input DataFrame
+        assert transformer.n_features_in_ == X.shape[1]
+        assert transformer.feature_names_in_ == X.columns.tolist()
+    
