@@ -10,7 +10,7 @@ import pandas as pd
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import BooleanColumnTransformer
+from app.custom_transformers import BooleanColumnTransformer, ColumnMismatchError
 from app.global_constants import BOOLEAN_COLUMN_MAPPINGS
 from tests.base_transformer_tests import BaseTransformerTests
 
@@ -78,3 +78,15 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         with pytest.raises(TypeError, match=expected_error_message):
             BooleanColumnTransformer(boolean_column_mappings=invalid_boolean_column_mappings)
     
+    # Ensure .fit() raises ColumnMismatchError for missing columns in input DataFrame
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_columns", [
+        "married", 
+        "car_ownership", 
+        ["married", "car_ownership"],
+    ])
+    def test_fit_raises_column_mismatch_error_for_missing_columns(self, transformer, X_input, missing_columns):
+        X = X_input.copy()
+        X_with_missing_columns = X.drop(columns=missing_columns)
+        with pytest.raises(ColumnMismatchError):
+            transformer.fit(X_with_missing_columns)
