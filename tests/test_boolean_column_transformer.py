@@ -176,5 +176,8 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
             "current_job_yrs": [3, 0, 5, 10, 6, 1],
             "current_house_yrs": [11, 11, 13, 12, 12, 12],
         })
+        # Ensure transformed columns are boolean data type
+        assert X_transformed["married"].dtype == "bool"
+        assert X_transformed["car_ownership"].dtype == "bool"
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
