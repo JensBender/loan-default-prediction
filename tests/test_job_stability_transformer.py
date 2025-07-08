@@ -77,4 +77,12 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         expected_error_message = "'job_stability_map' must be a dictionary specifying the mappings from 'profession' to 'job_stability'."
         with pytest.raises(TypeError, match=expected_error_message):
             JobStabilityTransformer(job_stability_map=invalid_job_stability_map)
-    
+
+    # Ensure .fit() raises ValueError if "profession" column is missing in input DataFrame
+    @pytest.mark.unit
+    def test_fit_raises_value_error_for_missing_profession_column(self, transformer, X_input):
+        X = X_input.copy()
+        X_without_profession = X.drop(columns="profession")
+        expected_error_message = "Input X is missing the 'profession' column."
+        with pytest.raises(ValueError, match=expected_error_message):
+            transformer.fit(X_without_profession)    
