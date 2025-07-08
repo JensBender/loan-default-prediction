@@ -230,3 +230,32 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         X_transformed_non_boolean = X_transformed[other_columns]
         # Ensure untransformed and transformed DataFrames of other columns are identical
         assert_frame_equal(X_other_columns, X_transformed_non_boolean)
+
+    # Ensure .transform() successfully maps integer categories to boolean
+    @pytest.mark.unit
+    def test_transform_maps_integer_categories_to_boolean(self):
+        # Create DataFrame with integer categories
+        X_integer_categories = pd.DataFrame({
+            "married" : [0, 1, 0, 1, 0, 1],
+            "car_ownership" : [5, 99, 5, 99, 5, 99],
+            "current_job_yrs": [3, 0, 5, 10, 6, 1],
+        })      
+        # Instantiate and map integers to boolean
+        transformer = BooleanColumnTransformer(boolean_column_mappings={
+            "married": {1: True, 0: False},
+            "car_ownership": {5: True, 99: False}              
+        })
+        # Fit and transform
+        transformer.fit(X_integer_categories)
+        X_transformed = transformer.transform(X_integer_categories)
+        # Create expected output
+        expected_X_transformed = pd.DataFrame({
+            "married" : [False, True, False, True, False, True],
+            "car_ownership" : [True, False, True, False, True, False],
+            "current_job_yrs": [3, 0, 5, 10, 6, 1],
+        }) 
+        # Ensure transformed columns are boolean data type
+        assert X_transformed["married"].dtype == "bool"
+        assert X_transformed["car_ownership"].dtype == "bool"
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed, expected_X_transformed)
