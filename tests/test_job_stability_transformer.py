@@ -54,4 +54,10 @@ def X_input():
 # .test_transform_raises_type_error_for_invalid_input()
 # .test_transform_raises_value_error_for_wrong_column_order()
 class TestJobStabilityTransformer(BaseTransformerTests):
-    pass
+    # Class instantiation 
+    def class_instantiation(self):
+        # First, run the .test_instantiation() method from the parent class BaseTransformerTests
+        super().class_instantiation(transformer)
+        # Then, add assertions specific to the BooleanColumnTransformer class
+        assert isinstance(transformer, JOB_STABILITY_MAP)
+        assert transformer.job_stability_map == JOB_STABILITY_MAP
