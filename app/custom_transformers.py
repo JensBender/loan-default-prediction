@@ -234,6 +234,10 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         self.job_stability_map = job_stability_map 
         
     def fit(self, X, y=None):
+        # Validate input data type
+        if not isinstance(X, pd.DataFrame):
+            raise TypeError("Input X must be a pandas DataFrame.")   
+
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
