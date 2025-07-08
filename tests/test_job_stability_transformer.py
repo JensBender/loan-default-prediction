@@ -5,6 +5,7 @@ import sys
 # Third-party library imports
 import pytest
 import pandas as pd
+from pandas.testing import assert_frame_equal
 
 # Add the parent directory to the path (for local imports)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -86,3 +87,16 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         expected_error_message = "Input X is missing the 'profession' column."
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.fit(X_without_profession)    
+   
+    # Ensure .transform() successfully converts professions to job stability tiers
+    @pytest.mark.unit
+    def test_transform_converts_professions_to_job_stability_tiers(self, transformer, X_input):
+        X = X_input.copy()
+        # Fit and transform
+        transformer.fit(X)
+        X_transformed = transformer.transform(X)
+        # Create expected output
+        expected_X_transformed = X_input.copy()
+        expected_X_transformed["job_stability"] = ["variable", "moderate", "variable", "variable", "moderate", "moderate"]
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed, expected_X_transformed)
