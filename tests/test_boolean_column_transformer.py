@@ -156,7 +156,7 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
     
     # Ensure .transform() successfully converts categorical string labels to boolean
     @pytest.mark.unit
-    def test_transform_converts_categorical_columns_to_boolean(self, transformer, X_input):
+    def test_transform_converts_string_categories_to_boolean(self, transformer, X_input):
         X = X_input.copy()
         # Fit and transform
         transformer.fit(X)
@@ -233,7 +233,7 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
 
     # Ensure .transform() successfully maps integer categories to boolean
     @pytest.mark.unit
-    def test_transform_maps_integer_categories_to_boolean(self):
+    def test_transform_converts_integer_categories_to_boolean(self):
         # Create DataFrame with integer categories
         X_integer_categories = pd.DataFrame({
             "married" : [0, 1, 0, 1, 0, 1],
