@@ -199,7 +199,7 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
     def test_transform_ignores_other_columns(self, transformer, X_input):
         X = X_input.copy()
         # Create DataFrame of other columns
-        other_columns = [column for column in X.columns if column not in transformer.boolean_column_mappings.keys()]
+        other_columns = [column for column in X.columns if column not in transformer.boolean_column_mappings]
         X_other_columns = X[other_columns].copy()
         # Fit and transform on entire DataFrame
         transformer.fit(X)
