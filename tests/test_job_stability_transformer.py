@@ -55,9 +55,26 @@ def X_input():
 # .test_transform_raises_value_error_for_wrong_column_order()
 class TestJobStabilityTransformer(BaseTransformerTests):
     # Class instantiation 
-    def class_instantiation(self):
+    def test_instantiation(self, transformer):
         # First, run the .test_instantiation() method from the parent class BaseTransformerTests
-        super().class_instantiation(transformer)
+        super().test_instantiation(transformer)
         # Then, add assertions specific to the BooleanColumnTransformer class
-        assert isinstance(transformer, JOB_STABILITY_MAP)
+        assert isinstance(transformer, JobStabilityTransformer)
         assert transformer.job_stability_map == JOB_STABILITY_MAP
+
+    # Ensure __init__() raises TypeError for invalid job_stability_map data type (must be a dictionary)
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_job_stability_map", [
+        "a string",
+        ["a", "list"],
+        ("a", "tuple"),
+        1,
+        1.23,
+        False,
+        None
+    ])
+    def test_init_raises_type_error_for_invalid_job_stability_map(self, invalid_job_stability_map):
+        expected_error_message = "'job_stability_map' must be a dictionary specifying the mappings from 'profession' to 'job_stability'."
+        with pytest.raises(TypeError, match=expected_error_message):
+            JobStabilityTransformer(job_stability_map=invalid_job_stability_map)
+    
