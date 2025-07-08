@@ -226,10 +226,11 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
 
 # Derive job stability from profession 
 class JobStabilityTransformer(BaseEstimator, TransformerMixin):
-    def __init__(self, job_stability_map=None):
-        if job_stability_map is None:
-            raise ValueError("'job_stability_map' cannot be None. It must be a dictionary specifying the mappings from 'profession' to 'job_stability'.")
-
+    def __init__(self, job_stability_map):
+        # Validate input data type
+        if not isinstance(job_stability_map, dict):
+            raise TypeError("'job_stability_map' must be a dictionary specifying the mappings from 'profession' to 'job_stability'.")
+        
         self.job_stability_map = job_stability_map 
         
     def fit(self, X, y=None):
