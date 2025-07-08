@@ -194,6 +194,24 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
 
+    # Ensure .transform() ignores np.nan in boolean columns
+    @pytest.mark.unit
+    def test_transform_ignores_nan_in_boolean_columns(self, transformer):
+        X = pd.DataFrame({
+            "married": ["single", "married", np.nan],
+            "car_ownership": ["no", "yes", np.nan],            
+        })        
+        # Fit and transform
+        transformer.fit(X)
+        X_transformed = transformer.transform(X)
+        # Create expected output
+        expected_X_transformed = pd.DataFrame({
+            "married": [False, True, np.nan],
+            "car_ownership": [False, True, np.nan],               
+        })
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed, expected_X_transformed)        
+
     # Ensure .transform() ignores other columns not specified in boolean_column_mappings hyperparameter
     @pytest.mark.unit
     def test_transform_ignores_other_columns(self, transformer, X_input):
