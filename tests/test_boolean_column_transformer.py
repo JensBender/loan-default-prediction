@@ -209,6 +209,9 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
             "married": [False, True, np.nan],
             "car_ownership": [False, True, np.nan],               
         })
+        # Ensure the data type of column is as expected (bool no longer possible for boolean & nan, thus object or float64)
+        assert X_transformed["married"].dtype != "bool"
+        assert X_transformed["car_ownership"].dtype != "bool"
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)        
 
