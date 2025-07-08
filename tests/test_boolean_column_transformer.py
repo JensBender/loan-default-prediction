@@ -196,17 +196,18 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
 
     # Ensure .transform() ignores np.nan in boolean columns
     @pytest.mark.unit
-    def test_transform_ignores_nan_in_boolean_columns(self, transformer):
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_transform_ignores_nan_in_boolean_columns(self, transformer, missing_value):
         X = pd.DataFrame({
-            "married": ["single", "married", np.nan],
-            "car_ownership": ["no", "yes", np.nan],            
+            "married": ["single", "married", missing_value],
+            "car_ownership": ["no", "yes", missing_value],            
         })        
         # Fit and transform
         transformer.fit(X)
         X_transformed = transformer.transform(X)
         # Create expected output
         expected_X_transformed = pd.DataFrame({
-            "married": [False, True, np.nan],
+            "married": [False, True, np.nan],  # .map() normalizes missing values to np.nan
             "car_ownership": [False, True, np.nan],               
         })
         # Ensure the data type of column is as expected (bool no longer possible for boolean & nan, thus object or float64)
