@@ -193,3 +193,21 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         })
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
+
+    # Ensure .transform() ignores non-boolean columns
+    @pytest.mark.unit
+    def test_transform_ignores_non_boolean_columns(self, transformer, X_input):
+        X = X_input.copy()
+        # Determine boolean and non-boolean columns
+        input_columns = set(X.columns)
+        boolean_columns = set(transformer.boolean_column_mappings.keys())
+        non_boolean_columns = list(input_columns - boolean_columns)
+        # Create DataFrame of non-boolean columns
+        X_non_boolean = X[non_boolean_columns].copy()
+        # Fit and transform on entire DataFrame
+        transformer.fit(X)
+        X_transformed = transformer.transform(X)
+        # Create transformed DataFrame of non-boolean columns
+        X_transformed_non_boolean = X_transformed[non_boolean_columns]
+        # Ensure untransformed and transformed DataFrames of non-boolean columns are identical
+        assert_frame_equal(X_non_boolean, X_transformed_non_boolean)
