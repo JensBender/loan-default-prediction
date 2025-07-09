@@ -196,12 +196,13 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
     @pytest.mark.parametrize("boolean_column", ["married", "car_ownership"])
     @pytest.mark.parametrize("missing_value", [None, np.nan])
     def test_transform_ignores_missing_values_in_boolean_columns(self, transformer, boolean_column, missing_value):
-        X = pd.DataFrame({
+        X_with_missing_value = pd.DataFrame({
             "married": ["single", "married", "single"],
             "car_ownership": ["no", "yes", "no"],            
         })    
-        # Create input DataFrame with missing value in first row
-        X_with_missing_value = X.copy()
+        # Cast boolean column data type to "object" before assigning None/np.nan (bool no longer possible for combination of boolean & nan)
+        X_with_missing_value[boolean_column] = X_with_missing_value[boolean_column].astype(object)
+        # Insert a missing value in first row
         X_with_missing_value.loc[0, boolean_column] = missing_value  
         # Fit and transform
         transformer.fit(X_with_missing_value)
@@ -211,8 +212,10 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
             "married": [False, True, False],  
             "car_ownership": [False, True, False],               
         })
-        expected_X_transformed.loc[0, boolean_column] = np.nan  # .map() normalizes missing values to np.nan
-        # Ensure the column is no longer boolean data type (not possible for combination of boolean & nan, thus object)
+        expected_X_transformed[boolean_column] = expected_X_transformed[boolean_column].astype(object)
+        # Insert np.nan in first row (.map() normalizes both None and np.nan to np.nan)
+        expected_X_transformed.loc[0, boolean_column] = np.nan  
+        # Ensure the column is no longer boolean data type 
         assert X_transformed[boolean_column].dtype != "bool"
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)        
