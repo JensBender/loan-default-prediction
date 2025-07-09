@@ -191,25 +191,29 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
 
-    # Ensure .transform() ignores np.nan in boolean columns
+    # Ensure .transform() ignores missing values in boolean columns
     @pytest.mark.unit
+    @pytest.mark.parametrize("boolean_column", ["married", "car_ownership"])
     @pytest.mark.parametrize("missing_value", [None, np.nan])
-    def test_transform_ignores_nan_in_boolean_columns(self, transformer, missing_value):
+    def test_transform_ignores_missing_values_in_boolean_columns(self, transformer, boolean_column, missing_value):
         X = pd.DataFrame({
-            "married": ["single", "married", missing_value],
-            "car_ownership": ["no", "yes", missing_value],            
-        })        
+            "married": ["single", "married", "single"],
+            "car_ownership": ["no", "yes", "no"],            
+        })    
+        # Create input DataFrame with missing value in first row
+        X_with_missing_value = X.copy()
+        X_with_missing_value.loc[0, boolean_column] = missing_value  
         # Fit and transform
-        transformer.fit(X)
-        X_transformed = transformer.transform(X)
+        transformer.fit(X_with_missing_value)
+        X_transformed = transformer.transform(X_with_missing_value)
         # Create expected output
         expected_X_transformed = pd.DataFrame({
-            "married": [False, True, np.nan],  # .map() normalizes missing values to np.nan
-            "car_ownership": [False, True, np.nan],               
+            "married": [False, True, False],  
+            "car_ownership": [False, True, False],               
         })
-        # Ensure the data type of column is as expected (bool no longer possible for boolean & nan, thus object or float64)
-        assert X_transformed["married"].dtype != "bool"
-        assert X_transformed["car_ownership"].dtype != "bool"
+        expected_X_transformed.loc[0, boolean_column] = np.nan  # .map() normalizes missing values to np.nan
+        # Ensure the column is no longer boolean data type (not possible for combination of boolean & nan, thus object)
+        assert X_transformed[boolean_column].dtype != "bool"
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)        
 
