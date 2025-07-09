@@ -164,3 +164,23 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         X_transformed_without_profession = X_transformed[other_columns]
         # Ensure untransformed and transformed DataFrames of other columns are identical
         assert_frame_equal(X_without_profession, X_transformed_without_profession)
+
+    # Ensure .transform() raises TypeError for invalid values in "profession" column (must be strings or missing values)
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_profession_value", [
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a": "dictionary"},
+        1,
+        1.23,
+        False
+    ])
+    def test_transform_raises_type_error_for_invalid_profession_values(self, transformer, X_input, invalid_profession_value):
+        X = X_input.copy()
+        transformer.fit(X)
+        X_with_invalid_profession_value = X_input.copy()
+        X_with_invalid_profession_value.at[0, "profession"] = invalid_profession_value
+        expected_error_message = "All values in 'profession' column must be strings or missing values."
+        with pytest.raises(TypeError, match=expected_error_message):
+            transformer.transform(X_with_invalid_profession_value)  
+    
