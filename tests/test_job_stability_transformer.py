@@ -149,3 +149,18 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         }) 
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed) 
+
+    # Ensure .transform() ignores other columns 
+    @pytest.mark.unit
+    def test_transform_ignores_other_columns(self, transformer, X_input):
+        X = X_input.copy()
+        # Create DataFrame of other columns
+        other_columns = [column for column in X.columns if column != "profession"]
+        X_without_profession = X[other_columns].copy()
+        # Fit and transform on entire DataFrame
+        transformer.fit(X)
+        X_transformed = transformer.transform(X)
+        # Create transformed DataFrame of other columns
+        X_transformed_without_profession = X_transformed[other_columns]
+        # Ensure untransformed and transformed DataFrames of other columns are identical
+        assert_frame_equal(X_without_profession, X_transformed_without_profession)
