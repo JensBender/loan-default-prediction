@@ -101,18 +101,18 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
 
-    # Ensure .transform() converts professions not specified in job_stability_map to "moderate" job stability tier
+    # Ensure .transform() assigns "moderate" job stability tier to professions not in job_stability_map 
     @pytest.mark.unit
-    def test_transform_converts_unspecified_professions_to_moderate(self, transformer):
-        X_with_unspecified_professions = pd.DataFrame({
-            "profession": ["artist", "unspecified_profession_1", "web_designer", "unspecified_profession_2"]
+    def test_transform_assigns_moderate_to_unmapped_professions(self, transformer):
+        X_with_unmapped_professions = pd.DataFrame({
+            "profession": ["artist", "unmapped_profession_1", "web_designer", "unmapped_profession_2"]
         })      
         # Fit and transform
-        transformer.fit(X_with_unspecified_professions)
-        X_transformed = transformer.transform(X_with_unspecified_professions)
+        transformer.fit(X_with_unmapped_professions)
+        X_transformed = transformer.transform(X_with_unmapped_professions)
         # Create expected output
         expected_X_transformed = pd.DataFrame({
-            "profession": ["artist", "unspecified_profession_1", "web_designer", "unspecified_profession_2"],
+            "profession": ["artist", "unmapped_profession_1", "web_designer", "unmapped_profession_2"],
             "job_stability": ["variable", "moderate", "variable", "moderate"]  # .fillna("moderate")
         })  
         # Ensure actual and expected output DataFrames are identical
