@@ -171,21 +171,21 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
 
-    # Ensure .transform() converts unspecified categorical labels to np.nan
+    # Ensure .transform() assigns np.nan to categorical labels not in boolean_column_mappings
     @pytest.mark.unit
-    def test_transform_converts_unspecified_labels_to_nan(self, transformer):
+    def test_transform_assigns_nan_to_unmapped_labels(self, transformer):
         X = pd.DataFrame({
             "married": ["single", "married", "single"],
             "car_ownership": ["no", "yes", "no"],            
         })        
-        X_with_unspecified_labels = pd.DataFrame({
-            "married": ["single", "married", "divorced"],  # "divorced" unspecified
-            "car_ownership": ["no", "yes", "maybe"],  # "maybe" unspecified        
+        X_with_unmapped_labels = pd.DataFrame({
+            "married": ["single", "married", "divorced"],  # "divorced" unmapped
+            "car_ownership": ["no", "yes", "maybe"],  # "maybe" unmapped        
         })
         # Fit on DataFrame where all labels are specified in the mappings
         transformer.fit(X)
-        # Transform on DataFrame that contains labels not specified in the mappings
-        X_transformed = transformer.transform(X_with_unspecified_labels)
+        # Transform on DataFrame that contains labels not in boolean_column_mappings
+        X_transformed = transformer.transform(X_with_unmapped_labels)
         # Create expected output
         expected_X_transformed = pd.DataFrame({
             "married": [False, True, np.nan],
