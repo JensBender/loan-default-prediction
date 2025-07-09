@@ -175,11 +175,14 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         1.23,
         False
     ])
-    def test_transform_raises_type_error_for_invalid_profession_values(self, transformer, X_input, invalid_profession_value):
-        X = X_input.copy()
+    def test_transform_raises_type_error_for_invalid_profession_values(self, transformer, invalid_profession_value):
+        X = pd.DataFrame({
+            "profession": ["artist", "computer_hardware_engineer", "web_designer"]
+            })
         transformer.fit(X)
-        X_with_invalid_profession_value = X_input.copy()
-        X_with_invalid_profession_value.at[0, "profession"] = invalid_profession_value
+        X_with_invalid_profession_value = pd.DataFrame({
+            "profession": ["artist", invalid_profession_value, "web_designer"]
+            })
         expected_error_message = "All values in 'profession' column must be strings or missing values."
         with pytest.raises(TypeError, match=expected_error_message):
             transformer.transform(X_with_invalid_profession_value)  
