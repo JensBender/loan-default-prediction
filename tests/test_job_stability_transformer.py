@@ -88,7 +88,20 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         expected_error_message = "Input X is missing the 'profession' column."
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.fit(X_without_profession)    
-   
+
+    # Ensure .fit() ignores missing values in "profession" column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_fit_ignores_missing_values_in_profession_column(self, transformer, missing_value):
+        X_with_missing_value = pd.DataFrame({
+            "profession": ["artist", missing_value, "web_designer"]
+        })  
+        # .fit() should not raise an error 
+        transformer.fit(X_with_missing_value)
+        # Ensure the learned feature number and names are same as in input DataFrame
+        assert transformer.n_features_in_ == X_with_missing_value.shape[1]
+        assert transformer.feature_names_in_ == X_with_missing_value.columns.tolist()
+
     # Ensure .transform() successfully converts professions to job stability tiers
     @pytest.mark.unit
     def test_transform_converts_professions_to_job_stability_tiers(self, transformer, X_input):
