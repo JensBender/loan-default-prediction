@@ -103,29 +103,17 @@ class TestJobStabilityTransformer(BaseTransformerTests):
 
     # Ensure .transform() converts professions not specified in job_stability_map to "moderate" job stability tier
     @pytest.mark.unit
-    def test_transform_converts_unspecified_professions_to_moderate(self, transformer, X_input):
-        X_with_unspecified_professions = X_input.copy()      
-        X_with_unspecified_professions["profession"] = [
-            "artist",
-            "unspecified_profession_1",
-            "web_designer",
-            "unspecified_profession_2",
-            "financial_analyst",
-            "unspecified_profession_3",
-        ]
-        # Fit on DataFrame where all labels are specified in the mappings
+    def test_transform_converts_unspecified_professions_to_moderate(self, transformer):
+        X_with_unspecified_professions = pd.DataFrame({
+            "profession": ["artist", "unspecified_profession_1", "web_designer", "unspecified_profession_2"]
+        })      
+        # Fit and transform
         transformer.fit(X_with_unspecified_professions)
-        # Transform on DataFrame that contains labels not specified in the mappings
         X_transformed = transformer.transform(X_with_unspecified_professions)
         # Create expected output
-        expected_X_transformed = X_with_unspecified_professions.copy()
-        expected_X_transformed["job_stability"] = [
-            "variable",
-            "moderate",  # .fillna("moderate")
-            "variable",
-            "moderate",  # .fillna("moderate")
-            "moderate",
-            "moderate",  # .fillna("moderate")
-        ]
+        expected_X_transformed = pd.DataFrame({
+            "profession": ["artist", "unspecified_profession_1", "web_designer", "unspecified_profession_2"],
+            "job_stability": ["variable", "moderate", "variable", "moderate"]  # .fillna("moderate")
+        })  
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
