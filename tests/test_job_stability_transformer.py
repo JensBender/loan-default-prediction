@@ -79,7 +79,7 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         with pytest.raises(TypeError, match=expected_error_message):
             JobStabilityTransformer(job_stability_map=invalid_job_stability_map)
 
-    # Ensure .fit() raises ValueError if "profession" column is missing in input DataFrame
+    # Ensure .fit() raises ValueError if input DataFrame is missing the "profession" column 
     @pytest.mark.unit
     def test_fit_raises_value_error_for_missing_profession_column(self, transformer, X_input):
         X = X_input.copy()
@@ -98,5 +98,34 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         # Create expected output
         expected_X_transformed = X_input.copy()
         expected_X_transformed["job_stability"] = ["variable", "moderate", "variable", "variable", "moderate", "moderate"]
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed, expected_X_transformed)
+
+    # Ensure .transform() converts professions not specified in job_stability_map to "moderate" job stability tier
+    @pytest.mark.unit
+    def test_transform_converts_unspecified_professions_to_moderate(self, transformer, X_input):
+        X_with_unspecified_professions = X_input.copy()      
+        X_with_unspecified_professions["profession"] = [
+            "artist",
+            "unspecified_profession_1",
+            "web_designer",
+            "unspecified_profession_2",
+            "financial_analyst",
+            "unspecified_profession_3",
+        ]
+        # Fit on DataFrame where all labels are specified in the mappings
+        transformer.fit(X_with_unspecified_professions)
+        # Transform on DataFrame that contains labels not specified in the mappings
+        X_transformed = transformer.transform(X_with_unspecified_professions)
+        # Create expected output
+        expected_X_transformed = X_with_unspecified_professions.copy()
+        expected_X_transformed["job_stability"] = [
+            "variable",
+            "moderate",  # .fillna("moderate")
+            "variable",
+            "moderate",  # .fillna("moderate")
+            "moderate",
+            "moderate",  # .fillna("moderate")
+        ]
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
