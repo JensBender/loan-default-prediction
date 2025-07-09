@@ -6,6 +6,7 @@ import sys
 import pytest
 import pandas as pd
 from pandas.testing import assert_frame_equal
+import numpy as np
 
 # Add the parent directory to the path (for local imports)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -101,7 +102,7 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
 
-    # Ensure .transform() assigns "moderate" job stability tier to professions not in job_stability_map 
+    # Ensure .transform() assigns "moderate" job stability to professions not in job_stability_map 
     @pytest.mark.unit
     def test_transform_assigns_moderate_to_unmapped_professions(self, transformer):
         X_with_unmapped_professions = pd.DataFrame({
@@ -117,3 +118,21 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         })  
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
+
+    # Ensure .transform() assigns "moderate" job stability for missing values in profession column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_transform_assigns_moderate_to_missing_professions(self, transformer, missing_value):
+        X_with_missing_value = pd.DataFrame({
+            "profession": ["artist", missing_value, "web_designer"]
+        })        
+        # Fit and transform
+        transformer.fit(X_with_missing_value)
+        X_transformed = transformer.transform(X_with_missing_value)
+        # Create expected output
+        expected_X_transformed = pd.DataFrame({
+            "profession": ["artist", missing_value, "web_designer"],
+            "job_stability": ["variable", "moderate", "variable"]  # .fillna("moderate")
+        }) 
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed, expected_X_transformed) 
