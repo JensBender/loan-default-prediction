@@ -110,3 +110,20 @@ class TestCityTierTransformer(BaseTransformerTests):
         # Ensure the learned feature number and names are same as in input DataFrame
         assert transformer.n_features_in_ == X_with_missing_value.shape[1]
         assert transformer.feature_names_in_ == X_with_missing_value.columns.tolist()
+
+    # Ensure .transform() successfully converts cities to city tiers
+    @pytest.mark.unit
+    def test_transform_converts_cities_to_city_tiers(self, transformer, X_input):
+        X = pd.DataFrame({
+            "city": ["new_delhi", "bhopal", "vijayanagaram", "kolkata", "vijayawada", "bulandshahr"]
+        })
+        # Fit and transform
+        transformer.fit(X)
+        X_transformed = transformer.transform(X)
+        # Create expected output
+        expected_X_transformed = pd.DataFrame({
+            "city": ["new_delhi", "bhopal", "vijayanagaram", "kolkata", "vijayawada", "bulandshahr"],
+            "city_tier": ["tier_1", "tier_2", "tier_3", "tier_1", "tier_2", "tier_3"]
+        })
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed, expected_X_transformed)
