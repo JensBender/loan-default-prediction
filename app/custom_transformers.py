@@ -292,7 +292,11 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
-    
+
+        # Ensure input DataFrame contains the required "city" column
+        if "city" not in X.columns:
+            raise ValueError("Input X is missing the 'city' column.")
+            
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
