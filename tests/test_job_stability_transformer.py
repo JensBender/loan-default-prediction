@@ -64,7 +64,7 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         assert isinstance(transformer, JobStabilityTransformer)
         assert transformer.job_stability_map == JOB_STABILITY_MAP
 
-    # Ensure __init__() raises TypeError for invalid job_stability_map data type (must be a dictionary)
+    # Ensure __init__() raises TypeError for invalid "job_stability_map" data type (must be a dictionary)
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_job_stability_map", [
         "a string",
@@ -79,6 +79,13 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         expected_error_message = "'job_stability_map' must be a dictionary specifying the mappings from 'profession' to 'job_stability'."
         with pytest.raises(TypeError, match=expected_error_message):
             JobStabilityTransformer(job_stability_map=invalid_job_stability_map)
+
+    # Ensure __init__() raises ValueError for empty "job_stability_map" dictionary
+    @pytest.mark.unit
+    def test_init_raises_value_error_for_empty_job_stability_map(self):
+        expected_error_message = "'job_stability_map' cannot be an empty dictionary. It must specify the mappings from 'profession' to 'job_stability'."
+        with pytest.raises(ValueError, match=expected_error_message):
+            JobStabilityTransformer(job_stability_map={}) 
 
     # Ensure .fit() raises ValueError if input DataFrame is missing the "profession" column 
     @pytest.mark.unit
