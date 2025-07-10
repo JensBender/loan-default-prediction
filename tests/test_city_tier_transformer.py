@@ -113,7 +113,7 @@ class TestCityTierTransformer(BaseTransformerTests):
 
     # Ensure .transform() successfully converts cities to city tiers
     @pytest.mark.unit
-    def test_transform_converts_cities_to_city_tiers(self, transformer, X_input):
+    def test_transform_converts_cities_to_city_tiers(self, transformer):
         X = pd.DataFrame({
             "city": ["new_delhi", "bhopal", "vijayanagaram", "kolkata", "vijayawada", "bulandshahr"]
         })
@@ -125,5 +125,22 @@ class TestCityTierTransformer(BaseTransformerTests):
             "city": ["new_delhi", "bhopal", "vijayanagaram", "kolkata", "vijayawada", "bulandshahr"],
             "city_tier": ["tier_1", "tier_2", "tier_3", "tier_1", "tier_2", "tier_3"]
         })
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed, expected_X_transformed)
+
+    # Ensure .transform() assigns "unknown" to cities not in "city_tier_map"
+    @pytest.mark.unit
+    def test_transform_assigns_unknown_to_unmapped_cities(self, transformer):
+        X_with_unmapped_cities = pd.DataFrame({
+            "city": ["new_delhi", "unmapped_city_1", "vijayanagaram", "unmapped_city_2", "vijayawada", "unmapped_city_3"]
+        })      
+        # Fit and transform
+        transformer.fit(X_with_unmapped_cities)
+        X_transformed = transformer.transform(X_with_unmapped_cities)
+        # Create expected output
+        expected_X_transformed = pd.DataFrame({
+            "city": ["new_delhi", "unmapped_city_1", "vijayanagaram", "unmapped_city_2", "vijayawada", "unmapped_city_3"],
+            "city_tier": ["tier_1", "unknown", "tier_3", "unknown", "tier_2", "unknown"]
+        })  
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
