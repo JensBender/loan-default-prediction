@@ -81,3 +81,11 @@ class TestCityTierTransformer(BaseTransformerTests):
         expected_error_message = "'city_tier_map' must be a dictionary specifying the mappings from 'city' to 'city_tier'."
         with pytest.raises(TypeError, match=expected_error_message):
             CityTierTransformer(city_tier_map=invalid_city_tier_map)
+
+    # Ensure __init__() raises ValueError for empty "job_stability_map" dictionary
+    @pytest.mark.unit
+    def test_init_raises_value_error_for_empty_city_tier_map(self):
+        expected_error_message = "'city_tier_map' cannot be an empty dictionary. It must specify the mappings from 'city' to 'city_tier'."
+        with pytest.raises(ValueError, match=expected_error_message):
+            CityTierTransformer(city_tier_map={})
+
