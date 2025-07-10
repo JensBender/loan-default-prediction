@@ -70,6 +70,7 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         "a string",
         ["a", "list"],
         ("a", "tuple"),
+        {"a", "set"}, 
         1,
         1.23,
         False,
