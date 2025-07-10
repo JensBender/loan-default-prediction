@@ -261,7 +261,8 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
             raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
 
         # Ensure all values in "profession" column are strings (or missing values)
-        if not X["profession"].apply(lambda x: False if isinstance(x, (list, tuple, dict, set)) else (isinstance(x, str) or pd.isna(x))).all():
+        # Non-scalar types (list, tuple, dict, set) must be checked first, since pd.isna() can raise errors on them
+        if X["profession"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
             raise TypeError("All values in 'profession' column must be strings or missing values.")
 
         # Create job stability column by mapping professions to job stability tiers (default to "moderate" for unknown professions)
