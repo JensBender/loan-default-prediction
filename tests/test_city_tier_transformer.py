@@ -57,4 +57,10 @@ def X_input():
 # .test_transform_raises_type_error_for_invalid_input()
 # .test_transform_raises_value_error_for_wrong_column_order()
 class TestCityTierTransformer(BaseTransformerTests):
-    pass
+    # Class instantiation 
+    def test_instantiation(self, transformer):
+        # First, run the .test_instantiation() method from the parent class BaseTransformerTests
+        super().test_instantiation(transformer)
+        # Then, add assertions specific to the BooleanColumnTransformer class
+        assert isinstance(transformer, CityTierTransformer)
+        assert transformer.city_tier_map == CITY_TIER_MAP
