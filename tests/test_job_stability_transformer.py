@@ -171,6 +171,7 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         ["a", "list"],
         ("a", "tuple"),
         {"a": "dictionary"},
+        {"a", "set"}, 
         1,
         1.23,
         False
