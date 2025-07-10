@@ -282,6 +282,10 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         if city_tier_map is None:
             raise ValueError("'city_tier_map' cannot be None. It must be a dictionary specifying the mappings from 'city' to 'city_tier'.")
 
+        # Validate input value
+        if not city_tier_map:
+            raise ValueError("'city_tier_map' cannot be an empty dictionary. It must specify the mappings from 'city' to 'city_tier'.")
+
         self.city_tier_map = city_tier_map 
 
     def fit(self, X, y=None):
