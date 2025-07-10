@@ -64,3 +64,20 @@ class TestCityTierTransformer(BaseTransformerTests):
         # Then, add assertions specific to the BooleanColumnTransformer class
         assert isinstance(transformer, CityTierTransformer)
         assert transformer.city_tier_map == CITY_TIER_MAP
+    
+    # Ensure __init__() raises TypeError for invalid "city_tier_map" data type (must be a dictionary)
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_city_tier_map", [
+        "a string",
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a", "set"}, 
+        1,
+        1.23,
+        False,
+        None
+    ])
+    def test_init_raises_type_error_for_invalid_city_tier_map(self, invalid_city_tier_map):
+        expected_error_message = "'city_tier_map' must be a dictionary specifying the mappings from 'city' to 'city_tier'."
+        with pytest.raises(TypeError, match=expected_error_message):
+            CityTierTransformer(city_tier_map=invalid_city_tier_map)
