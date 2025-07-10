@@ -144,3 +144,21 @@ class TestCityTierTransformer(BaseTransformerTests):
         })  
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
+
+    # Ensure .transform() assigns "unknown" for missing values in "city" column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_transform_assigns_unknown_to_missing_cities(self, transformer, missing_value):
+        X_with_missing_city = pd.DataFrame({
+            "city": ["new_delhi", missing_value, "vijayanagaram"]
+        })          
+        # Fit and transform
+        transformer.fit(X_with_missing_city)
+        X_transformed = transformer.transform(X_with_missing_city)
+        # Create expected output
+        expected_X_transformed = pd.DataFrame({
+            "city": ["new_delhi", missing_value, "vijayanagaram"],
+            "city_tier": ["tier_1", "unknown", "tier_3"] 
+        }) 
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed, expected_X_transformed) 
