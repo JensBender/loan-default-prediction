@@ -228,7 +228,7 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
 class JobStabilityTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, job_stability_map):
         # Validate input data type
-        if not isinstance(job_stability_map, dict) or job_stability_map == {}:
+        if not isinstance(job_stability_map, dict):
             raise TypeError("'job_stability_map' must be a dictionary specifying the mappings from 'profession' to 'job_stability'.")
         
         # Validate input value
