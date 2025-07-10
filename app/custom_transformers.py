@@ -278,9 +278,9 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
 
 # Derive city tier from city
 class CityTierTransformer(BaseEstimator, TransformerMixin):
-    def __init__(self, city_tier_map=None):
-        if city_tier_map is None:
-            raise ValueError("'city_tier_map' cannot be None. It must be a dictionary specifying the mappings from 'city' to 'city_tier'.")
+    def __init__(self, city_tier_map):
+        if not isinstance(city_tier_map, dict):
+            raise TypeError("'city_tier_map' must be a dictionary specifying the mappings from 'city' to 'city_tier'.")
 
         # Validate input value
         if not city_tier_map:
