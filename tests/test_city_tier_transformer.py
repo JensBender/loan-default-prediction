@@ -98,3 +98,15 @@ class TestCityTierTransformer(BaseTransformerTests):
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.fit(X_without_city) 
 
+    # Ensure .fit() ignores missing values in "city" column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_fit_ignores_missing_values_in_city_column(self, transformer, missing_value):
+        X_with_missing_value = pd.DataFrame({
+            "city": ["sikar", missing_value, "bidar"]
+        })  
+        # .fit() should not raise an error 
+        transformer.fit(X_with_missing_value)
+        # Ensure the learned feature number and names are same as in input DataFrame
+        assert transformer.n_features_in_ == X_with_missing_value.shape[1]
+        assert transformer.feature_names_in_ == X_with_missing_value.columns.tolist()
