@@ -341,9 +341,13 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
 # Target encoding of state default rate 
 class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
     def fit(self, X, y):
-        # Validate input data type
+        # Validate X input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
+
+        # Validate y input data type
+        if not isinstance(y, pd.Series):
+            raise TypeError("Input y must be a pandas Series.")   
         
         # Ensure input DataFrame contains the required "state" column
         if "state" not in X.columns:
