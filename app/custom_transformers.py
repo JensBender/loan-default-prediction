@@ -269,6 +269,12 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         if X["profession"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
             raise TypeError("All values in 'profession' column must be strings or missing values.")
 
+        # Handle empty DataFrames
+        X_transformed = X.copy()
+        if X_transformed.empty:
+            X_transformed["job_stability"] = pd.Series(dtype="object")
+            return X_transformed
+        
         # Create job stability column by mapping professions to job stability tiers (default to "moderate" for unknown professions)
         X_transformed = X.copy()
         X_transformed["job_stability"] = X_transformed["profession"].map(self.job_stability_map).fillna("moderate")
