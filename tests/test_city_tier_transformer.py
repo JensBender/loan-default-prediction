@@ -200,4 +200,20 @@ class TestCityTierTransformer(BaseTransformerTests):
         expected_error_message = "All values in 'city' column must be strings or missing values."
         with pytest.raises(TypeError, match=expected_error_message):
             transformer.transform(X_with_invalid_city) 
-    
+
+    # Ensure .transform() correctly handles an empty DataFrame
+    @pytest.mark.unit
+    def test_transform_handles_empty_df(self, transformer, X_input):
+        X = X_input.copy()
+        # Create empty DataFrame
+        input_columns = X.columns.tolist()
+        X_empty = pd.DataFrame(columns=input_columns)
+        # Fit on "full" DataFrame
+        transformer.fit(X)
+        # Transform on empty Dataframe     
+        X_transformed = transformer.transform(X_empty)
+        # Create expected output
+        expected_output_columns = input_columns + ["city_tier"]
+        expected_X_transformed = pd.DataFrame(columns=expected_output_columns)
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed, expected_X_transformed)
