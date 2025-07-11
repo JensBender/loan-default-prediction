@@ -349,6 +349,10 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         if not isinstance(y, pd.Series):
             raise TypeError("Input y must be a pandas Series.")   
         
+        # Ensure X and y have the same number of samples 
+        if len(X) != len(y):
+            raise ValueError(f"X and y must have the same number of samples. X has {len(X)} samples, but y has {len(y)}.")
+
         # Ensure input DataFrame contains the required "state" column
         if "state" not in X.columns:
             raise ValueError("Input X is missing the 'state' column.")
