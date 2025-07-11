@@ -344,17 +344,19 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
-
+        
+        # Ensure input DataFrame contains the required "state" column
+        if "state" not in X.columns:
+            raise ValueError("Input X is missing the 'state' column.")
+        
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
-
-        # Merge X and y
+       
+        # Calculate default rate by state
         df = X.copy()
-        df["target"] = y.values
-        
-        # Calculate default rate by state 
-        self.default_rate_by_state_ = df.groupby("state")["target"].mean()
+        df["default"] = y.values
+        self.default_rate_by_state_ = df.groupby("state")["default"].mean()
         
         return self  
 
