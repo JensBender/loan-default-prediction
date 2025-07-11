@@ -3,7 +3,7 @@ import gradio as gr
 import pandas as pd
 from app.custom_transformers import (
     MissingValueChecker,
-    CategoricalLabelStandardizer,
+    SnakeCaseFormatter,
     BooleanColumnTransformer,
     JobStabilityTransformer,
     CityTierTransformer,
