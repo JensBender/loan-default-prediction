@@ -320,8 +320,13 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         if X["city"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
             raise TypeError("All values in 'city' column must be strings or missing values.")
 
-        # Create city tier column by mapping cities to city tiers (default to "unknown" for unknown cities)
+        # Handle empty DataFrames
         X_transformed = X.copy()
+        if X_transformed.empty:
+            X_transformed["city_tier"] = pd.Series(dtype="object")
+            return X_transformed
+
+        # Create city tier column by mapping cities to city tiers (default to "unknown" for unknown cities)
         X_transformed["city_tier"] = X_transformed["city"].map(self.city_tier_map).fillna("unknown")
         
         return X_transformed
