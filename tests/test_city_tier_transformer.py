@@ -177,3 +177,27 @@ class TestCityTierTransformer(BaseTransformerTests):
         X_transformed_without_city = X_transformed[other_columns]
         # Ensure untransformed and transformed DataFrames of other columns are identical
         assert_frame_equal(X_without_city, X_transformed_without_city)
+
+    # Ensure .transform() raises TypeError for "city" values with invalid data type (must be strings or missing values)
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_city_data_type", [
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a": "dictionary"},
+        {"a", "set"}, 
+        1,
+        1.23,
+        False
+    ])
+    def test_transform_raises_type_error_for_invalid_city(self, transformer, invalid_city_data_type):
+        X = pd.DataFrame({
+           "city": ["new_delhi", "bhopal", "vijayanagaram"]
+        })
+        transformer.fit(X)
+        X_with_invalid_city = pd.DataFrame({
+           "city": ["new_delhi", invalid_city_data_type, "vijayanagaram"]
+        })
+        expected_error_message = "All values in 'city' column must be strings or missing values."
+        with pytest.raises(TypeError, match=expected_error_message):
+            transformer.transform(X_with_invalid_city) 
+    
