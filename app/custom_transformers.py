@@ -264,8 +264,8 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         if X.columns.tolist() != self.feature_names_in_:
             raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
 
-        # Ensure all values in "profession" column are strings (or missing values)
-        # Non-scalar types (list, tuple, dict, set) must be checked first, since pd.isna() can raise errors on them
+        # Ensure all values in "profession" column are strings or missing values
+        # Non-scalar types (list, tuple, dict, set) must be checked first, since pd.isna() can raise errors on non-scalars
         if X["profession"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
             raise TypeError("All values in 'profession' column must be strings or missing values.")
 
@@ -314,6 +314,11 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
             raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
+
+        # Ensure all values in the "city" column are strings or missing values
+        # Non-scalar types (list, tuple, dict, set) must be checked first, since pd.isna() can raise errors on non-scalars
+        if X["city"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
+            raise TypeError("All values in 'city' column must be strings or missing values.")
 
         # Create city tier column by mapping cities to city tiers (default to "unknown" for unknown cities)
         X_transformed = X.copy()
