@@ -167,9 +167,10 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
 
     # Ensure .fit() stores learned attributes correctly (feature number and names of the input DataFrame) 
     @pytest.mark.unit
-    def test_fit_learns_attributes(self, transformer, X_input):
+    def test_fit_learns_attributes(self, transformer, X_input, y_input):
         X = X_input.copy()
-        transformer.fit(X)  
+        y = y_input.copy()
+        transformer.fit(X, y)  
         assert hasattr(transformer, "n_features_in_")
         assert hasattr(transformer, "feature_names_in_")
         assert transformer.n_features_in_ == X.shape[1]
@@ -177,9 +178,10 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
 
     # Ensure instance can be cloned (important for scikit-learn compatibility)
     @pytest.mark.unit
-    def test_instance_can_be_cloned(self, transformer, X_input):
+    def test_instance_can_be_cloned(self, transformer, X_input, y_input):
         X = X_input.copy()
-        transformer.fit(X)
+        y = y_input.copy()
+        transformer.fit(X, y)
         cloned_transformer = clone(transformer)
         # Ensure it's a new object, not a pointer to the old one
         assert cloned_transformer is not transformer
@@ -188,37 +190,40 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
 
     # Ensure equal output of .fit().transform() and .fit_transform()
     @pytest.mark.unit
-    def test_fit_transform_equivalence(self, transformer, X_input):
+    def test_fit_transform_equivalence(self, transformer, X_input, y_input):
         X = X_input.copy()
+        y = y_input.copy()
         # Create two transformer instances
         transformer_1 = clone(transformer)
         transformer_2 = clone(transformer)
         # Ensure they are different objects in memory
         assert transformer_1 is not transformer_2
         # Perform .fit().transform() vs .fit_transform()
-        X_fit_then_transform = transformer_1.fit(X).transform(X) 
-        X_fit_transform = transformer_2.fit_transform(X)
+        X_fit_then_transform = transformer_1.fit(X, y).transform(X) 
+        X_fit_transform = transformer_2.fit_transform(X, y)
         # Ensure the output DataFrames are identical
         assert_frame_equal(X_fit_then_transform, X_fit_transform)
 
     # Ensure .transform() does not modify the X input DataFrame
     @pytest.mark.unit
-    def test_transform_does_not_modify_input_df(self, transformer, X_input):
+    def test_transform_does_not_modify_input_df(self, transformer, X_input, y_input):
         X_original = X_input.copy()
-        transformer.fit(X_original)
+        y = y_input.copy()
+        transformer.fit(X_original, y)
         transformer.transform(X_original)
         assert_frame_equal(X_original, X_input)
 
     # Ensure .transform() correctly handles an empty DataFrame
     @pytest.mark.unit
-    def test_transform_handles_empty_df(self, transformer, X_input):
+    def test_transform_handles_empty_df(self, transformer, X_input, y_input):
         X = X_input.copy()
+        y = y_input.copy()
         # Create empty DataFrame
         input_columns = X.columns
         input_data_types = X.dtypes.to_dict()
         X_empty = pd.DataFrame(columns=input_columns).astype(input_data_types)
         # Fit and transform on "full" DataFrame
-        transformer.fit(X)
+        transformer.fit(X, y)
         X_transformed = transformer.transform(X)
         # Transform on empty Dataframe     
         X_transformed_empty = transformer.transform(X_empty)
@@ -230,9 +235,10 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
         assert_frame_equal(X_transformed_empty, expected_X_transformed_empty)
 
     # Ensure instance can be pickled and unpickled without losing its attributes and functionality
-    def test_instance_can_be_pickled(self, transformer, X_input):
+    def test_instance_can_be_pickled(self, transformer, X_input, y_input):
         X = X_input.copy()
-        transformer.fit(X)
+        y = y_input.copy()
+        transformer.fit(X, y)
         # Pickle and unpickle
         pickled_transformer = pickle.dumps(transformer)
         unpickled_transformer = pickle.loads(pickled_transformer)
@@ -258,9 +264,10 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
         False,
         None
     ])
-    def test_fit_raises_type_error_for_invalid_input(self, transformer, invalid_input_X):
+    def test_fit_raises_type_error_for_invalid_input(self, transformer, invalid_input_X, y_input):
+        y = y_input.copy()
         with pytest.raises(TypeError):
-            transformer.fit(invalid_input_X)
+            transformer.fit(invalid_input_X, y)
 
     # Ensure .transform() raises TypeError for invalid input data type (must be a pandas DataFrame)
     @pytest.mark.unit
@@ -274,16 +281,19 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
         False,
         None
     ])
-    def test_transform_raises_type_error_for_invalid_input(self, transformer, X_input, invalid_X_input):
-        transformer.fit(X_input)
+    def test_transform_raises_type_error_for_invalid_input(self, transformer, X_input, y_input, invalid_X_input):
+        X = X_input.copy()
+        y = y_input.copy()
+        transformer.fit(X, y)
         with pytest.raises(TypeError):
             transformer.transform(invalid_X_input)
  
     # Ensure .transform() raises ValueError if columns are in wrong order
     @pytest.mark.unit
-    def test_transform_raises_value_error_for_wrong_column_order(self, transformer, X_input):
+    def test_transform_raises_value_error_for_wrong_column_order(self, transformer, X_input, y_input):
         X = X_input.copy()
-        transformer.fit(X)
+        y = y_input.copy()
+        transformer.fit(X, y)
         reversed_columns = X.columns[::-1]  # reverse order as an example
         X_with_wrong_column_order = X[reversed_columns]  
         with pytest.raises(ValueError):
