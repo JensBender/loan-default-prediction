@@ -1,6 +1,7 @@
 import pytest
 from sklearn.base import BaseEstimator, TransformerMixin, clone
 from sklearn.exceptions import NotFittedError
+import pandas as pd
 from pandas.testing import assert_frame_equal
 import numpy as np
 import pickle
@@ -64,6 +65,26 @@ class BaseTransformerTests:
         transformer.fit(X_original)
         transformer.transform(X_original)
         assert_frame_equal(X_original, X_input)
+
+    # Ensure .transform() correctly handles an empty DataFrame
+    @pytest.mark.unit
+    def test_transform_handles_empty_df(self, transformer, X_input):
+        X = X_input.copy()
+        # Create empty DataFrame
+        input_columns = X.columns
+        input_data_types = X.dtypes.to_dict()
+        X_empty = pd.DataFrame(columns=input_columns).astype(input_data_types)
+        # Fit and transform on "full" DataFrame
+        transformer.fit(X)
+        X_transformed = transformer.transform(X)
+        # Transform on empty Dataframe     
+        X_transformed_empty = transformer.transform(X_empty)
+        # Create expected output (based on "full" DataFrame)
+        expected_output_columns = X_transformed.columns
+        expected_output_data_types = X_transformed.dtypes.to_dict()
+        expected_X_transformed_empty = pd.DataFrame(columns=expected_output_columns).astype(expected_output_data_types)
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed_empty, expected_X_transformed_empty)
 
     # Ensure instance can be pickled and unpickled without losing its attributes and functionality
     def test_instance_can_be_pickled(self, transformer, X_input):
