@@ -159,9 +159,10 @@ class BaseTransformerTests:
 class BaseSupervisedTransformerTests(BaseTransformerTests):
     # Ensure .fit() returns the instance (self)
     @pytest.mark.unit
-    def test_fit_returns_self(self, transformer, X_input):
+    def test_fit_returns_self(self, transformer, X_input, y_input):
         X = X_input.copy()
-        fitted_transformer = transformer.fit(X)
+        y = y_input.copy()
+        fitted_transformer = transformer.fit(X, y)
         assert fitted_transformer is transformer
 
     # Ensure .fit() stores learned attributes correctly (feature number and names of the input DataFrame) 
