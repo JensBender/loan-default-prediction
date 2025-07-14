@@ -270,6 +270,25 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
             transformer.fit(invalid_input_X, y)
     
     # Ensure .fit() raises TypeError for invalid "y" input data type (must be a pandas Series)
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_y_input", [
+        np.array([1, 2, 3]), 
+        pd.DataFrame({"a": ["DataFrame"]}),
+        "a string",
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a", "set"}, 
+        {"a": "dictionary"},
+        1,
+        1.23,
+        False,
+        None
+    ])
+    def test_fit_raises_type_error_for_invalid_y_input(self, transformer, X_input, invalid_y_input):
+        X = X_input.copy()
+        expected_error_message = "Input y must be a pandas Series."
+        with pytest.raises(TypeError, match=expected_error_message):
+            transformer.fit(X, invalid_y_input)
 
     # Ensure .fit() raises ValueError for unequal length of X and y
 
