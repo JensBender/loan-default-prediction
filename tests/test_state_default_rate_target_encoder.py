@@ -138,9 +138,10 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
 
-    # Ensure .transform() assigns np.nan to unknown states not seen during .fit() 
+    # Ensure .transform() assigns np.nan to unknown or missing states 
     @pytest.mark.unit
-    def test_transform_assigns_nan_to_unknown_states(self, transformer):
+    @pytest.mark.parametrize("unknown_or_missing_state", ["unknown_state", np.nan, None])
+    def test_transform_assigns_nan_to_unknown_or_missing_states(self, transformer, unknown_or_missing_state):
         # X and y input
         X = pd.DataFrame({
             "state": ["state_1", "state_1", "state_2", "state_2"]
@@ -149,13 +150,13 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         # Fit 
         transformer.fit(X, y)
         # Transfrom on DataFrame with unknown state
-        X_with_unknown_state = pd.DataFrame({
-            "state": ["state_1", "state_2", "unknown_state"]
+        X_with_unknown_or_missing_state = pd.DataFrame({
+            "state": ["state_1", "state_2", unknown_or_missing_state]
         })
-        X_transformed = transformer.transform(X_with_unknown_state)   
+        X_transformed = transformer.transform(X_with_unknown_or_missing_state)   
         # Expected output with unknown state
         expected_X_transformed = pd.DataFrame({
-            "state": ["state_1", "state_2", "unknown_state"],
+            "state": ["state_1", "state_2", unknown_or_missing_state],
             "state_default_rate": [0.5, 1, np.nan]
         })  
         # Ensure actual and expected output DataFrames are identical
