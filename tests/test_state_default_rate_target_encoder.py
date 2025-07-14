@@ -137,3 +137,26 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         })
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
+
+    # Ensure .transform() assigns np.nan to unknown states not seen during .fit() 
+    @pytest.mark.unit
+    def test_transform_assigns_nan_to_unknown_states(self, transformer):
+        # X and y input
+        X = pd.DataFrame({
+            "state": ["state_1", "state_1", "state_2", "state_2"]
+        })
+        y = pd.Series([0, 1, 1, 1], name="default")
+        # Fit 
+        transformer.fit(X, y)
+        # Transfrom on DataFrame with unknown state
+        X_with_unknown_state = pd.DataFrame({
+            "state": ["state_1", "state_2", "unknown_state"]
+        })
+        X_transformed = transformer.transform(X_with_unknown_state)   
+        # Expected output with unknown state
+        expected_X_transformed = pd.DataFrame({
+            "state": ["state_1", "state_2", "unknown_state"],
+            "state_default_rate": [0.5, 1, np.nan]
+        })  
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed, expected_X_transformed)
