@@ -13,7 +13,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
 from app.custom_transformers import StateDefaultRateTargetEncoder
-from tests.base_transformer_tests import BaseTransformerTests
+from tests.base_transformer_tests import BaseSupervisedTransformerTests
 
 
 # --- Fixtures ---
@@ -46,3 +46,22 @@ def X_input():
 @pytest.fixture
 def y_input():
     return pd.Series([0, 1, 0, 0, 1, 0])
+
+
+# --- TestStateDefaultRateTargetEncoder class ---
+# Inherits from BaseSupervisedTransformerTests which adds the following tests:
+# .test_fit_returns_self()
+# .test_fit_learns_attributes()
+# .test_instance_can_be_cloned()
+# .test_fit_transform_equivalence()
+# .test_transform_does_not_modify_input_df()
+# .test_transform_handles_empty_df()
+# .test_instance_can_be_pickled()
+# .test_fit_raises_type_error_for_invalid_input()
+# .test_transform_raises_type_error_for_invalid_input()
+# .test_transform_raises_value_error_for_wrong_column_order()
+# BaseSupervisedTransformerTests further inherits the following tests from BaseTransformerTests:
+# .test_instantiation()
+# .test_transform_raises_not_fitted_error_if_unfitted()
+class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
+    pass
