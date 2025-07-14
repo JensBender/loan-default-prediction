@@ -308,9 +308,12 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_X_input", [
         np.array([[1, 2], [3, 4]]), 
+        pd.Series([1, 2, 3]),
         "a string",
-        {"a": "dictionary"},
+        ["a", "list"],
         ("a", "tuple"),
+        {"a", "set"}, 
+        {"a": "dictionary"},
         1,
         1.23,
         False,
@@ -320,7 +323,8 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
         X = X_input.copy()
         y = y_input.copy()
         transformer.fit(X, y)
-        with pytest.raises(TypeError):
+        expected_error_message = "Input X must be a pandas DataFrame."
+        with pytest.raises(TypeError, match=expected_error_message):
             transformer.transform(invalid_X_input)
  
     # Ensure .transform() raises ValueError if columns are in wrong order
