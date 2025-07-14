@@ -380,6 +380,11 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         if X.columns.tolist() != self.feature_names_in_:
             raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
 
+        # Ensure all values in the "state" column are strings or missing values
+        # Non-scalar types (list, tuple, dict, set) must be checked first, since pd.isna() can raise errors on non-scalars
+        if X["state"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
+            raise TypeError("All values in 'state' column must be strings or missing values.")
+
         # Create state default rate column by mapping the state to its corresponding default rate
         X_transformed = X.copy()
         X_transformed["state_default_rate"] = X_transformed["state"].map(self.default_rate_by_state_)
