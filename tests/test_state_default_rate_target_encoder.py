@@ -70,3 +70,13 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         super().test_instantiation(transformer)
         # Then, add assertion specific to the StateDefaultRateTargetEncoder class
         assert isinstance(transformer, StateDefaultRateTargetEncoder)
+    
+    # Ensure .fit() raises ValueError if input DataFrame is missing the "state" column 
+    @pytest.mark.unit
+    def test_fit_raises_value_error_for_missing_state_column(self, transformer, X_input, y_input):
+        X = X_input.copy()
+        X_without_state = X.drop(columns="state")
+        y = y_input.copy()
+        expected_error_message = "Input X is missing the 'state' column."
+        with pytest.raises(ValueError, match=expected_error_message):
+            transformer.fit(X_without_state, y)
