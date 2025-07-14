@@ -161,3 +161,19 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         })  
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
+
+    # Ensure .transform() ignores other columns 
+    @pytest.mark.unit
+    def test_transform_ignores_other_columns(self, transformer, X_input, y_input):
+        X = X_input.copy()
+        y = y_input.copy()
+        # Create DataFrame of other columns
+        other_columns = [column for column in X.columns if column != "state"]
+        X_without_state = X[other_columns].copy()
+        # Fit and transform on entire DataFrame
+        transformer.fit(X, y)
+        X_transformed = transformer.transform(X)
+        # Create transformed DataFrame of other columns
+        X_transformed_without_city = X_transformed[other_columns]
+        # Ensure untransformed and transformed DataFrames of other columns are identical
+        assert_frame_equal(X_without_state, X_transformed_without_city)
