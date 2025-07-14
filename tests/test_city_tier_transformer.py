@@ -62,7 +62,7 @@ class TestCityTierTransformer(BaseTransformerTests):
     def test_instantiation(self, transformer):
         # First, run the .test_instantiation() method from the parent class BaseTransformerTests
         super().test_instantiation(transformer)
-        # Then, add assertions specific to the BooleanColumnTransformer class
+        # Then, add assertions specific to the CityTierTransformer class
         assert isinstance(transformer, CityTierTransformer)
         assert transformer.city_tier_map == CITY_TIER_MAP
     

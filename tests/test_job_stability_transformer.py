@@ -61,7 +61,7 @@ class TestJobStabilityTransformer(BaseTransformerTests):
     def test_instantiation(self, transformer):
         # First, run the .test_instantiation() method from the parent class BaseTransformerTests
         super().test_instantiation(transformer)
-        # Then, add assertions specific to the BooleanColumnTransformer class
+        # Then, add assertions specific to the JobStabilityTransformer class
         assert isinstance(transformer, JobStabilityTransformer)
         assert transformer.job_stability_map == JOB_STABILITY_MAP
 
