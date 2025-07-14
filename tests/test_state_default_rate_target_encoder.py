@@ -5,7 +5,7 @@ import sys
 # Third-party library imports
 import pytest
 import pandas as pd
-from pandas.testing import assert_frame_equal
+from pandas.testing import assert_series_equal
 import numpy as np
 
 # Add the parent directory to the path (for local imports)
@@ -80,3 +80,19 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         expected_error_message = "Input X is missing the 'state' column."
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.fit(X_without_state, y)
+
+    # Ensure .fit() correctly learns state default rates
+    @pytest.mark.unit
+    def test_fit_learns_state_default_rates(self, transformer):
+        # X and y input
+        X = pd.DataFrame({
+            "state": ["state_1", "state_1", "state_2", "state_2"]
+        })
+        y = pd.Series([0, 1, 1, 1], name="default")
+        # Fit
+        transformer.fit(X, y)
+        # Expected "default_rate_by_state_" learned attribute (pd.Series)
+        expected_default_rate_by_state_index = pd.Index(["state_1", "state_2"], name="state")
+        expected_default_rate_by_state_ = pd.Series([0.5, 1.0], index=expected_default_rate_by_state_index, name="default")
+        # Ensure actual and expected "default_rate_by_state_" are identical
+        assert_series_equal(transformer.default_rate_by_state_, expected_default_rate_by_state_)
