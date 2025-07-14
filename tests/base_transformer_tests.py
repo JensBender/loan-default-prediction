@@ -58,7 +58,7 @@ class BaseTransformerTests:
         # Ensure the output DataFrames are identical
         assert_frame_equal(X_fit_then_transform, X_fit_transform)
 
-    # Ensure .transform() does not modify the X input DataFrame
+    # Ensure .transform() does not modify the "X" input DataFrame
     @pytest.mark.unit
     def test_transform_does_not_modify_input_df(self, transformer, X_input):
         X_original = X_input.copy()
@@ -103,7 +103,7 @@ class BaseTransformerTests:
         unpickled_X_transformed = unpickled_transformer.transform(X)
         assert_frame_equal(unpickled_X_transformed, X_transformed)
 
-    # Ensure .fit() raises TypeError for invalid input data type (must be a pandas DataFrame)
+    # Ensure .fit() raises TypeError for invalid "X" input data type (must be a pandas DataFrame)
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_input_X", [
         np.array([[1, 2], [3, 4]]), 
@@ -115,7 +115,7 @@ class BaseTransformerTests:
         False,
         None
     ])
-    def test_fit_raises_type_error_for_invalid_input(self, transformer, invalid_input_X):
+    def test_fit_raises_type_error_for_invalid_X_input(self, transformer, invalid_input_X):
         with pytest.raises(TypeError):
             transformer.fit(invalid_input_X)
 
@@ -126,7 +126,7 @@ class BaseTransformerTests:
         with pytest.raises(NotFittedError):
             transformer.transform(X)
 
-    # Ensure .transform() raises TypeError for invalid input data type (must be a pandas DataFrame)
+    # Ensure .transform() raises TypeError for invalid "X" input data type (must be a pandas DataFrame)
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_X_input", [
         np.array([[1, 2], [3, 4]]), 
@@ -138,7 +138,7 @@ class BaseTransformerTests:
         False,
         None
     ])
-    def test_transform_raises_type_error_for_invalid_input(self, transformer, X_input, invalid_X_input):
+    def test_transform_raises_type_error_for_invalid_X_input(self, transformer, X_input, invalid_X_input):
         transformer.fit(X_input)
         with pytest.raises(TypeError):
             transformer.transform(invalid_X_input)
@@ -204,7 +204,7 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
         # Ensure the output DataFrames are identical
         assert_frame_equal(X_fit_then_transform, X_fit_transform)
 
-    # Ensure .transform() does not modify the X input DataFrame
+    # Ensure .transform() does not modify the "X" input DataFrame
     @pytest.mark.unit
     def test_transform_does_not_modify_input_df(self, transformer, X_input, y_input):
         X_original = X_input.copy()
@@ -252,7 +252,7 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
         unpickled_X_transformed = unpickled_transformer.transform(X)
         assert_frame_equal(unpickled_X_transformed, X_transformed)
 
-    # Ensure .fit() raises TypeError for invalid input data type (must be a pandas DataFrame)
+    # Ensure .fit() raises TypeError for invalid "X" input data type (must be a pandas DataFrame)
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_input_X", [
         np.array([[1, 2], [3, 4]]), 
@@ -264,12 +264,16 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
         False,
         None
     ])
-    def test_fit_raises_type_error_for_invalid_input(self, transformer, invalid_input_X, y_input):
+    def test_fit_raises_type_error_for_invalid_X_input(self, transformer, invalid_input_X, y_input):
         y = y_input.copy()
         with pytest.raises(TypeError):
             transformer.fit(invalid_input_X, y)
+    
+    # Ensure .fit() raises TypeError for invalid "y" input data type (must be a pandas Series)
 
-    # Ensure .transform() raises TypeError for invalid input data type (must be a pandas DataFrame)
+    # Ensure .fit() raises ValueError for unequal length of X and y
+
+    # Ensure .transform() raises TypeError for invalid "X" input data type (must be a pandas DataFrame)
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_X_input", [
         np.array([[1, 2], [3, 4]]), 
@@ -281,7 +285,7 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
         False,
         None
     ])
-    def test_transform_raises_type_error_for_invalid_input(self, transformer, X_input, y_input, invalid_X_input):
+    def test_transform_raises_type_error_for_invalid_X_input(self, transformer, X_input, y_input, invalid_X_input):
         X = X_input.copy()
         y = y_input.copy()
         transformer.fit(X, y)
