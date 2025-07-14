@@ -64,4 +64,9 @@ def y_input():
 # .test_instantiation()
 # .test_transform_raises_not_fitted_error_if_unfitted()
 class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
-    pass
+    # Class instantiation 
+    def test_instantiation(self, transformer):
+        # First, run the .test_instantiation() method from the grandparent class BaseTransformerTests
+        super().test_instantiation(transformer)
+        # Then, add assertion specific to the StateDefaultRateTargetEncoder class
+        assert isinstance(transformer, StateDefaultRateTargetEncoder)
