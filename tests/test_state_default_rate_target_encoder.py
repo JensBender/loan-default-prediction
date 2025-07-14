@@ -5,7 +5,7 @@ import sys
 # Third-party library imports
 import pytest
 import pandas as pd
-from pandas.testing import assert_series_equal
+from pandas.testing import assert_series_equal, assert_frame_equal
 import numpy as np
 
 # Add the parent directory to the path (for local imports)
@@ -118,3 +118,22 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         expected_default_rate_by_state_ = pd.Series(expected_output, index=expected_default_rate_by_state_index, name="default")
         # Ensure actual and expected "default_rate_by_state_" are identical
         assert_series_equal(transformer.default_rate_by_state_, expected_default_rate_by_state_)
+
+    # Ensure .transform() successfully adds the "state_default_rate" column 
+    @pytest.mark.unit
+    def test_transform_adds_state_default_rate_column(self, transformer):
+        # X and y input
+        X = pd.DataFrame({
+            "state": ["state_1", "state_1", "state_2", "state_2"]
+        })
+        y = pd.Series([0, 1, 1, 1], name="default")
+        # Fit and transform
+        transformer.fit(X, y)
+        X_transformed = transformer.transform(X)
+        # Expected output
+        expected_X_transformed = pd.DataFrame({
+            "state": ["state_1", "state_1", "state_2", "state_2"],
+            "state_default_rate": [0.5, 0.5, 1.0, 1.0]
+        })
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed, expected_X_transformed)
