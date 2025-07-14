@@ -303,6 +303,15 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
             transformer.fit(X, invalid_y_input)
 
     # Ensure .fit() raises ValueError for unequal length of X and y
+    def test_fit_raises_value_error_for_unequal_X_and_y_length(self, transformer):
+        X = pd.DataFrame({
+            "column_1": [1, 2, 3],
+            "column_2": [1, 2, 3],
+        })
+        y = pd.Series([1, 2])
+        expected_error_message = "X and y must have the same number of samples. X has 3 samples, but y has 2."
+        with pytest.raises(ValueError, match=expected_error_message):
+            transformer.fit(X, y)
 
     # Ensure .transform() raises TypeError for invalid "X" input data type (must be a pandas DataFrame)
     @pytest.mark.unit
