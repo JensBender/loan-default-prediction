@@ -105,19 +105,23 @@ class BaseTransformerTests:
 
     # Ensure .fit() raises TypeError for invalid "X" input data type (must be a pandas DataFrame)
     @pytest.mark.unit
-    @pytest.mark.parametrize("invalid_input_X", [
+    @pytest.mark.parametrize("invalid_X_input", [
         np.array([[1, 2], [3, 4]]), 
+        pd.Series([1, 2, 3]),
         "a string",
-        {"a": "dictionary"},
+        ["a", "list"],
         ("a", "tuple"),
+        {"a", "set"}, 
+        {"a": "dictionary"},
         1,
         1.23,
         False,
         None
     ])
-    def test_fit_raises_type_error_for_invalid_X_input(self, transformer, invalid_input_X):
-        with pytest.raises(TypeError):
-            transformer.fit(invalid_input_X)
+    def test_fit_raises_type_error_for_invalid_X_input(self, transformer, invalid_X_input):
+        expected_error_message = "Input X must be a pandas DataFrame."
+        with pytest.raises(TypeError, match=expected_error_message):
+            transformer.fit(invalid_X_input)
 
     # Ensure .transform() raises NotFittedError if instance has not been fitted yet
     def test_transform_raises_not_fitted_error_if_unfitted(self, transformer, X_input):
