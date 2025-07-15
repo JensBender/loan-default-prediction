@@ -28,6 +28,12 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         if not isinstance(non_critical_features, list):
             raise TypeError("'non_critical_features' must be a list of column names.")
 
+        # Validate input value
+        if not critical_features:
+            raise ValueError("'critical_features' cannot be an empty list. It must specify the names of the critical features.")
+        if not non_critical_features:
+            raise ValueError("'non_critical_features' cannot be an empty list. It must specify the names of the non-critical features.")
+
         self.critical_features = critical_features
         self.non_critical_features = non_critical_features
     
@@ -110,7 +116,11 @@ class SnakeCaseFormatter(BaseEstimator, TransformerMixin):
     def __init__(self, columns=None):
         if not isinstance(columns, list) and columns is not None:
             raise TypeError("'columns' must be a list of column names or None. If None, all columns will be used.")
-         
+
+        # Validate input value
+        if columns == []:
+            raise ValueError("'columns' cannot be an empty list. It must specify the column names for snake case formatting.")
+
         self.columns = columns
     
     def fit(self, X, y=None):
@@ -170,6 +180,10 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
        # Validate input data type
         if not isinstance(boolean_column_mappings, dict):
             raise TypeError("'boolean_column_mappings' must be a dictionary specifying the mappings.")
+
+        # Validate input value
+        if not boolean_column_mappings:
+            raise ValueError("'boolean_column_mappings' cannot be an empty dictionary. It must specify the the mappings.")
             
         self.boolean_column_mappings = boolean_column_mappings 
             
