@@ -353,14 +353,33 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
         expected_error_message = "Input X must be a pandas DataFrame."
         with pytest.raises(TypeError, match=expected_error_message):
             transformer.transform(invalid_X_input)
- 
-    # Ensure .transform() raises ValueError if columns are in wrong order
+    
+    # Ensure .transform() raises ValueError for extra column not seen during .fit()
+    @pytest.mark.unit
+    def test_transform_raises_value_error_for_extra_column(self, transformer, X_input, y_input):
+        X = X_input.copy()
+        y = y_input.copy()
+        # Fit on original DataFrame X and y
+        transformer.fit(X, y)
+        # Create DataFrame with extra column not seen during .fit()
+        X_with_extra_column = X.copy()
+        X_with_extra_column["extra_column"] = 0
+        # Ensure .transform() on extra column raises ValueError
+        expected_error_message = "Feature names and feature order of input X must be the same as during .fit()."
+        with pytest.raises(ValueError, match=expected_error_message):
+            transformer.transform(X_with_extra_column)
+   
+    # Ensure .transform() raises ValueError if columns are in different order than during .fit()
     @pytest.mark.unit
     def test_transform_raises_value_error_for_wrong_column_order(self, transformer, X_input, y_input):
         X = X_input.copy()
         y = y_input.copy()
+        # Fit on original DataFrame X and y
         transformer.fit(X, y)
+        # Create DataFrame with different column order than during .fit()
         reversed_columns = X.columns[::-1]  # reverse order as an example
         X_with_wrong_column_order = X[reversed_columns]  
-        with pytest.raises(ValueError):
+        # Ensure .transform() on wrong column order raises ValueError
+        expected_error_message = "Feature names and feature order of input X must be the same as during .fit()."
+        with pytest.raises(ValueError, match=expected_error_message):
             transformer.transform(X_with_wrong_column_order)
