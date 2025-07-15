@@ -67,7 +67,7 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         assert isinstance(transformer, BooleanColumnTransformer)
         assert transformer.boolean_column_mappings == BOOLEAN_COLUMN_MAPPINGS
 
-    # Ensure __init__() raises TypeError for invalid boolean_column_mappings data type (must be a dictionary)
+    # Ensure __init__() raises TypeError for invalid data types of "boolean_column_mappings" (must be a dictionary)
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_boolean_column_mappings", [
         "a string",
@@ -82,7 +82,14 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         expected_error_message = "'boolean_column_mappings' must be a dictionary specifying the mappings."
         with pytest.raises(TypeError, match=expected_error_message):
             BooleanColumnTransformer(boolean_column_mappings=invalid_boolean_column_mappings)
-    
+ 
+    # Ensure __init__() raises ValueError for empty "boolean_column_mappings" dictionary
+    @pytest.mark.unit
+    def test_init_raises_value_error_for_empty_boolean_column_mappings(self):
+        expected_error_message = "'boolean_column_mappings' cannot be an empty dictionary. It must specify the the mappings."
+        with pytest.raises(ValueError, match=expected_error_message):
+            BooleanColumnTransformer(boolean_column_mappings={})
+
     # Ensure .fit() raises ColumnMismatchError for missing columns in input DataFrame
     @pytest.mark.unit
     @pytest.mark.parametrize("missing_columns", [
