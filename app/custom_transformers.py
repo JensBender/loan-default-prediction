@@ -278,10 +278,21 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         if X.columns.tolist() != self.feature_names_in_:
             raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
 
+        # Ensure "profession" column has no missing values
+        if X["profession"].isna().any():
+            raise MissingValueError("'profession' column cannot contain missing values.")
+
         # Ensure all values in "profession" column are strings or missing values
         # Non-scalar types (list, tuple, dict, set) must be checked first, since pd.isna() can raise errors on non-scalars
         if X["profession"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
             raise TypeError("All values in 'profession' column must be strings or missing values.")
+
+        # Ensure "profession" column contains only known professions
+        known_professions = set(self.job_stability_map.keys())
+        input_professions = set(X["profession"].unique())
+        unknown_professions = input_professions - known_professions
+        if unknown_professions:
+            raise CategoricalLabelError(f"'profession' column contains unknown professions: {', '.join(unknown_professions)}.")
 
         # Handle empty DataFrames
         X_transformed = X.copy()
