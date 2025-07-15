@@ -68,7 +68,7 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         assert isinstance(transformer, SnakeCaseFormatter)
         assert transformer.columns == COLUMNS_FOR_SNAKE_CASING
 
-    # Ensure __init__() raises TypeError for invalid columns data type (must be a list or None)
+    # Ensure __init__() raises TypeError for invalid data types of "columns" (must be a list or None)
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_columns", [
         "a string",
@@ -82,6 +82,13 @@ class TestSnakeCaseFormatter(BaseTransformerTests):
         expected_error_message = "'columns' must be a list of column names or None. If None, all columns will be used."
         with pytest.raises(TypeError, match=expected_error_message):
             SnakeCaseFormatter(columns=invalid_columns)
+
+    # Ensure __init__() raises ValueError for empty "columns" list
+    @pytest.mark.unit
+    def test_init_raises_value_error_for_empty_columns(self):
+        expected_error_message = "'columns' cannot be an empty list. It must specify the column names for snake case formatting."
+        with pytest.raises(ValueError, match=expected_error_message):
+            SnakeCaseFormatter(columns=[])
 
     # Ensure .fit() raises ColumnMismatchError for missing columns in the input DataFrame
     @pytest.mark.unit
