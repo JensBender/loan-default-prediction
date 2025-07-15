@@ -2,7 +2,7 @@ import pytest
 from sklearn.base import BaseEstimator, TransformerMixin, clone
 from sklearn.exceptions import NotFittedError
 import pandas as pd
-from pandas.testing import assert_frame_equal
+from pandas.testing import assert_frame_equal, assert_index_equal
 import numpy as np
 import pickle
 
@@ -178,6 +178,14 @@ class BaseTransformerTests:
         expected_error_message = "Feature names and feature order of input X must be the same as during .fit()."
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.transform(X_with_wrong_column_order)
+    
+    # Ensure .transform() preserves the index of the input DataFrame
+    def test_transform_preserves_df_index(self, transformer, X_input):
+        X = X_input.copy()
+        transformer.fit(X)
+        X_transformed = transformer.transform(X)
+        # Ensure that indexes of transformed and original DataFrame are identical
+        assert_index_equal(X_transformed.index, X.index)
 
 
 # Base tests for supervised transformers (inherits from BaseTransformerTests)
@@ -383,3 +391,12 @@ class BaseSupervisedTransformerTests(BaseTransformerTests):
         expected_error_message = "Feature names and feature order of input X must be the same as during .fit()."
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.transform(X_with_wrong_column_order)
+
+    # Ensure .transform() preserves the index of the input DataFrame
+    def test_transform_preserves_df_index(self, transformer, X_input, y_input):
+        X = X_input.copy()
+        y = y_input.copy()
+        transformer.fit(X, y)
+        X_transformed = transformer.transform(X)
+        # Ensure that indexes of transformed and original DataFrame are identical
+        assert_index_equal(X_transformed.index, X.index)
