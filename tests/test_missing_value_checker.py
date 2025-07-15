@@ -71,7 +71,7 @@ class TestMissingValueChecker(BaseTransformerTests):
         assert transformer.critical_features == CRITICAL_FEATURES
         assert transformer.non_critical_features == NON_CRITICAL_FEATURES
 
-    # Ensure __init__() raises TypeError for invalid critical_features data type (must be a list)
+    # Ensure __init__() raises TypeError for invalid data types of "critical_features" (must be a list)
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_critical_features", [
         "a string",
@@ -87,7 +87,7 @@ class TestMissingValueChecker(BaseTransformerTests):
         with pytest.raises(TypeError, match=expected_error_message):
             MissingValueChecker(invalid_critical_features, NON_CRITICAL_FEATURES)
 
-    # Ensure __init__() raises TypeError for invalid non_critical_features data type (must be a list)
+    # Ensure __init__() raises TypeError for invalid data types of "non_critical_features" (must be a list)
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_non_critical_features", [
         "a string",
@@ -102,6 +102,20 @@ class TestMissingValueChecker(BaseTransformerTests):
         expected_error_message = "'non_critical_features' must be a list of column names."
         with pytest.raises(TypeError, match=expected_error_message):
             MissingValueChecker(CRITICAL_FEATURES, invalid_non_critical_features)
+
+    # Ensure __init__() raises ValueError for empty "critical_features" list
+    @pytest.mark.unit
+    def test_init_raises_value_error_for_empty_critical_features(self):
+        expected_error_message = "'critical_features' cannot be an empty list. It must specify the names of the critical features."
+        with pytest.raises(ValueError, match=expected_error_message):
+            MissingValueChecker(critical_features=[], non_critical_features=NON_CRITICAL_FEATURES)
+
+    # Ensure __init__() raises ValueError for empty "non_critical_features" list
+    @pytest.mark.unit
+    def test_init_raises_value_error_for_empty_non_critical_features(self):
+        expected_error_message = "'non_critical_features' cannot be an empty list. It must specify the names of the non-critical features."
+        with pytest.raises(ValueError, match=expected_error_message):
+            MissingValueChecker(critical_features=CRITICAL_FEATURES, non_critical_features=[])
 
     # Ensure .fit() raises ColumnMismatchError for missing columns in the input DataFrame
     @pytest.mark.unit
