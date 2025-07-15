@@ -5,6 +5,7 @@ import sys
 # Third-party library imports
 import pytest
 import pandas as pd
+from pandas.testing import assert_frame_equal
 
 # Add the parent directory to the path (for local imports)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  
@@ -116,6 +117,29 @@ class TestFeatureSelector(BaseTransformerTests):
         # Ensure the learned feature number and names are same as in input DataFrame
         assert transformer.n_features_in_ == X.shape[1]
         assert transformer.feature_names_in_ == X.columns.tolist()
+
+    # Ensure .transform() removes other columns not specified in "columns_to_keep"
+    @pytest.mark.unit
+    def test_transform_removes_other_columns(self):
+        X = pd.DataFrame({
+            "column_to_keep_1": [1, 2, 3],
+            "column_to_keep_2": [1, 2, 3],
+            "column_to_keep_3": [1, 2, 3],
+            "column_to_remove_1": [1, 2, 3],
+            "column_to_remove_2": [1, 2, 3],
+        })
+        # Instantiate, fit and transform
+        transformer = FeatureSelector(columns_to_keep=["column_to_keep_1", "column_to_keep_2", "column_to_keep_3"])
+        transformer.fit(X)
+        X_transformed = transformer.transform(X)
+        # Expected output 
+        expected_X_transformed = pd.DataFrame({
+            "column_to_keep_1": [1, 2, 3],
+            "column_to_keep_2": [1, 2, 3],
+            "column_to_keep_3": [1, 2, 3],
+        })
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed, expected_X_transformed)
 
     # Ensure .transform() raises ValueError for missing columns in the input DataFrame
     @pytest.mark.unit
