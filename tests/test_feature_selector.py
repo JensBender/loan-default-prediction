@@ -157,3 +157,23 @@ class TestFeatureSelector(BaseTransformerTests):
         X_with_missing_columns = X.drop(columns=missing_columns)
         with pytest.raises(ValueError):
             transformer.transform(X_with_missing_columns)
+
+    # Ensure .transform() preserves data types of columns to keep
+    @pytest.mark.unit
+    @pytest.mark.parametrize("column, values", [
+        ("integer_column", [1, 2]),
+        ("float_column", [1.1, 2.2]),
+        ("boolean_column", [True, False]),
+        ("string_column", ["string", "values"]),
+    ])
+    def test_transform_preserves_data_types(self, column, values):
+        X = pd.DataFrame({
+            column: values,
+            "column_to_remove": ["some", "values"],
+        })
+        # Instantiate, fit and transform
+        transformer = FeatureSelector(columns_to_keep=[column])
+        transformer.fit(X)
+        X_transformed = transformer.transform(X)
+        # Ensure column has same data type in transformed and original DataFrame
+        assert X_transformed[column].dtype == X[column].dtype
