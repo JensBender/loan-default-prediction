@@ -397,8 +397,12 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
     def __init__(self, columns_to_keep):
         # Validate input data type
         if not isinstance(columns_to_keep, list):
-            raise TypeError("columns_to_keep must be a list.")
-        
+            raise TypeError("'columns_to_keep' must be a list of column names.")
+
+        # Validate input value
+        if not columns_to_keep:
+            raise ValueError("'columns_to_keep' cannot be an empty list. It must specify the column names.")
+
         self.columns_to_keep = columns_to_keep
 
     def fit(self, X, y=None):
