@@ -57,7 +57,9 @@ def X_input():
 # .test_fit_raises_type_error_for_invalid_input()
 # .test_transform_raises_not_fitted_error_if_unfitted()
 # .test_transform_raises_type_error_for_invalid_input()
+# .test_transform_raises_value_error_for_extra_column()
 # .test_transform_raises_value_error_for_wrong_column_order()
+# .test_transform_preserves_df_index()
 class TestFeatureSelector(BaseTransformerTests):
     # Class instantiation 
     @pytest.mark.unit
