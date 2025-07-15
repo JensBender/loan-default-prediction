@@ -282,10 +282,9 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         if X["profession"].isna().any():
             raise MissingValueError("'profession' column cannot contain missing values.")
 
-        # Ensure all values in "profession" column are strings or missing values
-        # Non-scalar types (list, tuple, dict, set) must be checked first, since pd.isna() can raise errors on non-scalars
-        if X["profession"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
-            raise TypeError("All values in 'profession' column must be strings or missing values.")
+        # Ensure all values in "profession" column are strings
+        if X["profession"].apply(lambda x: not isinstance(x, str)).any():
+            raise TypeError("All values in 'profession' column must be strings.")
 
         # Ensure "profession" column contains only known professions
         known_professions = set(self.job_stability_map.keys())
