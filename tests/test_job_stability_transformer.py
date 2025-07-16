@@ -12,7 +12,7 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import JobStabilityTransformer
+from app.custom_transformers import JobStabilityTransformer, MissingValueError
 from app.global_constants import JOB_STABILITY_MAP
 from tests.base_transformer_tests import BaseTransformerTests
 
@@ -100,18 +100,16 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.fit(X_without_profession)    
 
-    # Ensure .fit() ignores missing values in "profession" column
+    # Ensure .fit() raises MissingValueError for missing values in the "profession" column
     @pytest.mark.unit
     @pytest.mark.parametrize("missing_value", [None, np.nan])
-    def test_fit_ignores_missing_values_in_profession_column(self, transformer, missing_value):
-        X_with_missing_value = pd.DataFrame({
+    def test_fit_raises_missing_value_error_for_missing_professions(self, transformer, missing_value):
+        X_with_missing_profession = pd.DataFrame({
             "profession": ["artist", missing_value, "web_designer"]
         })  
-        # .fit() should not raise an error 
-        transformer.fit(X_with_missing_value)
-        # Ensure the learned feature number and names are same as in input DataFrame
-        assert transformer.n_features_in_ == X_with_missing_value.shape[1]
-        assert transformer.feature_names_in_ == X_with_missing_value.columns.tolist()
+        expected_error_message = "'profession' column cannot contain missing values."
+        with pytest.raises(MissingValueError, match=expected_error_message):
+            transformer.fit(X_with_missing_profession)
 
     # Ensure .transform() successfully converts professions to job stability tiers
     @pytest.mark.unit
