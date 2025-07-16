@@ -333,7 +333,7 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
             raise TypeError("All values in 'city' column must be strings.")
 
         # Ensure "city" column contains only known cities (from "city_tier_map")
-        known_cities = set(self.job_stability_map.keys())
+        known_cities = set(self.city_tier_map.keys())
         input_cities = set(X["city"].unique())
         unknown_cities = input_cities - known_cities
         if unknown_cities:
@@ -366,8 +366,8 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
             X_transformed["city_tier"] = pd.Series(dtype="object")
             return X_transformed
 
-        # Create city tier column by mapping cities to city tiers (default to "unknown" for unknown cities)
-        X_transformed["city_tier"] = X_transformed["city"].map(self.city_tier_map).fillna("unknown")
+        # Create city tier column by mapping cities to city tiers
+        X_transformed["city_tier"] = X_transformed["city"].map(self.city_tier_map)
         
         return X_transformed
 
