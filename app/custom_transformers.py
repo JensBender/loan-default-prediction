@@ -268,7 +268,7 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         if X["profession"].apply(lambda x: not isinstance(x, str)).any():
             raise TypeError("All values in 'profession' column must be strings.")
 
-        # Ensure "profession" column contains only known professions
+        # Ensure "profession" column contains only known professions (from "job_stability_map")
         known_professions = set(self.job_stability_map.keys())
         input_professions = set(X["profession"].unique())
         unknown_professions = input_professions - known_professions
@@ -331,6 +331,13 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         # Ensure all values in "city" column are strings
         if X["city"].apply(lambda x: not isinstance(x, str)).any():
             raise TypeError("All values in 'city' column must be strings.")
+
+        # Ensure "city" column contains only known cities (from "city_tier_map")
+        known_cities = set(self.job_stability_map.keys())
+        input_cities = set(X["city"].unique())
+        unknown_cities = input_cities - known_cities
+        if unknown_cities:
+            raise CategoricalLabelError(f"'city' column contains unknown cities: {', '.join(unknown_cities)}.")
     
     def fit(self, X, y=None):
         # Validate input
