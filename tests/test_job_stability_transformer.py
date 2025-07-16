@@ -111,6 +111,25 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         with pytest.raises(MissingValueError, match=expected_error_message):
             transformer.fit(X_with_missing_profession)
 
+    # Ensure .fit() raises TypeError for non-string values in the "profession" column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("non_string_value", [
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a", "set"},
+        {"a": "dictionary"}, 
+        1,
+        1.23,
+        False
+    ])
+    def test_fit_raises_type_error_for_non_string_professions(self, transformer, non_string_value):
+        X_with_non_string_profession = pd.DataFrame({
+            "profession": ["artist", non_string_value, "web_designer"]
+        })  
+        expected_error_message = "All values in 'profession' column must be strings."
+        with pytest.raises(TypeError, match=expected_error_message):
+            transformer.fit(X_with_non_string_profession)
+
     # Ensure .transform() successfully converts professions to job stability tiers
     @pytest.mark.unit
     def test_transform_converts_professions_to_job_stability_tiers(self, transformer, X_input):
