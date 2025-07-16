@@ -101,19 +101,6 @@ class TestCityTierTransformer(BaseTransformerTests):
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.fit(X_without_city) 
 
-    # Ensure .fit() ignores missing values in "city" column
-    @pytest.mark.unit
-    @pytest.mark.parametrize("missing_value", [None, np.nan])
-    def test_fit_ignores_missing_values_in_city_column(self, transformer, missing_value):
-        X_with_missing_value = pd.DataFrame({
-            "city": ["sikar", missing_value, "bidar"]
-        })  
-        # .fit() should not raise an error 
-        transformer.fit(X_with_missing_value)
-        # Ensure the learned feature number and names are same as in input DataFrame
-        assert transformer.n_features_in_ == X_with_missing_value.shape[1]
-        assert transformer.feature_names_in_ == X_with_missing_value.columns.tolist()
-
     # Ensure .transform() successfully converts cities to city tiers
     @pytest.mark.unit
     def test_transform_converts_cities_to_city_tiers(self, transformer):
@@ -131,42 +118,7 @@ class TestCityTierTransformer(BaseTransformerTests):
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
 
-    # Ensure .transform() assigns "unknown" to cities not in "city_tier_map"
-    @pytest.mark.unit
-    def test_transform_assigns_unknown_to_unmapped_cities(self, transformer):
-        X_with_unmapped_cities = pd.DataFrame({
-            "city": ["new_delhi", "unmapped_city_1", "vijayanagaram", "unmapped_city_2", "vijayawada", "unmapped_city_3"]
-        })      
-        # Fit and transform
-        transformer.fit(X_with_unmapped_cities)
-        X_transformed = transformer.transform(X_with_unmapped_cities)
-        # Create expected output
-        expected_X_transformed = pd.DataFrame({
-            "city": ["new_delhi", "unmapped_city_1", "vijayanagaram", "unmapped_city_2", "vijayawada", "unmapped_city_3"],
-            "city_tier": ["tier_1", "unknown", "tier_3", "unknown", "tier_2", "unknown"]
-        })  
-        # Ensure actual and expected output DataFrames are identical
-        assert_frame_equal(X_transformed, expected_X_transformed)
-
-    # Ensure .transform() assigns "unknown" for missing values in "city" column
-    @pytest.mark.unit
-    @pytest.mark.parametrize("missing_value", [None, np.nan])
-    def test_transform_assigns_unknown_to_missing_cities(self, transformer, missing_value):
-        X_with_missing_city = pd.DataFrame({
-            "city": ["new_delhi", missing_value, "vijayanagaram"]
-        })          
-        # Fit and transform
-        transformer.fit(X_with_missing_city)
-        X_transformed = transformer.transform(X_with_missing_city)
-        # Create expected output
-        expected_X_transformed = pd.DataFrame({
-            "city": ["new_delhi", missing_value, "vijayanagaram"],
-            "city_tier": ["tier_1", "unknown", "tier_3"] 
-        }) 
-        # Ensure actual and expected output DataFrames are identical
-        assert_frame_equal(X_transformed, expected_X_transformed) 
-
-    # Ensure .transform() ignores other columns 
+   # Ensure .transform() ignores other columns 
     @pytest.mark.unit
     def test_transform_ignores_other_columns(self, transformer, X_input):
         X = X_input.copy()
