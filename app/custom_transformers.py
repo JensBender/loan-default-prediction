@@ -250,8 +250,8 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
             raise ValueError("'job_stability_map' cannot be an empty dictionary. It must specify the mappings from 'profession' to 'job_stability'.")
 
         self.job_stability_map = job_stability_map 
-        
-    def fit(self, X, y=None):
+
+    def _validate_input(self, X):
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
@@ -275,6 +275,10 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         if unknown_professions:
             raise CategoricalLabelError(f"'profession' column contains unknown professions: {', '.join(unknown_professions)}.")
 
+    def fit(self, X, y=None):
+        # Validate input
+        self._validate_input(X)
+
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
@@ -285,28 +289,12 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         # Ensure .fit() happened before
         check_is_fitted(self)
         
-        # Validate input data type
-        if not isinstance(X, pd.DataFrame):
-            raise TypeError("Input X must be a pandas DataFrame.")   
+        # Validate input
+        self._validate_input(X)
         
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
             raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
-
-        # Ensure "profession" column has no missing values
-        if X["profession"].isna().any():
-            raise MissingValueError("'profession' column cannot contain missing values.")
-
-        # Ensure all values in "profession" column are strings
-        if X["profession"].apply(lambda x: not isinstance(x, str)).any():
-            raise TypeError("All values in 'profession' column must be strings.")
-
-        # Ensure "profession" column contains only known professions
-        known_professions = set(self.job_stability_map.keys())
-        input_professions = set(X["profession"].unique())
-        unknown_professions = input_professions - known_professions
-        if unknown_professions:
-            raise CategoricalLabelError(f"'profession' column contains unknown professions: {', '.join(unknown_professions)}.")
        
         # Create job stability column by mapping professions to job stability tiers (default to "moderate" for unknown professions)
         X_transformed = X.copy()
