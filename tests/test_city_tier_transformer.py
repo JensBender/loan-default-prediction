@@ -158,6 +158,33 @@ class TestCityTierTransformer(BaseTransformerTests):
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
 
+    # Ensure .transform() raises ValueError if input DataFrame is missing the "city" column 
+    @pytest.mark.unit
+    def test_transform_raises_value_error_for_missing_city_column(self, transformer, X_input):
+        X = X_input.copy()
+        X_without_city = X.drop(columns="city")
+        # Fit on original DataFrame, but transform on DataFrame without "city" column 
+        transformer.fit(X)
+        expected_error_message = "Input X is missing the 'city' column."
+        with pytest.raises(ValueError, match=expected_error_message):
+            transformer.transform(X_without_city)  
+
+    # Ensure .transform() raises MissingValueError for missing values in the "city" column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_transform_raises_missing_value_error_for_missing_cities(self, transformer, missing_value):
+        X = pd.DataFrame({
+            "city": ["new_delhi", "bhopal", "vijayanagaram"]
+        }) 
+        X_with_missing_city = pd.DataFrame({
+           "city": ["new_delhi", missing_value, "vijayanagaram"]
+        })  
+        # Fit on original DataFrame, but transform on DataFrame with missing city value 
+        transformer.fit(X) 
+        expected_error_message = "'city' column cannot contain missing values."
+        with pytest.raises(MissingValueError, match=expected_error_message):
+            transformer.transform(X_with_missing_city)
+
    # Ensure .transform() ignores other columns 
     @pytest.mark.unit
     def test_transform_ignores_other_columns(self, transformer, X_input):
