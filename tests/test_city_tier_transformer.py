@@ -12,7 +12,7 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import CityTierTransformer
+from app.custom_transformers import CityTierTransformer, MissingValueError, CategoricalLabelError
 from app.global_constants import CITY_TIER_MAP
 from tests.base_transformer_tests import BaseTransformerTests
 
@@ -100,6 +100,46 @@ class TestCityTierTransformer(BaseTransformerTests):
         expected_error_message = "Input X is missing the 'city' column."
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.fit(X_without_city) 
+    
+    # Ensure .fit() raises MissingValueError for missing values in the "city" column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_fit_raises_missing_value_error_for_missing_cities(self, transformer, missing_value):
+        X_with_missing_city = pd.DataFrame({
+            "city": ["new_delhi", missing_value, "vijayanagaram"]
+        })  
+        expected_error_message = "'city' column cannot contain missing values."
+        with pytest.raises(MissingValueError, match=expected_error_message):
+            transformer.fit(X_with_missing_city)
+
+    # Ensure .fit() raises TypeError for non-string values in the "city" column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("non_string_value", [
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a", "set"},
+        {"a": "dictionary"}, 
+        1,
+        1.23,
+        False
+    ])
+    def test_fit_raises_type_error_for_non_string_cities(self, transformer, non_string_value):
+        X_with_non_string_city = pd.DataFrame({
+            "city": ["new_delhi", non_string_value, "vijayanagaram"]
+        })  
+        expected_error_message = "All values in 'city' column must be strings."
+        with pytest.raises(TypeError, match=expected_error_message):
+            transformer.fit(X_with_non_string_city)
+
+    # Ensure .fit() raises CategoricalLabelError for unknown cities (not in "city_tier_map")
+    @pytest.mark.unit
+    def test_fit_raises_categorical_label_error_for_unknown_cities(self, transformer):
+        X_with_unknown_city = pd.DataFrame({
+            "city": ["new_delhi", "unknown_city", "vijayanagaram"]
+        })  
+        expected_error_message = "'city' column contains unknown cities: unknown_city."
+        with pytest.raises(CategoricalLabelError, match=expected_error_message):
+            transformer.fit(X_with_unknown_city)
 
     # Ensure .transform() successfully converts cities to city tiers
     @pytest.mark.unit
