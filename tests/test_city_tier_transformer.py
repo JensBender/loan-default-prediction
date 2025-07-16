@@ -185,6 +185,45 @@ class TestCityTierTransformer(BaseTransformerTests):
         with pytest.raises(MissingValueError, match=expected_error_message):
             transformer.transform(X_with_missing_city)
 
+    # Ensure .transform() raises TypeError for non-string values in the "city" column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("non_string_value", [
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a", "set"},
+        {"a": "dictionary"}, 
+        1,
+        1.23,
+        False
+    ])
+    def test_transform_raises_type_error_for_non_string_cities(self, transformer, non_string_value):
+        X = pd.DataFrame({
+            "city": ["new_delhi", "bhopal", "vijayanagaram"]
+        }) 
+        X_with_non_string_city = pd.DataFrame({
+            "city": ["new_delhi", non_string_value, "vijayanagaram"]
+        })  
+        # Fit on original DataFrame, but transform on DataFrame with non-string city 
+        transformer.fit(X)
+        expected_error_message = "All values in 'city' column must be strings."
+        with pytest.raises(TypeError, match=expected_error_message):
+            transformer.fit(X_with_non_string_city)
+
+    # Ensure .transform() raises CategoricalLabelError for unknown cities (not in "city_tier_map")
+    @pytest.mark.unit
+    def test_transform_raises_categorical_label_error_for_unknown_cities(self, transformer):
+        X = pd.DataFrame({
+            "city": ["new_delhi", "bhopal", "vijayanagaram"]
+        }) 
+        X_with_unknown_city = pd.DataFrame({
+            "city": ["new_delhi", "unknown_city", "vijayanagaram"]
+        })  
+        # Fit on original DataFrame, but transform on DataFrame with unknown city 
+        transformer.fit(X)
+        expected_error_message = "'city' column contains unknown cities: unknown_city."
+        with pytest.raises(CategoricalLabelError, match=expected_error_message):
+            transformer.transform(X_with_unknown_city)
+
    # Ensure .transform() ignores other columns 
     @pytest.mark.unit
     def test_transform_ignores_other_columns(self, transformer, X_input):
