@@ -323,11 +323,14 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         # Ensure input DataFrame contains the required "city" column
         if "city" not in X.columns:
             raise ValueError("Input X is missing the 'city' column.")
-            
-        # Ensure all values in the "city" column are strings or missing values
-        # Non-scalar types (list, tuple, dict, set) must be checked first, since pd.isna() can raise errors on non-scalars
-        if X["city"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
-            raise TypeError("All values in 'city' column must be strings or missing values.")
+        
+        # Ensure "city" column has no missing values
+        if X["city"].isna().any():
+            raise MissingValueError("'city' column cannot contain missing values.")
+
+        # Ensure all values in "city" column are strings
+        if X["city"].apply(lambda x: not isinstance(x, str)).any():
+            raise TypeError("All values in 'city' column must be strings.")
     
     def fit(self, X, y=None):
         # Validate input
