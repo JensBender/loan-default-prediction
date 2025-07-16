@@ -12,7 +12,7 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import JobStabilityTransformer, MissingValueError
+from app.custom_transformers import JobStabilityTransformer, MissingValueError, CategoricalLabelError
 from app.global_constants import JOB_STABILITY_MAP
 from tests.base_transformer_tests import BaseTransformerTests
 
@@ -129,6 +129,16 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         expected_error_message = "All values in 'profession' column must be strings."
         with pytest.raises(TypeError, match=expected_error_message):
             transformer.fit(X_with_non_string_profession)
+
+    # Ensure .fit() raises CategoricalLabelError for unknown professions (not in "job_stability_map")
+    @pytest.mark.unit
+    def test_fit_raises_categorical_label_error_for_unknown_professions(self, transformer):
+        X_with_unknown_profession = pd.DataFrame({
+            "profession": ["artist", "unknown_profession", "web_designer"]
+        })  
+        expected_error_message = "'profession' column contains unknown professions: unknown_profession."
+        with pytest.raises(CategoricalLabelError, match=expected_error_message):
+            transformer.fit(X_with_unknown_profession)
 
     # Ensure .transform() successfully converts professions to job stability tiers
     @pytest.mark.unit
