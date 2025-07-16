@@ -260,6 +260,21 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         if "profession" not in X.columns:
             raise ValueError("Input X is missing the 'profession' column.")
 
+        # Ensure "profession" column has no missing values
+        if X["profession"].isna().any():
+            raise MissingValueError("'profession' column cannot contain missing values.")
+
+        # Ensure all values in "profession" column are strings
+        if X["profession"].apply(lambda x: not isinstance(x, str)).any():
+            raise TypeError("All values in 'profession' column must be strings.")
+
+        # Ensure "profession" column contains only known professions
+        known_professions = set(self.job_stability_map.keys())
+        input_professions = set(X["profession"].unique())
+        unknown_professions = input_professions - known_professions
+        if unknown_professions:
+            raise CategoricalLabelError(f"'profession' column contains unknown professions: {', '.join(unknown_professions)}.")
+
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
