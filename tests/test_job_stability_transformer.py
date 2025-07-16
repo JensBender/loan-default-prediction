@@ -153,6 +153,17 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
 
+    # Ensure .transform() raises ValueError if input DataFrame is missing the "profession" column 
+    @pytest.mark.unit
+    def test_transform_raises_value_error_for_missing_profession_column(self, transformer, X_input):
+        X = X_input.copy()
+        X_without_profession = X.drop(columns="profession")
+        # Fit on original DataFrame, but transform on DataFrame without "profession" column 
+        transformer.fit(X)
+        expected_error_message = "Input X is missing the 'profession' column."
+        with pytest.raises(ValueError, match=expected_error_message):
+            transformer.transform(X_without_profession)  
+
     # Ensure .transform() assigns "moderate" job stability to professions not in job_stability_map 
     @pytest.mark.unit
     def test_transform_assigns_moderate_to_unmapped_professions(self, transformer):
