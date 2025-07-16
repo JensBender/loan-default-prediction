@@ -315,14 +315,23 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
 
         self.city_tier_map = city_tier_map 
 
-    def fit(self, X, y=None):
+    def _validate_input(self, X):
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
-            raise TypeError("Input X must be a pandas DataFrame.")   
+            raise TypeError("Input X must be a pandas DataFrame.")           
 
         # Ensure input DataFrame contains the required "city" column
         if "city" not in X.columns:
             raise ValueError("Input X is missing the 'city' column.")
+            
+        # Ensure all values in the "city" column are strings or missing values
+        # Non-scalar types (list, tuple, dict, set) must be checked first, since pd.isna() can raise errors on non-scalars
+        if X["city"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
+            raise TypeError("All values in 'city' column must be strings or missing values.")
+    
+    def fit(self, X, y=None):
+        # Validate input
+        self._validate_input(X) 
             
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
@@ -334,18 +343,12 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         # Ensure .fit() happened before
         check_is_fitted(self)
         
-        # Validate input data type
-        if not isinstance(X, pd.DataFrame):
-            raise TypeError("Input X must be a pandas DataFrame.")   
+        # Validate input
+        self._validate_input(X)   
         
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
             raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
-
-        # Ensure all values in the "city" column are strings or missing values
-        # Non-scalar types (list, tuple, dict, set) must be checked first, since pd.isna() can raise errors on non-scalars
-        if X["city"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
-            raise TypeError("All values in 'city' column must be strings or missing values.")
 
         # Handle empty DataFrames
         X_transformed = X.copy()
