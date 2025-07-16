@@ -204,6 +204,21 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         with pytest.raises(TypeError, match=expected_error_message):
             transformer.fit(X_with_non_string_profession)
 
+    # Ensure .transform() raises CategoricalLabelError for unknown professions (not in "job_stability_map")
+    @pytest.mark.unit
+    def test_transform_raises_categorical_label_error_for_unknown_professions(self, transformer):
+        X = pd.DataFrame({
+            "profession": ["artist", "police_officer", "web_designer"]
+        }) 
+        X_with_unknown_profession = pd.DataFrame({
+            "profession": ["artist", "unknown_profession", "web_designer"]
+        })  
+        # Fit on original DataFrame, but transform on DataFrame with unknown profession 
+        transformer.fit(X)
+        expected_error_message = "'profession' column contains unknown professions: unknown_profession."
+        with pytest.raises(CategoricalLabelError, match=expected_error_message):
+            transformer.transform(X_with_unknown_profession)
+
     # Ensure .transform() assigns "moderate" job stability to professions not in job_stability_map 
     @pytest.mark.unit
     def test_transform_assigns_moderate_to_unmapped_professions(self, transformer):
