@@ -378,10 +378,13 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         if "state" not in X.columns:
             raise ValueError("Input X is missing the 'state' column.")
         
-        # Ensure all values in the "state" column are strings or missing values
-        # Non-scalar types (list, tuple, dict, set) must be checked first, since pd.isna() can raise errors on non-scalars
-        if X["state"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
-            raise TypeError("All values in 'state' column must be strings or missing values.")
+        # Ensure "state" column has no missing values
+        if X["state"].isna().any():
+            raise MissingValueError("'state' column cannot contain missing values.")
+        
+        # Ensure all values in "state" column are strings
+        if X["state"].apply(lambda x: not isinstance(x, str)).any():
+            raise TypeError("All values in 'state' column must be strings.")
                 
     def fit(self, X, y):
         # Validate X input
