@@ -402,17 +402,17 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         if not y.isin([0, 1]).all():
             raise ValueError("All y values must be 0 (no default) or 1 (default).")
                 
-        # Ensure X and y have the same number of samples 
-        if len(X) != len(y):
-            raise ValueError(f"X and y must have the same number of samples. X has {len(X)} samples, but y has {len(y)}.")
-        
+        # Ensure X and y have the same index
+        if not X.index.equals(y.index):
+            raise ValueError("Input X and y must have the same index.")
+
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
        
         # Calculate default rate by state
         df = X.copy()
-        df["default"] = y.values
+        df["default"] = y
         self.default_rate_by_state_ = df.groupby("state")["default"].mean()
         
         return self  
