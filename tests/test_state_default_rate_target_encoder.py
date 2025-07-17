@@ -95,6 +95,14 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         with pytest.raises(MissingValueError, match=expected_error_message):
             transformer.fit(X_with_missing_state, y)
 
+    # Ensure .fit() raises ValueError for unequal index of X and y
+    def test_fit_raises_value_error_for_unequal_index_of_X_and_y(self, transformer):
+        X = pd.DataFrame({"state": ["state_1", "state_2", "state_3"]}, index=[1, 2, 3])
+        y = pd.Series([0, 0, 1], index=[4, 5, 6]) 
+        expected_error_message = "Input X and y must have the same index."
+        with pytest.raises(ValueError, match=expected_error_message):
+            transformer.fit(X, y)
+
     # Ensure .fit() correctly learns state default rates
     @pytest.mark.unit
     def test_fit_learns_state_default_rates(self, transformer):
