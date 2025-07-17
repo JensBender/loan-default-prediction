@@ -374,22 +374,31 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
 
 # Target encoding of state default rate 
 class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
-    def fit(self, X, y):
-        # Validate X input data type
+    def _validate_X_input(self, X):
+        # Ensure X input is a DataFrame
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
+        
+        # Ensure DataFrame contains the required "state" column
+        if "state" not in X.columns:
+            raise ValueError("Input X is missing the 'state' column.")
+        
+        # Ensure all values in the "state" column are strings or missing values
+        # Non-scalar types (list, tuple, dict, set) must be checked first, since pd.isna() can raise errors on non-scalars
+        if X["state"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
+            raise TypeError("All values in 'state' column must be strings or missing values.")
+                
+    def fit(self, X, y):
+        # Validate X input
+        self._validate_X_input(X)
 
-        # Validate y input data type
+        # Ensure y input is a Series
         if not isinstance(y, pd.Series):
             raise TypeError("Input y must be a pandas Series.")   
         
         # Ensure X and y have the same number of samples 
         if len(X) != len(y):
             raise ValueError(f"X and y must have the same number of samples. X has {len(X)} samples, but y has {len(y)}.")
-
-        # Ensure input DataFrame contains the required "state" column
-        if "state" not in X.columns:
-            raise ValueError("Input X is missing the 'state' column.")
         
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
@@ -406,18 +415,12 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         # Ensure .fit() happened before
         check_is_fitted(self)
 
-        # Validate input data type
-        if not isinstance(X, pd.DataFrame):
-            raise TypeError("Input X must be a pandas DataFrame.") 
+        # Validate X input
+        self._validate_X_input(X)
 
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
             raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
-
-        # Ensure all values in the "state" column are strings or missing values
-        # Non-scalar types (list, tuple, dict, set) must be checked first, since pd.isna() can raise errors on non-scalars
-        if X["state"].apply(lambda x: isinstance(x, (list, tuple, dict, set)) or not (isinstance(x, str) or pd.isna(x))).any():
-            raise TypeError("All values in 'state' column must be strings or missing values.")
 
         # Create state default rate column by mapping the state to its corresponding default rate
         X_transformed = X.copy()
