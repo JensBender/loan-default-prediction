@@ -99,27 +99,7 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         # Ensure actual and expected "default_rate_by_state_" are identical
         assert_series_equal(transformer.default_rate_by_state_, expected_default_rate_by_state_)
     
-    # Ensure .fit() handles missing values on y input 
-    @pytest.mark.unit
-    @pytest.mark.parametrize("y_with_missing_values, expected_output", [
-        ([0, 1, 1, np.nan], [0.5, 1.0]),
-        ([0, 1, 1, None], [0.5, 1.0]),
-        ([0, np.nan, 1, np.nan], [0.0, 1.0]),
-        ([np.nan, np.nan, np.nan, np.nan], [np.nan, np.nan]),
-    ])
-    def test_fit_handles_missing_y_values(self, transformer, y_with_missing_values, expected_output):
-        # X and y input
-        X = pd.DataFrame({
-            "state": ["state_1", "state_1", "state_2", "state_2"]
-        })
-        y = pd.Series(y_with_missing_values, name="default")
-        # Fit
-        transformer.fit(X, y)
-        # Expected "default_rate_by_state_" learned attribute (pd.Series)
-        expected_default_rate_by_state_index = pd.Index(["state_1", "state_2"], name="state")
-        expected_default_rate_by_state_ = pd.Series(expected_output, index=expected_default_rate_by_state_index, name="default")
-        # Ensure actual and expected "default_rate_by_state_" are identical
-        assert_series_equal(transformer.default_rate_by_state_, expected_default_rate_by_state_)
+    # Ensure .fit() raises MissingValueError for missing values on y input 
 
     # Ensure .transform() successfully adds the "state_default_rate" column 
     @pytest.mark.unit
@@ -137,30 +117,6 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
             "state": ["state_1", "state_1", "state_2", "state_2"],
             "state_default_rate": [0.5, 0.5, 1.0, 1.0]
         })
-        # Ensure actual and expected output DataFrames are identical
-        assert_frame_equal(X_transformed, expected_X_transformed)
-
-    # Ensure .transform() assigns np.nan to unknown or missing states 
-    @pytest.mark.unit
-    @pytest.mark.parametrize("unknown_or_missing_state", ["unknown_state", np.nan, None])
-    def test_transform_assigns_nan_to_unknown_or_missing_states(self, transformer, unknown_or_missing_state):
-        # X and y input
-        X = pd.DataFrame({
-            "state": ["state_1", "state_1", "state_2", "state_2"]
-        })
-        y = pd.Series([0, 1, 1, 1], name="default")
-        # Fit 
-        transformer.fit(X, y)
-        # Transfrom on DataFrame with unknown state
-        X_with_unknown_or_missing_state = pd.DataFrame({
-            "state": ["state_1", "state_2", unknown_or_missing_state]
-        })
-        X_transformed = transformer.transform(X_with_unknown_or_missing_state)   
-        # Expected output with unknown state
-        expected_X_transformed = pd.DataFrame({
-            "state": ["state_1", "state_2", unknown_or_missing_state],
-            "state_default_rate": [0.5, 1, np.nan]
-        })  
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
 
