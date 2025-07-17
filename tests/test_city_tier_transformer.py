@@ -207,7 +207,7 @@ class TestCityTierTransformer(BaseTransformerTests):
         transformer.fit(X)
         expected_error_message = "All values in 'city' column must be strings."
         with pytest.raises(TypeError, match=expected_error_message):
-            transformer.fit(X_with_non_string_city)
+            transformer.transform(X_with_non_string_city)
 
     # Ensure .transform() raises CategoricalLabelError for unknown cities (not in "city_tier_map")
     @pytest.mark.unit
