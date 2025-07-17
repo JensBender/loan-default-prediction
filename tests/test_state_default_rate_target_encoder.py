@@ -95,6 +95,26 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         with pytest.raises(MissingValueError, match=expected_error_message):
             transformer.fit(X_with_missing_state, y)
 
+    # Ensure .fit() raises TypeError for non-string values in the "state" column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("non_string_value", [
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a", "set"},
+        {"a": "dictionary"}, 
+        1,
+        1.23,
+        False
+    ])
+    def test_fit_raises_type_error_for_non_string_states(self, transformer, non_string_value):
+        X_with_non_string_state = pd.DataFrame({
+            "state": ["state_1", non_string_value, "state_2"]
+        })  
+        y = pd.Series([0, 0, 1])  
+        expected_error_message = "All values in 'state' column must be strings."
+        with pytest.raises(TypeError, match=expected_error_message):
+            transformer.fit(X_with_non_string_state, y)    
+
     # Ensure .fit() raises ValueError for unequal index of X and y
     @pytest.mark.unit
     @pytest.mark.parametrize("X, y", [
@@ -129,6 +149,31 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         assert_series_equal(transformer.default_rate_by_state_, expected_default_rate_by_state_)
     
     # Ensure .fit() raises MissingValueError for missing values on y input 
+
+    # Ensure .transform() raises TypeError for non-string values in the "state" column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("non_string_value", [
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a", "set"},
+        {"a": "dictionary"}, 
+        1,
+        1.23,
+        False
+    ])
+    def test_transform_raises_type_error_for_non_string_states(self, transformer, non_string_value):
+        X = pd.DataFrame({
+            "state": ["state_1", "state_2", "state_3"]
+        }) 
+        X_with_non_string_state = pd.DataFrame({
+            "state": ["state_1", non_string_value, "state_3"]
+        })  
+        y = pd.Series([0, 0, 1])  
+        # Fit on original DataFrame, but transform on DataFrame with non-string state 
+        transformer.fit(X, y)
+        expected_error_message = "All values in 'state' column must be strings."
+        with pytest.raises(TypeError, match=expected_error_message):
+            transformer.transform(X_with_non_string_state)
 
     # Ensure .transform() successfully adds the "state_default_rate" column 
     @pytest.mark.unit
