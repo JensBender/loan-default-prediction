@@ -1,6 +1,7 @@
 # Standard library imports
 import os
 import sys
+import re
 
 # Third-party library imports
 import pytest
@@ -137,7 +138,28 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
             transformer.fit(X, invalid_y_input)
 
     # Ensure .fit() raises MissingValueError for missing values on y input 
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_fit_raises_missing_value_error_for_missing_y_values(self, transformer, missing_value):
+        X = pd.DataFrame({
+            "state": ["state_1", "state_2", "state_3"]
+        })
+        y_with_missing_value = pd.Series([0, missing_value, 1])  
+        expected_error_message = "Input y cannot contain missing values."
+        with pytest.raises(MissingValueError, match=expected_error_message):
+            transformer.fit(X, y_with_missing_value)
+    
     # Ensure .fit() raises ValueError for y values that are not 0 or 1 
+    @pytest.mark.unit
+    @pytest.mark.parametrize("out_of_range_value", [-1, 2])
+    def test_fit_raises_value_error_if_y_not_0_or_1(self, transformer, out_of_range_value):
+        X = pd.DataFrame({
+            "state": ["state_1", "state_2", "state_3"]
+        })
+        y_out_of_range = pd.Series([0, out_of_range_value, 1])  
+        expected_error_message = re.escape("All y values must be 0 (no default) or 1 (default).")  # escape the string for the regex match
+        with pytest.raises(ValueError, match=expected_error_message):
+            transformer.fit(X, y_out_of_range)
 
     # Ensure .fit() raises ValueError for unequal index of X and y
     @pytest.mark.unit
