@@ -416,6 +416,13 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         # Validate X input
         self._validate_X_input(X)
 
+        # Ensure "state" column contains only known states seen during .fit()
+        known_states = set(self.default_rate_by_state_.index)
+        input_states = set(X["state"].unique())
+        unknown_states = input_states - known_states
+        if unknown_states:
+            raise CategoricalLabelError(f"'state' column contains unknown states: {', '.join(unknown_states)}.")
+      
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
             raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
