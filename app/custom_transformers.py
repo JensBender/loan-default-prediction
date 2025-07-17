@@ -390,13 +390,17 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         # Validate X input
         self._validate_X_input(X)
 
-        # Ensure y input is a Series
+        # Ensure y input is a pandas Series
         if not isinstance(y, pd.Series):
             raise TypeError("Input y must be a pandas Series.")   
         
         # Ensure y has no missing values
         if y.isna().any():
             raise MissingValueError("Input y cannot contain missing values.")
+
+        # Ensure y is integer type
+        if not pd.api.types.is_integer_dtype(y):
+            raise TypeError("Input y must be integer type.")
 
         # Ensure all y values are 0 or 1 
         if not y.isin([0, 1]).all():
