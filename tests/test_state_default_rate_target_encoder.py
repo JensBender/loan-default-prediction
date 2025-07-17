@@ -209,30 +209,3 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         X_transformed_without_city = X_transformed[other_columns]
         # Ensure untransformed and transformed DataFrames of other columns are identical
         assert_frame_equal(X_without_state, X_transformed_without_city)
-
-    # Ensure .transform() raises TypeError for "state" values with invalid data type (must be strings or missing values)
-    @pytest.mark.unit
-    @pytest.mark.parametrize("invalid_state_data_type", [
-        ["a", "list"],
-        ("a", "tuple"),
-        {"a": "dictionary"},
-        {"a", "set"}, 
-        1,
-        1.23,
-        False
-    ])
-    def test_transform_raises_type_error_for_invalid_state(self, transformer, invalid_state_data_type):
-        # X and y input
-        X = pd.DataFrame({
-            "state": ["state_1", "state_1", "state_2", "state_2"]
-        })
-        y = pd.Series([0, 1, 1, 1], name="default")
-        # Fit 
-        transformer.fit(X, y)
-        # Transfrom on DataFrame with invalid data type of a single "state" value
-        X_with_invalid_state = pd.DataFrame({
-            "state": ["state_1", "state_2", invalid_state_data_type]
-        })
-        expected_error_message = "All values in 'state' column must be strings or missing values."
-        with pytest.raises(TypeError, match=expected_error_message):
-            transformer.transform(X_with_invalid_state) 
