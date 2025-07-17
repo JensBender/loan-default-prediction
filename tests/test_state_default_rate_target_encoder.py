@@ -12,7 +12,7 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import StateDefaultRateTargetEncoder
+from app.custom_transformers import StateDefaultRateTargetEncoder, MissingValueError
 from tests.base_transformer_tests import BaseSupervisedTransformerTests
 
 
@@ -77,11 +77,23 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
     @pytest.mark.unit
     def test_fit_raises_value_error_for_missing_state_column(self, transformer, X_input, y_input):
         X = X_input.copy()
-        X_without_state = X.drop(columns="state")
         y = y_input.copy()
+        X_without_state = X.drop(columns="state")
         expected_error_message = "Input X is missing the 'state' column."
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.fit(X_without_state, y)
+
+    # Ensure .fit() raises MissingValueError for missing values in the "state" column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_fit_raises_missing_value_error_for_missing_states(self, transformer, missing_value):
+        X_with_missing_state = pd.DataFrame({
+            "state": ["state_1", missing_value, "state_2"]
+        })
+        y = pd.Series([0, 0, 1])  
+        expected_error_message = "'state' column cannot contain missing values."
+        with pytest.raises(MissingValueError, match=expected_error_message):
+            transformer.fit(X_with_missing_state, y)
 
     # Ensure .fit() correctly learns state default rates
     @pytest.mark.unit
