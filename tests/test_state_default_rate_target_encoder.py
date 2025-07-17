@@ -149,6 +149,22 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         with pytest.raises(MissingValueError, match=expected_error_message):
             transformer.fit(X, y_with_missing_value)
     
+    # Ensure .fit() raises TypeError if y is not a pd.Series of integer type
+    @pytest.mark.unit
+    @pytest.mark.parametrize("y_with_wrong_type", [
+        pd.Series([0.0, 1.0]), 
+        pd.Series([True, False]), 
+        pd.Series(["no default", "default"]), 
+        pd.Series(["0", "1"]), 
+    ])
+    def test_fit_raises_type_error_if_y_not_integer(self, transformer, y_with_wrong_type):
+        X = pd.DataFrame({
+            "state": ["state_1", "state_2"]
+        })
+        expected_error_message = "Input y must be integer type."
+        with pytest.raises(TypeError, match=expected_error_message):
+            transformer.fit(X, y_with_wrong_type)
+
     # Ensure .fit() raises ValueError for y values that are not 0 or 1 
     @pytest.mark.unit
     @pytest.mark.parametrize("out_of_range_value", [-1, 2])
