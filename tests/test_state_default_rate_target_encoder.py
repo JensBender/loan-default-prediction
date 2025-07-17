@@ -150,6 +150,35 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
     
     # Ensure .fit() raises MissingValueError for missing values on y input 
 
+    # Ensure .transform() raises ValueError if input DataFrame is missing the "state" column 
+    @pytest.mark.unit
+    def test_transform_raises_value_error_for_missing_state_column(self, transformer, X_input, y_input):
+        X = X_input.copy()
+        y = y_input.copy()
+        X_without_state = X.drop(columns="state")
+        # Fit on original DataFrame, but transform on DataFrame without "state" column 
+        transformer.fit(X, y)
+        expected_error_message = "Input X is missing the 'state' column."
+        with pytest.raises(ValueError, match=expected_error_message):
+            transformer.transform(X_without_state)  
+
+    # Ensure .transform() raises MissingValueError for missing values in the "state" column
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_transform_raises_missing_value_error_for_missing_states(self, transformer, missing_value):
+        X = pd.DataFrame({
+            "state": ["state_1", "state_2", "state_3"]
+        }) 
+        y = pd.Series([0, 0, 1])
+        X_with_missing_state = pd.DataFrame({
+           "state": ["state_1", missing_value, "state_3"]
+        })  
+        # Fit on original DataFrame, but transform on DataFrame with missing state value 
+        transformer.fit(X, y) 
+        expected_error_message = "'state' column cannot contain missing values."
+        with pytest.raises(MissingValueError, match=expected_error_message):
+            transformer.transform(X_with_missing_state)
+
     # Ensure .transform() raises TypeError for non-string values in the "state" column
     @pytest.mark.unit
     @pytest.mark.parametrize("non_string_value", [
