@@ -394,6 +394,14 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         if not isinstance(y, pd.Series):
             raise TypeError("Input y must be a pandas Series.")   
         
+        # Ensure y has no missing values
+        if y.isna().any():
+            raise MissingValueError("Input y cannot contain missing values.")
+
+        # Ensure all y values are 0 or 1 
+        if not y.isin([0, 1]).all():
+            raise ValueError("All y values must be 0 (no default) or 1 (default).")
+                
         # Ensure X and y have the same number of samples 
         if len(X) != len(y):
             raise ValueError(f"X and y must have the same number of samples. X has {len(X)} samples, but y has {len(y)}.")
