@@ -13,7 +13,7 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import StateDefaultRateTargetEncoder, MissingValueError
+from app.custom_transformers import StateDefaultRateTargetEncoder, MissingValueError, CategoricalLabelError
 from tests.base_transformer_tests import BaseSupervisedTransformerTests
 
 
@@ -263,6 +263,21 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         expected_error_message = "All values in 'state' column must be strings."
         with pytest.raises(TypeError, match=expected_error_message):
             transformer.transform(X_with_non_string_state)
+
+    # Ensure .transform() raises CategoricalLabelError for unknown states not seen during .fit()
+    def test_transform_raises_categorical_label_error_for_unknown_states(self, transformer):
+        X = pd.DataFrame({
+            "state": ["state_1", "state_2", "state_3"]
+        })
+        y = pd.Series([0, 0, 1]) 
+        X_with_unknown_state = pd.DataFrame({
+            "state": ["state_1", "unknown_state", "state_3"]
+        })  
+        # Fit on original DataFrame, but transform on DataFrame with unknown state 
+        transformer.fit(X, y)
+        expected_error_message = "'state' column contains unknown states: unknown_state."
+        with pytest.raises(CategoricalLabelError, match=expected_error_message):
+            transformer.transform(X_with_unknown_state)
 
     # Ensure .transform() successfully adds the "state_default_rate" column 
     @pytest.mark.unit
