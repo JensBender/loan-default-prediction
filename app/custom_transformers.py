@@ -360,13 +360,8 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         if X.columns.tolist() != self.feature_names_in_:
             raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
 
-        # Handle empty DataFrames
-        X_transformed = X.copy()
-        if X_transformed.empty:
-            X_transformed["city_tier"] = pd.Series(dtype="object")
-            return X_transformed
-
         # Create city tier column by mapping cities to city tiers
+        X_transformed = X.copy()
         X_transformed["city_tier"] = X_transformed["city"].map(self.city_tier_map)
         
         return X_transformed
