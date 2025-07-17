@@ -115,6 +115,30 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         with pytest.raises(TypeError, match=expected_error_message):
             transformer.fit(X_with_non_string_state, y)    
 
+    # Ensure .fit() raises TypeError if y input is not a pandas Series 
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_y_input", [
+        np.array([1, 2, 3]), 
+        pd.DataFrame({"column_1": [1, 2, 3]}),
+        "a string",
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a", "set"}, 
+        {"a": "dictionary"},
+        1,
+        1.23,
+        False,
+        None
+    ])
+    def test_fit_raises_type_error_if_y_not_pandas_series(self, transformer, X_input, invalid_y_input):
+        X = X_input.copy()
+        expected_error_message = "Input y must be a pandas Series."
+        with pytest.raises(TypeError, match=expected_error_message):
+            transformer.fit(X, invalid_y_input)
+
+    # Ensure .fit() raises MissingValueError for missing values on y input 
+    # Ensure .fit() raises ValueError for y values that are not 0 or 1 
+
     # Ensure .fit() raises ValueError for unequal index of X and y
     @pytest.mark.unit
     @pytest.mark.parametrize("X, y", [
@@ -148,8 +172,6 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         # Ensure actual and expected "default_rate_by_state_" are identical
         assert_series_equal(transformer.default_rate_by_state_, expected_default_rate_by_state_)
     
-    # Ensure .fit() raises MissingValueError for missing values on y input 
-
     # Ensure .transform() raises ValueError if input DataFrame is missing the "state" column 
     @pytest.mark.unit
     def test_transform_raises_value_error_for_missing_state_column(self, transformer, X_input, y_input):
