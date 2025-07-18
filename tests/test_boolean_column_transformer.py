@@ -249,6 +249,28 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         with pytest.raises(MissingValueError, match=expected_error_message):
             transformer.transform(X_with_missing)
 
+    # Ensure .transform() raises TypeError for invalid data types of boolean columns (must be str, int, float, bool)
+    @pytest.mark.unit
+    @pytest.mark.parametrize("boolean_column", ["married", "car_ownership"])
+    @pytest.mark.parametrize("invalid_data_type", [
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a": "dictionary"},
+        {"a", "set"}
+    ])
+    def test_transform_raises_type_error_for_invalid_boolean_column_type(self, transformer, boolean_column, invalid_data_type):
+        X = pd.DataFrame({
+            "married": ["single", "married", "single"],
+            "car_ownership": ["no", "yes", "no"],
+        })
+        X_with_invalid_type = X.copy()
+        X_with_invalid_type.at[0, boolean_column] = invalid_data_type  # modify first row as a representative example
+        expected_error_message = f"All values in '{boolean_column}' column must be str, int, float or bool."
+        # Fit on original DataFrame, but transform on DataFrame with invalid data type
+        transformer.fit(X)
+        with pytest.raises(TypeError, match=expected_error_message):
+            transformer.transform(X_with_invalid_type)
+
     # Ensure .transform() raises CategoricalLabelError for unknown labels (not in "boolean_column_mappings")
     @pytest.mark.unit
     @pytest.mark.parametrize("boolean_column, unknown_label", [
