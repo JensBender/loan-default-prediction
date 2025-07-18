@@ -197,7 +197,7 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
 
         self.boolean_column_mappings = boolean_column_mappings 
             
-    def fit(self, X, y=None):  
+    def _validate_input(self, X):
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
@@ -211,14 +211,18 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
 
         # Iterate all binary columns (from "boolean_column_mappings")
         for column, mapping in self.boolean_column_mappings.items():            
-            # Ensure the current binary column contains only labels specified in the mappings
-            specified_labels = set(mapping.keys())
+            # Ensure the current binary column contains only known labels (from "boolean_column_mappings")
+            known_labels = set(mapping.keys())
             input_labels = set(X[column].unique())
-            unspecified_labels = input_labels- specified_labels
-            unspecified_labels_notna = {label for label in unspecified_labels if pd.notna(label)}  # allow missing values to pass through
-            if unspecified_labels_notna:
-                raise CategoricalLabelError(f"Column '{column}' contains labels that are not specified in the mapping: {', '.join(unspecified_labels_notna)}.")
+            unknown_labels = input_labels- known_labels
+            unknown_labels_notna = {label for label in unknown_labels if pd.notna(label)}  # allow missing values to pass through
+            if unknown_labels_notna:
+                raise CategoricalLabelError(f"Column '{column}' contains labels that are not specified in the mapping: {', '.join(unknown_labels_notna)}.")
 
+    def fit(self, X, y=None):  
+        # Validate input
+        self._validate_input(X)
+        
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
@@ -229,9 +233,8 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
         # Ensure .fit() happened before
         check_is_fitted(self)
         
-        # Validate input data type
-        if not isinstance(X, pd.DataFrame):
-            raise TypeError("Input X must be a pandas DataFrame.")   
+        # Validate input
+        self._validate_input(X)
                     
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
