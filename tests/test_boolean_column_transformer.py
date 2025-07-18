@@ -202,6 +202,20 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
 
+    # Ensure .transform() raises ColumnMismatchError if any required column (from "boolean_column_mappings") is missing in X input DataFrame
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_columns", [
+        "married", 
+        "car_ownership", 
+        ["married", "car_ownership"],
+    ])
+    def test_transform_raises_column_mismatch_error_for_missing_columns(self, transformer, X_input, missing_columns):
+        X = X_input.copy()
+        X_with_missing_columns = X.drop(columns=missing_columns)
+        transformer.fit(X)
+        with pytest.raises(ColumnMismatchError):
+            transformer.transform(X_with_missing_columns)
+
     # Ensure .transform() assigns np.nan to categorical labels not in boolean_column_mappings
     @pytest.mark.unit
     def test_transform_assigns_nan_to_unmapped_labels(self, transformer):
