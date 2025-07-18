@@ -213,6 +213,23 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         with pytest.raises(ColumnMismatchError):
             transformer.transform(X_with_missing_columns)
 
+    # Ensure .transform() raises MissingValueError for missing values in boolean columns
+    @pytest.mark.unit
+    @pytest.mark.parametrize("boolean_column", ["married", "car_ownership"])
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_transform_raises_missing_value_error_for_nan_in_boolean_columns(self, transformer, boolean_column, missing_value):
+        X = pd.DataFrame({
+            "married": ["single", "married", "single"],
+            "car_ownership": ["no", "yes", "no"],
+        })
+        X_with_missing = X.copy()
+        X_with_missing.loc[0, boolean_column] = missing_value  # modify first row as a representative example
+        expected_error_message = f"'{boolean_column}' column cannot contain missing values."
+        # Fit on original DataFrame, but transform on DataFrame with missing value
+        transformer.fit(X)
+        with pytest.raises(MissingValueError, match=expected_error_message):
+            transformer.transform(X_with_missing)
+
     # Ensure .transform() assigns np.nan to categorical labels not in boolean_column_mappings
     @pytest.mark.unit
     def test_transform_assigns_nan_to_unmapped_labels(self, transformer):
@@ -235,32 +252,6 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         })
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
-
-    # Ensure .transform() ignores missing values in boolean columns
-    @pytest.mark.unit
-    @pytest.mark.parametrize("boolean_column", ["married", "car_ownership"])
-    @pytest.mark.parametrize("missing_value", [None, np.nan])
-    def test_transform_ignores_missing_values_in_boolean_columns(self, transformer, boolean_column, missing_value):
-        # Create input DataFrame with a missing value in the boolean column
-        X_with_missing_value = pd.DataFrame({
-            "married": ["single", "married", "single"],
-            "car_ownership": ["no", "yes", "no"],            
-        })    
-        X_with_missing_value.loc[0, boolean_column] = missing_value  # in first row
-        # Fit and transform
-        transformer.fit(X_with_missing_value)
-        X_transformed = transformer.transform(X_with_missing_value)
-        # Create expected output
-        expected_X_transformed = pd.DataFrame({
-            "married": [False, True, False],  
-            "car_ownership": [False, True, False],               
-        })
-        expected_X_transformed[boolean_column] = expected_X_transformed[boolean_column].astype(object)  # cast bool to object so column can store nan
-        expected_X_transformed.loc[0, boolean_column] = np.nan  # .map() normalizes both None and np.nan to np.nan
-        # Ensure the column is no longer boolean data type 
-        assert X_transformed[boolean_column].dtype != "bool"
-        # Ensure actual and expected output DataFrames are identical
-        assert_frame_equal(X_transformed, expected_X_transformed)        
 
     # Ensure .transform() ignores other columns not specified in boolean_column_mappings hyperparameter
     @pytest.mark.unit
