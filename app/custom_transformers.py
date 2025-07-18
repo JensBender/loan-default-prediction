@@ -213,7 +213,12 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
         for column in required_columns:
             if X[column].isna().any():
                 raise MissingValueError(f"'{column}' column cannot contain missing values.")
-        
+
+        # Ensure all binary columns have valid data types (str, int, float, bool)
+        for column in required_columns:
+            if X[column].apply(lambda x: not isinstance(x, (str, int, float, bool))).any():
+                raise TypeError(f"All values in '{column}' column must be str, int, float or bool.")
+
         # Ensure all binary columns contains only known labels (from "boolean_column_mappings")
         for column, mapping in self.boolean_column_mappings.items():            
             known_labels = set(mapping.keys())
