@@ -165,6 +165,27 @@ class TestMissingValueChecker(BaseTransformerTests):
         with pytest.raises(ColumnMismatchError):
             transformer.transform(X_with_missing_columns)
 
+    # Override parent class method to ensure unexpected columns raise ColumnMismatchError instead of ValueError (see next method)
+    def test_transform_raises_value_error_for_extra_column(self):
+        pass
+    
+    # Ensure .transform() raises ColumnMismatchError for unexpected columns in the input DataFrame
+    @pytest.mark.unit
+    @pytest.mark.parametrize("unexpected_columns", [
+        ["unexpected_column_1"],
+        ["unexpected_column_1", "unexpected_column_2"],
+        ["unexpected_column_1", "unexpected_column_2", "unexpected_column_3"]
+    ])
+    def test_transform_raises_column_mismatch_error_for_unexpected_columns(self, transformer, X_input, unexpected_columns):
+        X = X_input.copy()
+        X_with_unexpected_columns = X_input.copy()
+        for unexpected_column in unexpected_columns:
+            X_with_unexpected_columns[unexpected_column] = 5 
+        # Fit on original DataFrame, but transform on DataFrame with unexpected columns
+        transformer.fit(X)
+        with pytest.raises(ColumnMismatchError):
+            transformer.transform(X_with_unexpected_columns)
+
     # Ensure .transform() raises MissingValueError for missing values in critical features
     @pytest.mark.unit
     @pytest.mark.parametrize("missing_value", [None, np.nan])
