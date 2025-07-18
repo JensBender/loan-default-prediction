@@ -230,28 +230,28 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         with pytest.raises(MissingValueError, match=expected_error_message):
             transformer.transform(X_with_missing)
 
-    # Ensure .transform() assigns np.nan to categorical labels not in boolean_column_mappings
+    # Ensure .transform() raises CategoricalLabelError for unknown labels (not in "boolean_column_mappings")
     @pytest.mark.unit
-    def test_transform_assigns_nan_to_unmapped_labels(self, transformer):
+    @pytest.mark.parametrize("boolean_column, unknown_label", [
+        ("married", "divorced"), 
+        ("married", "yes"), 
+        ("married", "no"),
+        ("car_ownership", "maybe"),
+        ("car_ownership", "lamborghini"),
+        ("car_ownership", "soon"),
+    ])
+    def test_transform_raises_categorical_label_error_for_unknown_labels(self, transformer, boolean_column, unknown_label):
         X = pd.DataFrame({
             "married": ["single", "married", "single"],
-            "car_ownership": ["no", "yes", "no"],            
-        })        
-        X_with_unmapped_labels = pd.DataFrame({
-            "married": ["single", "married", "divorced"],  # "divorced" unmapped
-            "car_ownership": ["no", "yes", "maybe"],  # "maybe" unmapped        
+            "car_ownership": ["no", "yes", "no"],
         })
-        # Fit on DataFrame where all labels are specified in the mappings
+        X_with_unknown_label = X.copy()
+        X_with_unknown_label.loc[0, boolean_column] = unknown_label  # modify first row as a representative example
+        expected_error_message = f"'{boolean_column}' column contains unknown labels that are not in 'boolean_column_mappings': {unknown_label}."
+        # Fit on original DataFrame, but transform on DataFrame with unknown label
         transformer.fit(X)
-        # Transform on DataFrame that contains labels not in boolean_column_mappings
-        X_transformed = transformer.transform(X_with_unmapped_labels)
-        # Create expected output
-        expected_X_transformed = pd.DataFrame({
-            "married": [False, True, np.nan],
-            "car_ownership": [False, True, np.nan],               
-        })
-        # Ensure actual and expected output DataFrames are identical
-        assert_frame_equal(X_transformed, expected_X_transformed)
+        with pytest.raises(CategoricalLabelError, match=expected_error_message):
+            transformer.fit(X_with_unknown_label)
 
     # Ensure .transform() ignores other columns not specified in boolean_column_mappings hyperparameter
     @pytest.mark.unit
