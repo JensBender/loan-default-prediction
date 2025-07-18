@@ -147,6 +147,24 @@ class TestMissingValueChecker(BaseTransformerTests):
         with pytest.raises(ColumnMismatchError):
             transformer.fit(X_with_unexpected_columns)
 
+    # Ensure .transform() raises ColumnMismatchError for missing columns in the input DataFrame
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_columns", [
+        "income", 
+        "age", 
+        ["experience", "married"],
+        ["house_ownership", "car_ownership"],
+        ["profession", "city", "state"],
+        ["current_job_yrs", "current_house_yrs"],
+    ])
+    def test_transform_raises_column_mismatch_error_for_missing_columns(self, transformer, X_input, missing_columns):
+        X = X_input.copy()
+        X_with_missing_columns = X.drop(columns=missing_columns)
+        # Fit on original DataFrame, but transform on DataFrame with missing columns
+        transformer.fit(X)
+        with pytest.raises(ColumnMismatchError):
+            transformer.transform(X_with_missing_columns)
+
     # Ensure .transform() raises MissingValueError for missing values in critical features
     @pytest.mark.unit
     @pytest.mark.parametrize("missing_value", [None, np.nan])
