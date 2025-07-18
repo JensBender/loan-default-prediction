@@ -177,7 +177,7 @@ class SnakeCaseFormatter(BaseEstimator, TransformerMixin):
 # Convert binary categorical columns to boolean columns 
 class BooleanColumnTransformer(BaseEstimator, TransformerMixin):  
     def __init__(self, boolean_column_mappings):
-       # Validate input data type
+        # Validate input data type
         if not isinstance(boolean_column_mappings, dict):
             raise TypeError("'boolean_column_mappings' must be a dictionary specifying the mappings.")
 
@@ -190,6 +190,10 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
             # Ensure the mapping of the current column is also a dictionary
             if not isinstance(mapping, dict):
                 raise TypeError(f"The mapping for '{column}' must be a dictionary.")
+            
+            # Ensure the values of the current mapping are boolean
+            if not all(isinstance(value, bool) for value in mapping.values()):
+                raise ValueError(f"All values in the mapping for '{column}' must be boolean (True or False).")
 
         self.boolean_column_mappings = boolean_column_mappings 
             
