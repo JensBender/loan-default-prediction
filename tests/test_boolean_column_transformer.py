@@ -13,7 +13,7 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import BooleanColumnTransformer, ColumnMismatchError, CategoricalLabelError
+from app.custom_transformers import BooleanColumnTransformer, ColumnMismatchError, MissingValueError, CategoricalLabelError
 from app.global_constants import BOOLEAN_COLUMN_MAPPINGS
 from tests.base_transformer_tests import BaseTransformerTests
 
@@ -147,7 +147,21 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         X_with_missing_columns = X.drop(columns=missing_columns)
         with pytest.raises(ColumnMismatchError):
             transformer.fit(X_with_missing_columns)
-
+    
+    # Ensure .fit() raises MissingValueError for missing values in boolean columns
+    @pytest.mark.unit
+    @pytest.mark.parametrize("boolean_column", ["married", "car_ownership"])
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_fit_raises_missing_value_error_for_nan_in_boolean_columns(self, transformer, boolean_column, missing_value):
+        X_with_missing = pd.DataFrame({
+            "married": ["single", "married", "single"],
+            "car_ownership": ["no", "yes", "no"],
+        })
+        X_with_missing.loc[0, boolean_column] = missing_value  # modify first row as a representative example
+        expected_error_message = f"'{boolean_column}' column cannot contain missing values."
+        with pytest.raises(MissingValueError, match=expected_error_message):
+            transformer.fit(X_with_missing)
+    
     # Ensure .fit() raises CategoricalLabelError for labels not specified in the mappings
     @pytest.mark.unit
     @pytest.mark.parametrize("boolean_column, unspecified_label", [
@@ -168,23 +182,6 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         with pytest.raises(CategoricalLabelError, match=expected_error_message):
             transformer.fit(X)
 
-    # Ensure .fit() ignores missing values in boolean columns
-    @pytest.mark.unit
-    @pytest.mark.parametrize("boolean_column", ["married", "car_ownership"])
-    @pytest.mark.parametrize("missing_value", [None, np.nan])
-    def test_fit_ignores_missing_values_in_boolean_columns(self, transformer, boolean_column, missing_value):
-        X = pd.DataFrame({
-            "married": ["single", "married", "single"],
-            "car_ownership": ["no", "yes", "no"],
-        })
-        # Modify first row as a representative example
-        X.loc[0, boolean_column] = missing_value
-        # .fit() should not raise an error 
-        transformer.fit(X)
-        # Ensure the learned feature number and names are same as in input DataFrame
-        assert transformer.n_features_in_ == X.shape[1]
-        assert transformer.feature_names_in_ == X.columns.tolist()
-    
     # Ensure .transform() successfully converts categorical string labels to boolean
     @pytest.mark.unit
     def test_transform_converts_string_categories_to_boolean(self, transformer, X_input):
