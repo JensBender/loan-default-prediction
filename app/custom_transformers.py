@@ -184,7 +184,13 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
         # Validate input value
         if not boolean_column_mappings:
             raise ValueError("'boolean_column_mappings' cannot be an empty dictionary. It must specify the the mappings.")
-            
+
+        # Iterate all columns in "boolean_column_mappings"
+        for column, mapping in self.boolean_column_mappings.items():
+            # Ensure the mapping of the current column is also a dictionary
+            if not isinstance(mapping, dict):
+                raise TypeError(f"The mapping for '{column}' must be a dictionary.")
+
         self.boolean_column_mappings = boolean_column_mappings 
             
     def fit(self, X, y=None):  
@@ -192,19 +198,15 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
         
-        # Ensure input DataFrame contains all required columns
+        # Ensure input DataFrame contains all required binary columns (from "boolean_column_mappings")
         input_columns = set(X.columns)
         required_columns = set(self.boolean_column_mappings.keys())
         missing_columns = required_columns - input_columns 
         if missing_columns:
             raise ColumnMismatchError(f"Input X is missing the following columns: {', '.join(missing_columns)}.")
 
-        # Ensure all binary columns contain only labels specified in the mappings
-        for column, mapping in self.boolean_column_mappings.items():
-            # Ensure the mapping itself is also a dictionary
-            if not isinstance(mapping, dict):
-                raise TypeError(f"The mapping for '{column}' must be a dictionary.")
-            
+        # Iterate all binary columns (from "boolean_column_mappings")
+        for column, mapping in self.boolean_column_mappings.items():            
             # Ensure the current binary column contains only labels specified in the mappings
             specified_labels = set(mapping.keys())
             input_labels = set(X[column].unique())
