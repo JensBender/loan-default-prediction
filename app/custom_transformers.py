@@ -224,9 +224,8 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
             known_labels = set(mapping.keys())
             input_labels = set(X[column].unique())
             unknown_labels = input_labels- known_labels
-            unknown_labels_notna = {label for label in unknown_labels if pd.notna(label)}  # allow missing values to pass through
-            if unknown_labels_notna:
-                raise CategoricalLabelError(f"Column '{column}' contains labels that are not specified in the mapping: {', '.join(unknown_labels_notna)}.")
+            if unknown_labels:
+                raise CategoricalLabelError(f"'{column}' column contains unknown labels that are not in 'boolean_column_mappings': {', '.join(unknown_labels)}.")
 
     def fit(self, X, y=None):  
         # Validate input
