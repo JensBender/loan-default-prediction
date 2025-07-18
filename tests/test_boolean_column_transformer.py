@@ -292,9 +292,9 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         # Fit on original DataFrame, but transform on DataFrame with unknown label
         transformer.fit(X)
         with pytest.raises(CategoricalLabelError, match=expected_error_message):
-            transformer.fit(X_with_unknown_label)
+            transformer.transform(X_with_unknown_label)
 
-    # Ensure .transform() ignores other columns not specified in boolean_column_mappings hyperparameter
+    # Ensure .transform() ignores other columns not in "boolean_column_mappings"
     @pytest.mark.unit
     def test_transform_ignores_other_columns(self, transformer, X_input):
         X = X_input.copy()
