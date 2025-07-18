@@ -37,10 +37,10 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         self.critical_features = critical_features
         self.non_critical_features = non_critical_features
     
-    def fit(self, X, y=None):
+    def _validate_input(self, X):
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
-            raise TypeError("Input X must be a pandas DataFrame.")   
+            raise TypeError("Input X must be a pandas DataFrame.")          
         
         # Ensure input DataFrame contains all required columns
         input_columns = set(X.columns)
@@ -53,6 +53,10 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         unexpected_columns = input_columns - required_columns
         if unexpected_columns:
             raise ColumnMismatchError(f"Input X contains the following columns that are neither defined in 'critical_features' nor 'non_critical_features: {', '.join(unexpected_columns)}.")
+            
+    def fit(self, X, y=None):
+        # Validate input 
+        self._validate_input(X)  
         
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
@@ -64,9 +68,8 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         # Ensure .fit() happened before
         check_is_fitted(self)
         
-        # Validate input data type
-        if not isinstance(X, pd.DataFrame):
-            raise TypeError("Input X must be a pandas DataFrame.")   
+        # Validate input 
+        self._validate_input(X)    
         
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
