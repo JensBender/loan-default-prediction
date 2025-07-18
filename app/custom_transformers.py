@@ -186,7 +186,7 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
             raise ValueError("'boolean_column_mappings' cannot be an empty dictionary. It must specify the the mappings.")
 
         # Iterate all columns in "boolean_column_mappings"
-        for column, mapping in self.boolean_column_mappings.items():
+        for column, mapping in boolean_column_mappings.items():
             # Ensure the mapping of the current column is also a dictionary
             if not isinstance(mapping, dict):
                 raise TypeError(f"The mapping for '{column}' must be a dictionary.")
