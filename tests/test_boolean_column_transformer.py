@@ -1,6 +1,7 @@
 # Standard library imports
 import os
 import sys
+import re
 
 # Third-party library imports
 import pytest
@@ -91,7 +92,7 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
         with pytest.raises(ValueError, match=expected_error_message):
             BooleanColumnTransformer(boolean_column_mappings={})
 
-    # Ensure __init__()  raises TypeError if any individual mapping within the "boolean_column_mappings" is not a dictionary
+    # Ensure __init__() raises TypeError if any individual mapping within the "boolean_column_mappings" is not a dictionary
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_mapping", [
         "a string",
@@ -114,8 +115,25 @@ class TestBooleanColumnTransformer(BaseTransformerTests):
             )
 
     # Ensure __init__() raises ValueError if any value in the mappings is not boolean
-    def test_init_raises_value_error_for_non_boolean_mapping_values(self):
-        pass
+    @pytest.mark.parametrize("non_boolean_value", [
+        "a string",
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a": "dictionary"},
+        {"a", "set"},
+        1,
+        1.23,
+        None
+    ])
+    def test_init_raises_value_error_for_non_boolean_mapping_values(self, non_boolean_value):
+        expected_error_message = re.escape("All values in the mapping for 'car_ownership' must be boolean (True or False).")
+        with pytest.raises(ValueError, match=expected_error_message):
+            BooleanColumnTransformer(
+                boolean_column_mappings={
+                    "married": {"married": True, "single": False},
+                    "car_ownership": {"yes": True, "no": non_boolean_value}
+                }
+            )
 
     # Ensure .fit() raises ColumnMismatchError if any required column (from "boolean_column_mappings") is missing in X input DataFrame
     @pytest.mark.unit
