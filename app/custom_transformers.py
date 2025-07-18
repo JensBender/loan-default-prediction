@@ -209,9 +209,13 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
         if missing_columns:
             raise ColumnMismatchError(f"Input X is missing the following columns: {', '.join(missing_columns)}.")
 
-        # Iterate all binary columns (from "boolean_column_mappings")
+        # Ensure all binary columns have no missing values
+        for column in required_columns:
+            if X[column].isna().any():
+                raise MissingValueError(f"'{column}' column cannot contain missing values.")
+        
+        # Ensure all binary columns contains only known labels (from "boolean_column_mappings")
         for column, mapping in self.boolean_column_mappings.items():            
-            # Ensure the current binary column contains only known labels (from "boolean_column_mappings")
             known_labels = set(mapping.keys())
             input_labels = set(X[column].unique())
             unknown_labels = input_labels- known_labels
