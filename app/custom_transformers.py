@@ -53,11 +53,49 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         unexpected_columns = input_columns - required_columns
         if unexpected_columns:
             raise ColumnMismatchError(f"Input X contains the following columns that are neither defined in 'critical_features' nor 'non_critical_features: {', '.join(unexpected_columns)}.")
+
+    def _check_missing_values(self, X):
+        # --- Critical features ---
+        # Calculate total number of missing values  
+        n_missing_total_critical = X[self.critical_features].isnull().sum().sum()
+        # Calculate number of rows with missing values  
+        n_missing_rows_critical = X[self.critical_features].isnull().any(axis=1).sum()
+        # Create dictionary with number of missing values by column 
+        n_missing_by_column_critical = X[self.critical_features].isnull().sum().to_dict()
+        # Raise error  
+        if n_missing_total_critical > 0:
+            values = "value" if n_missing_total_critical == 1 else "values"
+            rows = "row" if n_missing_rows_critical == 1 else "rows"
+            raise MissingValueError(
+                f"{n_missing_total_critical} missing {values} found in critical features "
+                f"across {n_missing_rows_critical} {rows}. Please provide missing {values}.\n"
+                f"Missing values by column: {n_missing_by_column_critical}"
+            )
+
+        # --- Non-critical features ---
+        # Calculate total number of missing values 
+        n_missing_total_noncritical = X[self.non_critical_features].isnull().sum().sum()        
+        # Calculate number of rows with missing values 
+        n_missing_rows_noncritical = X[self.non_critical_features].isnull().any(axis=1).sum()
+        # Create dictionary with number of missing values by column 
+        n_missing_by_column_noncritical = X[self.non_critical_features].isnull().sum().to_dict()
+        # Display warning message
+        if n_missing_total_noncritical > 0:
+            values = "value" if n_missing_total_noncritical == 1 else "values"
+            rows = "row" if n_missing_rows_noncritical == 1 else "rows"
+            print(
+                f"Warning: {n_missing_total_noncritical} missing {values} found in non-critical features "
+                f"across {n_missing_rows_noncritical} {rows}. Missing {values} will be imputed.\n"
+                f"Missing values by column: {n_missing_by_column_noncritical}"
+            )
             
     def fit(self, X, y=None):
         # Validate input 
         self._validate_input(X)  
-        
+
+        # Check missing values
+        self._check_missing_values(X)
+
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
@@ -74,44 +112,11 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
             raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
-
-        X_transformed = X.copy()
         
-        # --- Critical features ---
-        # Calculate total number of missing values  
-        n_missing_total_critical = X_transformed[self.critical_features].isnull().sum().sum()
-        # Calculate number of rows with missing values  
-        n_missing_rows_critical = X_transformed[self.critical_features].isnull().any(axis=1).sum()
-        # Create dictionary with number of missing values by column 
-        n_missing_by_column_critical = X_transformed[self.critical_features].isnull().sum().to_dict()
-        # Raise error  
-        if n_missing_total_critical > 0:
-            values = "value" if n_missing_total_critical == 1 else "values"
-            rows = "row" if n_missing_rows_critical == 1 else "rows"
-            raise MissingValueError(
-                f"{n_missing_total_critical} missing {values} found in critical features "
-                f"across {n_missing_rows_critical} {rows}. Please provide missing {values}.\n"
-                f"Missing values by column: {n_missing_by_column_critical}"
-            )
+        # Check missing values
+        self._check_missing_values(X)
 
-        # --- Non-critical features ---
-        # Calculate total number of missing values 
-        n_missing_total_noncritical = X_transformed[self.non_critical_features].isnull().sum().sum()        
-        # Calculate number of rows with missing values 
-        n_missing_rows_noncritical = X_transformed[self.non_critical_features].isnull().any(axis=1).sum()
-        # Create dictionary with number of missing values by column 
-        n_missing_by_column_noncritical = X_transformed[self.non_critical_features].isnull().sum().to_dict()
-        # Display warning message
-        if n_missing_total_noncritical > 0:
-            values = "value" if n_missing_total_noncritical == 1 else "values"
-            rows = "row" if n_missing_rows_noncritical == 1 else "rows"
-            print(
-                f"Warning: {n_missing_total_noncritical} missing {values} found in non-critical features "
-                f"across {n_missing_rows_noncritical} {rows}. Missing {values} will be imputed.\n"
-                f"Missing values by column: {n_missing_by_column_noncritical}"
-            )
-        
-        return X_transformed
+        return X
 
 
 # Format categorical labels in snake_case
