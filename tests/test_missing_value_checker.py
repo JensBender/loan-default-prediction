@@ -166,6 +166,30 @@ class TestMissingValueChecker(BaseTransformerTests):
         with pytest.raises(MissingValueError, match=expected_error_message):
             transformer.fit(X_with_missing_value)
 
+    # Ensure .fit() prints warning message for missing values in non-critical features
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    @pytest.mark.parametrize("non_critical_feature", NON_CRITICAL_FEATURES)
+    def test_fit_prints_missing_value_warning_message_for_non_critical_features(self, transformer, X_input, missing_value, non_critical_feature, capsys):
+        X_with_missing_value = X_input.copy()
+        X_with_missing_value[non_critical_feature] = missing_value
+        transformer.fit(X_with_missing_value)
+        # Create expected dictionary of number of missing values by column 
+        expected_missing_by_column_dict = {"married": 0, "car_ownership": 0, "house_ownership": 0}
+        expected_missing_by_column_dict[non_critical_feature] = 6  # X_input has 6 rows
+        # Create expected warning message text
+        expected_warning_message = (
+            f"Warning: 6 missing values found in non-critical features "
+            f"across 6 rows. Missing values will be imputed.\n"
+            f"Missing values by column: {expected_missing_by_column_dict}\n" 
+        )
+        # Capture standard output and standard error
+        captured_output_and_error = capsys.readouterr()
+        # Ensure standard output is the expected warning message
+        assert captured_output_and_error.out == expected_warning_message
+        # Ensure nothing was written to standard error
+        assert captured_output_and_error.err == ""
+
     # Ensure .transform() raises ColumnMismatchError for missing columns in the input DataFrame
     @pytest.mark.unit
     @pytest.mark.parametrize("missing_columns", [
