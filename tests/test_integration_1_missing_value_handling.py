@@ -36,3 +36,14 @@ def X_input():
         "current_job_yrs": [3, 0, 5, 10, 6, 1],
         "current_house_yrs": [11, 11, 13, 12, 12, 12],
     })
+
+
+# --- Pipeline Segment to Be Integration Tested ---
+pipeline_segment = Pipeline([
+    ("missing_value_checker", MissingValueChecker(critical_features=CRITICAL_FEATURES, non_critical_features=NON_CRITICAL_FEATURES)),
+    ("missing_value_handler", ColumnTransformer(
+        transformers=[("categorical_imputer", SimpleImputer(strategy="most_frequent").set_output(transform="pandas"), NON_CRITICAL_FEATURES)],
+        remainder="passthrough",
+        verbose_feature_names_out=False  # preserve input column names instead of adding prefix 
+    ).set_output(transform="pandas")),  # output pd.DataFrame instead of np.array 
+])
