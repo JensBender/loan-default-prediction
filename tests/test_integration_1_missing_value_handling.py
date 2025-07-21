@@ -52,6 +52,7 @@ def pipeline_segment():
 
 
 # --- Test Cases ---
+# Ensure Pipeline .fit() raises MissingValueError for missing values in critical features
 @pytest.mark.integration
 @pytest.mark.parametrize("missing_value", [None, np.nan])
 @pytest.mark.parametrize("critical_feature", CRITICAL_FEATURES)
