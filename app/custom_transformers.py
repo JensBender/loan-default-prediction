@@ -123,15 +123,26 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
 # Standardize missing values
 class MissingValueStandardizer(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
+        # Validate input data type
+        if not isinstance(X, pd.DataFrame):
+            raise TypeError("Input X must be a pandas DataFrame.")   
+               
+        # Store input feature number and names as learned attributes
+        self.n_features_in_ = X.shape[1]
+        self.feature_names_in_ = X.columns.tolist()
+
         return self
     
     def transform(self, X):
-        X_transformed = X.copy()
+        # Ensure .fit() happened before
+        check_is_fitted(self)
         
+        # Validate input data type
+        if not isinstance(X, pd.DataFrame):
+            raise TypeError("Input X must be a pandas DataFrame.")   
+            
         # Convert all missing value types (None, np.nan, pd.NA, etc.) to np.nan
-        X_transformed.fillna(value=np.nan)
-
-        return X_transformed
+        return X.fillna(value=np.nan)
 
 
 # Format categorical labels in snake_case
