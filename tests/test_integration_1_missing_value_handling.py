@@ -69,9 +69,11 @@ def test_pipeline_fit_and_transform_raise_missing_value_error_for_critical_featu
             f"across 6 rows. Please provide missing values.\n"
             f"Missing values by column: {expected_missing_by_column_dict}" 
         )
+        # Ensure .fit() raises MissingValueError with expected error message text
         if method == "fit":
             with pytest.raises(MissingValueError, match=expected_error_message):
                 pipeline.fit(X_with_missing_values)
+        # Ensure .transform() raises MissingValueError with expected error message text
         else:
             # Fit on original DataFrame, but transform on DataFrame with missing values
             pipeline.fit(X)
