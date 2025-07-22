@@ -83,7 +83,7 @@ def test_pipeline_fit_and_transform_raise_missing_value_error_for_critical_featu
 
 # Ensure pipline .fit() imputes missing values in non-critical features
 @pytest.mark.integration
-@pytest.mark.parametrize("missing_value", [None, np.nan])
+@pytest.mark.parametrize("missing_value", [None, np.nan, pd.NA])
 @pytest.mark.parametrize("non_critical_feature", NON_CRITICAL_FEATURES)
 def test_pipeline_fit_warns_and_learns_mode_for_missing_values_in_non_critical_features(X_input, pipeline, missing_value, non_critical_feature, capsys):
         X_with_missing_value = X_input.copy()
