@@ -14,7 +14,7 @@ from sklearn.impute import SimpleImputer
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import MissingValueChecker, MissingValueError
+from app.custom_transformers import MissingValueChecker, MissingValueStandardizer, MissingValueError
 from app.global_constants import CRITICAL_FEATURES, NON_CRITICAL_FEATURES
 
 
@@ -42,6 +42,7 @@ def X_input():
 def pipeline(): 
     return Pipeline([
         ("missing_value_checker", MissingValueChecker(critical_features=CRITICAL_FEATURES, non_critical_features=NON_CRITICAL_FEATURES)),
+        ("missing_value_standardizer", MissingValueStandardizer()),
         ("missing_value_handler", ColumnTransformer(
             transformers=[("categorical_imputer", SimpleImputer(strategy="most_frequent").set_output(transform="pandas"), NON_CRITICAL_FEATURES)],
             remainder="passthrough",
