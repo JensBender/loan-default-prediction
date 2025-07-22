@@ -5,6 +5,7 @@ import sys
 # Third-party library imports
 import pytest
 import pandas as pd
+from pandas.testing import assert_frame_equal
 import numpy as np
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
@@ -101,7 +102,7 @@ def test_pipeline_fit_warns_and_learns_mode_for_missing_values_in_non_critical_f
         X_transformed = pipeline.transform(X_with_missing_value)
         assert X_transformed.loc[0, non_critical_feature] == expected_mode
 
-# Ensure pipline .transform() prints warning message and imputes mode for missing values in non-critical features
+# Ensure pipeline .transform() prints warning message and imputes mode for missing values in non-critical features
 @pytest.mark.integration
 @pytest.mark.parametrize("missing_value", [None, np.nan, pd.NA])
 @pytest.mark.parametrize("non_critical_feature", NON_CRITICAL_FEATURES)
@@ -124,3 +125,11 @@ def test_pipeline_transform_warns_and_imputes_mode_for_missing_values_in_non_cri
         assert X_transformed.loc[0, non_critical_feature] == expected_mode
         # Ensure no more missing values on non-critical feature
         assert X_transformed[non_critical_feature].isna().sum() == 0    
+
+# Ensure pipeline .transform() leaves DataFrame with no missing values unchanged 
+def test_pipeline_with_no_missing_values(X_input, pipeline):
+     X = X_input.copy()
+     pipeline.fit(X)
+     X_transformed = pipeline.transform(X)
+     assert_frame_equal(X_transformed, X)
+     
