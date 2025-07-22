@@ -64,3 +64,12 @@ class TestMissingValueStandardizer(BaseTransformerTests):
         super().test_instantiation(transformer)
         # Then, add assertions specific to the MissingValueChecker class
         assert isinstance(transformer, MissingValueStandardizer)
+
+    # Overwrite parent class method because this transformer allows extra columns
+    def test_transform_raises_value_error_for_extra_column(self):
+        pass
+
+
+    # Overwrite parent class method because this transformer allows different column order compared to .fit()
+    def test_transform_raises_value_error_for_wrong_column_order(self):
+        pass
