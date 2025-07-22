@@ -66,10 +66,23 @@ class TestMissingValueStandardizer(BaseTransformerTests):
         assert isinstance(transformer, MissingValueStandardizer)
 
     # Overwrite parent class method because this transformer allows extra columns
+    @pytest.mark.unit
     def test_transform_raises_value_error_for_extra_column(self):
         pass
 
 
     # Overwrite parent class method because this transformer allows different column order compared to .fit()
+    @pytest.mark.unit
     def test_transform_raises_value_error_for_wrong_column_order(self):
         pass
+
+    # Ensure .transform() standardizes all missing value types to np.nan
+    @pytest.mark.unit
+    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    def test_transform_standardizes_all_missing_value_types_to_numpy_nan(self, transformer, X_input, missing_value):
+        X = X_input.copy()
+        transformer.fit(X)
+        X_with_missing_value = X_input.copy()
+        X_with_missing_value.iloc[0, 0] = missing_value  # use first row of first column as a representative example
+        X_transformed = transformer.transform(X_with_missing_value)
+        assert np.isnan(X_transformed.iloc[0, 0])
