@@ -2,6 +2,7 @@
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.validation import check_is_fitted
 import pandas as pd
+import numpy as np
 
 
 # --- Custom error classes --- 
@@ -117,6 +118,20 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         self._check_missing_values(X)
 
         return X
+
+
+# Standardize missing values
+class MissingValueStandardizer(BaseEstimator, TransformerMixin):
+    def fit(self, X, y=None):
+        return self
+    
+    def transform(self, X):
+        X_transformed = X.copy()
+        
+        # Convert all missing value types (None, np.nan, pd.NA, etc.) to np.nan
+        X_transformed.fillna(value=np.nan)
+
+        return X_transformed
 
 
 # Format categorical labels in snake_case
