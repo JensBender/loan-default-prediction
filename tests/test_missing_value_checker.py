@@ -289,3 +289,19 @@ class TestMissingValueChecker(BaseTransformerTests):
         assert captured_output_and_error.out == expected_warning_message
         # Ensure nothing was written to standard error
         assert captured_output_and_error.err == ""
+
+    # Ensure .transform() raises MissingValueError for missing values in both critical and non-critical features
+    @pytest.mark.unit
+    def test_transform_raises_missing_value_error_for_critical_and_non_critical_missing(self, transformer, X_input):
+        X = X_input.copy()
+        transformer.fit(X)
+        # Use representative examples
+        example_critical_feature = CRITICAL_FEATURES[0]
+        example_non_critical_feature = NON_CRITICAL_FEATURES[0]
+        # Create DataFrame with missing value on both a critical and non-critical feature
+        X_with_both_missing = X_input.copy()
+        X_with_both_missing[example_critical_feature] = np.nan  
+        X_with_both_missing[example_non_critical_feature] = np.nan
+        # Ensure .transform() raises MissingValueError
+        with pytest.raises(MissingValueError):
+            transformer.transform(X_with_both_missing)
