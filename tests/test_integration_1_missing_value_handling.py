@@ -127,13 +127,16 @@ def test_pipeline_transform_warns_and_imputes_mode_for_missing_values_in_non_cri
         assert X_transformed[non_critical_feature].isna().sum() == 0    
 
 # Ensure pipeline .transform() on DataFrame with no missing values produces the expected column order 
-def test_pipeline_transform_with_no_missing_values_produces_expected_column_order(X_input, pipeline):
-     X = X_input.copy()
-     pipeline.fit(X)
-     X_transformed = pipeline.transform(X)
-     # Expected output (note: ColumnTransformer changes the column order)
-     expected_column_order = NON_CRITICAL_FEATURES + CRITICAL_FEATURES
-     expected_X_transformed = X[expected_column_order]
-     # Ensure actual and expected output DataFrames are identical
-     assert_frame_equal(X_transformed, expected_X_transformed)
-     
+def test_pipeline_transform_with_no_missing_values_produces_expected_column_order(X_input, pipeline, capsys):
+    X = X_input.copy()
+    pipeline.fit(X)
+    X_transformed = pipeline.transform(X)
+    # Expected output (note: ColumnTransformer changes the column order)
+    expected_column_order = NON_CRITICAL_FEATURES + CRITICAL_FEATURES
+    expected_X_transformed = X[expected_column_order]
+    # Ensure actual and expected output DataFrames are identical
+    assert_frame_equal(X_transformed, expected_X_transformed)
+    # Ensure no warnings in standard output and no errors
+    captured_output_and_error = capsys.readouterr()
+    assert captured_output_and_error.out == ""
+    assert captured_output_and_error.err == ""
