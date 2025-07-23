@@ -15,7 +15,7 @@ from sklearn.impute import SimpleImputer
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
-from app.custom_transformers import MissingValueChecker, MissingValueStandardizer, MissingValueError
+from app.custom_transformers import MissingValueChecker, MissingValueStandardizer, MissingValueError, ColumnMismatchError
 from app.global_constants import CRITICAL_FEATURES, NON_CRITICAL_FEATURES
 
 
@@ -113,6 +113,22 @@ def test_fit_raises_missing_value_error_for_non_critical_feature_with_only_missi
     expected_error_message = f"'{non_critical_feature}' cannot be only missing values. Please ensure at least one non-missing value."
     with pytest.raises(MissingValueError, match=expected_error_message):
         pipeline.fit(X_with_only_missings)
+
+# Ensure pipeline .fit() raises ColumnMismatchError for missing columns in the input DataFrame
+@pytest.mark.unit
+@pytest.mark.parametrize("missing_columns", [
+    "income", 
+    "age", 
+    ["experience", "married"],
+    ["house_ownership", "car_ownership"],
+    ["profession", "city", "state"],
+    ["current_job_yrs", "current_house_yrs"],
+])
+def test_pipeline_fit_raises_column_mismatch_error_for_missing_columns(X_input, pipeline, missing_columns):
+    X = X_input.copy()
+    X_with_missing_columns = X.drop(columns=missing_columns)
+    with pytest.raises(ColumnMismatchError):
+        pipeline.fit(X_with_missing_columns)
 
 # Ensure pipeline .transform() prints warning message and imputes mode for missing values in non-critical features
 @pytest.mark.integration
