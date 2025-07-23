@@ -204,7 +204,7 @@ class TestMissingValueChecker(BaseTransformerTests):
         with pytest.raises(MissingValueError):
             transformer.fit(X_with_both_missing)
 
-    # Ensure pipeline .fit() raises MissingValueError for non-critical feature with only missing values
+    # Ensure .fit() raises MissingValueError for non-critical feature with only missing values
     @pytest.mark.unit
     @pytest.mark.parametrize("non_critical_feature", NON_CRITICAL_FEATURES)
     def test_fit_raises_missing_value_error_for_non_critical_feature_with_only_missings(self, transformer, X_input, non_critical_feature):
