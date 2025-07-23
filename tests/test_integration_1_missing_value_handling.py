@@ -102,15 +102,16 @@ def test_pipeline_fit_warns_and_learns_mode_for_missing_values_in_non_critical_f
         X_transformed = pipeline.transform(X_with_missing_value)
         assert X_transformed.loc[0, non_critical_feature] == expected_mode
 
-# Ensure pipeline .fit() raises ValueError for non-critical feature with only missing values
+# Ensure pipeline .fit() raises MissingValueError for non-critical feature with only missing values
 @pytest.mark.integration
 @pytest.mark.parametrize("non_critical_feature", NON_CRITICAL_FEATURES)
-def test_fit_raises_value_error_for_non_critical_feature_with_only_missings(X_input, pipeline, non_critical_feature):
+def test_fit_raises_missing_value_error_for_non_critical_feature_with_only_missings(X_input, pipeline, non_critical_feature):
     # Create DataFrame with a non-critical feature with only missing values
     X_with_only_missings = X_input.copy()
     X_with_only_missings[non_critical_feature] = np.nan
-    # Ensure .fit() raises ValueError
-    with pytest.raises(ValueError):
+    # Ensure .fit() raises MissingValueError
+    expected_error_message = f"'{non_critical_feature}' cannot be only missing values. Please ensure at least one non-missing value."
+    with pytest.raises(MissingValueError, match=expected_error_message):
         pipeline.fit(X_with_only_missings)
 
 # Ensure pipeline .transform() prints warning message and imputes mode for missing values in non-critical features
