@@ -97,6 +97,11 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         # Check missing values
         self._check_missing_values(X)
 
+        # Raise MissingValueError if a non-critical feature has only missing values
+        for non_critical_feature in self.non_critical_features:
+            if X[non_critical_feature].isnull().all():
+                raise MissingValueError(f"'{non_critical_feature}' cannot be only missing values.")
+
         # Store input feature number and names as learned attributes
         self.n_features_in_ = X.shape[1]
         self.feature_names_in_ = X.columns.tolist()
