@@ -102,6 +102,17 @@ def test_pipeline_fit_warns_and_learns_mode_for_missing_values_in_non_critical_f
         X_transformed = pipeline.transform(X_with_missing_value)
         assert X_transformed.loc[0, non_critical_feature] == expected_mode
 
+# Ensure pipeline .fit() raises ValueError for non-critical feature with only missing values
+@pytest.mark.integration
+@pytest.mark.parametrize("non_critical_feature", NON_CRITICAL_FEATURES)
+def test_fit_raises_value_error_for_non_critical_feature_with_only_missings(X_input, pipeline, non_critical_feature):
+    # Create DataFrame with a non-critical feature with only missing values
+    X_with_only_missings = X_input.copy()
+    X_with_only_missings[non_critical_feature] = np.nan
+    # Ensure .fit() raises ValueError
+    with pytest.raises(ValueError):
+        pipeline.fit(X_with_only_missings)
+
 # Ensure pipeline .transform() prints warning message and imputes mode for missing values in non-critical features
 @pytest.mark.integration
 @pytest.mark.parametrize("missing_value", [None, np.nan, pd.NA])
@@ -127,6 +138,7 @@ def test_pipeline_transform_warns_and_imputes_mode_for_missing_values_in_non_cri
         assert X_transformed[non_critical_feature].isna().sum() == 0    
 
 # Ensure pipeline .transform() on DataFrame with no missing values produces the expected column order 
+@pytest.mark.integration
 def test_pipeline_transform_with_no_missing_values_produces_expected_column_order(X_input, pipeline, capsys):
     X = X_input.copy()
     pipeline.fit(X)
