@@ -153,14 +153,14 @@ class TestMissingValueChecker(BaseTransformerTests):
     @pytest.mark.parametrize("critical_feature", CRITICAL_FEATURES)
     def test_fit_raises_missing_value_error_for_critical_features(self, transformer, X_input, missing_value, critical_feature):
         X_with_missing_value = X_input.copy()
-        X_with_missing_value[critical_feature] = missing_value
+        X_with_missing_value.loc[0:2, critical_feature] = missing_value  # missings on rows 0-2 as an example
         # Create expected dictionary of number of missing values by column 
         expected_missing_by_column_dict = {"income": 0, "age": 0, "experience": 0, "profession": 0, "city": 0, "state": 0, "current_job_yrs": 0, "current_house_yrs": 0}
-        expected_missing_by_column_dict[critical_feature] = 6  # X_input has 6 rows
+        expected_missing_by_column_dict[critical_feature] = 3  # 3 missing values
         # Create expected error message text
         expected_error_message = (
-            f"6 missing values found in critical features "
-            f"across 6 rows. Please provide missing values.\n"
+            f"3 missing values found in critical features "
+            f"across 3 rows. Please provide missing values.\n"
             f"Missing values by column: {expected_missing_by_column_dict}" 
         )
         with pytest.raises(MissingValueError, match=expected_error_message):
@@ -172,11 +172,11 @@ class TestMissingValueChecker(BaseTransformerTests):
     @pytest.mark.parametrize("non_critical_feature", NON_CRITICAL_FEATURES)
     def test_fit_prints_missing_value_warning_message_for_non_critical_features(self, transformer, X_input, missing_value, non_critical_feature, capsys):
         X_with_missing_value = X_input.copy()
-        X_with_missing_value.loc[0:2, non_critical_feature] = missing_value  # missings on rows 0-2 as an example
+        X_with_missing_value.loc[0:2, non_critical_feature] = missing_value  
         transformer.fit(X_with_missing_value)
         # Create expected dictionary of number of missing values by column 
         expected_missing_by_column_dict = {"married": 0, "car_ownership": 0, "house_ownership": 0}
-        expected_missing_by_column_dict[non_critical_feature] = 3  # 3 missing values
+        expected_missing_by_column_dict[non_critical_feature] = 3  
         # Create expected warning message text
         expected_warning_message = (
             f"Warning: 3 missing values found in non-critical features "
