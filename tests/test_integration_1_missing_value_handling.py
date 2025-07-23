@@ -115,7 +115,7 @@ def test_fit_raises_missing_value_error_for_non_critical_feature_with_only_missi
         pipeline.fit(X_with_only_missings)
 
 # Ensure pipeline .fit() and .transform() raise ColumnMismatchError for missing columns in the input DataFrame
-@pytest.mark.unit
+@pytest.mark.integration
 @pytest.mark.parametrize("method", ["fit", "transform"])
 @pytest.mark.parametrize("missing_columns", [
     "income", 
@@ -136,7 +136,30 @@ def test_pipeline_fit_and_transform_raise_column_mismatch_error_for_missing_colu
     else:
         pipeline.fit(X)
         with pytest.raises(ColumnMismatchError):
-             pipeline.transform(X_with_missing_columns)
+            pipeline.transform(X_with_missing_columns)
+
+# Ensure pipeline .fit() and .transform() raise ColumnMismatchError for unexpected columns in the X input DataFrame
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["fit", "transform"])
+@pytest.mark.parametrize("unexpected_columns", [
+    ["unexpected_column_1"],
+    ["unexpected_column_1", "unexpected_column_2"],
+    ["unexpected_column_1", "unexpected_column_2", "unexpected_column_3"]
+])
+def test_pipeline_fit_and_transform_raise_column_mismatch_error_for_unexpected_columns(X_input, pipeline, method, unexpected_columns):
+    X = X_input.copy()
+    X_with_unexpected_columns = X_input.copy()
+    for unexpected_column in unexpected_columns:
+        X_with_unexpected_columns[unexpected_column] = 5 
+    # Ensure .fit() raises ColumnMismatchError 
+    if method == "fit":
+         with pytest.raises(ColumnMismatchError):
+             pipeline.fit(X_with_unexpected_columns)
+    # Ensure .transform() raises ColumnMismatchError 
+    else:
+        pipeline.fit(X)
+        with pytest.raises(ColumnMismatchError):
+            pipeline.transform(X_with_unexpected_columns)
 
 # Ensure pipeline .transform() prints warning message and imputes mode for missing values in non-critical features
 @pytest.mark.integration
