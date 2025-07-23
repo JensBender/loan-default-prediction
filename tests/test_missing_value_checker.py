@@ -284,15 +284,15 @@ class TestMissingValueChecker(BaseTransformerTests):
         X = X_input.copy()
         transformer.fit(X)
         X_with_missing_value = X_input.copy()
-        X_with_missing_value[non_critical_feature] = missing_value
+        X_with_missing_value.loc[0:2, non_critical_feature] = missing_value  # missings on rows 0-2 as an example
         transformer.transform(X_with_missing_value)
         # Create expected dictionary of number of missing values by column 
         expected_missing_by_column_dict = {"married": 0, "car_ownership": 0, "house_ownership": 0}
-        expected_missing_by_column_dict[non_critical_feature] = 6  # X_input has 6 rows
+        expected_missing_by_column_dict[non_critical_feature] = 3  # 3 missing values
         # Create expected warning message text
         expected_warning_message = (
-            f"Warning: 6 missing values found in non-critical features "
-            f"across 6 rows. Missing values will be imputed.\n"
+            f"Warning: 3 missing values found in non-critical features "
+            f"across 3 rows. Missing values will be imputed.\n"
             f"Missing values by column: {expected_missing_by_column_dict}\n" 
         )
         # Capture standard output and standard error
