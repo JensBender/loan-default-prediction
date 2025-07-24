@@ -11,7 +11,7 @@ import pickle
 class BasePipelineTests:
     # Ensure pipeline .transform() raises ValueError if columns are in different order than during .fit()
     @pytest.mark.integration
-    def test_pipeline_transform_raises_value_error_for_wrong_column_order(X_input, pipeline):
+    def test_pipeline_transform_raises_value_error_for_wrong_column_order(self, X_input, pipeline):
         X = X_input.copy()
         # Fit on original DataFrame X
         pipeline.fit(X)
