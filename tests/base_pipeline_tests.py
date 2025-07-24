@@ -38,6 +38,26 @@ class BasePipelineTests:
         # Ensure the output DataFrames are identical
         assert_frame_equal(X_fit_then_transform, X_fit_transform)
 
+    # Ensure pipeline .fit() raises TypeError if "X" input is not a pandas DataFrame
+    @pytest.mark.integration
+    @pytest.mark.parametrize("invalid_X_input", [
+        np.array([[1, 2], [3, 4]]), 
+        pd.Series([1, 2, 3]),
+        "a string",
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a", "set"}, 
+        {"a": "dictionary"},
+        1,
+        1.23,
+        False,
+        None
+    ])
+    def test_pipeline_fit_raises_type_error_if_X_not_df(self, pipeline, invalid_X_input):
+        expected_error_message = "Input X must be a pandas DataFrame."
+        with pytest.raises(TypeError, match=expected_error_message):
+            pipeline.fit(invalid_X_input)
+
     # Ensure pipeline .transform() does not modify the "X" input DataFrame
     @pytest.mark.integration
     def test_pipeline_transform_does_not_modify_input_df(self, pipeline, X_input):
