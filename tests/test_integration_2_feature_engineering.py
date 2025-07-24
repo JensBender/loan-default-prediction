@@ -26,7 +26,7 @@ from app.global_constants import (
     JOB_STABILITY_MAP,
     CITY_TIER_MAP
 )
-from tests.base_pipeline_tests import BasePipelineTests
+from tests.base_pipeline_tests import BaseSupervisedPipelineTests
 
 
 # --- Fixtures ---
@@ -48,6 +48,11 @@ def X_input():
         "current_house_yrs": [11, 11, 13, 12, 12, 12],
     })
 
+# Fixture to create y input Series for use in tests
+@pytest.fixture
+def y_input():
+    return pd.Series([0, 1, 0, 0, 1, 0])
+
 # Fixture to create pipeline segment for use in tests
 @pytest.fixture
 def pipeline(): 
@@ -61,7 +66,7 @@ def pipeline():
 
 
 # --- TestFeatureEngineeringPipeline class ---
-# Inherits from BasePipelineTests which adds the following integration tests:
+# Inherits from BaseSupervisedPipelineTests which adds the following integration tests:
 # .test_pipeline_can_be_cloned()
 # .test_pipeline_fit_transform_equivalence()
 # .test_pipeline_fit_and_transform_raise_type_error_if_X_not_df()
@@ -70,5 +75,7 @@ def pipeline():
 # .test_fitted_pipeline_can_be_pickled()
 # .test_pipeline_transform_raises_value_error_for_wrong_column_order()
 # .test_pipeline_transform_preserves_df_index()
-class TestFeatureEngineeringPipeline(BasePipelineTests):
+# BaseSupervisedPipelineTests further inherits the following test from BasePipelineTests:
+# .test_pipeline_transform_raises_not_fitted_error_if_unfitted()
+class TestFeatureEngineeringPipeline(BaseSupervisedPipelineTests):
     pass
