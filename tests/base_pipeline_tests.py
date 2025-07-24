@@ -38,6 +38,14 @@ class BasePipelineTests:
         # Ensure the output DataFrames are identical
         assert_frame_equal(X_fit_then_transform, X_fit_transform)
 
+    # Ensure pipeline .transform() does not modify the "X" input DataFrame
+    @pytest.mark.integration
+    def test_pipeline_transform_does_not_modify_input_df(self, pipeline, X_input):
+        X_original = X_input.copy()
+        pipeline.fit(X_original)
+        pipeline.transform(X_original)
+        assert_frame_equal(X_original, X_input)
+
     # Ensure pipeline .transform() raises ValueError if columns are in different order than during .fit()
     @pytest.mark.integration
     def test_pipeline_transform_raises_value_error_for_wrong_column_order(self, pipeline, X_input):
