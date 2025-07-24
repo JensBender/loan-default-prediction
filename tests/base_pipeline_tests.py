@@ -9,9 +9,21 @@ import pickle
 
 # Base tests for a sklearn pipeline or subsegment of a pipeline (that individual integration test classes can inherit from)
 class BasePipelineTests:
+    # Ensure instance can be cloned 
+    @pytest.mark.unit
+    def test_pipeline_can_be_cloned(self, pipeline, X_input):
+        X = X_input.copy()
+        cloned_pipeline = clone(pipeline)
+        pipeline_output = pipeline.fit_transform(X)
+        cloned_pipeline_output = cloned_pipeline.fit_transform(X)
+        # Ensure it's a new object, not a pointer to the old one
+        assert cloned_pipeline is not pipeline
+        # Ensure the original and cloned outputs are identical
+        assert_frame_equal(pipeline_output, cloned_pipeline_output)
+
     # Ensure pipeline .transform() raises ValueError if columns are in different order than during .fit()
     @pytest.mark.integration
-    def test_pipeline_transform_raises_value_error_for_wrong_column_order(self, X_input, pipeline):
+    def test_pipeline_transform_raises_value_error_for_wrong_column_order(self, pipeline, X_input):
         X = X_input.copy()
         # Fit on original DataFrame X
         pipeline.fit(X)
