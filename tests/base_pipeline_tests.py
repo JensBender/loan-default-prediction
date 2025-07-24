@@ -67,6 +67,13 @@ class BasePipelineTests:
             with pytest.raises(TypeError, match=expected_error_message):
                 pipeline.transform(invalid_X_input)
 
+    # Ensure pipeline .transform() raises NotFittedError if pipeline instance has not been fitted yet
+    def test_pipeline_transform_raises_not_fitted_error_if_unfitted(self, pipeline, X_input):
+        X = X_input.copy()
+        # .fit() is intentionally not called here
+        with pytest.raises(NotFittedError):
+            pipeline.transform(X)
+
     # Ensure pipeline .transform() does not modify the "X" input DataFrame
     @pytest.mark.integration
     def test_pipeline_transform_does_not_modify_input_df(self, pipeline, X_input):
