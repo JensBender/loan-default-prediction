@@ -68,6 +68,7 @@ class BasePipelineTests:
                 pipeline.transform(invalid_X_input)
 
     # Ensure pipeline .transform() raises NotFittedError if pipeline instance has not been fitted yet
+    @pytest.mark.integration
     def test_pipeline_transform_raises_not_fitted_error_if_unfitted(self, pipeline, X_input):
         X = X_input.copy()
         # .fit() is intentionally not called here
@@ -83,6 +84,7 @@ class BasePipelineTests:
         assert_frame_equal(X_original, X_input)
 
     # Ensure fitted pipeline instance can be pickled and unpickled without losing its attributes and functionality
+    @pytest.mark.integration
     def test_fitted_pipeline_can_be_pickled(self, pipeline, X_input):
         X = X_input.copy()
         pipeline.fit(X)
@@ -109,6 +111,7 @@ class BasePipelineTests:
             pipeline.transform(X_with_wrong_column_order)
 
     # Ensure pipeline .transform() preserves the index of the input DataFrame
+    @pytest.mark.integration
     def test_pipeline_transform_preserves_df_index(self, pipeline, X_input):
         X = X_input.copy()
         pipeline.fit(X)
