@@ -200,3 +200,17 @@ def test_pipeline_transform_with_no_missing_values_produces_expected_column_orde
     captured_output_and_error = capsys.readouterr()
     assert captured_output_and_error.out == ""
     assert captured_output_and_error.err == ""
+
+# Ensure pipeline .transform() raises ValueError if columns are in different order than during .fit()
+@pytest.mark.unit
+def test_pipeline_transform_raises_value_error_for_wrong_column_order(X_input, pipeline):
+    X = X_input.copy()
+    # Fit on original DataFrame X
+    pipeline.fit(X)
+    # Create DataFrame with different column order than during .fit()
+    reversed_columns = X.columns[::-1]  # reverse order as an example
+    X_with_wrong_column_order = X[reversed_columns]  
+    # Ensure .transform() on wrong column order raises ValueError
+    expected_error_message = "Feature names and feature order of input X must be the same as during .fit()."
+    with pytest.raises(ValueError, match=expected_error_message):
+        pipeline.transform(X_with_wrong_column_order)
