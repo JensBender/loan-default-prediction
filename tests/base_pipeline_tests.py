@@ -9,17 +9,34 @@ import pickle
 
 # Base tests for a sklearn pipeline or subsegment of a pipeline (that individual integration test classes can inherit from)
 class BasePipelineTests:
-    # Ensure instance can be cloned 
-    @pytest.mark.unit
+    # Ensure pipeline instance can be cloned 
+    @pytest.mark.integration
     def test_pipeline_can_be_cloned(self, pipeline, X_input):
         X = X_input.copy()
         cloned_pipeline = clone(pipeline)
-        pipeline_output = pipeline.fit_transform(X)
-        cloned_pipeline_output = cloned_pipeline.fit_transform(X)
+        pipeline.fit(X)
+        pipeline_output = pipeline.transform(X)
+        cloned_pipeline.fit(X)
+        cloned_pipeline_output = cloned_pipeline.transform(X)
         # Ensure it's a new object, not a pointer to the old one
         assert cloned_pipeline is not pipeline
         # Ensure the original and cloned outputs are identical
         assert_frame_equal(pipeline_output, cloned_pipeline_output)
+
+    # Ensure equal output of .fit().transform() and .fit_transform()
+    @pytest.mark.integration
+    def test_pipeline_fit_transform_equivalence(self, pipeline, X_input):
+        X = X_input.copy()
+        # Create two transformer instances
+        pipeline_1 = clone(pipeline)
+        pipeline_2 = clone(pipeline)
+        # Ensure they are different objects in memory
+        assert pipeline_1 is not pipeline_2
+        # Perform .fit().transform() vs .fit_transform()
+        X_fit_then_transform = pipeline_1.fit(X).transform(X) 
+        X_fit_transform = pipeline_2.fit_transform(X)
+        # Ensure the output DataFrames are identical
+        assert_frame_equal(X_fit_then_transform, X_fit_transform)
 
     # Ensure pipeline .transform() raises ValueError if columns are in different order than during .fit()
     @pytest.mark.integration
