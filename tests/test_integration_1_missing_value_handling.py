@@ -55,7 +55,14 @@ def pipeline():
 
 # --- TestMissingValueHandlingPipeline class ---
 # Inherits from BasePipelineTests which adds the following integration tests:
+# .test_pipeline_can_be_cloned()
+# .test_pipeline_fit_transform_equivalence()
+# .test_pipeline_fit_and_transform_raise_type_error_if_X_not_df()
+# .test_pipeline_transform_raises_not_fitted_error_if_unfitted()
+# .test_pipeline_transform_does_not_modify_input_df()
+# .test_fitted_pipeline_can_be_pickled()
 # .test_pipeline_transform_raises_value_error_for_wrong_column_order()
+# .test_pipeline_transform_preserves_df_index()
 class TestMissingValueHandlingPipeline(BasePipelineTests):
     # Ensure pipeline .fit() and .transform() raise MissingValueError for missing values in critical features
     @pytest.mark.integration
