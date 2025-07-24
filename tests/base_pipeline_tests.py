@@ -46,6 +46,18 @@ class BasePipelineTests:
         pipeline.transform(X_original)
         assert_frame_equal(X_original, X_input)
 
+    # Ensure fitted pipeline instance can be pickled and unpickled without losing its attributes and functionality
+    def test_fitted_pipeline_can_be_pickled(self, pipeline, X_input):
+        X = X_input.copy()
+        pipeline.fit(X)
+        X_transformed = pipeline.transform(X)
+        # Pickle and unpickle
+        pickled_pipeline = pickle.dumps(pipeline)
+        unpickled_pipeline = pickle.loads(pickled_pipeline)
+        # Ensure that unpickled pipeline produces identical output as original
+        unpickled_X_transformed = unpickled_pipeline.transform(X)
+        assert_frame_equal(unpickled_X_transformed, X_transformed)
+
     # Ensure pipeline .transform() raises ValueError if columns are in different order than during .fit()
     @pytest.mark.integration
     def test_pipeline_transform_raises_value_error_for_wrong_column_order(self, pipeline, X_input):
