@@ -107,3 +107,11 @@ class BasePipelineTests:
         expected_error_message = "Feature names and feature order of input X must be the same as during .fit()."
         with pytest.raises(ValueError, match=expected_error_message):
             pipeline.transform(X_with_wrong_column_order)
+
+    # Ensure pipeline .transform() preserves the index of the input DataFrame
+    def test_transform_preserves_df_index(self, pipeline, X_input):
+        X = X_input.copy()
+        pipeline.fit(X)
+        X_transformed = pipeline.transform(X)
+        # Ensure that indexes of transformed and original DataFrame are identical
+        assert_index_equal(X_transformed.index, X.index)
