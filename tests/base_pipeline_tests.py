@@ -109,7 +109,7 @@ class BasePipelineTests:
             pipeline.transform(X_with_wrong_column_order)
 
     # Ensure pipeline .transform() preserves the index of the input DataFrame
-    def test_transform_preserves_df_index(self, pipeline, X_input):
+    def test_pipeline_transform_preserves_df_index(self, pipeline, X_input):
         X = X_input.copy()
         pipeline.fit(X)
         X_transformed = pipeline.transform(X)
