@@ -190,7 +190,12 @@ class SnakeCaseFormatter(BaseEstimator, TransformerMixin):
         # Validate input data type
         if not isinstance(X, pd.DataFrame):
             raise TypeError("Input X must be a pandas DataFrame.")   
-            
+
+        # Ensure input DataFrame contains all required columns
+        missing_columns = set(self.columns_) - set(X.columns)
+        if missing_columns:
+            raise ColumnMismatchError(f"Input X is missing the following columns: {', '.join(missing_columns)}.")
+
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
             raise ColumnMismatchError("Feature names and feature order of input X must be the same as during .fit().")      
