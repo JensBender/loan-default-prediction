@@ -20,7 +20,8 @@ from app.custom_transformers import (
     CityTierTransformer, 
     StateDefaultRateTargetEncoder,
     ColumnMismatchError,
-    CategoricalLabelError
+    CategoricalLabelError,
+    MissingValueError
 )
 from app.global_constants import (
     COLUMNS_FOR_SNAKE_CASING,
@@ -158,3 +159,18 @@ class TestFeatureEngineeringPipeline(BaseSupervisedPipelineTests):
         pipeline.fit(X, y) 
         with pytest.raises(CategoricalLabelError):
             pipeline.transform(X_with_unknown_state)
+
+    # Ensure pipeline .fit() and .transform() raise MissingValueError for missing values on required columns 
+    @pytest.mark.integration
+    @pytest.mark.parametrize("required_column, expected_error_message", [
+        ("profession", "'profession' column cannot contain missing values"), 
+        ("city", "'city' column cannot contain missing values"),
+        ("state", "'state' column cannot contain missing values")
+    ])
+    def test_feature_engineering_pipeline_fit_raises_missing_value_error_for_required_columns(self, X_input, y_input, pipeline, required_column, expected_error_message):
+        X = X_input.copy()
+        y = y_input.copy()
+        X_with_missing_value = X_input.copy()
+        X_with_missing_value.loc[0, required_column] = np.nan  # modify first row as a representative example
+        with pytest.raises(MissingValueError, match=expected_error_message):
+            pipeline.fit(X_with_missing_value, y)
