@@ -18,7 +18,8 @@ from app.custom_transformers import (
     BooleanColumnTransformer, 
     JobStabilityTransformer, 
     CityTierTransformer, 
-    StateDefaultRateTargetEncoder
+    StateDefaultRateTargetEncoder,
+    ColumnMismatchError
 )
 from app.global_constants import (
     COLUMNS_FOR_SNAKE_CASING,
@@ -104,3 +105,27 @@ class TestFeatureEngineeringPipeline(BaseSupervisedPipelineTests):
         })
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
+
+    # Ensure pipeline .fit() and .transform() raise ColumnMismatchError for missing columns in the input DataFrame
+    @pytest.mark.integration
+    @pytest.mark.parametrize("method", ["fit", "transform"])
+    @pytest.mark.parametrize("missing_columns", [
+        "married", 
+        "car_ownership", 
+        "profession", 
+        "city", 
+        "state"
+    ])
+    def test_feature_engineering_pipeline_fit_and_transform_raise_column_mismatch_error_for_missing_columns(self, X_input, y_input, pipeline, method, missing_columns):
+        X = X_input.copy()
+        y = y_input.copy()
+        X_with_missing_columns = X.drop(columns=missing_columns)
+        # Ensure .fit() raises ColumnMismatchError 
+        if method == "fit":
+            with pytest.raises(ColumnMismatchError):
+                pipeline.fit(X_with_missing_columns)
+        # Ensure .transform() raises ColumnMismatchError 
+        else:
+            pipeline.fit(X)
+            with pytest.raises(ColumnMismatchError):
+                pipeline.transform(X_with_missing_columns)
