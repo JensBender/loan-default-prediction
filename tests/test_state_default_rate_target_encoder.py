@@ -80,7 +80,7 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         X = X_input.copy()
         y = y_input.copy()
         X_without_state = X.drop(columns="state")
-        expected_error_message = "Input X is missing the 'state' column."
+        expected_error_message = "Input X is missing the following columns: state."
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.fit(X_without_state, y)
 
@@ -218,7 +218,7 @@ class TestStateDefaultRateTargetEncoder(BaseSupervisedTransformerTests):
         X_without_state = X.drop(columns="state")
         # Fit on original DataFrame, but transform on DataFrame without "state" column 
         transformer.fit(X, y)
-        expected_error_message = "Input X is missing the 'state' column."
+        expected_error_message = "Input X is missing the following columns: state."
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.transform(X_without_state)  
 
