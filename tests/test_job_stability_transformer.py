@@ -96,7 +96,7 @@ class TestJobStabilityTransformer(BaseTransformerTests):
     def test_fit_raises_value_error_for_missing_profession_column(self, transformer, X_input):
         X = X_input.copy()
         X_without_profession = X.drop(columns="profession")
-        expected_error_message = "Input X is missing the 'profession' column."
+        expected_error_message = "Input X is missing the following columns: profession."
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.fit(X_without_profession)    
 
@@ -160,7 +160,7 @@ class TestJobStabilityTransformer(BaseTransformerTests):
         X_without_profession = X.drop(columns="profession")
         # Fit on original DataFrame, but transform on DataFrame without "profession" column 
         transformer.fit(X)
-        expected_error_message = "Input X is missing the 'profession' column."
+        expected_error_message = "Input X is missing the following columns: profession."
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.transform(X_without_profession)  
 
