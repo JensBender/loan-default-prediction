@@ -109,23 +109,23 @@ class TestFeatureEngineeringPipeline(BaseSupervisedPipelineTests):
     # Ensure pipeline .fit() and .transform() raise ColumnMismatchError for missing columns in the input DataFrame
     @pytest.mark.integration
     @pytest.mark.parametrize("method", ["fit", "transform"])
-    @pytest.mark.parametrize("missing_columns", [
+    @pytest.mark.parametrize("missing_column", [
         "married", 
         "car_ownership", 
         "profession", 
         "city", 
         "state"
     ])
-    def test_feature_engineering_pipeline_fit_and_transform_raise_column_mismatch_error_for_missing_columns(self, X_input, y_input, pipeline, method, missing_columns):
+    def test_feature_engineering_pipeline_fit_and_transform_raise_column_mismatch_error_for_missing_columns(self, X_input, y_input, pipeline, method, missing_column):
         X = X_input.copy()
         y = y_input.copy()
-        X_with_missing_columns = X.drop(columns=missing_columns)
+        X_with_missing_column = X.drop(columns=missing_column)
         # Ensure .fit() raises ColumnMismatchError 
         if method == "fit":
             with pytest.raises(ColumnMismatchError):
-                pipeline.fit(X_with_missing_columns)
+                pipeline.fit(X_with_missing_column, y)
         # Ensure .transform() raises ColumnMismatchError 
         else:
-            pipeline.fit(X)
+            pipeline.fit(X, y)
             with pytest.raises(ColumnMismatchError):
-                pipeline.transform(X_with_missing_columns)
+                pipeline.transform(X_with_missing_column)
