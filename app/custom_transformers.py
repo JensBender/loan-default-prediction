@@ -314,7 +314,7 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
 
         # Ensure input DataFrame contains the required "profession" column
         if "profession" not in X.columns:
-            raise ColumnMismatchError("Input X is missing the 'profession' column.")
+            raise ColumnMismatchError("Input X is missing the following columns: profession.")
 
         # Ensure "profession" column has no missing values
         if X["profession"].isna().any():
@@ -378,7 +378,7 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
 
         # Ensure input DataFrame contains the required "city" column
         if "city" not in X.columns:
-            raise ColumnMismatchError("Input X is missing the 'city' column.")
+            raise ColumnMismatchError("Input X is missing the following columns: city.")
         
         # Ensure "city" column has no missing values
         if X["city"].isna().any():
@@ -432,7 +432,7 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         
         # Ensure DataFrame contains the required "state" column
         if "state" not in X.columns:
-            raise ColumnMismatchError("Input X is missing the 'state' column.")
+            raise ColumnMismatchError("Input X is missing the following columns: state.")
         
         # Ensure "state" column has no missing values
         if X["state"].isna().any():
