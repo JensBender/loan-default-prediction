@@ -19,7 +19,8 @@ from app.custom_transformers import (
     JobStabilityTransformer, 
     CityTierTransformer, 
     StateDefaultRateTargetEncoder,
-    ColumnMismatchError
+    ColumnMismatchError,
+    CategoricalLabelError
 )
 from app.global_constants import (
     COLUMNS_FOR_SNAKE_CASING,
@@ -129,3 +130,15 @@ class TestFeatureEngineeringPipeline(BaseSupervisedPipelineTests):
             pipeline.fit(X, y)
             with pytest.raises(ColumnMismatchError):
                 pipeline.transform(X_with_missing_column)
+
+    # Ensure pipeline .transform() raises CategoricalLabelError for unknown labels 
+    @pytest.mark.integration
+    @pytest.mark.parametrize("column", ["married", "car_ownership"])
+    def test_feature_engineering_pipeline_transform_raises_categorical_label_error_for_unknown_labels(self, X_input, y_input, pipeline, column):
+        X = X_input.copy()
+        y = y_input.copy()
+        X_with_unknown_label = X_input.copy()
+        X_with_unknown_label.loc[0, column] = "unknown_label"  # modify first row as a representative example
+        pipeline.fit(X, y)
+        with pytest.raises(CategoricalLabelError):
+            pipeline.transform(X_with_unknown_label)
