@@ -10,7 +10,7 @@ import numpy as np
 class MissingValueError(ValueError):
     pass
 
-# For mistmatch between expected and actual X input DataFrame columns 
+# For mistmatch between expected and actual columns in X input DataFrame because of missing columns, unexpected columns, or wrong column order 
 class ColumnMismatchError(ValueError):
     pass
 
@@ -117,7 +117,7 @@ class MissingValueChecker(BaseEstimator, TransformerMixin):
         
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
-            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
+            raise ColumnMismatchError("Feature names and feature order of input X must be the same as during .fit().")      
         
         # Check missing values
         self._check_missing_values(X)
@@ -193,7 +193,7 @@ class SnakeCaseFormatter(BaseEstimator, TransformerMixin):
             
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
-            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
+            raise ColumnMismatchError("Feature names and feature order of input X must be the same as during .fit().")      
 
         X_transformed = X.copy()
         
@@ -285,7 +285,7 @@ class BooleanColumnTransformer(BaseEstimator, TransformerMixin):
                     
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
-            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
+            raise ColumnMismatchError("Feature names and feature order of input X must be the same as during .fit().")      
 
         X_transformed = X.copy()
         for column, mapping in self.boolean_column_mappings.items():
@@ -314,7 +314,7 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
 
         # Ensure input DataFrame contains the required "profession" column
         if "profession" not in X.columns:
-            raise ValueError("Input X is missing the 'profession' column.")
+            raise ColumnMismatchError("Input X is missing the 'profession' column.")
 
         # Ensure "profession" column has no missing values
         if X["profession"].isna().any():
@@ -350,7 +350,7 @@ class JobStabilityTransformer(BaseEstimator, TransformerMixin):
         
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
-            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
+            raise ColumnMismatchError("Feature names and feature order of input X must be the same as during .fit().")      
        
         # Create job stability column by mapping professions to job stability tiers (default to "moderate" for unknown professions)
         X_transformed = X.copy()
@@ -378,7 +378,7 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
 
         # Ensure input DataFrame contains the required "city" column
         if "city" not in X.columns:
-            raise ValueError("Input X is missing the 'city' column.")
+            raise ColumnMismatchError("Input X is missing the 'city' column.")
         
         # Ensure "city" column has no missing values
         if X["city"].isna().any():
@@ -414,7 +414,7 @@ class CityTierTransformer(BaseEstimator, TransformerMixin):
         
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
-            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
+            raise ColumnMismatchError("Feature names and feature order of input X must be the same as during .fit().")      
 
         # Create city tier column by mapping cities to city tiers
         X_transformed = X.copy()
@@ -432,7 +432,7 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         
         # Ensure DataFrame contains the required "state" column
         if "state" not in X.columns:
-            raise ValueError("Input X is missing the 'state' column.")
+            raise ColumnMismatchError("Input X is missing the 'state' column.")
         
         # Ensure "state" column has no missing values
         if X["state"].isna().any():
@@ -493,7 +493,7 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
       
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
-            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
+            raise ColumnMismatchError("Feature names and feature order of input X must be the same as during .fit().")      
 
         # Create state default rate column by mapping the state to its corresponding default rate
         X_transformed = X.copy()
@@ -541,7 +541,7 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
 
         # Ensure input feature names and feature order is the same as during .fit()
         if X.columns.tolist() != self.feature_names_in_:
-            raise ValueError("Feature names and feature order of input X must be the same as during .fit().")      
+            raise ColumnMismatchError("Feature names and feature order of input X must be the same as during .fit().")      
         
         # Create transformed DataFrame with only the selected features
         X_transformed = X[self.columns_to_keep].copy()
