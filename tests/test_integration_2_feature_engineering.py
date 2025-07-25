@@ -164,6 +164,8 @@ class TestFeatureEngineeringPipeline(BaseSupervisedPipelineTests):
     @pytest.mark.integration
     @pytest.mark.parametrize("method", ["fit", "transform"])
     @pytest.mark.parametrize("required_column, expected_error_message", [
+        ("married", "'married' column cannot contain missing values"), 
+        ("car_ownership", "'car_ownership' column cannot contain missing values"), 
         ("profession", "'profession' column cannot contain missing values"), 
         ("city", "'city' column cannot contain missing values"),
         ("state", "'state' column cannot contain missing values")
