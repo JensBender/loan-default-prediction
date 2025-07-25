@@ -97,7 +97,7 @@ class TestCityTierTransformer(BaseTransformerTests):
     def test_fit_raises_value_error_for_missing_city_column(self, transformer, X_input):
         X = X_input.copy()
         X_without_city = X.drop(columns="city")
-        expected_error_message = "Input X is missing the 'city' column."
+        expected_error_message = "Input X is missing the following columns: city."
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.fit(X_without_city) 
     
@@ -165,7 +165,7 @@ class TestCityTierTransformer(BaseTransformerTests):
         X_without_city = X.drop(columns="city")
         # Fit on original DataFrame, but transform on DataFrame without "city" column 
         transformer.fit(X)
-        expected_error_message = "Input X is missing the 'city' column."
+        expected_error_message = "Input X is missing the following columns: city."
         with pytest.raises(ValueError, match=expected_error_message):
             transformer.transform(X_without_city)  
 
