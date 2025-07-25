@@ -131,7 +131,7 @@ class TestFeatureEngineeringPipeline(BaseSupervisedPipelineTests):
             with pytest.raises(ColumnMismatchError):
                 pipeline.transform(X_with_missing_column)
 
-    # Ensure pipeline .transform() raises CategoricalLabelError for unknown labels 
+    # Ensure pipeline .fit() and .transform() raise CategoricalLabelError for unknown labels 
     @pytest.mark.integration
     @pytest.mark.parametrize("method", ["fit", "transform"])
     @pytest.mark.parametrize("column", ["married", "car_ownership", "profession", "city"])
@@ -147,3 +147,14 @@ class TestFeatureEngineeringPipeline(BaseSupervisedPipelineTests):
             pipeline.fit(X, y) 
             with pytest.raises(CategoricalLabelError):
                 pipeline.transform(X_with_unknown_label)
+
+    # Ensure pipeline .transform() raises CategoricalLabelError for states not seen during .fit() 
+    @pytest.mark.integration
+    def test_feature_engineering_pipeline_transform_raises_categorical_label_error_for_unknown_states(self, X_input, y_input, pipeline):
+        X = X_input.copy()
+        y = y_input.copy()
+        X_with_unknown_state = X_input.copy()
+        X_with_unknown_state.loc[0, "state"] = "unknown_state"  # modify first row as a representative example
+        pipeline.fit(X, y) 
+        with pytest.raises(CategoricalLabelError):
+            pipeline.transform(X_with_unknown_state)
