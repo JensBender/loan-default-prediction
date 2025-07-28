@@ -25,9 +25,9 @@ from tests.base_pipeline_tests import BasePipelineTests
 @pytest.fixture
 def X_input():
     return pd.DataFrame({
-        "income": [9121364, 2636544, 9470213, 6558967, 6245331, 154867],
-        "age": [70, 39, 41, 41, 65, 64],
-        "experience": [18, 0, 5, 10, 6, 1],
+        "income": [300000, 300000, 300000, 500000, 500000, 500000],
+        "age": [30, 30, 30, 50, 50, 50],
+        "experience": [3, 3, 3, 5, 5, 5],
         "married": [False, False, False, True, False, False],
         "house_ownership": ["rented", "rented", "norent_noown", "rented", "rented", "owned"],
         "car_ownership": [False, False, True, False, False, False],
@@ -35,11 +35,11 @@ def X_input():
                         "financial_analyst", "statistician"],
         "city": ["sikar", "vellore", "bidar", "bongaigaon", "eluru[25]", "danapur"],
         "state": ["rajasthan", "tamil_nadu", "karnataka", "assam", "andhra_pradesh", "bihar"],
-        "current_job_yrs": [3, 0, 5, 10, 6, 1],
-        "current_house_yrs": [11, 11, 13, 12, 12, 12],
+        "current_job_yrs": [3, 3, 3, 5, 5, 5],
+        "current_house_yrs": [11, 11, 11, 13, 13, 13],
         "job_stability": ["variable", "moderate", "variable", "variable", "moderate", "moderate"],
         "city_tier": ["unknown", "unknown", "unknown", "unknown", "unknown", "tier_3"],
-        "state_default_rate": [0.0, 1.0, 0.0, 0.0, 1.0, 0.0],
+        "state_default_rate": [0.25, 0.25, 0.25, 0.75, 0.75, 0.75],
     })
 
 # Fixture to create pipeline segment for use in tests
@@ -77,4 +77,3 @@ class TestModelPreprocessingPipeline(BasePipelineTests):
     # Override parent class methods: ColumnTransformer accepts different column order compared to .fit()
     def test_pipeline_transform_raises_value_error_for_wrong_column_order(self):
         pass  
-    
