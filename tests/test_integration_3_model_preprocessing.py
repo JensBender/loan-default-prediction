@@ -80,7 +80,7 @@ class TestModelPreprocessingPipeline(BasePipelineTests):
     
     # Ensure pipeline scales, encodes, and selects features correctly
     @pytest.mark.integration
-    def test_model_preprocessing_pipeline_happy_path(self, X_input, pipeline):
+    def test_model_preprocessing_pipeline_scales_encodes_and_selects_features(self, X_input, pipeline):
         X = X_input.copy() 
         pipeline.fit(X)
         X_transformed = pipeline.transform(X)
