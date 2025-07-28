@@ -77,3 +77,25 @@ class TestModelPreprocessingPipeline(BasePipelineTests):
     # Override parent class methods: ColumnTransformer accepts different column order compared to .fit()
     def test_pipeline_transform_raises_value_error_for_wrong_column_order(self):
         pass  
+    
+    # Ensure pipeline scales, encodes, and selects features correctly
+    @pytest.mark.integration
+    def test_model_preprocessing_pipeline_happy_path(self, X_input, pipeline):
+        X = X_input.copy() 
+        pipeline.fit(X)
+        X_transformed = pipeline.transform(X)
+        expected_X_transformed = pd.DataFrame({
+            "income": [-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
+            "age": [-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
+            "experience": [-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
+            "current_job_yrs": [-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
+            "current_house_yrs": [-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
+            "state_default_rate": [-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],            
+            "house_ownership_owned": [0.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+            "house_ownership_rented": [1.0, 1.0, 0.0, 1.0, 1.0, 0.0],
+            "job_stability": [0.0, 1.0, 0.0, 0.0, 1.0, 1.0],
+            "city_tier": [0.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+            "married": [False, False, False, True, False, False],
+            "car_ownership": [False, False, True, False, False, False],
+        })
+        assert_frame_equal(X_transformed, expected_X_transformed)
