@@ -410,6 +410,9 @@ NUMERICAL_COLUMNS = ["income", "age", "experience", "current_job_yrs", "current_
 CATEGORICAL_COLUMNS = ["house_ownership", "job_stability", "city_tier", "profession", "city", "state"]
 BOOLEAN_COLUMNS = ["risk_flag", "married", "car_ownership"]
 
+# Define the categories for the nominal column "house_ownership" (for OneHotEncoder)
+NOMINAL_COLUMN_CATEGORIES = [["norent_noown", "owned", "rented"]]  # OneHotEncoder requires list of lists even for single column
+
 # Define the explicit order of categories for all ordinal columns (for OrdinalEncoder)
 ORDINAL_COLUMN_ORDERS = [
     ["variable", "moderate", "stable", "very_stable"],  # Order for job_stability
