@@ -99,3 +99,13 @@ class TestModelPreprocessingPipeline(BasePipelineTests):
             "car_ownership": [False, False, True, False, False, False],
         })
         assert_frame_equal(X_transformed, expected_X_transformed)
+
+    # Ensure pipeline .transform() raises ValueError for unknown "house_ownership" categories not seen during .fit() 
+    @pytest.mark.integration
+    def test_model_preprocessing_pipeline_transform_raises_value_error_for_unknown_categories(self, X_input, pipeline):
+        X = X_input.copy()
+        pipeline.fit(X) 
+        X_with_unknown_category = X_input.copy()
+        X_with_unknown_category.loc[0, "house_ownership"] = "unknown_category"  # modify first row as a representative example
+        with pytest.raises(ValueError):
+            pipeline.transform(X_with_unknown_category)
