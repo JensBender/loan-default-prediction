@@ -70,7 +70,11 @@ def pipeline():
 # .test_pipeline_transform_raises_value_error_for_wrong_column_order()
 # .test_pipeline_transform_preserves_df_index()
 class TestModelPreprocessingPipeline(BasePipelineTests):
-    # Override parent class method
+    # Override parent class methods: ColumnTransformer accepts non-DataFrame inputs
     def test_pipeline_fit_and_transform_raise_type_error_if_X_not_df(self):
-        pass  # pipeline starts with ColumnTransformer which accepts non-DataFrame inputs
+        pass  
+
+    # Override parent class methods: ColumnTransformer accepts different column order compared to .fit()
+    def test_pipeline_transform_raises_value_error_for_wrong_column_order(self):
+        pass  
     
