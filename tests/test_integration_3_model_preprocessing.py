@@ -16,7 +16,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
 from app.custom_transformers import FeatureSelector
-from app.global_constants import NUMERICAL_COLUMNS, ORDINAL_COLUMN_ORDERS, COLUMNS_TO_KEEP
+from app.global_constants import NUMERICAL_COLUMNS, NOMINAL_COLUMN_CATEGORIES, ORDINAL_COLUMN_ORDERS, COLUMNS_TO_KEEP
 from tests.base_pipeline_tests import BasePipelineTests
 
 
@@ -49,7 +49,7 @@ def pipeline():
         ("feature_scaler_encoder", ColumnTransformer(
             transformers=[
                 ("scaler", StandardScaler(), NUMERICAL_COLUMNS), 
-                ("nominal_encoder", OneHotEncoder(drop="first", sparse_output=False), ["house_ownership"]),
+                ("nominal_encoder", OneHotEncoder(categories=NOMINAL_COLUMN_CATEGORIES, drop="first", sparse_output=False), ["house_ownership"]),
                 ("ordinal_encoder", OrdinalEncoder(categories=ORDINAL_COLUMN_ORDERS), ["job_stability", "city_tier"])  
             ],
             remainder="passthrough",
