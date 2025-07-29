@@ -115,3 +115,18 @@ class TestModelPreprocessingPipeline(BasePipelineTests):
             pipeline.fit(X) 
             with pytest.raises(ValueError):
                 pipeline.transform(X_with_unknown_category)
+
+    # Ensure ColumnTransformer .transform() outputs the expected feature names
+    @pytest.mark.integration
+    def test_column_transformer_outputs_expected_feature_names(self, X_input, pipeline):
+        X = X_input.copy()
+        pipeline.fit(X)
+        column_transformer = pipeline.named_steps["feature_scaler_encoder"]
+        column_transformer_output = column_transformer.transform(X)
+        expected_feature_names = [
+            "income", "age", "experience", "current_job_yrs", "current_house_yrs", "state_default_rate", # from scaler
+            "house_ownership_owned", "house_ownership_rented", # from nominal_encoder
+            "job_stability", "city_tier", # from ordinal_encoder
+            "married", "car_ownership", "profession", "city", "state" # from remainder="passthrough"            
+        ]
+        assert column_transformer_output.columns.tolist() == expected_feature_names
