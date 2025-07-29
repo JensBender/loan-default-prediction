@@ -9,8 +9,8 @@ from pandas.testing import assert_frame_equal
 import numpy as np
 from sklearn.pipeline import Pipeline
 
-# Add the parent directory to the path (for local imports)
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# Add the root directory to the path for local imports (by going up two levels from current directory in which this file lives)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
 from app.custom_transformers import (
