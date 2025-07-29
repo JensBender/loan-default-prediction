@@ -29,7 +29,7 @@ from app.global_constants import (
     JOB_STABILITY_MAP,
     CITY_TIER_MAP
 )
-from tests.base_pipeline_tests import BaseSupervisedPipelineTests
+from tests.integration.base_pipeline_tests import BaseSupervisedPipelineTests
 
 
 # --- Fixtures ---
