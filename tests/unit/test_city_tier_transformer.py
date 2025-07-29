@@ -14,7 +14,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # Local imports
 from app.custom_transformers import CityTierTransformer, MissingValueError, CategoricalLabelError
 from app.global_constants import CITY_TIER_MAP
-from tests.base_transformer_tests import BaseTransformerTests
+from tests.unit.base_transformer_tests import BaseTransformerTests
 
 
 # --- Fixtures ---

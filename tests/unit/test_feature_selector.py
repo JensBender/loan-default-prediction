@@ -13,7 +13,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # Local imports
 from app.custom_transformers import FeatureSelector, ColumnMismatchError
 from app.global_constants import COLUMNS_TO_KEEP
-from tests.base_transformer_tests import BaseTransformerTests
+from tests.unit.base_transformer_tests import BaseTransformerTests
 
 
 # --- Fixtures ---
