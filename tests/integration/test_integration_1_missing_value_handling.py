@@ -17,7 +17,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # Local imports
 from app.custom_transformers import MissingValueChecker, MissingValueStandardizer, MissingValueError, ColumnMismatchError
 from app.global_constants import CRITICAL_FEATURES, NON_CRITICAL_FEATURES
-from tests.base_pipeline_tests import BasePipelineTests
+from tests.integration.base_pipeline_tests import BasePipelineTests
 
 
 # --- Fixtures ---
