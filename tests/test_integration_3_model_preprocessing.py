@@ -130,3 +130,19 @@ class TestModelPreprocessingPipeline(BasePipelineTests):
             "married", "car_ownership", "profession", "city", "state" # from remainder="passthrough"            
         ]
         assert column_transformer_output.columns.tolist() == expected_feature_names
+
+    # Ensure pipeline .fit() and .transform() raise ValueError for missing values
+    @pytest.mark.integration
+    @pytest.mark.parametrize("method", ["fit", "transform"])
+    @pytest.mark.parametrize("column", ["house_ownership", "job_stability", "city_tier"])
+    def test_model_preprocessing_pipeline_fit_and_transform_raise_value_error_for_missing_values(self, X_input, pipeline, method, column):
+        X = X_input.copy()
+        X_with_missing_value = X_input.copy()
+        X_with_missing_value.loc[0, column] = np.nan
+        if method == "fit":
+            with pytest.raises(ValueError):
+                pipeline.fit(X_with_missing_value)
+        else:  # method == "transform"
+            pipeline.fit(X) 
+            with pytest.raises(ValueError):
+                pipeline.transform(X_with_missing_value)
