@@ -62,6 +62,11 @@ def X_input():
         "current_house_yrs": [11, 11, 13, 12, 12, 12],
     })
 
+# Fixture to create y input Series for use in tests
+@pytest.fixture
+def y_input():
+    return pd.Series([0, 1, 0, 0, 1, 0])
+
 # Fixture to create the data preprocessing pipeline for use in tests
 @pytest.fixture
 def pipeline(): 
@@ -89,3 +94,18 @@ def pipeline():
     ).set_output(transform="pandas")),
     ("feature_selector", FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP))
 ])
+
+
+# --- TestDataPreprocessingPipeline class ---
+# Inherits from BaseSupervisedPipelineTests which adds the following integration tests:
+# .test_pipeline_can_be_cloned()
+# .test_pipeline_fit_transform_equivalence()
+# .test_pipeline_fit_and_transform_raise_type_error_if_X_not_df()
+# .test_pipeline_transform_does_not_modify_input_df()
+# .test_fitted_pipeline_can_be_pickled()
+# .test_pipeline_transform_raises_value_error_for_wrong_column_order()
+# .test_pipeline_transform_preserves_df_index()
+# BaseSupervisedPipelineTests further inherits the following test from BasePipelineTests:
+# .test_pipeline_transform_raises_not_fitted_error_if_unfitted()
+class TestDataPreprocessingPipeline(BaseSupervisedPipelineTests):
+    pass
