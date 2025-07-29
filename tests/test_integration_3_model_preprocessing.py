@@ -100,13 +100,18 @@ class TestModelPreprocessingPipeline(BasePipelineTests):
         })
         assert_frame_equal(X_transformed, expected_X_transformed)
 
-    # Ensure pipeline .transform() raises ValueError for unknown "house_ownership" categories not seen during .fit() 
+    # Ensure pipeline .fit() and .transform() raise ValueError for unknown categories (not specified in the "categories" parameter of OneHotEncoder or OrdinalEncoder) 
     @pytest.mark.integration
+    @pytest.mark.parametrize("method", ["fit", "transform"])
     @pytest.mark.parametrize("categorical_column", ["house_ownership", "job_stability", "city_tier"])
-    def test_model_preprocessing_pipeline_transform_raises_value_error_for_unknown_categories(self, X_input, pipeline, categorical_column):
+    def test_model_preprocessing_pipeline_fit_and_transform_raise_value_error_for_unknown_categories(self, X_input, pipeline, method, categorical_column):
         X = X_input.copy()
-        pipeline.fit(X) 
         X_with_unknown_category = X_input.copy()
         X_with_unknown_category.loc[0, categorical_column] = "unknown_category"  # modify first row as a representative example
-        with pytest.raises(ValueError):
-            pipeline.transform(X_with_unknown_category)
+        if method == "fit":
+            with pytest.raises(ValueError):
+                pipeline.fit(X_with_unknown_category)
+        else:  # method == "transform"
+            pipeline.fit(X) 
+            with pytest.raises(ValueError):
+                pipeline.transform(X_with_unknown_category)
