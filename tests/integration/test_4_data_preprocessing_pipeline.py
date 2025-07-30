@@ -231,8 +231,6 @@ class TestDataPreprocessingPipeline(BaseSupervisedPipelineTests):
             with pytest.raises(ColumnMismatchError):
                 pipeline.transform(X_with_unexpected_columns)
 
-    # Ensure pipeline .transform() handles an empty X input DataFrame
-
     # Ensure pipeline .fit() and .transform() raise CategoricalLabelError for unknown labels
     @pytest.mark.integration
     @pytest.mark.parametrize("method", ["fit", "transform"])
@@ -260,3 +258,22 @@ class TestDataPreprocessingPipeline(BaseSupervisedPipelineTests):
         pipeline.fit(X, y) 
         with pytest.raises(CategoricalLabelError):
             pipeline.transform(X_with_unknown_state)
+
+    # Ensure pipeline .fit() and .transform() raise ValueError for unknown categories in columns to be encoded (OneHotEncoder and OrdinalEncoder with "categories" parameter) 
+    @pytest.mark.integration
+    @pytest.mark.parametrize("method", ["fit", "transform"])
+    @pytest.mark.parametrize("column_to_be_encoded", ["house_ownership", "job_stability", "city_tier"])
+    def test_data_preprocessing_pipeline_raises_value_error_for_unknown_categories_for_encoding(self, X_input, y_input, pipeline, method, column_to_be_encoded):
+        X = X_input.copy()
+        y = y_input.copy()
+        X_with_unknown_category = X_input.copy()
+        X_with_unknown_category.loc[0, column_to_be_encoded] = "unknown_category"  # modify first row as a representative example
+        if method == "fit":
+            with pytest.raises(ValueError):
+                pipeline.fit(X_with_unknown_category, y)
+        else:  # method == "transform"
+            pipeline.fit(X, y) 
+            with pytest.raises(ValueError):
+                pipeline.transform(X_with_unknown_category)
+
+    # Ensure pipeline .transform() handles an empty X input DataFrame
