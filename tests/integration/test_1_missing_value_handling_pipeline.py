@@ -67,7 +67,7 @@ class TestMissingValueHandlingPipeline(BasePipelineTests):
     # Ensure pipeline .fit() and .transform() raise MissingValueError for missing values in critical features
     @pytest.mark.integration
     @pytest.mark.parametrize("method", ["fit", "transform"])
-    @pytest.mark.parametrize("missing_value", [None, np.nan])
+    @pytest.mark.parametrize("missing_value", [None, np.nan, pd.NA])
     @pytest.mark.parametrize("critical_feature", CRITICAL_FEATURES)
     def test_pipeline_fit_and_transform_raise_missing_value_error_for_critical_features(self, X_input, pipeline, method, missing_value, critical_feature):
         X = X_input.copy()
