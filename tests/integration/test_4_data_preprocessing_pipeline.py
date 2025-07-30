@@ -181,3 +181,28 @@ class TestDataPreprocessingPipeline(BaseSupervisedPipelineTests):
         else:  # non_critical_feature = "house_ownership"
             assert X_transformed.loc[0, "house_ownership_rented"] == 1.0
             assert X_transformed.loc[0, "house_ownership_owned"] == 0.0       
+
+    # Ensure pipeline .fit() and .transform() raise ColumnMismatchError for missing columns 
+    @pytest.mark.integration
+    @pytest.mark.parametrize("method", ["fit", "transform"])
+    @pytest.mark.parametrize("missing_columns", [
+        "income", 
+        "age", 
+        ["experience", "married"],
+        ["house_ownership", "car_ownership"],
+        ["profession", "city", "state"],
+        ["current_job_yrs", "current_house_yrs"],
+    ])
+    def test_data_preprocessing_pipeline_raises_column_mismatch_error_for_missing_columns(self, X_input, y_input, pipeline, method, missing_columns):
+        X = X_input.copy()
+        y = y_input.copy()
+        X_with_missing_columns = X.drop(columns=missing_columns)
+        # Ensure .fit() raises ColumnMismatchError 
+        if method == "fit":
+            with pytest.raises(ColumnMismatchError):
+                pipeline.fit(X_with_missing_columns, y)
+        # Ensure .transform() raises ColumnMismatchError 
+        else:
+            pipeline.fit(X, y)
+            with pytest.raises(ColumnMismatchError):
+                pipeline.transform(X_with_missing_columns)
