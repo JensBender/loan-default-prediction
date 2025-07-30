@@ -276,3 +276,16 @@ class TestDataPreprocessingPipeline(BaseSupervisedPipelineTests):
                 pipeline.transform(X_with_unknown_category)
 
     # Ensure pipeline .transform() handles an empty X input DataFrame
+    @pytest.mark.integration
+    def test_data_preprocessing_pipeline_transform_handles_empty_dataframe(self, X_input, y_input, pipeline):
+        X = X_input.copy()
+        y = y_input.copy()
+        # Create an empty DataFrame with same columns as the original DataFrame
+        X_empty = pd.DataFrame(columns=X.columns)
+        # Fit on non-empty DataFrame but transform on empty DataFrame
+        pipeline.fit(X, y)
+        X_transformed_empty = pipeline.transform(X_empty)
+        # Ensure output is an empty DataFrame with columns as defined in COLUMNS_TO_KEEP
+        assert isinstance(X_transformed_empty, pd.DataFrame)
+        assert X_transformed_empty.empty
+        assert X_transformed_empty.columns.to_list() == COLUMNS_TO_KEEP
