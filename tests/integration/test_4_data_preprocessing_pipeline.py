@@ -49,9 +49,9 @@ from tests.integration.base_pipeline_tests import BaseSupervisedPipelineTests
 @pytest.fixture
 def X_input():
     return pd.DataFrame({
-        "income": [9121364, 2636544, 9470213, 6558967, 6245331, 154867],
-        "age": [70, 39, 41, 41, 65, 64],
-        "experience": [18, 0, 5, 10, 6, 1],
+        "income": [300000, 300000, 300000, 500000, 500000, 500000],
+        "age": [30, 30, 30, 50, 50, 50],
+        "experience": [3, 3, 3, 5, 5, 5],
         "married": ["single", "single", "single", "married", "single", "single"],
         "house_ownership": ["rented", "rented", "norent_noown", "rented", "rented", "owned"],
         "car_ownership": ["no", "no", "yes", "no", "no", "no"],
@@ -59,14 +59,14 @@ def X_input():
                        "Financial_Analyst", "Statistician"],
         "city": ["Sikar", "Vellore", "Bidar", "Bongaigaon", "Eluru[25]", "Danapur"],
         "state": ["Rajasthan", "Tamil_Nadu", "Karnataka", "Assam", "Andhra_Pradesh", "Bihar"],
-        "current_job_yrs": [3, 0, 5, 10, 6, 1],
-        "current_house_yrs": [11, 11, 13, 12, 12, 12],
+        "current_job_yrs": [3, 3, 3, 5, 5, 5],
+        "current_house_yrs": [11, 11, 11, 13, 13, 13],
     })
 
 # Fixture to create y input Series for use in tests
 @pytest.fixture
 def y_input():
-    return pd.Series([0, 1, 0, 0, 1, 0])
+    return pd.Series([0, 0, 0, 1, 1, 1])
 
 # Fixture to create the data preprocessing pipeline for use in tests
 @pytest.fixture
@@ -109,4 +109,26 @@ def pipeline():
 # BaseSupervisedPipelineTests further inherits the following test from BasePipelineTests:
 # .test_pipeline_transform_raises_not_fitted_error_if_unfitted()
 class TestDataPreprocessingPipeline(BaseSupervisedPipelineTests):
-    pass
+    # Ensure data preprocessing pipeline works as expected
+    @pytest.mark.integration
+    def test_data_preprocessing_pipeline_happy_path(self, X_input, y_input, pipeline):
+        X = X_input.copy()
+        y = y_input.copy()
+        pipeline.fit(X, y)
+        X_transformed = pipeline.transform(X)
+        expected_X_transformed = pd.DataFrame({
+            "income": [-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
+            "age": [-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
+            "experience": [-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
+            "current_job_yrs": [-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
+            "current_house_yrs": [-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
+            "state_default_rate": [-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],            
+            "house_ownership_owned": [0.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+            "house_ownership_rented": [1.0, 1.0, 0.0, 1.0, 1.0, 0.0],
+            "job_stability": [0.0, 1.0, 0.0, 0.0, 1.0, 1.0],
+            "city_tier": [0.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+            "married": [False, False, False, True, False, False],
+            "car_ownership": [False, False, True, False, False, False],
+        })
+        # Ensure actual and expected output DataFrames are identical
+        assert_frame_equal(X_transformed, expected_X_transformed)
