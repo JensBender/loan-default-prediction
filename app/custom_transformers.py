@@ -1,5 +1,6 @@
 # Imports
 from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.impute import SimpleImputer
 from sklearn.utils.validation import check_is_fitted
 import pandas as pd
 import numpy as np
@@ -148,6 +149,15 @@ class MissingValueStandardizer(BaseEstimator, TransformerMixin):
             
         # Convert all missing value types (None, np.nan, pd.NA, etc.) to np.nan
         return X.fillna(value=np.nan)
+
+
+# A wrapper for SimpleImputer that passes through empty DataFrames during .transform() instead of raising a ValueError (SimpleImputer default behavior)
+class RobustSimpleImputer(SimpleImputer):
+    def transform(self, X):
+        if X.empty:
+            return X
+        else:
+            return super().transform(X)
 
 
 # Format categorical labels in snake_case
