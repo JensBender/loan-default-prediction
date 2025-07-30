@@ -132,3 +132,24 @@ class TestDataPreprocessingPipeline(BaseSupervisedPipelineTests):
         })
         # Ensure actual and expected output DataFrames are identical
         assert_frame_equal(X_transformed, expected_X_transformed)
+
+    # Ensure pipeline .fit() and .transform() raise MissingValueError for missing values in critical features
+    @pytest.mark.integration
+    @pytest.mark.parametrize("method", ["fit", "transform"])
+    @pytest.mark.parametrize("missing_value", [None, np.nan, pd.NA])
+    @pytest.mark.parametrize("critical_feature", CRITICAL_FEATURES)
+    def test_data_preprocessing_pipeline_fit_and_transform_raise_missing_value_error_for_critical_features(self, X_input, y_input, pipeline, method, missing_value, critical_feature):
+        X = X_input.copy()
+        y = y_input.copy()
+        X_with_missing_value = X_input.copy()
+        X_with_missing_value.loc[0, critical_feature] = missing_value  # in first row as representative example
+        # Ensure .fit() raises MissingValueError 
+        if method == "fit":
+            with pytest.raises(MissingValueError):
+                pipeline.fit(X_with_missing_value, y)
+        # Ensure .transform() raises MissingValueError with expected error message text
+        else:
+            # Fit on original DataFrame, but transform on DataFrame with missing values
+            pipeline.fit(X, y)
+            with pytest.raises(MissingValueError):
+                pipeline.transform(X_with_missing_value)
