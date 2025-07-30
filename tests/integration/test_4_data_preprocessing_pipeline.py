@@ -164,15 +164,16 @@ class TestDataPreprocessingPipeline(BaseSupervisedPipelineTests):
         y = y_input.copy()
         X_with_missing_value = X_input.copy()
         X_with_missing_value.loc[0, non_critical_feature] = missing_value  # use first row as a representative example
-        expected_mode = X_with_missing_value[non_critical_feature].mode()[0]
         # Both .fit() and .transform() with missing value 
         if method_with_missing == "fit_and_transform":
             pipeline.fit(X_with_missing_value, y)
             X_transformed = pipeline.transform(X_with_missing_value)
+            expected_mode = X_with_missing_value[non_critical_feature].mode()[0]
         # .fit() without and .transform() with missing value
         else:  # method_with_missing == "transform_only"
             pipeline.fit(X, y)
             X_transformed = pipeline.transform(X_with_missing_value)
+            expected_mode = X[non_critical_feature].mode()[0]
         # Ensure pipeline prints warning message and imputes mode
         assert "Warning" in capsys.readouterr().out
         if non_critical_feature in ["married", "car_ownership"]:
