@@ -205,4 +205,28 @@ class TestDataPreprocessingPipeline(BaseSupervisedPipelineTests):
         else:
             pipeline.fit(X, y)
             with pytest.raises(ColumnMismatchError):
-                pipeline.transform(X_with_missing_columns)
+                pipeline.transform(X_with_missing_columns) 
+
+   # Ensure pipeline .fit() and .transform() raise ColumnMismatchError for unexpected columns (not in CRITICAL_FEATURES or NON_CRITICAL_FEATURES)
+    @pytest.mark.integration
+    @pytest.mark.parametrize("method", ["fit", "transform"])
+    @pytest.mark.parametrize("unexpected_columns", [
+        ["unexpected_column_1"],
+        ["unexpected_column_1", "unexpected_column_2"],
+        ["unexpected_column_1", "unexpected_column_2", "unexpected_column_3"]
+    ])
+    def test_data_preprocessing_pipeline_raises_column_mismatch_error_for_unexpected_columns(self, X_input, y_input, pipeline, method, unexpected_columns):
+        X = X_input.copy()
+        y = y_input.copy()
+        X_with_unexpected_columns = X_input.copy()
+        for unexpected_column in unexpected_columns:
+            X_with_unexpected_columns[unexpected_column] = 5 
+        # Ensure .fit() raises ColumnMismatchError 
+        if method == "fit":
+            with pytest.raises(ColumnMismatchError):
+                pipeline.fit(X_with_unexpected_columns, y)
+        # Ensure .transform() raises ColumnMismatchError 
+        else:
+            pipeline.fit(X, y)
+            with pytest.raises(ColumnMismatchError):
+                pipeline.transform(X_with_unexpected_columns)
