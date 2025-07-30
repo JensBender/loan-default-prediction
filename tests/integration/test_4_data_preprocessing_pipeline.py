@@ -230,3 +230,22 @@ class TestDataPreprocessingPipeline(BaseSupervisedPipelineTests):
             pipeline.fit(X, y)
             with pytest.raises(ColumnMismatchError):
                 pipeline.transform(X_with_unexpected_columns)
+
+    # Ensure pipeline .transform() handles an empty X input DataFrame
+
+    # Ensure pipeline .fit() and .transform() raise CategoricalLabelError for unknown labels 
+    @pytest.mark.integration
+    @pytest.mark.parametrize("method", ["fit", "transform"])
+    @pytest.mark.parametrize("column", ["married", "car_ownership", "profession", "city"])
+    def test_data_preprocessing_pipeline_raises_categorical_label_error_for_unknown_labels(self, X_input, y_input, pipeline, method, column):
+        X = X_input.copy()
+        y = y_input.copy()
+        X_with_unknown_label = X_input.copy()
+        X_with_unknown_label.loc[0, column] = "unknown_label"  # modify first row as a representative example
+        if method == "fit":
+            with pytest.raises(CategoricalLabelError):
+                pipeline.fit(X_with_unknown_label, y)
+        else:  # method == "transform"
+            pipeline.fit(X, y) 
+            with pytest.raises(CategoricalLabelError):
+                pipeline.transform(X_with_unknown_label)
