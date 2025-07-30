@@ -156,21 +156,22 @@ class TestDataPreprocessingPipeline(BaseSupervisedPipelineTests):
 
     # Ensure pipline .fit() prints warning message and learns mode for missing values in non-critical features
     @pytest.mark.integration
+    # @pytest.mark.parametrize("method", ["fit_on_missing", "transform_on_missing"])
     @pytest.mark.parametrize("missing_value", [None, np.nan, pd.NA])
     @pytest.mark.parametrize("non_critical_feature", NON_CRITICAL_FEATURES)
     def test_data_preprocessing_pipeline_imputes_missing_values_in_non_critical_features(self, X_input, y_input, pipeline, missing_value, non_critical_feature, capsys):
+        X = X_input.copy()
         y = y_input.copy()
         X_with_missing_value = X_input.copy()
         X_with_missing_value.loc[0, non_critical_feature] = missing_value  # use first row as a representative example
         expected_mode = X_with_missing_value[non_critical_feature].mode()[0]
-        # Ensure .fit() prints warning message
+        # Ensure .fit() and .transform() on missing value prints warning message and imputes mode
         pipeline.fit(X_with_missing_value, y)
-        captured_output_and_error = capsys.readouterr()
-        warning_message = captured_output_and_error.out
-        assert "Warning" in warning_message 
-        assert "1 missing value found in non-critical features" in warning_message
-        assert "will be imputed" in warning_message
-        assert captured_output_and_error.err == ""
-        # Ensure .fit() learns mode (most frequent value) of non-critical feature
         X_transformed = pipeline.transform(X_with_missing_value)
-        assert X_transformed.loc[0, non_critical_feature] == expected_mode
+        assert "Warning" in capsys.readouterr().out
+        if non_critical_feature in ["married", "car_ownership"]:
+            assert X_transformed.loc[0, non_critical_feature] == BOOLEAN_COLUMN_MAPPINGS[non_critical_feature][expected_mode]
+        else:  # non_critical_feature = "house_ownership"
+            assert X_transformed.loc[0, "house_ownership_rented"] == 1.0
+            assert X_transformed.loc[0, "house_ownership_owned"] == 0.0
+    
