@@ -9,7 +9,6 @@ from pandas.testing import assert_frame_equal
 import numpy as np
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
-from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, OrdinalEncoder
 
 # Add the root directory to the path for local imports (by going up two levels from current directory in which this file lives)
@@ -19,6 +18,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")
 from app.custom_transformers import (
     MissingValueChecker, 
     MissingValueStandardizer, 
+    RobustSimpleImputer,
     SnakeCaseFormatter, 
     BooleanColumnTransformer, 
     JobStabilityTransformer, 
@@ -75,7 +75,7 @@ def pipeline():
     ("missing_value_checker", MissingValueChecker(critical_features=CRITICAL_FEATURES, non_critical_features=NON_CRITICAL_FEATURES)),
     ("missing_value_standardizer", MissingValueStandardizer()),
     ("missing_value_handler", ColumnTransformer(
-        transformers=[("categorical_imputer", SimpleImputer(strategy="most_frequent").set_output(transform="pandas"), NON_CRITICAL_FEATURES)],
+        transformers=[("categorical_imputer", RobustSimpleImputer(strategy="most_frequent").set_output(transform="pandas"), NON_CRITICAL_FEATURES)],
         remainder="passthrough",
         verbose_feature_names_out=False  # preserve input column names instead of adding prefix 
     ).set_output(transform="pandas")),  # output pd.DataFrame instead of np.array 
