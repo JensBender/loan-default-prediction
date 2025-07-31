@@ -522,7 +522,8 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
 class RobustStandardScaler(StandardScaler):
     def transform(self, X):
         if X.empty:
-            return X
+            feature_names_out = self.get_feature_names_out(X.columns)
+            return pd.DataFrame(columns=feature_names_out, dtype=float)
         else:
             return super().transform(X)
 
@@ -533,7 +534,7 @@ class RobustOneHotEncoder(OneHotEncoder):
         check_is_fitted(self)
         if X.empty:
             feature_names_out = self.get_feature_names_out(X.columns)
-            return pd.DataFrame(columns=feature_names_out)
+            return pd.DataFrame(columns=feature_names_out, dtype=float)
         else:
             return super().transform(X)
 
@@ -542,7 +543,8 @@ class RobustOneHotEncoder(OneHotEncoder):
 class RobustOrdinalEncoder(OrdinalEncoder):
     def transform(self, X):
         if X.empty:
-            return X
+            feature_names_out = self.get_feature_names_out(X.columns)
+            return pd.DataFrame(columns=feature_names_out, dtype=float)
         else:
             return super().transform(X)
 
