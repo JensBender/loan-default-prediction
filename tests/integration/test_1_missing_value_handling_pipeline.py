@@ -68,6 +68,7 @@ def pipeline():
 # .test_fitted_pipeline_can_be_pickled()
 # .test_pipeline_transform_raises_value_error_for_wrong_column_order()
 # .test_pipeline_transform_preserves_df_index()
+# .test_pipeline_transform_passes_through_empty_df()
 class TestMissingValueHandlingPipeline(BasePipelineTests):
     # Ensure pipeline .fit() and .transform() raise MissingValueError for missing values in critical features
     @pytest.mark.integration
@@ -216,18 +217,3 @@ class TestMissingValueHandlingPipeline(BasePipelineTests):
         captured_output_and_error = capsys.readouterr()
         assert captured_output_and_error.out == ""
         assert captured_output_and_error.err == ""
-
-    # Ensure pipeline .transform() passes through an empty DataFrame
-    @pytest.mark.integration
-    def test_missing_value_handling_pipeline_transform_passes_through_empty_df(self, X_input, pipeline):
-        X = X_input.copy()
-        # Create an empty DataFrame with same columns as the original DataFrame
-        X_empty = pd.DataFrame(columns=X.columns)
-        # Fit on non-empty DataFrame but transform on empty DataFrame
-        pipeline.fit(X)
-        X_transformed_empty = pipeline.transform(X_empty)
-        # Ensure output is an empty DataFrame with expected column order
-        assert isinstance(X_transformed_empty, pd.DataFrame)
-        assert X_transformed_empty.empty
-        expected_column_order = NON_CRITICAL_FEATURES + CRITICAL_FEATURES
-        assert X_transformed_empty.columns.to_list() == expected_column_order
