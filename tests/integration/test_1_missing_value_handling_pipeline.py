@@ -226,7 +226,7 @@ class TestMissingValueHandlingPipeline(BasePipelineTests):
         # Fit on non-empty DataFrame but transform on empty DataFrame
         pipeline.fit(X)
         X_transformed_empty = pipeline.transform(X_empty)
-        # Ensure output is an empty DataFrame with columns as defined in COLUMNS_TO_KEEP
+        # Ensure output is an empty DataFrame with expected column order
         assert isinstance(X_transformed_empty, pd.DataFrame)
         assert X_transformed_empty.empty
         expected_column_order = NON_CRITICAL_FEATURES + CRITICAL_FEATURES
