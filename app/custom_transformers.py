@@ -1,7 +1,7 @@
 # Imports
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, OneHotEncoder, OrdinalEncoder
 from sklearn.utils.validation import check_is_fitted
 import pandas as pd
 import numpy as np
@@ -525,7 +525,27 @@ class RobustStandardScaler(StandardScaler):
             return X
         else:
             return super().transform(X)
-        
+
+
+# A wrapper for StandardScaler to passthrough empty DataFrames during .transform() instead of raising a ValueError
+class RobustOneHotEncoder(OneHotEncoder):
+    def transform(self, X):
+        check_is_fitted(self)
+        if X.empty:
+            feature_names_out = self.get_feature_names_out(X.columns)
+            return pd.DataFrame(columns=feature_names_out)
+        else:
+            return super().transform(X)
+
+
+# A wrapper for StandardScaler to passthrough empty DataFrames during .transform() instead of raising a ValueError
+class RobustOrdinalEncoder(OrdinalEncoder):
+    def transform(self, X):
+        if X.empty:
+            return X
+        else:
+            return super().transform(X)
+
 
 # Feature selection for downstream model training and inference 
 class FeatureSelector(BaseEstimator, TransformerMixin):
