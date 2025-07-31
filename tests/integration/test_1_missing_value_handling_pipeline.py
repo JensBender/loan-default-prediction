@@ -211,3 +211,18 @@ class TestMissingValueHandlingPipeline(BasePipelineTests):
         captured_output_and_error = capsys.readouterr()
         assert captured_output_and_error.out == ""
         assert captured_output_and_error.err == ""
+
+    # Ensure pipeline .transform() passes through an empty DataFrame
+    @pytest.mark.integration
+    def test_missing_value_handling_pipeline_transform_passes_through_empty_df(self, X_input, pipeline):
+        X = X_input.copy()
+        # Create an empty DataFrame with same columns as the original DataFrame
+        X_empty = pd.DataFrame(columns=X.columns)
+        # Fit on non-empty DataFrame but transform on empty DataFrame
+        pipeline.fit(X)
+        X_transformed_empty = pipeline.transform(X_empty)
+        # Ensure output is an empty DataFrame with columns as defined in COLUMNS_TO_KEEP
+        assert isinstance(X_transformed_empty, pd.DataFrame)
+        assert X_transformed_empty.empty
+        expected_column_order = NON_CRITICAL_FEATURES + CRITICAL_FEATURES
+        assert X_transformed_empty.columns.to_list() == expected_column_order
