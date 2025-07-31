@@ -39,7 +39,7 @@ def X_input():
         "current_house_yrs": [11, 11, 13, 12, 12, 12],
     })
 
-# Fixture to create pipeline segment for use in tests
+# Fixture to create the missing value handling pipeline segment for use in tests
 @pytest.fixture
 def pipeline(): 
     return Pipeline([
@@ -69,7 +69,7 @@ class TestMissingValueHandlingPipeline(BasePipelineTests):
     @pytest.mark.parametrize("method", ["fit", "transform"])
     @pytest.mark.parametrize("missing_value", [None, np.nan, pd.NA])
     @pytest.mark.parametrize("critical_feature", CRITICAL_FEATURES)
-    def test_pipeline_fit_and_transform_raise_missing_value_error_for_critical_features(self, X_input, pipeline, method, missing_value, critical_feature):
+    def test_missing_value_handling_pipeline_raises_missing_value_error_for_critical_features(self, X_input, pipeline, method, missing_value, critical_feature):
         X = X_input.copy()
         X_with_missing_values = X_input.copy()
         X_with_missing_values[critical_feature] = missing_value
@@ -97,7 +97,7 @@ class TestMissingValueHandlingPipeline(BasePipelineTests):
     @pytest.mark.integration
     @pytest.mark.parametrize("missing_value", [None, np.nan, pd.NA])
     @pytest.mark.parametrize("non_critical_feature", NON_CRITICAL_FEATURES)
-    def test_pipeline_fit_warns_and_learns_mode_for_missing_values_in_non_critical_features(self, X_input, pipeline, missing_value, non_critical_feature, capsys):
+    def test_missing_value_handling_pipeline_fit_warns_and_learns_mode_for_missing_values_in_non_critical_features(self, X_input, pipeline, missing_value, non_critical_feature, capsys):
         X_with_missing_value = X_input.copy()
         X_with_missing_value.loc[0, non_critical_feature] = missing_value  # use first row as a representative example
         expected_mode = X_with_missing_value[non_critical_feature].mode()[0]
@@ -116,7 +116,7 @@ class TestMissingValueHandlingPipeline(BasePipelineTests):
     # Ensure pipeline .fit() raises MissingValueError for non-critical feature with only missing values
     @pytest.mark.integration
     @pytest.mark.parametrize("non_critical_feature", NON_CRITICAL_FEATURES)
-    def test_fit_raises_missing_value_error_for_non_critical_feature_with_only_missings(self, X_input, pipeline, non_critical_feature):
+    def test_missing_value_handling_pipeline_fit_raises_missing_value_error_for_non_critical_feature_with_only_missings(self, X_input, pipeline, non_critical_feature):
         # Create DataFrame with a non-critical feature with only missing values
         X_with_only_missings = X_input.copy()
         X_with_only_missings[non_critical_feature] = np.nan
@@ -136,7 +136,7 @@ class TestMissingValueHandlingPipeline(BasePipelineTests):
         ["profession", "city", "state"],
         ["current_job_yrs", "current_house_yrs"],
     ])
-    def test_pipeline_fit_and_transform_raise_column_mismatch_error_for_missing_columns(self, X_input, pipeline, method, missing_columns):
+    def test_missing_value_handling_pipeline_raises_column_mismatch_error_for_missing_columns(self, X_input, pipeline, method, missing_columns):
         X = X_input.copy()
         X_with_missing_columns = X.drop(columns=missing_columns)
         # Ensure .fit() raises ColumnMismatchError 
@@ -157,7 +157,7 @@ class TestMissingValueHandlingPipeline(BasePipelineTests):
         ["unexpected_column_1", "unexpected_column_2"],
         ["unexpected_column_1", "unexpected_column_2", "unexpected_column_3"]
     ])
-    def test_pipeline_fit_and_transform_raise_column_mismatch_error_for_unexpected_columns(self, X_input, pipeline, method, unexpected_columns):
+    def test_missing_value_handling_pipeline_raises_column_mismatch_error_for_unexpected_columns(self, X_input, pipeline, method, unexpected_columns):
         X = X_input.copy()
         X_with_unexpected_columns = X_input.copy()
         for unexpected_column in unexpected_columns:
@@ -176,7 +176,7 @@ class TestMissingValueHandlingPipeline(BasePipelineTests):
     @pytest.mark.integration
     @pytest.mark.parametrize("missing_value", [None, np.nan, pd.NA])
     @pytest.mark.parametrize("non_critical_feature", NON_CRITICAL_FEATURES)
-    def test_pipeline_transform_warns_and_imputes_mode_for_missing_values_in_non_critical_features(self, X_input, pipeline, missing_value, non_critical_feature, capsys):
+    def test_missing_value_handling_pipeline_transform_warns_and_imputes_mode_for_missing_values_in_non_critical_features(self, X_input, pipeline, missing_value, non_critical_feature, capsys):
         X = X_input.copy()
         X_with_missing_value = X_input.copy()
         X_with_missing_value.loc[0, non_critical_feature] = missing_value  # use first row as a representative example
@@ -198,7 +198,7 @@ class TestMissingValueHandlingPipeline(BasePipelineTests):
 
     # Ensure pipeline .transform() on DataFrame with no missing values produces the expected column order 
     @pytest.mark.integration
-    def test_pipeline_transform_with_no_missing_values_produces_expected_column_order(self, X_input, pipeline, capsys):
+    def test_missing_value_handling_pipeline_transform_with_no_missing_values_produces_expected_column_order(self, X_input, pipeline, capsys):
         X = X_input.copy()
         pipeline.fit(X)
         X_transformed = pipeline.transform(X)
