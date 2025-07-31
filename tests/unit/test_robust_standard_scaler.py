@@ -44,6 +44,22 @@ class TestRobustStandardScaler:
         assert isinstance(transformer, StandardScaler)
         assert isinstance(transformer, RobustStandardScaler)
 
+    # Ensure .transform() z-score scales columns
+    @pytest.mark.unit
+    def test_robust_standard_scaler_happy_path(self, transformer, X_input):
+        X = X_input.copy()
+        transformer.fit(X)
+        X_transformed = transformer.transform(X)
+        expected_X_transformed = np.array([
+            [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0],
+            [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0],
+            [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0],
+            [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+            [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+            [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],                       
+        ])
+        assert_array_equal(X_transformed, expected_X_transformed)
+
     # Ensure .transform() correctly handles an empty DataFrame
     @pytest.mark.unit
     def test_transform_handles_empty_df(self, transformer, X_input):
