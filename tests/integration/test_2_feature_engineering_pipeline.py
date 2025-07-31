@@ -77,6 +77,7 @@ def pipeline():
 # .test_fitted_pipeline_can_be_pickled()
 # .test_pipeline_transform_raises_value_error_for_wrong_column_order()
 # .test_pipeline_transform_preserves_df_index()
+# .test_pipeline_transform_passes_through_empty_df()
 # BaseSupervisedPipelineTests further inherits the following test from BasePipelineTests:
 # .test_pipeline_transform_raises_not_fitted_error_if_unfitted()
 class TestFeatureEngineeringPipeline(BaseSupervisedPipelineTests):
@@ -181,19 +182,3 @@ class TestFeatureEngineeringPipeline(BaseSupervisedPipelineTests):
             pipeline.fit(X, y)
             with pytest.raises(MissingValueError, match=expected_error_message):
                 pipeline.transform(X_with_missing_value)
-
-    # Ensure pipeline .transform() passes through an empty DataFrame
-    @pytest.mark.integration
-    def test_feature_engineering_pipeline_transform_passes_through_empty_df(self, X_input, y_input, pipeline):
-        X = X_input.copy()
-        y = y_input.copy()
-        # Create an empty DataFrame with same columns as the original DataFrame
-        X_empty = pd.DataFrame(columns=X.columns)
-        # Fit on non-empty DataFrame but transform on empty DataFrame
-        pipeline.fit(X, y)
-        X_transformed_empty = pipeline.transform(X_empty)
-        # Ensure output is an empty DataFrame with expected column order
-        assert isinstance(X_transformed_empty, pd.DataFrame)
-        assert X_transformed_empty.empty
-        expected_column_order = X.columns.to_list() + ["job_stability", "city_tier", "state_default_rate"]
-        assert X_transformed_empty.columns.to_list() == expected_column_order
