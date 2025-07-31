@@ -9,7 +9,6 @@ from pandas.testing import assert_frame_equal
 import numpy as np
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import StandardScaler, OneHotEncoder, OrdinalEncoder
 
 # Add the root directory to the path for local imports (by going up two levels from current directory in which this file lives)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
@@ -24,6 +23,9 @@ from app.custom_transformers import (
     JobStabilityTransformer, 
     CityTierTransformer, 
     StateDefaultRateTargetEncoder,
+    RobustStandardScaler,
+    RobustOneHotEncoder,
+    RobustOrdinalEncoder,
     FeatureSelector,
     MissingValueError, 
     ColumnMismatchError,
@@ -86,9 +88,9 @@ def pipeline():
     ("state_default_rate_target_encoder", StateDefaultRateTargetEncoder()),
     ("feature_scaler_encoder", ColumnTransformer(
         transformers=[
-            ("scaler", StandardScaler(), NUMERICAL_COLUMNS), 
-            ("nominal_encoder", OneHotEncoder(categories=NOMINAL_COLUMN_CATEGORIES, drop="first", sparse_output=False), ["house_ownership"]),
-            ("ordinal_encoder", OrdinalEncoder(categories=ORDINAL_COLUMN_ORDERS), ["job_stability", "city_tier"])  
+            ("scaler", RobustStandardScaler(), NUMERICAL_COLUMNS), 
+            ("nominal_encoder", RobustOneHotEncoder(categories=NOMINAL_COLUMN_CATEGORIES, drop="first", sparse_output=False), ["house_ownership"]),
+            ("ordinal_encoder", RobustOrdinalEncoder(categories=ORDINAL_COLUMN_ORDERS), ["job_stability", "city_tier"])  
         ],
         remainder="passthrough",
         verbose_feature_names_out=False
