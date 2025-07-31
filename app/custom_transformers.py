@@ -1,6 +1,7 @@
 # Imports
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler
 from sklearn.utils.validation import check_is_fitted
 import pandas as pd
 import numpy as np
@@ -151,7 +152,7 @@ class MissingValueStandardizer(BaseEstimator, TransformerMixin):
         return X.fillna(value=np.nan)
 
 
-# A wrapper for SimpleImputer that passes through empty DataFrames during .transform() instead of raising a ValueError (SimpleImputer default behavior)
+# A wrapper for SimpleImputer to passthrough empty DataFrames during .transform() instead of raising a ValueError (SimpleImputer default behavior)
 class RobustSimpleImputer(SimpleImputer):
     def transform(self, X):
         if X.empty:
@@ -516,6 +517,15 @@ class StateDefaultRateTargetEncoder(BaseEstimator, TransformerMixin):
         
         return X_transformed
 
+
+# A wrapper for StandardScaler to passthrough empty DataFrames during .transform() instead of raising a ValueError
+class RobustStandardScaler(StandardScaler):
+    def transform(self, X):
+        if X.empty:
+            return X
+        else:
+            return super().transform(X)
+        
 
 # Feature selection for downstream model training and inference 
 class FeatureSelector(BaseEstimator, TransformerMixin):
