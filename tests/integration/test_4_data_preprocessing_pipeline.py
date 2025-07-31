@@ -277,9 +277,9 @@ class TestDataPreprocessingPipeline(BaseSupervisedPipelineTests):
             with pytest.raises(ValueError):
                 pipeline.transform(X_with_unknown_category)
 
-    # Ensure pipeline .transform() handles an empty X input DataFrame
+    # Ensure pipeline .transform() passes through an empty DataFrame
     @pytest.mark.integration
-    def test_data_preprocessing_pipeline_transform_handles_empty_dataframe(self, X_input, y_input, pipeline):
+    def test_data_preprocessing_pipeline_transform_passes_through_empty_df(self, X_input, y_input, pipeline):
         X = X_input.copy()
         y = y_input.copy()
         # Create an empty DataFrame with same columns as the original DataFrame
