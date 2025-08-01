@@ -131,3 +131,33 @@ def test_data_preprocessing_and_model_pipeline_predict_proba_output(X_input, y_i
     assert np.all((predict_proba_output >= 0) & (predict_proba_output <= 1))
     # Ensure each row sums up to 1 (or rather close to 1 using np.isclose)
     assert np.all(np.isclose(np.sum(predict_proba_output, axis=1), 1))
+
+# Ensure pipeline .fit() and .predict() raise TypeError if "X" input is not a pandas DataFrame
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["fit", "predict"])
+@pytest.mark.parametrize("invalid_X_input", [
+    np.array([[1, 2], [3, 4]]), 
+    pd.Series([1, 2, 3]),
+    "a string",
+    ["a", "list"],
+    ("a", "tuple"),
+    {"a", "set"}, 
+    {"a": "dictionary"},
+    1,
+    1.23,
+    False,
+    None
+])
+def test_data_preprocessing_and_model_pipeline_raises_type_error_if_X_not_df(X_input, y_input, pipeline, method, invalid_X_input):
+    y = y_input.copy()
+    expected_error_message = "Input X must be a pandas DataFrame."
+    # Ensure .fit() raises TypeError
+    if method == "fit":
+        with pytest.raises(TypeError, match=expected_error_message):
+            pipeline.fit(invalid_X_input, y)
+    # Ensure .predict() raises TypeError
+    else:
+        X = X_input.copy()
+        pipeline.fit(X, y)
+        with pytest.raises(TypeError, match=expected_error_message):
+            pipeline.predict(invalid_X_input)
