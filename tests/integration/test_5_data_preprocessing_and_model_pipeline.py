@@ -116,3 +116,16 @@ def test_data_preprocessing_and_model_pipeline_predict_output(X_input, y_input, 
     # Ensure all values are 0 or 1
     assert np.all(np.isin(predict_output, [0, 1]))
 
+# Ensure pipeline .predict_proba() output is as expected
+@pytest.mark.integration
+def test_data_preprocessing_and_model_pipeline_predict_proba_output(X_input, y_input, pipeline):
+    X = X_input.copy()
+    y = y_input.copy()
+    pipeline.fit(X, y)
+    predict_proba_output = pipeline.predict_proba(X)
+    # Ensure output is an array
+    assert isinstance(predict_proba_output, np.ndarray)
+    # Ensure array has same number of samples as input and two columns (for class 0 and class 1)
+    assert predict_proba_output.shape == (len(X), 2)
+    # Ensure all values are between 0 and 1
+    assert np.all((predict_proba_output >= 0) & (predict_proba_output <= 1))
