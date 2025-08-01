@@ -164,7 +164,7 @@ def test_data_preprocessing_and_model_pipeline_raises_type_error_if_X_not_df(X_i
             with pytest.raises(TypeError, match=expected_error_message):
                 pipeline.predict_proba(invalid_X_input)
 
-# Ensure pipeline .fit() and .predict(), and .predict_proba() raise ColumnMismatchError for missing columns 
+# Ensure pipeline .fit(), .predict(), and .predict_proba() raise ColumnMismatchError for missing columns 
 @pytest.mark.integration
 @pytest.mark.parametrize("method", ["fit", "predict", "predict_proba"])
 @pytest.mark.parametrize("missing_columns", [
@@ -192,7 +192,7 @@ def test_data_preprocessing_and_model_pipeline_raises_column_mismatch_error_for_
             with pytest.raises(ColumnMismatchError):
                 pipeline.predict_proba(X_with_missing_columns)
 
-# Ensure pipeline .fit() and .predict(), and .predict_proba() raise ColumnMismatchError for unexpected columns (not in CRITICAL_FEATURES or NON_CRITICAL_FEATURES)
+# Ensure pipeline .fit(), .predict(), and .predict_proba() raise ColumnMismatchError for unexpected columns (not in CRITICAL_FEATURES or NON_CRITICAL_FEATURES)
 @pytest.mark.integration
 @pytest.mark.parametrize("method", ["fit", "predict", "predict_proba"])
 @pytest.mark.parametrize("unexpected_columns", [
@@ -217,3 +217,25 @@ def test_data_preprocessing_and_model_pipeline_raises_column_mismatch_error_for_
         else:  # method == "predict_proba"
             with pytest.raises(ColumnMismatchError):
                 pipeline.predict_proba(X_with_unexpected_columns)
+
+# Ensure pipeline .fit(), .predict(), and .predict_proba() raise MissingValueError for missing values in critical features
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["fit", "predict", "predict_proba"])
+@pytest.mark.parametrize("missing_value", [None, np.nan, pd.NA])
+@pytest.mark.parametrize("critical_feature", CRITICAL_FEATURES)
+def test_data_preprocessing_and_model_pipeline_raises_missing_value_error_for_critical_features(X_input, y_input, pipeline, method, missing_value, critical_feature):
+    X_with_missing_value = X_input.copy()
+    X_with_missing_value.loc[0, critical_feature] = missing_value  # in first row as representative example
+    y = y_input.copy()
+    if method == "fit":
+        with pytest.raises(MissingValueError):
+            pipeline.fit(X_with_missing_value, y)
+    else:
+        X = X_input.copy()
+        pipeline.fit(X, y)
+        if method == "predict":
+            with pytest.raises(MissingValueError):
+                pipeline.predict(X_with_missing_value)
+        else:  # method == "predict_proba"
+            with pytest.raises(MissingValueError):
+                pipeline.predict_proba(X_with_missing_value)
