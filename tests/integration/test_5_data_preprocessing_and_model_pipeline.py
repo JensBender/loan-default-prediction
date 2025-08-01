@@ -163,3 +163,30 @@ def test_data_preprocessing_and_model_pipeline_raises_type_error_if_X_not_df(X_i
         else:  # method == "predict_proba"
             with pytest.raises(TypeError, match=expected_error_message):
                 pipeline.predict_proba(invalid_X_input)
+
+# Ensure pipeline .fit() and .predict(), and .predict_proba() raise ColumnMismatchError for missing columns 
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["fit", "predict", "predict_proba"])
+@pytest.mark.parametrize("missing_columns", [
+    "income", 
+    "age", 
+    ["experience", "married"],
+    ["house_ownership", "car_ownership"],
+    ["profession", "city", "state"],
+    ["current_job_yrs", "current_house_yrs"],
+])
+def test_data_preprocessing_and_model_pipeline_raises_column_mismatch_error_for_missing_columns(X_input, y_input, pipeline, method, missing_columns):
+    X = X_input.copy()
+    y = y_input.copy()
+    X_with_missing_columns = X.drop(columns=missing_columns)
+    if method == "fit":
+        with pytest.raises(ColumnMismatchError):
+            pipeline.fit(X_with_missing_columns, y)
+    else:
+        pipeline.fit(X, y)
+        if method == "predict":
+            with pytest.raises(ColumnMismatchError):
+                pipeline.predict(X_with_missing_columns)
+        else:  # method == "predict_proba"
+            with pytest.raises(ColumnMismatchError):
+                pipeline.predict_proba(X_with_missing_columns)
