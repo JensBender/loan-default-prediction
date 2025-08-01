@@ -176,13 +176,14 @@ def test_data_preprocessing_and_model_pipeline_raises_type_error_if_X_not_df(X_i
     ["current_job_yrs", "current_house_yrs"],
 ])
 def test_data_preprocessing_and_model_pipeline_raises_column_mismatch_error_for_missing_columns(X_input, y_input, pipeline, method, missing_columns):
-    X = X_input.copy()
+    X_with_missing_columns = X_input.copy()
+    X_with_missing_columns = X_with_missing_columns.drop(columns=missing_columns)
     y = y_input.copy()
-    X_with_missing_columns = X.drop(columns=missing_columns)
     if method == "fit":
         with pytest.raises(ColumnMismatchError):
             pipeline.fit(X_with_missing_columns, y)
     else:
+        X = X_input.copy()
         pipeline.fit(X, y)
         if method == "predict":
             with pytest.raises(ColumnMismatchError):
@@ -190,3 +191,29 @@ def test_data_preprocessing_and_model_pipeline_raises_column_mismatch_error_for_
         else:  # method == "predict_proba"
             with pytest.raises(ColumnMismatchError):
                 pipeline.predict_proba(X_with_missing_columns)
+
+# Ensure pipeline .fit() and .predict(), and .predict_proba() raise ColumnMismatchError for unexpected columns (not in CRITICAL_FEATURES or NON_CRITICAL_FEATURES)
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["fit", "predict", "predict_proba"])
+@pytest.mark.parametrize("unexpected_columns", [
+    ["unexpected_column_1"],
+    ["unexpected_column_1", "unexpected_column_2"],
+    ["unexpected_column_1", "unexpected_column_2", "unexpected_column_3"]
+])
+def test_data_preprocessing_and_model_pipeline_raises_column_mismatch_error_for_unexpected_columns(X_input, y_input, pipeline, method, unexpected_columns):
+    X_with_unexpected_columns = X_input.copy()
+    for unexpected_column in unexpected_columns:
+        X_with_unexpected_columns[unexpected_column] = 5 
+    y = y_input.copy()
+    if method == "fit":
+        with pytest.raises(ColumnMismatchError):
+            pipeline.fit(X_with_unexpected_columns, y)
+    else:
+        X = X_input.copy()
+        pipeline.fit(X, y)
+        if method == "predict":
+            with pytest.raises(ColumnMismatchError):
+                pipeline.predict(X_with_unexpected_columns)
+        else:  # method == "predict_proba"
+            with pytest.raises(ColumnMismatchError):
+                pipeline.predict_proba(X_with_unexpected_columns)
