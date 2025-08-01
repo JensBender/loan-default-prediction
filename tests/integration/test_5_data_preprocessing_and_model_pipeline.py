@@ -129,3 +129,5 @@ def test_data_preprocessing_and_model_pipeline_predict_proba_output(X_input, y_i
     assert predict_proba_output.shape == (len(X), 2)
     # Ensure all values are between 0 and 1
     assert np.all((predict_proba_output >= 0) & (predict_proba_output <= 1))
+    # Ensure each row sums up to 1 (or rather close to 1 using np.isclose)
+    assert np.all(np.isclose(np.sum(predict_proba_output, axis=1), 1))
