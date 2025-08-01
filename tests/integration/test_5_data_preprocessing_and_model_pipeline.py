@@ -101,6 +101,17 @@ def pipeline():
 ])
 
 
-# --- TestDataPreprocessingAndModelPipeline class ---
-class TestDataPreprocessingAndModelPipeline:
-    pass
+# --- Test Functions ---
+@pytest.mark.integration
+# Ensure pipeline predict output is np.array with same number of samples as input and all values are 0 or 1
+def test_data_preprocessing_and_model_pipeline_predict_output(X_input, y_input, pipeline):
+    X = X_input.copy()
+    y = y_input.copy()
+    pipeline.fit(X, y)
+    predict_output = pipeline.predict(X)
+    # Ensure output is np.array
+    assert isinstance(predict_output, np.ndarray)
+    # Ensure output has same number of samples as input
+    assert len(predict_output) == len(X)
+    # Ensure all values are 0 or 1
+    assert np.all(np.isin(predict_output, [0, 1]))
