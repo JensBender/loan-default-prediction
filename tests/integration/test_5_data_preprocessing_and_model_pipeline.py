@@ -264,9 +264,14 @@ def test_data_preprocessing_and_model_pipeline_imputes_missing_values_in_non_cri
     else:
         X = X_input.copy()
         pipeline.fit(X, y)    
+        expected_mode = X[non_critical_feature].mode()[0]
+        X_with_manual_impute = X_with_missing_value.fillna({non_critical_feature: expected_mode})
         if method == "predict":
-            predict_output = pipeline.predict(X)
-            predict_output_missing = pipeline.predict(X_with_missing_value)
-            assert_array_equal(predict_output, predict_output_missing)
+            # Ensure .predict() on missing value imputes the mode
+            predict_with_manual_impute = pipeline.predict(X_with_manual_impute)
+            predict_with_pipeline_impute = pipeline.predict(X_with_missing_value)
+            assert_array_equal(predict_with_pipeline_impute, predict_with_manual_impute)
+            # Ensure .predict() on missing value prints warning message
+            assert "Warning" in capsys.readouterr().out
         else:  # method == "predict_proba"
             pass
