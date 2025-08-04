@@ -348,9 +348,8 @@ def test_data_preprocessing_and_model_pipeline_raises_column_mismatch_error_for_
     reversed_columns = X.columns[::-1]  # reverse order as an example
     X_with_wrong_column_order = X[reversed_columns]  
     expected_error_message = "Feature names and feature order of input X must be the same as during .fit()."
-    if method == "predict":
-        with pytest.raises(ColumnMismatchError, match=expected_error_message):
+    with pytest.raises(ColumnMismatchError, match=expected_error_message):
+        if method == "predict":
             pipeline.predict(X_with_wrong_column_order)
-    else:  # method == "predict_proba"
-        with pytest.raises(ColumnMismatchError, match=expected_error_message):
+        else:  # method == "predict_proba"
             pipeline.predict_proba(X_with_wrong_column_order)      
