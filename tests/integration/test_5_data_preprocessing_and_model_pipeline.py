@@ -274,4 +274,9 @@ def test_data_preprocessing_and_model_pipeline_imputes_missing_values_in_non_cri
             # Ensure .predict() on missing value prints warning message
             assert "Warning" in capsys.readouterr().out
         else:  # method == "predict_proba"
-            pass
+            # Ensure .predict_proba() on missing value imputes the mode
+            predict_proba_with_manual_impute = pipeline.predict_proba(X_with_manual_impute)
+            predict_proba_with_pipeline_impute = pipeline.predict_proba(X_with_missing_value)
+            assert_array_equal(predict_proba_with_pipeline_impute, predict_proba_with_manual_impute)
+            # Ensure .predict_proba() on missing value prints warning message
+            assert "Warning" in capsys.readouterr().out
