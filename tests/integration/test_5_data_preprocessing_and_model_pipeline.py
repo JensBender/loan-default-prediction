@@ -317,3 +317,23 @@ def test_data_preprocessing_and_model_pipeline_raises_categorical_label_error_fo
     else:  # method == "predict_proba"
         with pytest.raises(CategoricalLabelError):
             pipeline.predict_proba(X_with_unknown_state)
+
+# Ensure pipeline .fit(), .predict(), and .predict_proba() raise ValueError for unknown "house_ownership" categories (not in "categories" hyperparameter of OneHotEncoder) 
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["fit", "predict", "predict_proba"])
+def test_data_preprocessing_and_model_pipeline_raises_value_error_for_unknown_house_ownership_categories(X_input, y_input, pipeline, method):
+    X_with_unknown_category = X_input.copy()
+    X_with_unknown_category.loc[0, "house_ownership"] = "unknown_category"  
+    y = y_input.copy()
+    if method == "fit":
+        with pytest.raises(ValueError):
+            pipeline.fit(X_with_unknown_category, y)
+    else:  
+        X = X_input.copy()
+        pipeline.fit(X, y) 
+        if method == "predict":
+            with pytest.raises(ValueError):
+                pipeline.predict(X_with_unknown_category)
+        else:  # method == "predict_proba"
+            with pytest.raises(ValueError):
+                pipeline.predict_proba(X_with_unknown_category)
