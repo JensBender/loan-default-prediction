@@ -280,3 +280,24 @@ def test_data_preprocessing_and_model_pipeline_imputes_missing_values_in_non_cri
             assert_array_equal(predict_proba_with_pipeline_impute, predict_proba_with_manual_impute)
             # Ensure .predict_proba() on missing value prints warning message
             assert "Warning" in capsys.readouterr().out
+
+# Ensure pipeline .fit(), .predict(), and .predict_proba() raise CategoricalLabelError for unknown labels
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["fit", "predict", "predict_proba"])
+@pytest.mark.parametrize("column", ["married", "car_ownership", "profession", "city"])
+def test_data_preprocessing_and_model_pipeline_raises_categorical_label_error_for_unknown_labels(X_input, y_input, pipeline, method, column):
+    X_with_unknown_label = X_input.copy()
+    X_with_unknown_label.loc[0, column] = "unknown_label"  
+    y = y_input.copy()
+    if method == "fit":
+        with pytest.raises(CategoricalLabelError):
+            pipeline.fit(X_with_unknown_label, y)
+    else:  
+        X = X_input.copy()
+        pipeline.fit(X, y) 
+        if method == "predict":
+            with pytest.raises(CategoricalLabelError):
+                pipeline.predict(X_with_unknown_label)
+        else:  # method == "predict_proba"
+            with pytest.raises(CategoricalLabelError):
+                pipeline.predict_proba(X_with_unknown_label)
