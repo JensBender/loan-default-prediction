@@ -250,8 +250,15 @@ def test_data_preprocessing_and_model_pipeline_imputes_missing_values_in_non_cri
     y = y_input.copy()
     X_with_missing_value = X_input.copy()
     X_with_missing_value.loc[0, non_critical_feature] = missing_value
-    # Ensure .fit() on missing value prints warning message
     if method == "fit":
         pipeline.fit(X_with_missing_value, y)
-        # categorical_imputer = pipeline.named_steps
+        # Ensure .fit() on missing value prints warning message 
         assert "Warning" in capsys.readouterr().out
+        # Ensure .fit() learns mode
+        expected_mode = X_with_missing_value[non_critical_feature].mode()[0]
+        column_transformer = pipeline.named_steps["missing_value_handler"]
+        robust_simple_imputer = column_transformer.named_transformers_["categorical_imputer"]
+        feature_index = NON_CRITICAL_FEATURES.index(non_critical_feature)
+        learned_mode = robust_simple_imputer.statistics_[feature_index]
+        assert learned_mode == expected_mode
+        
