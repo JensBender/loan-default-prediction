@@ -6,6 +6,7 @@ import sys
 import pytest
 import pandas as pd
 import numpy as np
+from numpy.testing import assert_array_equal
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
@@ -246,10 +247,9 @@ def test_data_preprocessing_and_model_pipeline_raises_missing_value_error_for_cr
 @pytest.mark.parametrize("missing_value", [None, np.nan, pd.NA])
 @pytest.mark.parametrize("non_critical_feature", NON_CRITICAL_FEATURES)
 def test_data_preprocessing_and_model_pipeline_imputes_missing_values_in_non_critical_features(X_input, y_input, pipeline, method, missing_value, non_critical_feature, capsys):
-    X = X_input.copy()
-    y = y_input.copy()
     X_with_missing_value = X_input.copy()
     X_with_missing_value.loc[0, non_critical_feature] = missing_value
+    y = y_input.copy()
     if method == "fit":
         pipeline.fit(X_with_missing_value, y)
         # Ensure .fit() on missing value prints warning message 
@@ -261,4 +261,12 @@ def test_data_preprocessing_and_model_pipeline_imputes_missing_values_in_non_cri
         feature_index = NON_CRITICAL_FEATURES.index(non_critical_feature)
         learned_mode = robust_simple_imputer.statistics_[feature_index]
         assert learned_mode == expected_mode
-        
+    else:
+        X = X_input.copy()
+        pipeline.fit(X, y)    
+        if method == "predict":
+            predict_output = pipeline.predict(X)
+            predict_output_missing = pipeline.predict(X_with_missing_value)
+            assert_array_equal(predict_output, predict_output_missing)
+        else:  # method == "predict_proba"
+            pass
