@@ -10,6 +10,7 @@ from numpy.testing import assert_array_equal
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.base import clone
 
 # Add the root directory to the path for local imports (by going up two levels from current directory in which this file lives)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
@@ -353,3 +354,24 @@ def test_data_preprocessing_and_model_pipeline_raises_column_mismatch_error_for_
             pipeline.predict(X_with_wrong_column_order)
         else:  # method == "predict_proba"
             pipeline.predict_proba(X_with_wrong_column_order)      
+
+# Ensure pipeline can be cloned 
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["predict", "predict_proba"])
+def test_data_preprocessing_and_model_pipeline_can_be_cloned(X_input, y_input, pipeline, method):
+    X = X_input.copy()
+    y = y_input.copy()
+    cloned_pipeline = clone(pipeline)
+    pipeline.fit(X, y)
+    cloned_pipeline.fit(X, y)
+    # Ensure it's a new object, not a pointer to the old one
+    assert cloned_pipeline is not pipeline
+    # Ensure the original and cloned outputs are identical
+    if method == "predict":
+        pipeline_predict_output = pipeline.predict(X)
+        cloned_pipeline_predict_output = cloned_pipeline.predict(X)
+        assert_array_equal(pipeline_predict_output, cloned_pipeline_predict_output)
+    else:  # method == "predict_proba"
+        pipeline_predict_proba_output = pipeline.predict_proba(X)
+        cloned_pipeline_predict_proba_output = cloned_pipeline.predict_proba(X)
+        assert_array_equal(pipeline_predict_proba_output, cloned_pipeline_predict_proba_output)
