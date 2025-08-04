@@ -239,3 +239,11 @@ def test_data_preprocessing_and_model_pipeline_raises_missing_value_error_for_cr
         else:  # method == "predict_proba"
             with pytest.raises(MissingValueError):
                 pipeline.predict_proba(X_with_missing_value)
+
+# Ensure pipeline .fit() warns about missing values in non-critical features and .predict() and .predict_proba() impute the mode
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["fit", "predict", "predict_proba"])
+@pytest.mark.parametrize("missing_value", [None, np.nan, pd.NA])
+@pytest.mark.parametrize("non_critical_feature", NON_CRITICAL_FEATURES)
+def test_data_preprocessing_and_model_pipeline_imputes_missing_values_in_non_critical_features(X_input, y_input, pipeline, method, missing_value, non_critical_feature):
+    pass  # to do
