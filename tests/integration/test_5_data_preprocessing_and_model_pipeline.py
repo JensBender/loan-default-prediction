@@ -301,3 +301,19 @@ def test_data_preprocessing_and_model_pipeline_raises_categorical_label_error_fo
         else:  # method == "predict_proba"
             with pytest.raises(CategoricalLabelError):
                 pipeline.predict_proba(X_with_unknown_label)
+
+# Ensure pipeline .predict(), and .predict_proba() raise CategoricalLabelError for unknown states not seen during .fit() 
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["predict", "predict_proba"])
+def test_data_preprocessing_and_model_pipeline_raises_categorical_label_error_for_unknown_states(X_input, y_input, pipeline, method):
+    X = X_input.copy()
+    y = y_input.copy()
+    X_with_unknown_state = X_input.copy()
+    X_with_unknown_state.loc[0, "state"] = "unknown_state"  
+    pipeline.fit(X, y) 
+    if method == "predict":
+        with pytest.raises(CategoricalLabelError):
+            pipeline.predict(X_with_unknown_state)
+    else:  # method == "predict_proba"
+        with pytest.raises(CategoricalLabelError):
+            pipeline.predict_proba(X_with_unknown_state)
