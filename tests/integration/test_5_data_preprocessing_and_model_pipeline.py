@@ -302,7 +302,7 @@ def test_data_preprocessing_and_model_pipeline_raises_categorical_label_error_fo
             with pytest.raises(CategoricalLabelError):
                 pipeline.predict_proba(X_with_unknown_label)
 
-# Ensure pipeline .predict(), and .predict_proba() raise CategoricalLabelError for unknown states not seen during .fit() 
+# Ensure pipeline .predict() and .predict_proba() raise CategoricalLabelError for unknown states not seen during .fit() 
 @pytest.mark.integration
 @pytest.mark.parametrize("method", ["predict", "predict_proba"])
 def test_data_preprocessing_and_model_pipeline_raises_categorical_label_error_for_unknown_states(X_input, y_input, pipeline, method):
@@ -337,3 +337,20 @@ def test_data_preprocessing_and_model_pipeline_raises_value_error_for_unknown_ho
         else:  # method == "predict_proba"
             with pytest.raises(ValueError):
                 pipeline.predict_proba(X_with_unknown_category)
+
+# Ensure pipeline .predict() and .predict_proba() raise ColumnMismatchError for wrong feature order, i.e., not the same as during .fit()
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["predict", "predict_proba"])
+def test_data_preprocessing_and_model_pipeline_raises_column_mismatch_error_for_wrong_feature_order(X_input, y_input, pipeline, method):
+    X = X_input.copy()
+    y = y_input.copy()
+    pipeline.fit(X, y)
+    reversed_columns = X.columns[::-1]  # reverse order as an example
+    X_with_wrong_column_order = X[reversed_columns]  
+    expected_error_message = "Feature names and feature order of input X must be the same as during .fit()."
+    if method == "predict":
+        with pytest.raises(ColumnMismatchError, match=expected_error_message):
+            pipeline.predict(X_with_wrong_column_order)
+    else:  # method == "predict_proba"
+        with pytest.raises(ColumnMismatchError, match=expected_error_message):
+            pipeline.predict_proba(X_with_wrong_column_order)      
