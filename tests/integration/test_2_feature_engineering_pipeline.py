@@ -13,22 +13,8 @@ from sklearn.pipeline import Pipeline
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.custom_transformers import (
-    SnakeCaseFormatter, 
-    BooleanColumnTransformer, 
-    JobStabilityTransformer, 
-    CityTierTransformer, 
-    StateDefaultRateTargetEncoder,
-    ColumnMismatchError,
-    CategoricalLabelError,
-    MissingValueError
-)
-from app.global_constants import (
-    COLUMNS_FOR_SNAKE_CASING,
-    BOOLEAN_COLUMN_MAPPINGS,
-    JOB_STABILITY_MAP,
-    CITY_TIER_MAP
-)
+from app.pipeline import create_feature_engineering_pipeline
+from app.custom_transformers import ColumnMismatchError, CategoricalLabelError, MissingValueError
 from tests.integration.base_pipeline_tests import BaseSupervisedPipelineTests
 
 
@@ -59,13 +45,7 @@ def y_input():
 # Fixture to create pipeline segment for use in tests
 @pytest.fixture
 def pipeline(): 
-    return Pipeline([
-        ("snake_case_formatter", SnakeCaseFormatter(columns=COLUMNS_FOR_SNAKE_CASING)),
-        ("boolean_column_transformer", BooleanColumnTransformer(boolean_column_mappings=BOOLEAN_COLUMN_MAPPINGS)),
-        ("job_stability_transformer", JobStabilityTransformer(job_stability_map=JOB_STABILITY_MAP)),
-        ("city_tier_transformer", CityTierTransformer(city_tier_map=CITY_TIER_MAP)),
-        ("state_default_rate_target_encoder", StateDefaultRateTargetEncoder()),
-    ])
+    return create_feature_engineering_pipeline()
 
 
 # --- TestFeatureEngineeringPipeline class ---
