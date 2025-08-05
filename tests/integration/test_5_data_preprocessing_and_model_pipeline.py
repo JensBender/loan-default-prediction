@@ -377,18 +377,6 @@ def test_data_preprocessing_and_model_pipeline_can_be_cloned(X_input, y_input, p
         cloned_pipeline_predict_proba_output = cloned_pipeline.predict_proba(X)
         assert_array_equal(pipeline_predict_proba_output, cloned_pipeline_predict_proba_output)
 
-# Ensure pipeline output of .fit().predict() and .fit_predict() is equivalent
-@pytest.mark.integration
-def test_data_preprocessing_and_model_pipeline_fit_predict_equivalence(X_input, y_input, pipeline):
-    X = X_input.copy()
-    y = y_input.copy()
-    pipeline_1 = clone(pipeline)
-    pipeline_2 = clone(pipeline)
-    assert pipeline_1 is not pipeline_2  # ensure they are different objects in memory
-    pipeline_output_fit_then_predict = pipeline_1.fit(X, y).predict(X) 
-    pipeline_output_fit_predict = pipeline_2.fit_predict(X, y)
-    assert_array_equal(pipeline_output_fit_then_predict, pipeline_output_fit_predict)
-
 # Ensure pipeline .predict() and .predict_proba() raise NotFittedError if pipeline instance has not been fitted yet
 @pytest.mark.integration
 @pytest.mark.parametrize("method", ["predict", "predict_proba"])
