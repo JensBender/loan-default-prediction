@@ -4,7 +4,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 
 # Local imports
-from custom_transformers import (
+from app.custom_transformers import (
     MissingValueChecker, 
     MissingValueStandardizer, 
     RobustSimpleImputer,
@@ -18,7 +18,7 @@ from custom_transformers import (
     RobustOrdinalEncoder,
     FeatureSelector
 )
-from global_constants import (
+from app.global_constants import (
     CRITICAL_FEATURES, 
     NON_CRITICAL_FEATURES, 
     COLUMNS_FOR_SNAKE_CASING,
@@ -33,29 +33,30 @@ from global_constants import (
 )
 
 
-# --- Pipeline Definitions ---
-data_preprocessing_and_model_pipeline = Pipeline([
-    ("missing_value_checker", MissingValueChecker(critical_features=CRITICAL_FEATURES, non_critical_features=NON_CRITICAL_FEATURES)),
-    ("missing_value_standardizer", MissingValueStandardizer()),
-    ("missing_value_handler", ColumnTransformer(
-        transformers=[("categorical_imputer", RobustSimpleImputer(strategy="most_frequent").set_output(transform="pandas"), NON_CRITICAL_FEATURES)],
-        remainder="passthrough",
-        verbose_feature_names_out=False  # preserve input column names instead of adding prefix 
-    ).set_output(transform="pandas")),  # output pd.DataFrame instead of np.array 
-    ("snake_case_formatter", SnakeCaseFormatter(columns=COLUMNS_FOR_SNAKE_CASING)),
-    ("boolean_column_transformer", BooleanColumnTransformer(boolean_column_mappings=BOOLEAN_COLUMN_MAPPINGS)),
-    ("job_stability_transformer", JobStabilityTransformer(job_stability_map=JOB_STABILITY_MAP)),
-    ("city_tier_transformer", CityTierTransformer(city_tier_map=CITY_TIER_MAP)),
-    ("state_default_rate_target_encoder", StateDefaultRateTargetEncoder()),
-    ("feature_scaler_encoder", ColumnTransformer(
-        transformers=[
-            ("scaler", RobustStandardScaler(), NUMERICAL_COLUMNS), 
-            ("nominal_encoder", RobustOneHotEncoder(categories=NOMINAL_COLUMN_CATEGORIES, drop="first", sparse_output=False), ["house_ownership"]),
-            ("ordinal_encoder", RobustOrdinalEncoder(categories=ORDINAL_COLUMN_ORDERS), ["job_stability", "city_tier"])  
-        ],
-        remainder="passthrough",
-        verbose_feature_names_out=False
-    ).set_output(transform="pandas")),
-    ("feature_selector", FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP)),
-    ("rf_classifier", RandomForestClassifier(**RF_BEST_PARAMS, random_state=42)) 
-])
+# --- Helper Functions to Create Full Pipeline and Pipeline Segments ---
+def create_data_preprocessing_and_model_pipeline(): 
+    return Pipeline([
+        ("missing_value_checker", MissingValueChecker(critical_features=CRITICAL_FEATURES, non_critical_features=NON_CRITICAL_FEATURES)),
+        ("missing_value_standardizer", MissingValueStandardizer()),
+        ("missing_value_handler", ColumnTransformer(
+            transformers=[("categorical_imputer", RobustSimpleImputer(strategy="most_frequent").set_output(transform="pandas"), NON_CRITICAL_FEATURES)],
+            remainder="passthrough",
+            verbose_feature_names_out=False  # preserve input column names instead of adding prefix 
+        ).set_output(transform="pandas")),  # output pd.DataFrame instead of np.array 
+        ("snake_case_formatter", SnakeCaseFormatter(columns=COLUMNS_FOR_SNAKE_CASING)),
+        ("boolean_column_transformer", BooleanColumnTransformer(boolean_column_mappings=BOOLEAN_COLUMN_MAPPINGS)),
+        ("job_stability_transformer", JobStabilityTransformer(job_stability_map=JOB_STABILITY_MAP)),
+        ("city_tier_transformer", CityTierTransformer(city_tier_map=CITY_TIER_MAP)),
+        ("state_default_rate_target_encoder", StateDefaultRateTargetEncoder()),
+        ("feature_scaler_encoder", ColumnTransformer(
+            transformers=[
+                ("scaler", RobustStandardScaler(), NUMERICAL_COLUMNS), 
+                ("nominal_encoder", RobustOneHotEncoder(categories=NOMINAL_COLUMN_CATEGORIES, drop="first", sparse_output=False), ["house_ownership"]),
+                ("ordinal_encoder", RobustOrdinalEncoder(categories=ORDINAL_COLUMN_ORDERS), ["job_stability", "city_tier"])  
+            ],
+            remainder="passthrough",
+            verbose_feature_names_out=False
+        ).set_output(transform="pandas")),
+        ("feature_selector", FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP)),
+        ("rf_classifier", RandomForestClassifier(**RF_BEST_PARAMS, random_state=42)) 
+    ])
