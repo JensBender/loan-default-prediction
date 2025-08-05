@@ -100,3 +100,12 @@ def create_model_preprocessing_pipeline():
         ).set_output(transform="pandas")),
         ("feature_selector", FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP))
     ])
+
+def create_feature_engineering_pipeline(): 
+    return Pipeline([
+        ("snake_case_formatter", SnakeCaseFormatter(columns=COLUMNS_FOR_SNAKE_CASING)),
+        ("boolean_column_transformer", BooleanColumnTransformer(boolean_column_mappings=BOOLEAN_COLUMN_MAPPINGS)),
+        ("job_stability_transformer", JobStabilityTransformer(job_stability_map=JOB_STABILITY_MAP)),
+        ("city_tier_transformer", CityTierTransformer(city_tier_map=CITY_TIER_MAP)),
+        ("state_default_rate_target_encoder", StateDefaultRateTargetEncoder()),
+    ])
