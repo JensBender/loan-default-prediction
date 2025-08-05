@@ -49,7 +49,6 @@ from app.global_constants import (
     COLUMNS_TO_KEEP,
     RF_BEST_PARAMS
 )
-from tests.integration.base_pipeline_tests import BaseSupervisedPipelineTests
 
 
 # --- Fixtures ---
