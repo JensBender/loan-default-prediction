@@ -7,20 +7,13 @@ import pytest
 import pandas as pd
 from pandas.testing import assert_frame_equal
 import numpy as np
-from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
 
 # Add the root directory to the path for local imports (by going up two levels from current directory in which this file lives)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.custom_transformers import (
-    MissingValueChecker, 
-    MissingValueStandardizer, 
-    RobustSimpleImputer,
-    MissingValueError, 
-    ColumnMismatchError
-)
+from app.pipeline import create_missing_value_handling_pipeline
+from app.custom_transformers import MissingValueError, ColumnMismatchError
 from app.global_constants import CRITICAL_FEATURES, NON_CRITICAL_FEATURES
 from tests.integration.base_pipeline_tests import BasePipelineTests
 
@@ -47,15 +40,7 @@ def X_input():
 # Fixture to create the missing value handling pipeline segment for use in tests
 @pytest.fixture
 def pipeline(): 
-    return Pipeline([
-        ("missing_value_checker", MissingValueChecker(critical_features=CRITICAL_FEATURES, non_critical_features=NON_CRITICAL_FEATURES)),
-        ("missing_value_standardizer", MissingValueStandardizer()),
-        ("missing_value_handler", ColumnTransformer(
-            transformers=[("categorical_imputer", RobustSimpleImputer(strategy="most_frequent").set_output(transform="pandas"), NON_CRITICAL_FEATURES)],
-            remainder="passthrough",
-            verbose_feature_names_out=False  # preserve input column names instead of adding prefix 
-        ).set_output(transform="pandas")),  # output pd.DataFrame instead of np.array 
-    ])
+    return create_missing_value_handling_pipeline()
 
 
 # --- TestMissingValueHandlingPipeline class ---
