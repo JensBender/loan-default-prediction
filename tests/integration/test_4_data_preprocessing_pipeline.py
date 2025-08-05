@@ -7,42 +7,14 @@ import pytest
 import pandas as pd
 from pandas.testing import assert_frame_equal
 import numpy as np
-from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
 
 # Add the root directory to the path for local imports (by going up two levels from current directory in which this file lives)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.custom_transformers import (
-    MissingValueChecker, 
-    MissingValueStandardizer, 
-    RobustSimpleImputer,
-    SnakeCaseFormatter, 
-    BooleanColumnTransformer, 
-    JobStabilityTransformer, 
-    CityTierTransformer, 
-    StateDefaultRateTargetEncoder,
-    RobustStandardScaler,
-    RobustOneHotEncoder,
-    RobustOrdinalEncoder,
-    FeatureSelector,
-    MissingValueError, 
-    ColumnMismatchError,
-    CategoricalLabelError
-)
-from app.global_constants import (
-    CRITICAL_FEATURES, 
-    NON_CRITICAL_FEATURES, 
-    COLUMNS_FOR_SNAKE_CASING,
-    BOOLEAN_COLUMN_MAPPINGS,
-    JOB_STABILITY_MAP,
-    CITY_TIER_MAP,
-    NUMERICAL_COLUMNS, 
-    NOMINAL_COLUMN_CATEGORIES, 
-    ORDINAL_COLUMN_ORDERS, 
-    COLUMNS_TO_KEEP
-)
+from app.pipeline import create_data_preprocessing_pipeline
+from app.custom_transformers import MissingValueError, ColumnMismatchError, CategoricalLabelError
+from app.global_constants import CRITICAL_FEATURES, NON_CRITICAL_FEATURES, BOOLEAN_COLUMN_MAPPINGS
 from tests.integration.base_pipeline_tests import BaseSupervisedPipelineTests
 
 
@@ -73,30 +45,7 @@ def y_input():
 # Fixture to create the data preprocessing pipeline for use in tests
 @pytest.fixture
 def pipeline(): 
-    return Pipeline([
-    ("missing_value_checker", MissingValueChecker(critical_features=CRITICAL_FEATURES, non_critical_features=NON_CRITICAL_FEATURES)),
-    ("missing_value_standardizer", MissingValueStandardizer()),
-    ("missing_value_handler", ColumnTransformer(
-        transformers=[("categorical_imputer", RobustSimpleImputer(strategy="most_frequent").set_output(transform="pandas"), NON_CRITICAL_FEATURES)],
-        remainder="passthrough",
-        verbose_feature_names_out=False  # preserve input column names instead of adding prefix 
-    ).set_output(transform="pandas")),  # output pd.DataFrame instead of np.array 
-    ("snake_case_formatter", SnakeCaseFormatter(columns=COLUMNS_FOR_SNAKE_CASING)),
-    ("boolean_column_transformer", BooleanColumnTransformer(boolean_column_mappings=BOOLEAN_COLUMN_MAPPINGS)),
-    ("job_stability_transformer", JobStabilityTransformer(job_stability_map=JOB_STABILITY_MAP)),
-    ("city_tier_transformer", CityTierTransformer(city_tier_map=CITY_TIER_MAP)),
-    ("state_default_rate_target_encoder", StateDefaultRateTargetEncoder()),
-    ("feature_scaler_encoder", ColumnTransformer(
-        transformers=[
-            ("scaler", RobustStandardScaler(), NUMERICAL_COLUMNS), 
-            ("nominal_encoder", RobustOneHotEncoder(categories=NOMINAL_COLUMN_CATEGORIES, drop="first", sparse_output=False), ["house_ownership"]),
-            ("ordinal_encoder", RobustOrdinalEncoder(categories=ORDINAL_COLUMN_ORDERS), ["job_stability", "city_tier"])  
-        ],
-        remainder="passthrough",
-        verbose_feature_names_out=False
-    ).set_output(transform="pandas")),
-    ("feature_selector", FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP))
-])
+    return create_data_preprocessing_pipeline()
 
 
 # --- TestDataPreprocessingPipeline class ---
