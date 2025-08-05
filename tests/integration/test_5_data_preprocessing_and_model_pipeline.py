@@ -5,6 +5,7 @@ import sys
 # Third-party library imports
 import pytest
 import pandas as pd
+from pandas.testing import assert_frame_equal
 import numpy as np
 from numpy.testing import assert_array_equal
 from sklearn.pipeline import Pipeline
@@ -388,3 +389,17 @@ def test_data_preprocessing_and_model_pipeline_raises_not_fitted_error_if_unfitt
             pipeline.predict(X)
         else:  # method == "predict_proba"
             pipeline.predict_proba(X)
+
+# Ensure pipeline .predict() and .predict_proba() do not modify the "X" input DataFrame
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["predict", "predict_proba"])
+def test_data_preprocessing_and_model_pipeline_does_not_modify_X(X_input, y_input, pipeline, method):
+    X1 = X_input.copy()
+    X2 = X_input.copy()
+    y = y_input.copy()
+    pipeline.fit(X1, y)
+    if method == "predict":
+        pipeline.predict(X1)
+    else:  # method == "predict_proba"
+        pipeline.predict_proba(X1)
+    assert_frame_equal(X1, X2)
