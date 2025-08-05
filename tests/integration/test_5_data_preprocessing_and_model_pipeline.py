@@ -1,6 +1,7 @@
 # Standard library imports
 import os
 import sys
+import pickle
 
 # Third-party library imports
 import pytest
@@ -403,3 +404,22 @@ def test_data_preprocessing_and_model_pipeline_does_not_modify_X(X_input, y_inpu
     else:  # method == "predict_proba"
         pipeline.predict_proba(X1)
     assert_frame_equal(X1, X2)
+
+# Ensure fitted pipeline can be pickled and unpickled 
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["predict", "predict_proba"])
+def test_fitted_data_preprocessing_and_model_pipeline_can_be_pickled(X_input, y_input, pipeline, method):
+    X = X_input.copy()
+    y = y_input.copy()
+    pipeline.fit(X, y)
+    # Pickle and unpickle
+    pickled_pipeline = pickle.dumps(pipeline)
+    unpickled_pipeline = pickle.loads(pickled_pipeline)
+    if method == "predict":
+        pipeline_output = pipeline.predict(X)
+        unpickled_pipeline_output = unpickled_pipeline.predict(X)
+    else:  # method == "predict_proba"
+        pipeline_output = pipeline.predict_proba(X)
+        unpickled_pipeline_output = unpickled_pipeline.predict_proba(X)
+    # Ensure that unpickled pipeline produces identical output as original
+    assert_array_equal(unpickled_pipeline_output, pipeline_output)
