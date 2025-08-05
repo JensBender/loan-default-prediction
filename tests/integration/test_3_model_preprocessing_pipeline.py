@@ -7,25 +7,12 @@ import pytest
 import pandas as pd
 from pandas.testing import assert_frame_equal
 import numpy as np
-from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
 
 # Add the root directory to the path for local imports (by going up two levels from current directory in which this file lives)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.custom_transformers import (
-    RobustStandardScaler,
-    RobustOneHotEncoder,
-    RobustOrdinalEncoder,
-    FeatureSelector
-)
-from app.global_constants import (
-    NUMERICAL_COLUMNS, 
-    NOMINAL_COLUMN_CATEGORIES, 
-    ORDINAL_COLUMN_ORDERS, 
-    COLUMNS_TO_KEEP
-)
+from app.pipeline import create_model_preprocessing_pipeline
 from tests.integration.base_pipeline_tests import BasePipelineTests
 
 
@@ -54,18 +41,7 @@ def X_input():
 # Fixture to create pipeline segment for use in tests
 @pytest.fixture
 def pipeline(): 
-    return Pipeline([
-        ("feature_scaler_encoder", ColumnTransformer(
-            transformers=[
-                ("scaler", RobustStandardScaler(), NUMERICAL_COLUMNS), 
-                ("nominal_encoder", RobustOneHotEncoder(categories=NOMINAL_COLUMN_CATEGORIES, drop="first", sparse_output=False), ["house_ownership"]),
-                ("ordinal_encoder", RobustOrdinalEncoder(categories=ORDINAL_COLUMN_ORDERS), ["job_stability", "city_tier"])  
-            ],
-            remainder="passthrough",
-            verbose_feature_names_out=False
-        ).set_output(transform="pandas")),
-        ("feature_selector", FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP))
-    ])
+    return create_model_preprocessing_pipeline()
 
 
 # --- TestModelPreprocessingPipeline class ---
