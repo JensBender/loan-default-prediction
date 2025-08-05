@@ -86,3 +86,17 @@ def create_data_preprocessing_pipeline():
     ).set_output(transform="pandas")),
     ("feature_selector", FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP))
 ])
+
+def create_model_preprocessing_pipeline(): 
+    return Pipeline([
+        ("feature_scaler_encoder", ColumnTransformer(
+            transformers=[
+                ("scaler", RobustStandardScaler(), NUMERICAL_COLUMNS), 
+                ("nominal_encoder", RobustOneHotEncoder(categories=NOMINAL_COLUMN_CATEGORIES, drop="first", sparse_output=False), ["house_ownership"]),
+                ("ordinal_encoder", RobustOrdinalEncoder(categories=ORDINAL_COLUMN_ORDERS), ["job_stability", "city_tier"])  
+            ],
+            remainder="passthrough",
+            verbose_feature_names_out=False
+        ).set_output(transform="pandas")),
+        ("feature_selector", FeatureSelector(columns_to_keep=COLUMNS_TO_KEEP))
+    ])
