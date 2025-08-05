@@ -11,6 +11,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.base import clone
+from sklearn.exceptions import NotFittedError
 
 # Add the root directory to the path for local imports (by going up two levels from current directory in which this file lives)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
@@ -387,3 +388,15 @@ def test_data_preprocessing_and_model_pipeline_fit_predict_equivalence(X_input, 
     pipeline_output_fit_then_predict = pipeline_1.fit(X, y).predict(X) 
     pipeline_output_fit_predict = pipeline_2.fit_predict(X, y)
     assert_array_equal(pipeline_output_fit_then_predict, pipeline_output_fit_predict)
+
+# Ensure pipeline .predict() and .predict_proba() raise NotFittedError if pipeline instance has not been fitted yet
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["predict", "predict_proba"])
+def test_data_preprocessing_and_model_pipeline_raises_not_fitted_error_if_unfitted(X_input, pipeline, method):
+    X = X_input.copy()
+    # .fit() is intentionally not called here
+    with pytest.raises(NotFittedError):
+        if method == "predict":
+            pipeline.predict(X)
+        else:  # method == "predict_proba"
+            pipeline.predict_proba(X)
