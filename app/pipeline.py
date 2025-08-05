@@ -109,3 +109,14 @@ def create_feature_engineering_pipeline():
         ("city_tier_transformer", CityTierTransformer(city_tier_map=CITY_TIER_MAP)),
         ("state_default_rate_target_encoder", StateDefaultRateTargetEncoder()),
     ])
+
+def create_missing_value_handling_pipeline(): 
+    return Pipeline([
+        ("missing_value_checker", MissingValueChecker(critical_features=CRITICAL_FEATURES, non_critical_features=NON_CRITICAL_FEATURES)),
+        ("missing_value_standardizer", MissingValueStandardizer()),
+        ("missing_value_handler", ColumnTransformer(
+            transformers=[("categorical_imputer", RobustSimpleImputer(strategy="most_frequent").set_output(transform="pandas"), NON_CRITICAL_FEATURES)],
+            remainder="passthrough",
+            verbose_feature_names_out=False  # preserve input column names instead of adding prefix 
+        ).set_output(transform="pandas")),  # output pd.DataFrame instead of np.array 
+    ])
