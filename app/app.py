@@ -274,8 +274,11 @@ custom_css = """
 .narrow-centered-column {
     max-width: 700px; 
     width: 100%; 
-    margin-left: auto; 
-    margin-right: auto;
+    margin: 0 auto; 
+}
+#predict-button-wrapper {
+    max-width: 250px;
+    margin: 0 auto;
 }
 #prediction-text textarea {font-size: 1.8em; font-weight: bold; text-align: center;}
 #pred-proba-label {margin-top: -15px;}
@@ -313,7 +316,8 @@ with gr.Blocks(css=custom_css) as app:
 
     # Predict button and outputs
     with gr.Column(elem_classes="narrow-centered-column"):
-        predict = gr.Button("Predict")
+        with gr.Column(elem_id="predict-button-wrapper"):
+            predict = gr.Button("Predict")
         prediction_text = gr.Textbox(placeholder="Prediction Result", show_label=False, container=False, elem_id="prediction-text")   
         pred_proba = gr.Label(show_label=False, show_heading=False, elem_id="pred-proba-label")
         gr.Markdown(
