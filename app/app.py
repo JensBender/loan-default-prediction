@@ -253,17 +253,17 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         # --- Input preprocessing (part 1) ---
         # Create inputs dictionary 
         inputs = {
-            "age": age,
-            "married": married,
             "income": income, 
-            "car_ownership": car_ownership,
+            "age": age,
+            "experience": experience,
+            "married": married,
             "house_ownership": house_ownership,
-            "current_house_yrs": current_house_yrs,
+            "car_ownership": car_ownership,
+            "profession": profession,
             "city": city,
             "state": state,
-            "profession": profession,
-            "experience": experience,
-            "current_job_yrs": current_job_yrs
+            "current_job_yrs": current_job_yrs,
+            "current_house_yrs": current_house_yrs
         }
 
         # Format string inputs in snake_case
