@@ -42,7 +42,8 @@ def valid_inputs():
     }
 
 
-# --- Test standardize_string() function ---
+# --- Test snake_case_format() function ---
+# Ensure snake_case_format() converts strings to snake_case correctly
 @pytest.mark.parametrize("input_value, expected_output", [
     ("   leading spaces", "leading_spaces"),
     ("trailing spaces   ", "trailing_spaces"),
@@ -66,13 +67,13 @@ def valid_inputs():
     (("a", "tuple"), ("a", "tuple")),
     ({"a": "dictionary"}, {"a": "dictionary"}),
 ])
-def test_standardize_string(input_value, expected_output):
+def test_snake_case_format_happy_path(input_value, expected_output):
     assert snake_case_format(input_value) == expected_output
 
 
-# --- Test standardize_inputs() function ---
-# Remove leading/trailing whitespace, convert to lowercase, and replace inner whitespaces with underscores
-def test_standardize_inputs():
+# --- Test snake_case_format_inputs() function ---
+# Ensure snake_case_format_inputs() formats all string values in a dictionary in snake_case
+def test_snake_case_format_inputs_happy_path():
     raw_inputs = {
         "age": 30,
         "married": " Married  ",
@@ -102,8 +103,8 @@ def test_standardize_inputs():
     assert snake_case_format_inputs(raw_inputs) == expected_standardized_inputs
 
 
-# Ensure standardized inputs remain unchanged by standardize_inputs()
-def test_standardized_inputs_remain_unchanged():
+# Ensure inputs already formatted in snake_case remain unchanged by snake_case_format_inputs()
+def test_snake_case_formatted_inputs_remain_unchanged():
     standardized_inputs = {
         "age": 30,
         "married": "married",
@@ -120,13 +121,13 @@ def test_standardized_inputs_remain_unchanged():
     assert snake_case_format_inputs(standardized_inputs) == standardized_inputs
 
 
-# --- Test prepare_house_ownership_for_pipeline() function ---
+# --- Test format_house_ownership() function ---
 @pytest.mark.parametrize("display_label, expected_pipeline_label", [
     ("neither_rented_nor_owned", "norent_noown"),
     ("rented", "rented"),
     ("owned", "owned")
 ])
-def test_format_house_ownership(display_label, expected_pipeline_label):
+def test_format_house_ownership_happy_path(display_label, expected_pipeline_label):
     assert format_house_ownership(display_label) == expected_pipeline_label
 
 
@@ -149,12 +150,12 @@ def test_format_house_ownership(display_label, expected_pipeline_label):
     (100.5, 100),
     (100.51, 101),
 ])
-def test_convert_float_to_int(valid_input_value, expected_output):
+def test_convert_float_to_int_happy_path(valid_input_value, expected_output):
     output = convert_float_to_int(valid_input_value)
     assert output == expected_output
     assert isinstance(output, int)
 
-# Test invalid inputs that should raise TypeError
+# Ensure convert_float_to_int() raises TypeError for invalid inputs
 @pytest.mark.parametrize("invalid_input_value", [
     "a string",
     "1.23",
