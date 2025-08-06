@@ -271,13 +271,12 @@ def test_check_missing_valueserror_message_for_three_missing_inputs(valid_inputs
 
 
 # --- Test validate_data_types() function ---
-# No invalid data types
-def test_no_invalid_data_types(valid_inputs):
+# Ensure validate_data_types() returns None if no invalid data types
+def test_validate_data_types_returns_none_if_no_invalid_types(valid_inputs):
     assert validate_data_types(valid_inputs) == None
 
-
-# All invalid data types
-def test_invalid_datatype_message_for_all_inputs():
+# Ensure validate_data_types() returns the expected error message for invalid data type in all inputs
+def test_validate_data_types_error_message_for_all_invalid_inputs():
     inputs = {
         "age": "invalid string",
         "married": 12345,
@@ -297,18 +296,16 @@ def test_invalid_datatype_message_for_all_inputs():
     )
     assert validate_data_types(inputs) == expected_error_message
 
-
-# Single invalid data type in a numerical input
+# Ensure validate_data_types() returns expected error message for single numerical input with invalid type 
 @pytest.mark.parametrize("invalid_numerical_data_type", ["invalid string", ["invalid", "list"], ("invalid", "tuple"), {"invalid": "dictionary"}])
-def test_invalid_datatype_message_for_single_numerical_input(valid_inputs, invalid_numerical_data_type):
+def test_validate_data_types_error_message_for_single_numerical_input(valid_inputs, invalid_numerical_data_type):
     inputs = valid_inputs.copy()
     inputs["age"] = invalid_numerical_data_type  # age represents all numerical inputs
     assert validate_data_types(inputs) == "Data type error! Age must be a number."
 
-
-# Single invalid data type in a string input
+# Ensure validate_data_types() returns expected error message for single string input with invalid type 
 @pytest.mark.parametrize("invalid_string_data_type", [123, 123.45, False, ["invalid", "list"], ("invalid", "tuple"), {"invalid": "dictionary"}])
-def test_invalid_datatype_message_for_single_string_input(valid_inputs, invalid_string_data_type):
+def test_validate_data_types_error_message_for_single_string_input(valid_inputs, invalid_string_data_type):
     inputs = valid_inputs.copy()
     inputs["married"] = invalid_string_data_type  # married represents all string inputs
     assert validate_data_types(inputs) == "Data type error! Married/Single must be a string."
