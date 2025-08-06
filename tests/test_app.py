@@ -171,12 +171,12 @@ def test_convert_float_to_int_raises_type_error_for_invalid_inputs(invalid_input
 
 
 # --- Test check_missing_values() function ---
-# No missing inputs
-def test_no_missing_values(valid_inputs):
+# Ensure check_missing_values() returns None if no missing inputs
+def test_check_missing_values_returns_none_if_no_missing_values(valid_inputs):
     assert check_missing_values(valid_inputs) == None
 
-# All missing inputs
-def test_error_message_for_all_values_missing():
+# Ensure check_missing_values() returns the expected error message for all missing values on all inputs
+def test_check_missing_values_error_message_for_all_values_missing():
     inputs = {
         "age": None,
         "married": None,
@@ -196,8 +196,7 @@ def test_error_message_for_all_values_missing():
         )
     assert check_missing_values(inputs) == expected_error_message
 
-
-# Single missing numerical input: `if numerical_input in [None, "", [], {}, ()]`
+# Ensure check_missing_values() returns the expected error message for single missing numerical input
 @pytest.mark.parametrize("missing_value_type", [None, "", [], {}, ()])
 @pytest.mark.parametrize("numerical_input, expected_error_message", [
     ("age", "Please provide: Age."),
@@ -206,7 +205,7 @@ def test_error_message_for_all_values_missing():
     ("experience", "Please provide: Experience."),
     ("current_job_yrs", "Please provide: Current Job Years."),
 ])
-def test_error_message_for_single_missing_numerical_input(valid_inputs, missing_value_type, numerical_input, expected_error_message):
+def test_check_missing_values_error_message_for_single_missing_numerical_input(valid_inputs, missing_value_type, numerical_input, expected_error_message):
     inputs = valid_inputs.copy()
     inputs[numerical_input] = missing_value_type
     error_message = check_missing_values(inputs)
@@ -215,16 +214,14 @@ def test_error_message_for_single_missing_numerical_input(valid_inputs, missing_
     # Check exact error message text
     assert error_message == expected_error_message, f"Expected exact error message: '{expected_error_message}' for {numerical_input}='{missing_value_type}'."
 
-
-# Ensure 0 is a valid numerical input that does not trigger an error
+# Ensure check_missing_values() does not return an error message for 0 in numerical inputs
 @pytest.mark.parametrize("numerical_input", ["age", "income", "current_house_yrs", "experience", "current_job_yrs"])
-def test_zero_is_valid_numerical_input(valid_inputs, numerical_input):
+def test_check_missing_values_no_error_message_for_zero_in_numerical_inputs(valid_inputs, numerical_input):
     inputs = valid_inputs.copy()
     inputs[numerical_input] = 0
     assert check_missing_values(inputs) == None  
 
-
-# Single missing string input: `if not string_input`, which catches None, "", [], {}, (), 0, 0.0, False
+# Ensure check_missing_values() returns the expected error message for single missing string input
 @pytest.mark.parametrize("missing_value_type", [None, "", [], {}, (), 0, 0.0, False])
 @pytest.mark.parametrize("string_input, expected_error_message", [
     ("married", "Please provide: Married/Single."),
@@ -234,7 +231,7 @@ def test_zero_is_valid_numerical_input(valid_inputs, numerical_input):
     ("state", "Please provide: State."),
     ("profession", "Please provide: Profession."),
 ])
-def test_error_message_for_single_missing_string_input(valid_inputs, missing_value_type, string_input, expected_error_message):
+def test_check_missing_values_error_message_for_single_missing_string_input(valid_inputs, missing_value_type, string_input, expected_error_message):
     inputs = valid_inputs.copy()
     inputs[string_input] = missing_value_type
     error_message = check_missing_values(inputs)
@@ -243,8 +240,7 @@ def test_error_message_for_single_missing_string_input(valid_inputs, missing_val
     # Check exact error message text
     assert error_message == expected_error_message, f"Expected exact error message: '{expected_error_message}' for {string_input}='{missing_value_type}'."
 
-
-# Two missing inputs
+# Ensure check_missing_values() returns the expected error message for two missing inputs
 @pytest.mark.parametrize("missing_input_1, missing_input_2, expected_error_message", [
     ("age", "married", "Please provide: Age and Married/Single."),
     ("income", "car_ownership", "Please provide: Income and Car Ownership."),
@@ -253,21 +249,20 @@ def test_error_message_for_single_missing_string_input(valid_inputs, missing_val
     ("profession", "experience", "Please provide: Profession and Experience."),
     ("age", "current_job_yrs", "Please provide: Age and Current Job Years."),
 ])
-def test_error_message_for_two_missing_inputs(valid_inputs, missing_input_1, missing_input_2, expected_error_message):
+def test_check_missing_values_error_message_for_two_missing_inputs(valid_inputs, missing_input_1, missing_input_2, expected_error_message):
     inputs = valid_inputs.copy()
     inputs[missing_input_1] = None
     inputs[missing_input_2] = None
     assert check_missing_values(inputs) == expected_error_message
 
-
-# Three missing inputs
+# Ensure check_missing_values() returns the expected error message for three missing inputs
 @pytest.mark.parametrize("missing_input_1, missing_input_2, missing_input_3, expected_error_message", [
     ("age", "married", "income", "Please provide: Age, Married/Single and Income."),
     ("car_ownership", "house_ownership", "current_house_yrs", "Please provide: Car Ownership, House Ownership and Current House Years."),
     ("city", "state", "profession", "Please provide: City, State and Profession."),
     ("age", "experience", "current_job_yrs", "Please provide: Age, Experience and Current Job Years."),
 ])
-def test_error_message_for_three_missing_inputs(valid_inputs, missing_input_1, missing_input_2, missing_input_3, expected_error_message):
+def test_check_missing_valueserror_message_for_three_missing_inputs(valid_inputs, missing_input_1, missing_input_2, missing_input_3, expected_error_message):
     inputs = valid_inputs.copy()
     inputs[missing_input_1] = None
     inputs[missing_input_2] = None
