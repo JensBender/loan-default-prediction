@@ -69,7 +69,7 @@ def convert_float_to_int(value):
 
 
 # --- Input validation functions ---
-# Function to return error message for missing values in the inputs dictionary
+# Check missing values in the inputs dictionary
 def check_missing_values(inputs_dict):
     missing_inputs = []
     if inputs_dict["age"] in [None, "", [], {}, ()]:
@@ -101,13 +101,13 @@ def check_missing_values(inputs_dict):
     return None  # no missing values
 
 
-# Function to return error message for invalid data types in the inputs dictionary
+# Check data types in the inputs dictionary
 def validate_data_types(inputs_dict):
     invalid_numbers = []
     invalid_strings = []
     invalid_datatype_message = "Data type error! "   
 
-    # Validate numerical inputs     
+    # Check numerical inputs     
     if not isinstance(inputs_dict["age"], (int, float)):
         invalid_numbers.append("Age")
     if not isinstance(inputs_dict["income"], (int, float)):
@@ -123,7 +123,7 @@ def validate_data_types(inputs_dict):
     if len(invalid_numbers) > 1:
         invalid_datatype_message += f"{', '.join(invalid_numbers[:-1])} and {invalid_numbers[-1]} must be numbers."
     
-    # Validate string inputs
+    # Check string inputs
     if not isinstance(inputs_dict["married"], str):
         invalid_strings.append("Married/Single")
     if not isinstance(inputs_dict["house_ownership"], str):
@@ -146,31 +146,31 @@ def validate_data_types(inputs_dict):
     return None  # no invalid data types
 
 
-# Function to return error message for out-of-range values in the inputs dictionary
+# Check out-of-range values in the inputs dictionary
 def check_out_of_range_values(inputs_dict):
     out_of_range_inputs = []
     if inputs_dict["age"] < 21 or inputs_dict["age"] > 79:
-        out_of_range_inputs.append("age must be 21-79")
+        out_of_range_inputs.append("Age must be 21-79")
     if inputs_dict["married"] not in MARRIED_LABELS:
-        out_of_range_inputs.append("married must be 'single' or 'married'")
+        out_of_range_inputs.append("Married/Single must be 'Single' or 'Married'")
     if inputs_dict["income"] < 0:
-        out_of_range_inputs.append("income must be a non-negative number")
+        out_of_range_inputs.append("Income must be a non-negative number")
     if inputs_dict["car_ownership"] not in CAR_OWNERSHIP_LABELS:
-        out_of_range_inputs.append("car ownership must be 'yes' or 'no'")
+        out_of_range_inputs.append("Car Ownership must be 'Yes' or 'No'")
     if inputs_dict["house_ownership"] not in HOUSE_OWNERSHIP_LABELS:
-        out_of_range_inputs.append("house ownership must be 'rented', 'owned', or 'norent_noown'")
+        out_of_range_inputs.append("House Ownership must be 'Rented', 'Owned', or 'Neither Rented Nor Owned'")
     if inputs_dict["current_house_yrs"] < 10 or inputs_dict["current_house_yrs"] > 14:
-        out_of_range_inputs.append("current house years must be 10-14")
+        out_of_range_inputs.append("Current House Years must be 10-14")
     if inputs_dict["city"] not in CITY_LABELS:
-        out_of_range_inputs.append("city must be one of the predefined cities")
+        out_of_range_inputs.append("City must be one of the predefined cities")
     if inputs_dict["state"] not in STATE_LABELS:
-        out_of_range_inputs.append("state must be one of the predefined states")
+        out_of_range_inputs.append("State must be one of the predefined states")
     if inputs_dict["profession"] not in PROFESSION_LABELS:
-        out_of_range_inputs.append("profession must be one of the predefined professions")
+        out_of_range_inputs.append("Profession must be one of the predefined professions")
     if inputs_dict["experience"] < 0 or inputs_dict["experience"] > 20:
-        out_of_range_inputs.append("experience must be 0-20 years")
+        out_of_range_inputs.append("Experience must be 0-20 years")
     if inputs_dict["current_job_yrs"] < 0 or inputs_dict["current_job_yrs"] > 14:
-        out_of_range_inputs.append("current job years must be 0-14")
+        out_of_range_inputs.append("Current Job Years must be 0-14")
     if len(out_of_range_inputs) == 1:
         return f"Out-of-range value error: {out_of_range_inputs[0]}."
     if len(out_of_range_inputs) > 1:
