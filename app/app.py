@@ -102,7 +102,7 @@ STATE_DISPLAY_LABELS = [label.replace("_", " ").title() for label in STATE_LABEL
 
 
 # --- Input preprocessing functions ---
-# Function to standardize a single string input value
+# Function to standardize a single string input 
 def standardize_string(value):
     if isinstance(value, str):
         # Remove leading/trailing whitespace, convert to lowercase, and replace single or multiple hyphens, forward slashes, and inner whitespaces with a single underscore
@@ -115,7 +115,7 @@ def standardize_inputs(inputs_dict):
     return {key: standardize_string(value) for key, value in inputs_dict.items()}
 
 
-# Function to replace house ownership display label with expected pipeline input label
+# Function to replace "house_ownership" display label with expected pipeline input label
 def prepare_house_ownership_for_pipeline(display_label):
     return display_label.replace("neither_rented_nor_owned", "norent_noown")
 
@@ -286,17 +286,17 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
             return out_of_range_value_message, ""
 
         # --- Input preprocessing (part 2) ---
-        # Convert float inputs to int (pipeline expects int inputs)
+        # Convert float inputs to int (pipeline was trained on int inputs)
         inputs["income"] = convert_float_to_int(inputs["income"])
         inputs["age"] = convert_float_to_int(inputs["age"])
         inputs["experience"] = convert_float_to_int(inputs["experience"])
         inputs["current_job_yrs"] = convert_float_to_int(inputs["current_job_yrs"])
         inputs["current_house_yrs"] = convert_float_to_int(inputs["current_house_yrs"])
 
-        # Replace house ownership display label with expected pipeline input label
+        # Replace "house_ownership" display label with label expected by pipeline 
         inputs["house_ownership"] = prepare_house_ownership_for_pipeline(inputs["house_ownership"])
 
-        # Create input DataFrame for Pipeline
+        # Create input DataFrame for pipeline
         pipeline_input_df = pd.DataFrame({key: [value] for key, value in inputs.items()})   
 
         # Use single-row DataFrame as input
@@ -316,7 +316,7 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         }
 
         # Apply optimized threshold to convert probabilities to binary predictions
-        optimized_threshold = 0.29  # see threshold optimization in training script: loan_default_prediction.ipynb
+        optimized_threshold = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
         pred = (pred_proba[1] >= optimized_threshold).astype(int)
 
         # Create prediction text
