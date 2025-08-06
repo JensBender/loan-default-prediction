@@ -314,10 +314,12 @@ with gr.Blocks(css=custom_css) as app:
             current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
             gr.Markdown("")  # empty space for layout
 
-    # Predict button and outputs
+    # Predict button 
+    with gr.Column(elem_id="predict-button-wrapper"):
+        predict = gr.Button("Predict")
+    
+    # Outputs
     with gr.Column(elem_classes="narrow-centered-column"):
-        with gr.Column(elem_id="predict-button-wrapper"):
-            predict = gr.Button("Predict")
         prediction_text = gr.Textbox(placeholder="Prediction Result", show_label=False, container=False, elem_id="prediction-text")   
         pred_proba = gr.Label(show_label=False, show_heading=False, elem_id="pred-proba-label")
         gr.Markdown(
@@ -325,6 +327,7 @@ with gr.Blocks(css=custom_css) as app:
             "(predicts 'Default' if probability ≥ 29%, otherwise 'No Default').</small>",
             elem_id="markdown-note"
         )
+        
     # Predict button click event
     predict.click(
         predict_loan_default,
