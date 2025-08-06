@@ -19,3 +19,4 @@ app-venv
 .ipynb_checkpoints
 **/__pycache__/
 test_loan_default_prediction.ipynb
+GEMINI.md 
