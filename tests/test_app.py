@@ -312,13 +312,12 @@ def test_validate_data_types_error_message_for_single_string_input(valid_inputs,
 
 
 # --- Test check_out_of_range_values() function ---
-# No out-of-range values
-def test_no_out_of_range_values(valid_inputs):
+# Ensure check_out_of_range_values() returns None if no out-of-range values
+def test_check_out_of_range_values_returns_none_if_no_out_of_range_values(valid_inputs):
     assert check_out_of_range_values(valid_inputs) == None
 
-
-# All out-of-range values
-def test_error_message_for_all_out_of_range_values():
+# Ensure check_out_of_range_values() returns expected error message for out-of-range value in all inputs
+def test_check_out_of_range_values_error_message_for_all_oor_inputs():
     inputs = {
         "age": 150,
         "married": "divorced",
@@ -340,8 +339,7 @@ def test_error_message_for_all_out_of_range_values():
     )
     assert check_out_of_range_values(inputs) == expected_error_message
 
-
-# Age out-of-range
+# Ensure check_out_of_range_values() returns expected error message for age out-of-range 
 @pytest.mark.parametrize("age_value, expected_error_message", [
     (-50, "Out-of-range value error: age must be 21-79."), 
     (0, "Out-of-range value error: age must be 21-79."), 
@@ -351,13 +349,12 @@ def test_error_message_for_all_out_of_range_values():
     (80, "Out-of-range value error: age must be 21-79."),
     (1000, "Out-of-range value error: age must be 21-79.")
 ])
-def test_error_message_for_age_out_of_range(valid_inputs, age_value, expected_error_message):
+def test_check_out_of_range_values_error_message_for_age(valid_inputs, age_value, expected_error_message):
     inputs = valid_inputs.copy()
     inputs["age"] = age_value
     assert check_out_of_range_values(inputs) == expected_error_message
 
-
-# Married out-of-range
+# Ensure check_out_of_range_values() returns expected error message for married out-of-range 
 @pytest.mark.parametrize("married_value, expected_error_message", [
     ("divorced", "Out-of-range value error: married must be 'single' or 'married'."),
     ("yes", "Out-of-range value error: married must be 'single' or 'married'."),
@@ -365,13 +362,12 @@ def test_error_message_for_age_out_of_range(valid_inputs, age_value, expected_er
     ("single", None),
     ("married", None)
 ])
-def test_error_message_for_married_out_of_range(valid_inputs, married_value, expected_error_message):
+def test_check_out_of_range_values_error_message_for_married(valid_inputs, married_value, expected_error_message):
     inputs = valid_inputs.copy()
     inputs["married"] = married_value
     assert check_out_of_range_values(inputs) == expected_error_message
 
-
-# Income out-of-range
+# Ensure check_out_of_range_values() returns expected error message for income out-of-range 
 @pytest.mark.parametrize("income_value, expected_error_message", [
     (-1000, "Out-of-range value error: income must be a non-negative number."), 
     (-50, "Out-of-range value error: income must be a non-negative number."), 
@@ -380,13 +376,12 @@ def test_error_message_for_married_out_of_range(valid_inputs, married_value, exp
     (0, None), 
     (1000, None), 
 ])
-def test_error_message_for_income_out_of_range(valid_inputs, income_value, expected_error_message):
+def test_check_out_of_range_values_error_message_for_income(valid_inputs, income_value, expected_error_message):
     inputs = valid_inputs.copy()
     inputs["income"] = income_value
     assert check_out_of_range_values(inputs) == expected_error_message
 
-
-# Car ownership out-of-range
+# Ensure check_out_of_range_values() returns expected error message for car ownership out-of-range 
 @pytest.mark.parametrize("car_ownership_value, expected_error_message", [
     ("maybe", "Out-of-range value error: car ownership must be 'yes' or 'no'."),
     ("lamborghini", "Out-of-range value error: car ownership must be 'yes' or 'no'."),
@@ -394,13 +389,12 @@ def test_error_message_for_income_out_of_range(valid_inputs, income_value, expec
     ("yes", None),
     ("no", None)
 ])
-def test_error_message_for_car_ownership_out_of_range(valid_inputs, car_ownership_value, expected_error_message):
+def test_check_out_of_range_values_error_message_for_car_ownership(valid_inputs, car_ownership_value, expected_error_message):
     inputs = valid_inputs.copy()
     inputs["car_ownership"] = car_ownership_value
     assert check_out_of_range_values(inputs) == expected_error_message  
 
-
-# House ownership out-of-range
+# Ensure check_out_of_range_values() returns expected error message for house ownership out-of-range 
 @pytest.mark.parametrize("house_ownership_value, expected_error_message", [
     ("maybe", "Out-of-range value error: house ownership must be 'rented', 'owned', or 'norent_noown'."),
     ("yes", "Out-of-range value error: house ownership must be 'rented', 'owned', or 'norent_noown'."),
@@ -411,13 +405,12 @@ def test_error_message_for_car_ownership_out_of_range(valid_inputs, car_ownershi
     ("rented", None),
     ("norent_noown", None)
 ])
-def test_error_message_for_house_ownership_out_of_range(valid_inputs, house_ownership_value, expected_error_message):
+def test_check_out_of_range_values_error_message_for_house_ownership(valid_inputs, house_ownership_value, expected_error_message):
     inputs = valid_inputs.copy()
     inputs["house_ownership"] = house_ownership_value
     assert check_out_of_range_values(inputs) == expected_error_message
 
-
-# Current house years out-of-range
+# Ensure check_out_of_range_values() returns expected error message for current house years out-of-range
 @pytest.mark.parametrize("current_house_yrs_value, expected_error_message", [
     (-50, "Out-of-range value error: current house years must be 10-14."), 
     (0, "Out-of-range value error: current house years must be 10-14."), 
@@ -427,13 +420,12 @@ def test_error_message_for_house_ownership_out_of_range(valid_inputs, house_owne
     (15, "Out-of-range value error: current house years must be 10-14."), 
     (1000, "Out-of-range value error: current house years must be 10-14.")
 ])
-def test_error_message_for_current_house_yrs_out_of_range(valid_inputs, current_house_yrs_value, expected_error_message):
+def test_check_out_of_range_values_error_message_for_current_house_yrs(valid_inputs, current_house_yrs_value, expected_error_message):
     inputs = valid_inputs.copy()
     inputs["current_house_yrs"] = current_house_yrs_value
     assert check_out_of_range_values(inputs) == expected_error_message
 
-
-# City out-of-range
+# Ensure check_out_of_range_values() returns expected error message for city out-of-range
 @pytest.mark.parametrize("city_value, expected_error_message", [
     ("unknown", "Out-of-range value error: city must be one of the predefined cities."),
     ("metropolis", "Out-of-range value error: city must be one of the predefined cities."),
@@ -443,13 +435,12 @@ def test_error_message_for_current_house_yrs_out_of_range(valid_inputs, current_
     ("tiruvottiyur", None),
     ("surendranagar_dudhrej", None)
 ])
-def test_error_message_for_city_out_of_range(valid_inputs, city_value, expected_error_message):
+def test_check_out_of_range_values_error_message_for_city(valid_inputs, city_value, expected_error_message):
     inputs = valid_inputs.copy()
     inputs["city"] = city_value
     assert check_out_of_range_values(inputs) == expected_error_message
 
-
-# State out-of-range
+# Ensure check_out_of_range_values() returns expected error message for state out-of-range
 @pytest.mark.parametrize("state_value, expected_error_message", [
     ("unknown", "Out-of-range value error: state must be one of the predefined states."),
     ("India", "Out-of-range value error: state must be one of the predefined states."),
@@ -458,13 +449,12 @@ def test_error_message_for_city_out_of_range(valid_inputs, city_value, expected_
     ("gujarat", None),
     ("maharashtra", None)
 ])
-def test_error_message_for_state_out_of_range(valid_inputs, state_value, expected_error_message):
+def test_check_out_of_range_values_error_message_for_state(valid_inputs, state_value, expected_error_message):
     inputs = valid_inputs.copy()
     inputs["state"] = state_value
     assert check_out_of_range_values(inputs) == expected_error_message
 
-
-# Profession out-of-range
+# Ensure check_out_of_range_values() returns expected error message for profession out-of-range
 @pytest.mark.parametrize("profession_value, expected_error_message", [
     ("unknown", "Out-of-range value error: profession must be one of the predefined professions."),
     ("princess", "Out-of-range value error: profession must be one of the predefined professions."),
@@ -473,13 +463,13 @@ def test_error_message_for_state_out_of_range(valid_inputs, state_value, expecte
     ("lawyer", None),
     ("air_traffic_controller", None)
 ])
-def test_error_message_for_profession_out_of_range(valid_inputs, profession_value, expected_error_message):
+def test_check_out_of_range_values_error_message_for_profession(valid_inputs, profession_value, expected_error_message):
     inputs = valid_inputs.copy()
     inputs["profession"] = profession_value
     assert check_out_of_range_values(inputs) == expected_error_message
 
 
-# Experience out-of-range
+# Ensure check_out_of_range_values() returns expected error message for experience out-of-range
 @pytest.mark.parametrize("experience_value, expected_error_message", [
     (-50, "Out-of-range value error: experience must be 0-20 years."), 
     (-1, "Out-of-range value error: experience must be 0-20 years."), 
@@ -488,13 +478,12 @@ def test_error_message_for_profession_out_of_range(valid_inputs, profession_valu
     (21, "Out-of-range value error: experience must be 0-20 years."), 
     (1000, "Out-of-range value error: experience must be 0-20 years.")
 ])
-def test_error_message_for_experience_out_of_range(valid_inputs, experience_value, expected_error_message):
+def test_check_out_of_range_values_error_message_for_experience(valid_inputs, experience_value, expected_error_message):
     inputs = valid_inputs.copy()
     inputs["experience"] = experience_value
     assert check_out_of_range_values(inputs) == expected_error_message
 
-
-# Current job years out-of-range
+# Ensure check_out_of_range_values() returns expected error message for current job years out-of-range
 @pytest.mark.parametrize("current_job_yrs_value, expected_error_message", [
     (-50, "Out-of-range value error: current job years must be 0-14."), 
     (-1, "Out-of-range value error: current job years must be 0-14."), 
@@ -503,7 +492,7 @@ def test_error_message_for_experience_out_of_range(valid_inputs, experience_valu
     (15, "Out-of-range value error: current job years must be 0-14."), 
     (1000, "Out-of-range value error: current job years must be 0-14.")
 ])
-def test_error_message_for_current_job_yrs_out_of_range(valid_inputs, current_job_yrs_value, expected_error_message):
+def test_check_out_of_range_values_error_message_for_current_job_yrs(valid_inputs, current_job_yrs_value, expected_error_message):
     inputs = valid_inputs.copy()
     inputs["current_job_yrs"] = current_job_yrs_value
     assert check_out_of_range_values(inputs) == expected_error_message
