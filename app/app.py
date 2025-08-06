@@ -22,75 +22,14 @@ from app.custom_transformers import (
     RobustOrdinalEncoder,
     FeatureSelector
 )
-
-# --- Global constants ---
-# Lists of categorical string labels (in format expected by the model)
-MARRIED_LABELS = ["single", "married"]
-CAR_OWNERSHIP_LABELS = ["yes", "no"]
-HOUSE_OWNERSHIP_LABELS = ["rented", "owned", "norent_noown"]  
-
-PROFESSION_LABELS = [
-    "air_traffic_controller", "analyst", "architect", "army_officer", "artist", "aviator",
-    "biomedical_engineer", "chartered_accountant", "chef", "chemical_engineer", "civil_engineer",
-    "civil_servant", "comedian", "computer_hardware_engineer", "computer_operator", "consultant",
-    "dentist", "design_engineer", "designer", "drafter", "economist", "engineer",
-    "fashion_designer", "financial_analyst", "firefighter", "flight_attendant", "geologist",
-    "graphic_designer", "hotel_manager", "industrial_engineer", "lawyer", "librarian",
-    "magistrate", "mechanical_engineer", "microbiologist", "official", "petroleum_engineer",
-    "physician", "police_officer", "politician", "psychologist", "scientist", "secretary",
-    "software_developer", "statistician", "surgeon", "surveyor", "technical_writer",
-    "technician", "technology_specialist", "web_designer"
-]
-
-CITY_LABELS = [
-    "adoni", "agartala", "agra", "ahmedabad", "ahmednagar", "aizawl", "ajmer", "akola", "alappuzha", "aligarh",
-    "allahabad", "alwar", "ambala", "ambarnath", "ambattur", "amravati", "amritsar", "amroha", "anand", "anantapur",
-    "anantapuram[24]", "arrah", "asansol", "aurangabad", "aurangabad[39]", "avadi", "bahraich", "ballia", "bally",
-    "bangalore", "baranagar", "barasat", "bardhaman", "bareilly", "bathinda", "begusarai", "belgaum", "bellary",
-    "berhampore", "berhampur", "bettiah[33]", "bhadravati", "bhagalpur", "bhalswa_jahangir_pur", "bharatpur",
-    "bhatpara", "bhavnagar", "bhilai", "bhilwara", "bhimavaram", "bhind", "bhiwandi", "bhiwani", "bhopal",
-    "bhubaneswar", "bhusawal", "bidar", "bidhannagar", "bihar_sharif", "bijapur", "bikaner", "bilaspur", "bokaro",
-    "bongaigaon", "bulandshahr", "burhanpur", "buxar[37]", "chandigarh_city", "chandrapur", "chapra", "chennai",
-    "chinsurah", "chittoor[28]", "coimbatore", "cuttack", "danapur", "darbhanga", "davanagere", "dehradun",
-    "dehri[30]", "delhi_city", "deoghar", "dewas", "dhanbad", "dharmavaram", "dhule", "dibrugarh", "dindigul",
-    "durg", "durgapur", "eluru[25]", "erode[17]", "etawah", "faridabad", "farrukhabad", "fatehpur", "firozabad",
-    "gandhidham", "gandhinagar", "gangtok", "gaya", "ghaziabad", "giridih", "gopalpur", "gorakhpur", "gudivada",
-    "gulbarga", "guna", "guntakal", "guntur[13]", "gurgaon", "guwahati", "gwalior", "hajipur[31]", "haldia",
-    "hapur", "haridwar", "hazaribagh", "hindupur", "hospet", "hosur", "howrah", "hubli_dharwad", "hyderabad",
-    "ichalkaranji", "imphal", "indore", "jabalpur", "jaipur", "jalandhar", "jalgaon", "jalna", "jamalpur[36]",
-    "jammu[16]", "jamnagar", "jamshedpur", "jaunpur", "jehanabad[38]", "jhansi", "jodhpur", "jorhat", "junagadh",
-    "kadapa[23]", "kakinada", "kalyan_dombivli", "kamarhati", "kanpur", "karawal_nagar", "karaikudi", "karimnagar",
-    "karnal", "katihar", "katni", "kavali", "khammam", "khandwa", "kharagpur", "khora,_ghaziabad",
-    "kirari_suleman_nagar", "kishanganj[35]", "kochi", "kolhapur", "kolkata", "kollam", "korba", "kota[6]",
-    "kottayam", "kozhikode", "kulti", "kumbakonam", "kurnool[18]", "latur", "loni", "lucknow", "ludhiana",
-    "machilipatnam", "madanapalle", "madhyamgram", "madurai", "mahbubnagar", "maheshtala", "malda", "malegaon",
-    "mango", "mangalore", "mathura", "mau", "medininagar", "meerut", "mehsana", "mira_bhayandar", "mirzapur",
-    "miryalaguda", "moradabad", "morbi", "morena", "motihari[34]", "mumbai", "munger", "muzaffarnagar",
-    "muzaffarpur", "mysore[7][8][9]", "nadiad", "nagaon", "nagercoil", "nagpur", "naihati", "nanded", "nandyal",
-    "nangloi_jat", "narasaraopet", "nashik", "navi_mumbai", "nellore[14][15]", "new_delhi", "nizamabad", "noida",
-    "north_dumdum", "ongole", "orai", "ozhukarai", "pali", "pallavaram", "panchkula", "panipat", "panihati",
-    "panvel", "parbhani", "patiala", "patna", "phagwara", "phusro", "pimpri_chinchwad", "pondicherry",
-    "proddatur", "pudukkottai", "pune", "purnia[26]", "raebareli", "raichur", "raiganj", "raipur",
-    "rajahmundry[19][20]", "rajkot", "rajpur_sonarpur", "ramagundam[27]", "ramgarh", "rampur", "ranchi", "ratlam",
-    "raurkela_industrial_township", "rewa", "rohtak", "rourkela", "sagar", "saharanpur", "saharsa[29]", "salem",
-    "sambalpur", "sambhal", "sangli_miraj_&_kupwad", "sasaram[30]", "satara", "satna", "secunderabad",
-    "serampore", "shahjahanpur", "shimla", "shimoga", "shivpuri", "sikar", "silchar", "siliguri", "singrauli",
-    "sirsa", "siwan[32]", "solapur", "sonipat", "south_dumdum", "sri_ganganagar", "srikakulam", "srinagar",
-    "sultan_pur_majra", "surat", "surendranagar_dudhrej", "suryapet", "tadipatri", "tadepalligudem", "tenali",
-    "tezpur", "thane", "thanjavur", "thiruvananthapuram", "thoothukudi", "thrissur", "tinsukia",
-    "tiruchirappalli[10]", "tirunelveli", "tirupati[21][22]", "tiruppur", "tiruvottiyur", "tumkur", "udaipur",
-    "udupi", "ujjain", "ulhasnagar", "uluberia", "unnao", "vadodara", "varanasi", "vasai_virar", "vellore",
-    "vijayawada", "vijayanagaram", "visakhapatnam[4]", "warangal[11][12]", "yamunanagar"
-]
-
-STATE_LABELS = [
-    "andhra_pradesh", "assam", "bihar", "chandigarh", "chhattisgarh",
-    "delhi", "gujarat", "haryana", "himachal_pradesh", "jammu_and_kashmir",
-    "jharkhand", "karnataka", "kerala", "madhya_pradesh", "maharashtra",
-    "manipur", "mizoram", "odisha", "puducherry", "punjab", "rajasthan",
-    "sikkim", "tamil_nadu", "telangana", "tripura", "uttar_pradesh",
-    "uttar_pradesh[5]", "uttarakhand", "west_bengal"
-]
+from app.global_constants import (
+    MARRIED_LABELS,
+    CAR_OWNERSHIP_LABELS,
+    HOUSE_OWNERSHIP_LABELS,
+    PROFESSION_LABELS,
+    CITY_LABELS,
+    STATE_LABELS
+)
 
 # Format categorical string labels for display in UI
 MARRIED_DISPLAY_LABELS = [label.title() for label in MARRIED_LABELS]
