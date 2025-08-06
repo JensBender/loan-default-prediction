@@ -54,9 +54,11 @@ def snake_case_format_inputs(inputs_dict):
     return {key: snake_case_format(value) for key, value in inputs_dict.items()}
 
 
-# Function to replace "house_ownership" display label with label expected by pipeline
-def prepare_house_ownership_for_pipeline(display_label):
-    return display_label.replace("neither_rented_nor_owned", "norent_noown")
+# Function to format "house_ownership" label as expected by pipeline
+def format_house_ownership(display_label):
+    if isinstance(display_label, str):
+        return display_label.replace("neither_rented_nor_owned", "norent_noown")
+    return display_label  # return non-string values unchanged
 
 
 # Function to convert float to int (pipeline expects int inputs)
@@ -208,8 +210,8 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         # Format string inputs in snake_case
         inputs = snake_case_format_inputs(inputs)
 
-        # Replace "house_ownership" display label "neither_rented_nor_owned" with "norent_noown" (expected by pipeline) 
-        inputs["house_ownership"] = prepare_house_ownership_for_pipeline(inputs["house_ownership"])
+        # Format "house_ownership" label as expected by pipeline 
+        inputs["house_ownership"] = format_house_ownership(inputs["house_ownership"])
 
         # --- Input validation ---
         # Missing value check
@@ -327,7 +329,7 @@ with gr.Blocks(css=custom_css) as app:
             "(predicts 'Default' if probability ≥ 29%, otherwise 'No Default').</small>",
             elem_id="markdown-note"
         )
-        
+
     # Predict button click event
     predict.click(
         predict_loan_default,
