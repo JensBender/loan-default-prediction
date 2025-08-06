@@ -102,20 +102,20 @@ STATE_DISPLAY_LABELS = [label.replace("_", " ").title() for label in STATE_LABEL
 
 
 # --- Input preprocessing functions ---
-# Function to standardize a single string input 
-def standardize_string(value):
+# Function to snake_case format a single string input  
+def snake_case_format(value):
     if isinstance(value, str):
         # Remove leading/trailing whitespace, convert to lowercase, and replace single or multiple hyphens, forward slashes, and inner whitespaces with a single underscore
         return re.sub(r"[-/\s]+", "_", value.strip().lower())
     return value  # return non-string values unchanged
 
 
-# Function to standardize all string inputs in a dictionary
-def standardize_inputs(inputs_dict):
-    return {key: standardize_string(value) for key, value in inputs_dict.items()}
+# Function to snake_case format all string inputs in a dictionary
+def snake_case_format_inputs(inputs_dict):
+    return {key: snake_case_format(value) for key, value in inputs_dict.items()}
 
 
-# Function to replace "house_ownership" display label with expected pipeline input label
+# Function to replace "house_ownership" display label with label expected by pipeline
 def prepare_house_ownership_for_pipeline(display_label):
     return display_label.replace("neither_rented_nor_owned", "norent_noown")
 
@@ -266,8 +266,11 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
             "current_job_yrs": current_job_yrs
         }
 
-        # Standardize inputs
-        inputs = standardize_inputs(inputs)
+        # Format string inputs in snake_case
+        inputs = snake_case_format_inputs(inputs)
+
+        # Replace "house_ownership" display label "neither_rented_nor_owned" with "norent_noown" (expected by pipeline) 
+        inputs["house_ownership"] = prepare_house_ownership_for_pipeline(inputs["house_ownership"])
 
         # --- Input validation ---
         # Missing value check
@@ -292,9 +295,6 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         inputs["experience"] = convert_float_to_int(inputs["experience"])
         inputs["current_job_yrs"] = convert_float_to_int(inputs["current_job_yrs"])
         inputs["current_house_yrs"] = convert_float_to_int(inputs["current_house_yrs"])
-
-        # Replace "house_ownership" display label with label expected by pipeline 
-        inputs["house_ownership"] = prepare_house_ownership_for_pipeline(inputs["house_ownership"])
 
         # Create input DataFrame for pipeline
         pipeline_input_df = pd.DataFrame({key: [value] for key, value in inputs.items()})   
