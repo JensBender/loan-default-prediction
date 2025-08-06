@@ -14,9 +14,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Local imports
 from app.app import (
-    standardize_string, 
-    standardize_inputs, 
-    prepare_house_ownership_for_pipeline,
+    snake_case_format, 
+    snake_case_format_inputs, 
+    format_house_ownership,
     convert_float_to_int,
     check_missing_values, 
     validate_data_types, 
@@ -67,7 +67,7 @@ def valid_inputs():
     ({"a": "dictionary"}, {"a": "dictionary"}),
 ])
 def test_standardize_string(input_value, expected_output):
-    assert standardize_string(input_value) == expected_output
+    assert snake_case_format(input_value) == expected_output
 
 
 # --- Test standardize_inputs() function ---
@@ -99,7 +99,7 @@ def test_standardize_inputs():
         "experience": 10,
         "current_job_yrs": 7
     }
-    assert standardize_inputs(raw_inputs) == expected_standardized_inputs
+    assert snake_case_format_inputs(raw_inputs) == expected_standardized_inputs
 
 
 # Ensure standardized inputs remain unchanged by standardize_inputs()
@@ -117,7 +117,7 @@ def test_standardized_inputs_remain_unchanged():
         "experience": 10,
         "current_job_yrs": 7
     }   
-    assert standardize_inputs(standardized_inputs) == standardized_inputs
+    assert snake_case_format_inputs(standardized_inputs) == standardized_inputs
 
 
 # --- Test prepare_house_ownership_for_pipeline() function ---
@@ -126,8 +126,8 @@ def test_standardized_inputs_remain_unchanged():
     ("rented", "rented"),
     ("owned", "owned")
 ])
-def test_prepare_house_ownership_for_pipeline(display_label, expected_pipeline_label):
-    assert prepare_house_ownership_for_pipeline(display_label) == expected_pipeline_label
+def test_format_house_ownership(display_label, expected_pipeline_label):
+    assert format_house_ownership(display_label) == expected_pipeline_label
 
 
 # --- Test convert_float_to_int() function ---
