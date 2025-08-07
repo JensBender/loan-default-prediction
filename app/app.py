@@ -239,16 +239,10 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
 
         # Create input DataFrame for pipeline
         pipeline_input_df = pd.DataFrame({key: [value] for key, value in inputs.items()})   
-
-        # Use single-row DataFrame as input
-        pipeline_input_df = pipeline_input_df.head(1) 
         
         # --- Pipeline prediction ---       
         # Use pipeline to predict probabilities 
         pred_proba = pipeline.predict_proba(pipeline_input_df)
-
-        # Use only first row of predictions 
-        pred_proba = pred_proba[0, :] 
 
         # Create predicted probabilities dictionary (for gr.Label output)
         pred_proba_dict = {
