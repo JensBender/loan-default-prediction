@@ -193,7 +193,7 @@ def _pipeline_predict_proba(input_df):
     return pipeline.predict_proba(input_df)
 
 
-# --- Function: Predict Loan Default for a Single User ---
+# --- Function: Predict Single Loan Default for App UI ---
 def single_predict(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
     try:
         # --- Input preprocessing (part 1) ---
@@ -265,6 +265,11 @@ def single_predict(age, married, income, car_ownership, house_ownership, current
 
     except Exception as e:
         return f"Error: {str(e)}", ""
+
+
+# --- Function: Batch Predict Loan Default for API ---
+def batch_predict(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
+    pass
 
 
 # --- Gradio App UI ---
