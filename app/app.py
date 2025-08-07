@@ -40,8 +40,8 @@ CITY_DISPLAY_LABELS = [label.replace("_", " ").title() for label in CITY_LABELS]
 STATE_DISPLAY_LABELS = [label.replace("_", " ").title() for label in STATE_LABELS]
 
 
-# --- Input preprocessing functions ---
-# Function to snake_case format a single string input  
+# --- Functions: Input Preprocessing ---
+# Format a single string input in snake_case  
 def snake_case_format(value):
     if isinstance(value, str):
         # Remove leading/trailing whitespace, convert to lowercase, and replace single or multiple hyphens, forward slashes, and inner whitespaces with a single underscore
@@ -49,26 +49,26 @@ def snake_case_format(value):
     return value  # return non-string values unchanged
 
 
-# Function to snake_case format all string inputs in a dictionary
+# Format all string inputs in a dictionary in snake_case
 def snake_case_format_inputs(inputs_dict):
     return {key: snake_case_format(value) for key, value in inputs_dict.items()}
 
 
-# Function to format "house_ownership" label as expected by pipeline
+# Format "house_ownership" label as expected by pipeline
 def format_house_ownership(display_label):
     if isinstance(display_label, str):
         return display_label.replace("neither_rented_nor_owned", "norent_noown")
     return display_label  # return non-string values unchanged
 
 
-# Function to convert float to int (pipeline expects int inputs)
+# Convert float to int (pipeline expects int inputs)
 def convert_float_to_int(value):
     if isinstance(value, bool):
         raise TypeError()  # otherwise Python would treat True as 1 and False as 0 not raising a TypeError 
     return int(round(value)) 
 
 
-# --- Input validation functions ---
+# --- Functions: Input Validation ---
 # Check missing values in the inputs dictionary
 def check_missing_values(inputs_dict):
     missing_inputs = []
@@ -101,13 +101,13 @@ def check_missing_values(inputs_dict):
     return None  # no missing values
 
 
-# Check data types in the inputs dictionary
+# Validate data types in the inputs dictionary
 def validate_data_types(inputs_dict):
     invalid_numbers = []
     invalid_strings = []
     invalid_datatype_message = "Data type error! "   
 
-    # Check numerical inputs     
+    # Numerical inputs     
     if not isinstance(inputs_dict["age"], (int, float)):
         invalid_numbers.append("Age")
     if not isinstance(inputs_dict["income"], (int, float)):
@@ -123,7 +123,7 @@ def validate_data_types(inputs_dict):
     if len(invalid_numbers) > 1:
         invalid_datatype_message += f"{', '.join(invalid_numbers[:-1])} and {invalid_numbers[-1]} must be numbers."
     
-    # Check string inputs
+    # String inputs
     if not isinstance(inputs_dict["married"], str):
         invalid_strings.append("Married/Single")
     if not isinstance(inputs_dict["house_ownership"], str):
@@ -178,17 +178,17 @@ def check_out_of_range_values(inputs_dict):
     return None  # no out-of-range inputs
 
 
-# --- Load the pre-trained pipeline (including data preprocessing and Random Forest Classifier model) ---
+# --- Load Machine Learning Pipeline ---
 # Get the path to the pipeline file relative to this script
 base_dir = os.path.dirname(os.path.abspath(__file__))
 pipeline_path = os.path.join(base_dir, "..", "models", "loan_default_rf_pipeline.pkl")
 
-# Load the pipeline
+# Load the pre-trained pipeline (including data preprocessing and Random Forest Classifier model)
 with open(pipeline_path, "rb") as file:
     pipeline = pickle.load(file)
 
 
-# --- Function to predict loan default ---
+# --- Function: Predict Loan Default ---
 def predict_loan_default(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
     try:
         # --- Input preprocessing (part 1) ---
@@ -224,7 +224,7 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         if invalid_datatype_message:
             return invalid_datatype_message, ""
 
-        # Out-of-range values check
+        # Out-of-range value check
         out_of_range_value_message = check_out_of_range_values(inputs)
         if out_of_range_value_message:
             return out_of_range_value_message, ""
@@ -270,7 +270,7 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         return f"Error: {str(e)}", ""
 
 
-# --- Gradio app UI ---
+# --- Gradio App UI ---
 # Custom CSS 
 custom_css = """
 .narrow-centered-column {
@@ -289,7 +289,7 @@ custom_css = """
 
 # Create Gradio app UI using Blocks
 with gr.Blocks(css=custom_css) as app:
-    # App title and description
+    # Title and description
     gr.Markdown(
         """
         <h1 style='text-align:center'>Loan Default Prediction</h1>
