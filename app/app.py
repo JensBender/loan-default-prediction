@@ -61,7 +61,7 @@ def format_house_ownership(display_label):
     return display_label  # return non-string values unchanged
 
 
-# Convert float to int (pipeline expects int inputs)
+# Convert float to int (pipeline was trained on int inputs)
 def convert_float_to_int(value):
     if isinstance(value, bool):
         raise TypeError()  # otherwise Python would treat True as 1 and False as 0 not raising a TypeError 
@@ -74,7 +74,7 @@ def check_missing_values(inputs_dict):
     missing_inputs = []
     if inputs_dict["age"] in [None, "", [], {}, ()]:
         missing_inputs.append("Age")
-    if not inputs_dict["married"]:  # catches None, "", 0, 0.0, False, [], {}, ()
+    if not inputs_dict["married"]:  # catches 0, 0.0, False, None, "", [], {}, ()
         missing_inputs.append("Married/Single")
     if inputs_dict["income"] in [None, "", [], {}, ()]:
         missing_inputs.append("Income")
@@ -108,15 +108,15 @@ def validate_data_types(inputs_dict):
     invalid_datatype_message = "Data type error! "   
 
     # Numerical inputs     
-    if not isinstance(inputs_dict["age"], (int, float)):
+    if not isinstance(inputs_dict["age"], (int, float)) or isinstance(inputs_dict["age"], bool):
         invalid_numbers.append("Age")
-    if not isinstance(inputs_dict["income"], (int, float)):
+    if not isinstance(inputs_dict["income"], (int, float)) or isinstance(inputs_dict["income"], bool):
         invalid_numbers.append("Income")
-    if not isinstance(inputs_dict["current_house_yrs"], (int, float)):
+    if not isinstance(inputs_dict["current_house_yrs"], (int, float)) or isinstance(inputs_dict["current_house_yrs"], bool):
         invalid_numbers.append("Current House Years")
-    if not isinstance(inputs_dict["experience"], (int, float)):
+    if not isinstance(inputs_dict["experience"], (int, float)) or isinstance(inputs_dict["experience"], bool):
         invalid_numbers.append("Experience")
-    if not isinstance(inputs_dict["current_job_yrs"], (int, float)):
+    if not isinstance(inputs_dict["current_job_yrs"], (int, float)) or isinstance(inputs_dict["current_job_yrs"], bool):
         invalid_numbers.append("Current Job Years")
     if len(invalid_numbers) == 1:
         invalid_datatype_message += f"{invalid_numbers[0]} must be a number."
@@ -230,7 +230,7 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
             return out_of_range_value_message, ""
 
         # --- Input preprocessing (part 2) ---
-        # Convert float inputs to int (pipeline was trained on int inputs)
+        # Convert float inputs to int 
         inputs["income"] = convert_float_to_int(inputs["income"])
         inputs["age"] = convert_float_to_int(inputs["age"])
         inputs["experience"] = convert_float_to_int(inputs["experience"])
