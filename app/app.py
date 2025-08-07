@@ -252,14 +252,14 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
 
         # Apply optimized threshold to convert probabilities to binary predictions
         optimized_threshold = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
-        pred = (pred_proba[0, 1] >= optimized_threshold).astype(int)
+        prediction_int = (pred_proba[0, 1] >= optimized_threshold).astype(int)
 
         # Create prediction text
         prediction_label_map = {0: "No Default", 1: "Default"}
-        prediction_text = f"{prediction_label_map[pred]}"
+        prediction_str = f"{prediction_label_map[prediction_int]}"
 
-        return prediction_text, pred_proba_dict
-    
+        return prediction_str, pred_proba_dict
+
     except Exception as e:
         return f"Error: {str(e)}", ""
 
