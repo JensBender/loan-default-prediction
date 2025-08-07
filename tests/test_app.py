@@ -42,8 +42,9 @@ def valid_inputs():
     }
 
 
-# --- Test snake_case_format() function ---
+# --- snake_case_format() ---
 # Ensure snake_case_format() converts strings to snake_case correctly
+@pytest.mark.unit
 @pytest.mark.parametrize("input_value, expected_output", [
     ("   leading spaces", "leading_spaces"),
     ("trailing spaces   ", "trailing_spaces"),
@@ -71,8 +72,9 @@ def test_snake_case_format_happy_path(input_value, expected_output):
     assert snake_case_format(input_value) == expected_output
 
 
-# --- Test snake_case_format_inputs() function ---
+# --- snake_case_format_inputs() ---
 # Ensure snake_case_format_inputs() formats all string values in a dictionary in snake_case
+@pytest.mark.unit
 def test_snake_case_format_inputs_happy_path():
     raw_inputs = {
         "age": 30,
@@ -102,8 +104,8 @@ def test_snake_case_format_inputs_happy_path():
     }
     assert snake_case_format_inputs(raw_inputs) == expected_standardized_inputs
 
-
-# Ensure inputs already formatted in snake_case remain unchanged by snake_case_format_inputs()
+# Ensure snake_case_format_inputs() leaves inputs that are already formatted in snake_case unchanged 
+@pytest.mark.unit
 def test_snake_case_formatted_inputs_remain_unchanged():
     standardized_inputs = {
         "age": 30,
@@ -121,7 +123,9 @@ def test_snake_case_formatted_inputs_remain_unchanged():
     assert snake_case_format_inputs(standardized_inputs) == standardized_inputs
 
 
-# --- Test format_house_ownership() function ---
+# --- format_house_ownership() ---
+# Ensure format_house_ownership() converts display label "neither_rented_nor_owned" to label "norent_noown" as pipeline expects
+@pytest.mark.unit
 @pytest.mark.parametrize("display_label, expected_pipeline_label", [
     ("neither_rented_nor_owned", "norent_noown"),
     ("rented", "rented"),
@@ -131,8 +135,9 @@ def test_format_house_ownership_happy_path(display_label, expected_pipeline_labe
     assert format_house_ownership(display_label) == expected_pipeline_label
 
 
-# --- Test convert_float_to_int() function ---
-# Test a variety of valid inputs (float and int) 
+# --- convert_float_to_int() ---
+# Ensure convert_float_to_int() converts float values to int  
+@pytest.mark.unit
 @pytest.mark.parametrize("valid_input_value, expected_output", [
     (0.0, 0),
     (1.0, 1),
@@ -156,6 +161,7 @@ def test_convert_float_to_int_happy_path(valid_input_value, expected_output):
     assert isinstance(output, int)
 
 # Ensure convert_float_to_int() raises TypeError for invalid inputs
+@pytest.mark.unit
 @pytest.mark.parametrize("invalid_input_value", [
     "a string",
     "1.23",
@@ -170,12 +176,14 @@ def test_convert_float_to_int_raises_type_error_for_invalid_inputs(invalid_input
         convert_float_to_int(invalid_input_value)
 
 
-# --- Test check_missing_values() function ---
+# --- check_missing_values() ---
 # Ensure check_missing_values() returns None if no missing inputs
+@pytest.mark.unit
 def test_check_missing_values_returns_none_if_no_missing_values(valid_inputs):
     assert check_missing_values(valid_inputs) == None
 
-# Ensure check_missing_values() returns the expected error message for all missing values on all inputs
+# Ensure check_missing_values() returns the expected error message for missing values on all inputs
+@pytest.mark.unit
 def test_check_missing_values_error_message_for_all_values_missing():
     inputs = {
         "age": None,
@@ -197,6 +205,7 @@ def test_check_missing_values_error_message_for_all_values_missing():
     assert check_missing_values(inputs) == expected_error_message
 
 # Ensure check_missing_values() returns the expected error message for single missing numerical input
+@pytest.mark.unit
 @pytest.mark.parametrize("missing_value_type", [None, "", [], {}, ()])
 @pytest.mark.parametrize("numerical_input, expected_error_message", [
     ("age", "Please provide: Age."),
@@ -215,6 +224,7 @@ def test_check_missing_values_error_message_for_single_missing_numerical_input(v
     assert error_message == expected_error_message, f"Expected exact error message: '{expected_error_message}' for {numerical_input}='{missing_value_type}'."
 
 # Ensure check_missing_values() does not return an error message for 0 in numerical inputs
+@pytest.mark.unit
 @pytest.mark.parametrize("numerical_input", ["age", "income", "current_house_yrs", "experience", "current_job_yrs"])
 def test_check_missing_values_no_error_message_for_zero_in_numerical_inputs(valid_inputs, numerical_input):
     inputs = valid_inputs.copy()
@@ -222,6 +232,7 @@ def test_check_missing_values_no_error_message_for_zero_in_numerical_inputs(vali
     assert check_missing_values(inputs) == None  
 
 # Ensure check_missing_values() returns the expected error message for single missing string input
+@pytest.mark.unit
 @pytest.mark.parametrize("missing_value_type", [None, "", [], {}, (), 0, 0.0, False])
 @pytest.mark.parametrize("string_input, expected_error_message", [
     ("married", "Please provide: Married/Single."),
@@ -241,6 +252,7 @@ def test_check_missing_values_error_message_for_single_missing_string_input(vali
     assert error_message == expected_error_message, f"Expected exact error message: '{expected_error_message}' for {string_input}='{missing_value_type}'."
 
 # Ensure check_missing_values() returns the expected error message for two missing inputs
+@pytest.mark.unit
 @pytest.mark.parametrize("missing_input_1, missing_input_2, expected_error_message", [
     ("age", "married", "Please provide: Age and Married/Single."),
     ("income", "car_ownership", "Please provide: Income and Car Ownership."),
@@ -256,6 +268,7 @@ def test_check_missing_values_error_message_for_two_missing_inputs(valid_inputs,
     assert check_missing_values(inputs) == expected_error_message
 
 # Ensure check_missing_values() returns the expected error message for three missing inputs
+@pytest.mark.unit
 @pytest.mark.parametrize("missing_input_1, missing_input_2, missing_input_3, expected_error_message", [
     ("age", "married", "income", "Please provide: Age, Married/Single and Income."),
     ("car_ownership", "house_ownership", "current_house_yrs", "Please provide: Car Ownership, House Ownership and Current House Years."),
@@ -270,12 +283,14 @@ def test_check_missing_valueserror_message_for_three_missing_inputs(valid_inputs
     assert check_missing_values(inputs) == expected_error_message
 
 
-# --- Test validate_data_types() function ---
+# --- validate_data_types() ---
 # Ensure validate_data_types() returns None if no invalid data types
+@pytest.mark.unit
 def test_validate_data_types_returns_none_if_no_invalid_types(valid_inputs):
     assert validate_data_types(valid_inputs) == None
 
 # Ensure validate_data_types() returns the expected error message for invalid data type in all inputs
+@pytest.mark.unit
 def test_validate_data_types_error_message_for_all_invalid_inputs():
     inputs = {
         "age": "invalid string",
@@ -297,6 +312,7 @@ def test_validate_data_types_error_message_for_all_invalid_inputs():
     assert validate_data_types(inputs) == expected_error_message
 
 # Ensure validate_data_types() returns expected error message for single numerical input with invalid type 
+@pytest.mark.unit
 @pytest.mark.parametrize("invalid_numerical_data_type", ["invalid string", ["invalid", "list"], ("invalid", "tuple"), {"invalid": "dictionary"}])
 def test_validate_data_types_error_message_for_single_numerical_input(valid_inputs, invalid_numerical_data_type):
     inputs = valid_inputs.copy()
@@ -304,6 +320,7 @@ def test_validate_data_types_error_message_for_single_numerical_input(valid_inpu
     assert validate_data_types(inputs) == "Data type error! Age must be a number."
 
 # Ensure validate_data_types() returns expected error message for single string input with invalid type 
+@pytest.mark.unit
 @pytest.mark.parametrize("invalid_string_data_type", [123, 123.45, False, ["invalid", "list"], ("invalid", "tuple"), {"invalid": "dictionary"}])
 def test_validate_data_types_error_message_for_single_string_input(valid_inputs, invalid_string_data_type):
     inputs = valid_inputs.copy()
@@ -311,12 +328,14 @@ def test_validate_data_types_error_message_for_single_string_input(valid_inputs,
     assert validate_data_types(inputs) == "Data type error! Married/Single must be a string."
 
 
-# --- Test check_out_of_range_values() function ---
+# --- check_out_of_range_values() ---
 # Ensure check_out_of_range_values() returns None if no out-of-range values
+@pytest.mark.unit
 def test_check_out_of_range_values_returns_none_if_no_out_of_range_values(valid_inputs):
     assert check_out_of_range_values(valid_inputs) == None
 
 # Ensure check_out_of_range_values() returns expected error message for out-of-range value in all inputs
+@pytest.mark.unit
 def test_check_out_of_range_values_error_message_for_all_oor_inputs():
     inputs = {
         "age": 150,
@@ -340,6 +359,7 @@ def test_check_out_of_range_values_error_message_for_all_oor_inputs():
     assert check_out_of_range_values(inputs) == expected_error_message
 
 # Ensure check_out_of_range_values() returns expected error message for age out-of-range 
+@pytest.mark.unit
 @pytest.mark.parametrize("age_value, expected_error_message", [
     (-50, "Out-of-range value error: Age must be 21-79."), 
     (0, "Out-of-range value error: Age must be 21-79."), 
@@ -355,6 +375,7 @@ def test_check_out_of_range_values_error_message_for_age(valid_inputs, age_value
     assert check_out_of_range_values(inputs) == expected_error_message
 
 # Ensure check_out_of_range_values() returns expected error message for married out-of-range 
+@pytest.mark.unit
 @pytest.mark.parametrize("married_value, expected_error_message", [
     ("divorced", "Out-of-range value error: Married/Single must be 'Single' or 'Married'."),
     ("yes", "Out-of-range value error: Married/Single must be 'Single' or 'Married'."),
@@ -368,6 +389,7 @@ def test_check_out_of_range_values_error_message_for_married(valid_inputs, marri
     assert check_out_of_range_values(inputs) == expected_error_message
 
 # Ensure check_out_of_range_values() returns expected error message for income out-of-range 
+@pytest.mark.unit
 @pytest.mark.parametrize("income_value, expected_error_message", [
     (-1000, "Out-of-range value error: Income must be a non-negative number."), 
     (-50, "Out-of-range value error: Income must be a non-negative number."), 
@@ -382,6 +404,7 @@ def test_check_out_of_range_values_error_message_for_income(valid_inputs, income
     assert check_out_of_range_values(inputs) == expected_error_message
 
 # Ensure check_out_of_range_values() returns expected error message for car ownership out-of-range 
+@pytest.mark.unit
 @pytest.mark.parametrize("car_ownership_value, expected_error_message", [
     ("maybe", "Out-of-range value error: Car Ownership must be 'Yes' or 'No'."),
     ("lamborghini", "Out-of-range value error: Car Ownership must be 'Yes' or 'No'."),
@@ -395,6 +418,7 @@ def test_check_out_of_range_values_error_message_for_car_ownership(valid_inputs,
     assert check_out_of_range_values(inputs) == expected_error_message  
 
 # Ensure check_out_of_range_values() returns expected error message for house ownership out-of-range 
+@pytest.mark.unit
 @pytest.mark.parametrize("house_ownership_value, expected_error_message", [
     ("maybe", "Out-of-range value error: House Ownership must be 'Rented', 'Owned', or 'Neither Rented Nor Owned'."),
     ("yes", "Out-of-range value error: House Ownership must be 'Rented', 'Owned', or 'Neither Rented Nor Owned'."),
@@ -411,6 +435,7 @@ def test_check_out_of_range_values_error_message_for_house_ownership(valid_input
     assert check_out_of_range_values(inputs) == expected_error_message
 
 # Ensure check_out_of_range_values() returns expected error message for current house years out-of-range
+@pytest.mark.unit
 @pytest.mark.parametrize("current_house_yrs_value, expected_error_message", [
     (-50, "Out-of-range value error: Current House Years must be 10-14."), 
     (0, "Out-of-range value error: Current House Years must be 10-14."), 
@@ -426,6 +451,7 @@ def test_check_out_of_range_values_error_message_for_current_house_yrs(valid_inp
     assert check_out_of_range_values(inputs) == expected_error_message
 
 # Ensure check_out_of_range_values() returns expected error message for city out-of-range
+@pytest.mark.unit
 @pytest.mark.parametrize("city_value, expected_error_message", [
     ("unknown", "Out-of-range value error: City must be one of the predefined cities."),
     ("metropolis", "Out-of-range value error: City must be one of the predefined cities."),
@@ -441,6 +467,7 @@ def test_check_out_of_range_values_error_message_for_city(valid_inputs, city_val
     assert check_out_of_range_values(inputs) == expected_error_message
 
 # Ensure check_out_of_range_values() returns expected error message for state out-of-range
+@pytest.mark.unit
 @pytest.mark.parametrize("state_value, expected_error_message", [
     ("unknown", "Out-of-range value error: State must be one of the predefined states."),
     ("India", "Out-of-range value error: State must be one of the predefined states."),
@@ -455,6 +482,7 @@ def test_check_out_of_range_values_error_message_for_state(valid_inputs, state_v
     assert check_out_of_range_values(inputs) == expected_error_message
 
 # Ensure check_out_of_range_values() returns expected error message for profession out-of-range
+@pytest.mark.unit
 @pytest.mark.parametrize("profession_value, expected_error_message", [
     ("unknown", "Out-of-range value error: Profession must be one of the predefined professions."),
     ("princess", "Out-of-range value error: Profession must be one of the predefined professions."),
@@ -468,8 +496,8 @@ def test_check_out_of_range_values_error_message_for_profession(valid_inputs, pr
     inputs["profession"] = profession_value
     assert check_out_of_range_values(inputs) == expected_error_message
 
-
 # Ensure check_out_of_range_values() returns expected error message for experience out-of-range
+@pytest.mark.unit
 @pytest.mark.parametrize("experience_value, expected_error_message", [
     (-50, "Out-of-range value error: Experience must be 0-20 years."), 
     (-1, "Out-of-range value error: Experience must be 0-20 years."), 
@@ -484,6 +512,7 @@ def test_check_out_of_range_values_error_message_for_experience(valid_inputs, ex
     assert check_out_of_range_values(inputs) == expected_error_message
 
 # Ensure check_out_of_range_values() returns expected error message for current job years out-of-range
+@pytest.mark.unit
 @pytest.mark.parametrize("current_job_yrs_value, expected_error_message", [
     (-50, "Out-of-range value error: Current Job Years must be 0-14."), 
     (-1, "Out-of-range value error: Current Job Years must be 0-14."), 
