@@ -238,7 +238,7 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         inputs["current_house_yrs"] = convert_float_to_int(inputs["current_house_yrs"])
 
         # Create input DataFrame for pipeline
-        pipeline_input_df = pd.DataFrame({key: [value] for key, value in inputs.items()})   
+        pipeline_input_df = pd.DataFrame([inputs])   
         
         # --- Pipeline prediction ---       
         # Use pipeline to predict probabilities 
@@ -246,13 +246,13 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
 
         # Create predicted probabilities dictionary (for gr.Label output)
         pred_proba_dict = {
-            "Default": pred_proba[1],  # "Default" is class 1
-            "No Default": pred_proba[0]  # "No Default" is class 0
+            "Default": pred_proba[0, 1],  # "Default" is class 1
+            "No Default": pred_proba[0, 0]  # "No Default" is class 0
         }
 
         # Apply optimized threshold to convert probabilities to binary predictions
         optimized_threshold = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
-        pred = (pred_proba[1] >= optimized_threshold).astype(int)
+        pred = (pred_proba[0, 1] >= optimized_threshold).astype(int)
 
         # Create prediction text
         prediction_label_map = {0: "No Default", 1: "Default"}
