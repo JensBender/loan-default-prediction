@@ -193,8 +193,8 @@ def _pipeline_predict_proba(input_df):
     return pipeline.predict_proba(input_df)
 
 
-# --- Function: Predict Loan Default ---
-def predict_loan_default(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
+# --- Function: Predict Loan Default for a Single User ---
+def single_predict(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
     try:
         # --- Input preprocessing (part 1) ---
         # Create inputs dictionary 
@@ -285,7 +285,7 @@ custom_css = """
 """
 
 # Create Gradio app UI using Blocks
-with gr.Blocks(css=custom_css) as app:
+with gr.Blocks(css=custom_css) as app_ui:
     # Title and description
     gr.Markdown(
         """
@@ -329,13 +329,14 @@ with gr.Blocks(css=custom_css) as app:
 
     # Predict button click event
     predict.click(
-        predict_loan_default,
+        single_predict,
         inputs=[
             age, married, income, car_ownership, house_ownership, current_house_yrs, 
             city, state, profession, experience, current_job_yrs
         ],
         outputs=[prediction_text, pred_proba]
     )
+
 
 # Launch the app
 if __name__ == "__main__":
