@@ -342,7 +342,6 @@ with gr.Blocks(css=custom_css) as app_ui:
         outputs=[prediction_text, pred_proba]
     )
 
-
 # --- Gradio Batch API ---
 batch_api = gr.Interface(
     fn=batch_predict,
@@ -357,7 +356,8 @@ batch_api = gr.Interface(
     max_batch_size=64
 )
 
+# --- Combine and Launch UI and API ---
+app = gr.TabbedInterface([app_ui, batch_api], ["Single Prediction UI", "Batch Prediction API"])
 
-# Launch the app
 if __name__ == "__main__":
     app.launch()
