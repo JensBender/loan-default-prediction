@@ -343,6 +343,21 @@ with gr.Blocks(css=custom_css) as app_ui:
     )
 
 
+# --- Gradio Batch API ---
+batch_api = gr.Interface(
+    fn=batch_predict,
+    inputs=[
+            age, married, income, car_ownership, house_ownership, current_house_yrs, 
+            city, state, profession, experience, current_job_yrs        
+    ],
+    outputs="json",
+    title="Loan Default Batch Prediction API",
+    description="Submit a batch of data via the API.",
+    batch=True,
+    max_batch_size=64
+)
+
+
 # Launch the app
 if __name__ == "__main__":
     app.launch()
