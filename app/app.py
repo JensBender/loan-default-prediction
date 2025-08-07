@@ -188,6 +188,11 @@ with open(pipeline_path, "rb") as file:
     pipeline = pickle.load(file)
 
 
+# --- Function: Predict Probabilities of Loan Default with Pipeline ---
+def _pipeline_predict_proba(input_df):
+    return pipeline.predict_proba(input_df)
+
+
 # --- Function: Predict Loan Default ---
 def predict_loan_default(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
     try:
@@ -240,9 +245,9 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         # Create input DataFrame for pipeline
         pipeline_input_df = pd.DataFrame([inputs])   
         
-        # --- Pipeline prediction ---       
+        # --- Predict loan default ---       
         # Use pipeline to predict probabilities 
-        pred_proba = pipeline.predict_proba(pipeline_input_df)
+        pred_proba = _pipeline_predict_proba(pipeline_input_df)
 
         # Create predicted probabilities dictionary (for gr.Label output)
         pred_proba_dict = {
@@ -253,10 +258,8 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
         # Apply optimized threshold to convert probabilities to binary predictions
         optimized_threshold = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
         prediction_int = (pred_proba[0, 1] >= optimized_threshold).astype(int)
-
-        # Create prediction text
-        prediction_label_map = {0: "No Default", 1: "Default"}
-        prediction_str = f"{prediction_label_map[prediction_int]}"
+        prediction_str_map = {0: "No Default", 1: "Default"}
+        prediction_str = f"{prediction_str_map[prediction_int]}"
 
         return prediction_str, pred_proba_dict
 
