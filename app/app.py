@@ -339,20 +339,29 @@ with gr.Blocks(css=custom_css) as app_ui:
 
 
 # --- Function: Batch Predict Loan Default for API ---
-def batch_predict(batch_inputs):
-        # --- Input preprocessing ---
-        pipeline_input_df = pd.DataFrame(batch_inputs)
-        
+def batch_predict(json_input):       
         # --- Input validation ---
+        # Empty input check
+
+        # Missing feature check 
+
         # Missing value check
         
         # Data type validation
 
         # Out-of-range value check
+        
+        # --- Input preprocessing ---
+        pipeline_input_df = pd.DataFrame(json_input)
 
         # --- Prediction ---       
         # Use pipeline to predict probabilities 
         pred_proba = _pipeline_predict_proba(pipeline_input_df)
+
+        # --- JSON output ---
+        json_output = []
+
+        return json_output
 
 
 # --- Gradio Batch API ---
