@@ -267,11 +267,6 @@ def single_predict(age, married, income, car_ownership, house_ownership, current
         return f"Error: {str(e)}", ""
 
 
-# --- Function: Batch Predict Loan Default for API ---
-def batch_predict(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
-    pass
-
-
 # --- Gradio App UI ---
 # Custom CSS 
 custom_css = """
@@ -342,14 +337,17 @@ with gr.Blocks(css=custom_css) as app_ui:
         outputs=[prediction_text, pred_proba]
     )
 
+
+# --- Function: Batch Predict Loan Default for API ---
+def batch_predict(batch_inputs):
+    pass
+
+
 # --- Gradio Batch API ---
 batch_api = gr.Interface(
     fn=batch_predict,
-    inputs=[
-            age, married, income, car_ownership, house_ownership, current_house_yrs, 
-            city, state, profession, experience, current_job_yrs        
-    ],
-    outputs="json",
+    inputs=gr.JSON(),
+    outputs=gr.JSON(),
     title="Loan Default Batch Prediction API",
     description="Submit a batch of data via the API.",
     batch=True,
