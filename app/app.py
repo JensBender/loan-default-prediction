@@ -340,7 +340,19 @@ with gr.Blocks(css=custom_css) as app_ui:
 
 # --- Function: Batch Predict Loan Default for API ---
 def batch_predict(batch_inputs):
-    pass
+        # --- Input preprocessing ---
+        pipeline_input_df = pd.DataFrame(batch_inputs)
+        
+        # --- Input validation ---
+        # Missing value check
+        
+        # Data type validation
+
+        # Out-of-range value check
+
+        # --- Prediction ---       
+        # Use pipeline to predict probabilities 
+        pred_proba = _pipeline_predict_proba(pipeline_input_df)
 
 
 # --- Gradio Batch API ---
@@ -348,14 +360,14 @@ batch_api = gr.Interface(
     fn=batch_predict,
     inputs=gr.JSON(),
     outputs=gr.JSON(),
-    title="Loan Default Batch Prediction API",
+    title="API for Batch Prediction",
     description="Submit a batch of data via the API.",
     batch=True,
     max_batch_size=64
 )
 
 # --- Combine and Launch UI and API ---
-app = gr.TabbedInterface([app_ui, batch_api], ["Single Prediction UI", "Batch Prediction API"])
+app = gr.TabbedInterface([app_ui, batch_api], ["UI", "API"])
 
 if __name__ == "__main__":
     app.launch()
