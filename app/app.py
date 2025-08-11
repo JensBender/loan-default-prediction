@@ -188,13 +188,8 @@ with open(pipeline_path, "rb") as file:
     pipeline = pickle.load(file)
 
 
-# --- Function: Predict Probabilities of Loan Default with Pipeline ---
-def _pipeline_predict_proba(input_df):
-    return pipeline.predict_proba(input_df)
-
-
-# --- Function: Predict Single Loan Default for App UI ---
-def single_predict(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
+# --- Function: Predict Loan Default for App UI ---
+def predict_loan_default(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
     try:
         # --- Input preprocessing (part 1) ---
         # Create inputs dictionary 
@@ -247,7 +242,7 @@ def single_predict(age, married, income, car_ownership, house_ownership, current
         
         # --- Predict loan default ---       
         # Use pipeline to predict probabilities 
-        pred_proba = _pipeline_predict_proba(pipeline_input_df)
+        pred_proba = pipeline.predict_proba(pipeline_input_df)
 
         # Create predicted probabilities dictionary (for gr.Label output)
         pred_proba_dict = {
@@ -329,7 +324,7 @@ with gr.Blocks(css=custom_css) as app_ui:
 
     # Predict button click event
     predict.click(
-        single_predict,
+        predict_loan_default,
         inputs=[
             age, married, income, car_ownership, house_ownership, current_house_yrs, 
             city, state, profession, experience, current_job_yrs
@@ -338,45 +333,6 @@ with gr.Blocks(css=custom_css) as app_ui:
     )
 
 
-# --- Function: Batch Predict Loan Default for API ---
-def batch_predict(json_input):       
-        # --- Input validation ---
-        # Empty input check
-
-        # Missing feature check 
-
-        # Missing value check
-        
-        # Data type validation
-
-        # Out-of-range value check
-        
-        # --- Input preprocessing ---
-        pipeline_input_df = pd.DataFrame(json_input)
-
-        # --- Prediction ---       
-        # Use pipeline to predict probabilities 
-        pred_proba = _pipeline_predict_proba(pipeline_input_df)
-
-        # --- JSON output ---
-        json_output = []
-
-        return json_output
-
-
-# --- Gradio Batch API ---
-batch_api = gr.Interface(
-    fn=batch_predict,
-    inputs=gr.JSON(),
-    outputs=gr.JSON(),
-    title="API for Batch Prediction",
-    description="Submit a batch of data via the API.",
-    batch=True,
-    max_batch_size=64
-)
-
-# --- Combine and Launch UI and API ---
-app = gr.TabbedInterface([app_ui, batch_api], ["UI", "API"])
-
+# --- Launch Web App UI ---
 if __name__ == "__main__":
-    app.launch()
+    app_ui.launch()
