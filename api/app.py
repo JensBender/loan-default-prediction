@@ -13,7 +13,8 @@ import uvicorn
 app = FastAPI()
 
 
-# Pydantic data model: Pipeline input dictionary
+# --- Pydantic Data Model
+# Pipeline input dictionary
 class pipeline_input_dict(BaseModel):
     age: StrictInt | StrictFloat
     married: str
@@ -26,6 +27,19 @@ class pipeline_input_dict(BaseModel):
     profession: str 
     experience: StrictInt | StrictFloat
     current_job_yrs: StrictInt | StrictFloat
+
+
+# --- API Endpoints ---
+# Single prediction
+@app.post("/predict")
+def single_predict():
+    pass
+
+
+# Batch prediction
+@app.post("/batch-predict")
+def batch_predict():
+    pass
 
 
 # Launch API
