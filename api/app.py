@@ -14,8 +14,8 @@ app = FastAPI()
 
 
 # --- Pydantic Data Model
-# Pipeline input dictionary
-class pipeline_input_dict(BaseModel):
+# Pipeline input
+class PipelineInput(BaseModel):
     age: StrictInt | StrictFloat
     married: str
     income: StrictInt | StrictFloat
@@ -32,8 +32,8 @@ class pipeline_input_dict(BaseModel):
 # --- API Endpoints ---
 # Single prediction
 @app.post("/predict")
-def single_predict():
-    pass
+def single_predict(pipeline_input: PipelineInput):
+    pipeline_input_df = pd.DataFrame([pipeline_input.model_dump])
 
 
 # Batch prediction
