@@ -1,6 +1,5 @@
 # Standard library imports
 import os
-import re
 import pickle
 
 # Third-party library imports
@@ -9,11 +8,42 @@ from fastapi import FastAPI
 from pydantic import BaseModel, StrictInt, StrictFloat
 import uvicorn
 
+# Local imports
+from app.custom_transformers import (
+    MissingValueChecker, 
+    MissingValueStandardizer, 
+    RobustSimpleImputer,
+    SnakeCaseFormatter, 
+    BooleanColumnTransformer, 
+    JobStabilityTransformer, 
+    CityTierTransformer, 
+    StateDefaultRateTargetEncoder,
+    RobustStandardScaler,
+    RobustOneHotEncoder,
+    RobustOrdinalEncoder,
+    FeatureSelector
+)
+from app.global_constants import (
+    MARRIED_LABELS,
+    CAR_OWNERSHIP_LABELS,
+    HOUSE_OWNERSHIP_LABELS,
+    PROFESSION_LABELS,
+    CITY_LABELS,
+    STATE_LABELS
+)
+
+# --- Pipeline ---
+# Load the pre-trained ML pipeline to predict loan default (including data preprocessing and Random Forest Classifier model)
+pipeline_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models", "loan_default_rf_pipeline.pkl")
+with open(pipeline_path, "rb") as file:
+    pipeline = pickle.load(file)
+
+# --- API ---
 # Create FastAPI app
 app = FastAPI()
 
 
-# --- Pydantic Data Model
+# --- Pydantic Data Model ---
 # Pipeline input
 class PipelineInput(BaseModel):
     age: StrictInt | StrictFloat
