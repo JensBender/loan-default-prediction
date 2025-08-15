@@ -47,10 +47,10 @@ app = FastAPI()
 # Pipeline input
 class PipelineInput(BaseModel):
     age: StrictInt | StrictFloat
-    married: str
+    married: str | None = None 
     income: StrictInt | StrictFloat
-    car_ownership: str
-    house_ownership: str 
+    car_ownership: str | None = None 
+    house_ownership: str | None = None 
     current_house_yrs: StrictInt | StrictFloat
     city: str 
     state: str 
