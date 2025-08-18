@@ -77,6 +77,8 @@ The final selected model, a Random Forest classifier with optimized threshold, a
 - [![Seaborn][Seaborn-badge]][Seaborn-url]
 - [![scikit-learn][scikit-learn-badge]][scikit-learn-url]
 - [![Jupyter Notebook][JupyterNotebook-badge]][JupyterNotebook-url]
+- [![FastAPI][FastAPI-badge]][FastAPI-url]
+- [![Pydantic][Pydantic-badge]][Pydantic-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -393,3 +395,7 @@ Training Data
 [scikit-learn-url]: https://scikit-learn.org/stable/
 [JupyterNotebook-badge]: https://img.shields.io/badge/Jupyter-F37626.svg?style=for-the-badge&logo=Jupyter&logoColor=white
 [JupyterNotebook-url]: https://jupyter.org/
+[FastAPI-badge]: https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white
+[FastAPI-url]: https://fastapi.tiangolo.com/
+[Pydantic-badge]: https://img.shields.io/badge/Pydantic-3776AB?style=for-the-badge&logo=pydantic&logoColor=white
+[Pydantic-url]: https://docs.pydantic.dev/
