@@ -34,10 +34,13 @@ from app.global_constants import (
 )
 
 # --- Enums ---
-# Create custom Enum classes from global constants List[str] for Pydantic data validation
+# Create custom Enum classes for string inputs from global constants (for Pydantic data validation)
 MarriedEnum = Enum("MarriedEnum", {label.upper(): label for label in MARRIED_LABELS})
 CarOwnershipEnum = Enum("CarOwnershipEnum", {label.upper(): label for label in CAR_OWNERSHIP_LABELS})
 HouseOwnershipEnum = Enum("HouseOwnershipEnum", {label.upper(): label for label in HOUSE_OWNERSHIP_LABELS})
+ProfessionEnum = Enum("ProfessionEnum", {label.upper(): label for label in PROFESSION_LABELS})
+CityEnum = Enum("CityEnum", {label.upper(): label for label in CITY_LABELS})
+StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS})
 
 # --- Pipeline ---
 # Load the pre-trained ML pipeline to predict loan default (including data preprocessing and Random Forest Classifier model)
