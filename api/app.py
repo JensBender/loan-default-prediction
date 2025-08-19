@@ -1,6 +1,7 @@
 # Standard library imports
 import os
 import pickle
+from enum import Enum
 
 # Third-party library imports
 import pandas as pd
@@ -31,6 +32,12 @@ from app.global_constants import (
     CITY_LABELS,
     STATE_LABELS
 )
+
+# --- Enums ---
+# Create custom Enum classes from global constants List[str] for Pydantic data validation
+MarriedEnum = Enum("MarriedEnum", {label.upper(): label for label in MARRIED_LABELS})
+CarOwnershipEnum = Enum("CarOwnershipEnum", {label.upper(): label for label in CAR_OWNERSHIP_LABELS})
+HouseOwnershipEnum = Enum("HouseOwnershipEnum", {label.upper(): label for label in HOUSE_OWNERSHIP_LABELS})
 
 # --- Pipeline ---
 # Load the pre-trained ML pipeline to predict loan default (including data preprocessing and Random Forest Classifier model)
