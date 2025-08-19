@@ -35,12 +35,12 @@ from app.global_constants import (
 
 # --- Enums ---
 # Create custom Enum classes for string inputs from global constants (for Pydantic data validation)
-MarriedEnum = Enum("MarriedEnum", {label.upper(): label for label in MARRIED_LABELS})
-CarOwnershipEnum = Enum("CarOwnershipEnum", {label.upper(): label for label in CAR_OWNERSHIP_LABELS})
-HouseOwnershipEnum = Enum("HouseOwnershipEnum", {label.upper(): label for label in HOUSE_OWNERSHIP_LABELS})
-ProfessionEnum = Enum("ProfessionEnum", {label.upper(): label for label in PROFESSION_LABELS})
-CityEnum = Enum("CityEnum", {label.upper(): label for label in CITY_LABELS})
-StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS})
+MarriedEnum = Enum("MarriedEnum", {label.upper(): label for label in MARRIED_LABELS}, type=str)
+CarOwnershipEnum = Enum("CarOwnershipEnum", {label.upper(): label for label in CAR_OWNERSHIP_LABELS}, type=str)
+HouseOwnershipEnum = Enum("HouseOwnershipEnum", {label.upper(): label for label in HOUSE_OWNERSHIP_LABELS}, type=str)
+ProfessionEnum = Enum("ProfessionEnum", {label.upper(): label for label in PROFESSION_LABELS}, type=str)
+CityEnum = Enum("CityEnum", {label.upper(): label for label in CITY_LABELS}, type=str)
+StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS}, type=str)
 
 # --- Pipeline ---
 # Load the pre-trained ML pipeline to predict loan default (including data preprocessing and Random Forest Classifier model)
@@ -57,14 +57,14 @@ app = FastAPI()
 # Pipeline input
 class PipelineInput(BaseModel):
     age: StrictInt | StrictFloat
-    married: str | None = None 
+    married: MarriedEnum | None = None 
     income: StrictInt | StrictFloat
-    car_ownership: str | None = None 
-    house_ownership: str | None = None 
+    car_ownership: CarOwnershipEnum | None = None 
+    house_ownership: HouseOwnershipEnum | None = None 
     current_house_yrs: StrictInt | StrictFloat
-    city: str 
-    state: str 
-    profession: str 
+    city: CityEnum 
+    state: StateEnum 
+    profession: ProfessionEnum  
     experience: StrictInt | StrictFloat
     current_job_yrs: StrictInt | StrictFloat
 
