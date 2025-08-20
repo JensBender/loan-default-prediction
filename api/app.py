@@ -6,7 +6,7 @@ from typing import List
 
 # Third-party library imports
 from fastapi import FastAPI
-from pydantic import BaseModel, StrictInt, StrictFloat, field_validator 
+from pydantic import BaseModel, Field, StrictInt, StrictFloat, field_validator 
 import pandas as pd
 import uvicorn
 
@@ -47,7 +47,7 @@ StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS})
 # --- Pydantic Data Model ---
 # Pipeline input
 class PipelineInput(BaseModel):
-    age: StrictInt | StrictFloat
+    age: StrictInt | StrictFloat = Field(..., ge=21, le=79)
     married: MarriedEnum | None = None 
     income: StrictInt | StrictFloat
     car_ownership: CarOwnershipEnum | None = None 
