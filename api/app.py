@@ -4,9 +4,9 @@ import pickle
 from enum import Enum
 
 # Third-party library imports
-import pandas as pd
 from fastapi import FastAPI
-from pydantic import BaseModel, StrictInt, StrictFloat
+from pydantic import BaseModel, StrictInt, StrictFloat, field_validator
+import pandas as pd
 import uvicorn
 
 # Local imports
@@ -35,22 +35,12 @@ from app.global_constants import (
 
 # --- Enums ---
 # Create custom Enum classes for string inputs from global constants (for Pydantic data validation)
-MarriedEnum = Enum("MarriedEnum", {label.upper(): label for label in MARRIED_LABELS}, type=str)
-CarOwnershipEnum = Enum("CarOwnershipEnum", {label.upper(): label for label in CAR_OWNERSHIP_LABELS}, type=str)
-HouseOwnershipEnum = Enum("HouseOwnershipEnum", {label.upper(): label for label in HOUSE_OWNERSHIP_LABELS}, type=str)
-ProfessionEnum = Enum("ProfessionEnum", {label.upper(): label for label in PROFESSION_LABELS}, type=str)
-CityEnum = Enum("CityEnum", {label.upper(): label for label in CITY_LABELS}, type=str)
-StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS}, type=str)
-
-# --- Pipeline ---
-# Load the pre-trained ML pipeline to predict loan default (including data preprocessing and Random Forest Classifier model)
-pipeline_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models", "loan_default_rf_pipeline.pkl")
-with open(pipeline_path, "rb") as file:
-    pipeline = pickle.load(file)
-
-# --- API ---
-# Create FastAPI app
-app = FastAPI()
+MarriedEnum = Enum("MarriedEnum", {label.upper(): label for label in MARRIED_LABELS})
+CarOwnershipEnum = Enum("CarOwnershipEnum", {label.upper(): label for label in CAR_OWNERSHIP_LABELS})
+HouseOwnershipEnum = Enum("HouseOwnershipEnum", {label.upper(): label for label in HOUSE_OWNERSHIP_LABELS})
+ProfessionEnum = Enum("ProfessionEnum", {label.upper(): label for label in PROFESSION_LABELS})
+CityEnum = Enum("CityEnum", {label.upper(): label for label in CITY_LABELS})
+StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS})
 
 
 # --- Pydantic Data Model ---
@@ -68,15 +58,31 @@ class PipelineInput(BaseModel):
     experience: StrictInt | StrictFloat
     current_job_yrs: StrictInt | StrictFloat
 
+    @field_validator("age")
+    def convert_float_to_int(age):
+        if isinstance(age, float):
+            return int(round(age))
+        return age
 
-# --- API Endpoints ---
-# Single prediction
+
+# --- Pipeline ---
+# Load the pre-trained ML pipeline to predict loan default (including data preprocessing and Random Forest Classifier model)
+pipeline_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models", "loan_default_rf_pipeline.pkl")
+with open(pipeline_path, "rb") as file:
+    pipeline = pickle.load(file)
+
+# --- API ---
+# Create FastAPI app
+app = FastAPI()
+
+
+# Endpoint for single prediction
 @app.post("/predict")
 def single_predict(pipeline_input: PipelineInput):
     pipeline_input_df = pd.DataFrame([pipeline_input.model_dump])
 
 
-# Batch prediction
+# Endpoint for batch prediction
 @app.post("/batch-predict")
 def batch_predict():
     pass
