@@ -58,11 +58,11 @@ class PipelineInput(BaseModel):
     experience: StrictInt | StrictFloat
     current_job_yrs: StrictInt | StrictFloat
 
-    @field_validator("age")
-    def convert_float_to_int(age):
-        if isinstance(age, float):
-            return int(round(age))
-        return age
+    @field_validator("age", "income", "current_house_yrs", "experience", "current_job_yrs")
+    def convert_float_to_int(cls, value):
+        if isinstance(value, float):
+            return int(round(value))
+        return value
 
 
 # --- Pipeline ---
