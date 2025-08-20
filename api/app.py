@@ -2,6 +2,7 @@
 import os
 import pickle
 from enum import Enum
+from typing import List
 
 # Third-party library imports
 from fastapi import FastAPI
@@ -76,16 +77,20 @@ with open(pipeline_path, "rb") as file:
 app = FastAPI()
 
 
-# Endpoint for single prediction
+# Single prediction endpoint 
 @app.post("/predict")
 def single_predict(pipeline_input: PipelineInput):
-    pipeline_input_df = pd.DataFrame([pipeline_input.model_dump])
+    pipeline_input_dict = pipeline_input.model_dump()
+    # pipeline_input_df = pd.DataFrame([pipeline_input_dict])
+    return pipeline_input_dict
 
 
-# Endpoint for batch prediction
+# Batch prediction endpoint
 @app.post("/batch-predict")
-def batch_predict():
-    pass
+def batch_predict(pipeline_inputs: List[PipelineInput]):
+    pipeline_input_dict_ls = [input.model_dump() for input in pipeline_inputs]
+    # pipeline_input_df = pd.DataFrame(pipeline_input_dict_ls)
+    return pipeline_input_dict_ls
 
 
 # Launch API
