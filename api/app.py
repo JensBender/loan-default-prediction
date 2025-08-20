@@ -5,7 +5,7 @@ from enum import Enum
 
 # Third-party library imports
 from fastapi import FastAPI
-from pydantic import BaseModel, StrictInt, StrictFloat, field_validator
+from pydantic import BaseModel, StrictInt, StrictFloat, field_transformer 
 import pandas as pd
 import uvicorn
 
@@ -58,7 +58,7 @@ class PipelineInput(BaseModel):
     experience: StrictInt | StrictFloat
     current_job_yrs: StrictInt | StrictFloat
 
-    @field_validator("age", "income", "current_house_yrs", "experience", "current_job_yrs")
+    @field_transformer(fields={"age", "income", "current_house_yrs", "experience", "current_job_yrs"})
     def convert_float_to_int(cls, value):
         if isinstance(value, float):
             return int(round(value))
