@@ -49,10 +49,10 @@ StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS})
 class PredictionEnum(Enum):
     DEFAULT = "Default"
     NO_DEFAULT = "No Default"
-
+    
 
 # --- Pydantic Data Models ---
-# Pipeline input
+# Pipeline input model
 class PipelineInput(BaseModel):
     age: StrictInt | StrictFloat = Field(..., ge=21, le=79)
     married: MarriedEnum | None = None 
@@ -73,10 +73,16 @@ class PipelineInput(BaseModel):
         return value
 
 
-# Prediction result
+# Predicted probabilities model
+class PredictedProbabilities(BaseModel):
+    default: float 
+    no_default: float 
+
+
+# Prediction result model
 class PredictionResult(BaseModel):
     prediction: PredictionEnum 
-    probabilities: Dict[str, float] 
+    probabilities: PredictedProbabilities
 
 
 # --- Pipeline ---
@@ -111,10 +117,10 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]):  # JSON object
     results = []
     for prediction, predicted_probability in zip(predictions, predicted_probabilities):
         prediction_enum = PredictionEnum("Default" if prediction else "No Default")
-        probabilities = {
-            "Default": predicted_probability[1],  # class 1 is "Default"
-            "No Default": predicted_probability[0]  # class 0 is "No Default"
-        }
+        probabilities = PredictedProbabilities(
+            default=predicted_probability[1],  # class 1 is "Default"
+            no_default=predicted_probability[0]  # class 0 is "No Default"
+        )
         prediction_result = PredictionResult(prediction=prediction_enum, probabilities=probabilities)
         results.append(prediction_result)
 
