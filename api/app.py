@@ -7,7 +7,7 @@ from typing import List, Annotated
 
 # Third-party library imports
 from fastapi import FastAPI
-from pydantic import BaseModel, Field, StrictInt, StrictFloat, field_validator 
+from pydantic import BaseModel, Field, field_validator 
 import pandas as pd
 import uvicorn
 
@@ -38,6 +38,10 @@ from app.global_constants import (
 # --- Constants ---
 # Variable constraints for Pydantic data models
 AGE_CONSTRAINTS = Field(strict=True, ge=21, le=79)
+INCOME_CONSTRAINTS = Field(strict=True, ge=0)
+CURRENT_HOUSE_YRS_CONSTRAINTS = Field(strict=True, ge=10, le=14)
+EXPERIENCE_CONSTRAINTS = Field(strict=True, ge=0, le=20)
+CURRENT_JOB_YRS_CONSTRAINTS = Field(strict=True, ge=0, le=14)
 
 # --- Enums ---
 # Create custom Enum classes for string inputs from global constants (for Pydantic data validation)
@@ -53,24 +57,30 @@ StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS})
 class PredictionEnum(str, Enum):
     DEFAULT = "Default"
     NO_DEFAULT = "No Default"
+  
     
 # --- Pydantic Data Models ---
 # Custom data types for validation (that annotate existing types with custom constraints and combine them)
 Age = Annotated[int, AGE_CONSTRAINTS] | Annotated[float, AGE_CONSTRAINTS]
+Income = Annotated[int, INCOME_CONSTRAINTS] | Annotated[float, INCOME_CONSTRAINTS]
+CurrentHouseYrs = Annotated[int, CURRENT_HOUSE_YRS_CONSTRAINTS] | Annotated[float, CURRENT_HOUSE_YRS_CONSTRAINTS]
+Experience = Annotated[int, EXPERIENCE_CONSTRAINTS] | Annotated[float, EXPERIENCE_CONSTRAINTS]
+CurrentJobYrs =  Annotated[int, CURRENT_JOB_YRS_CONSTRAINTS] | Annotated[float, CURRENT_JOB_YRS_CONSTRAINTS]
+
 
 # Pipeline input model
 class PipelineInput(BaseModel):
     age: Age
     married: MarriedEnum | None = None 
-    income: StrictInt | StrictFloat = Field(..., ge=0)
+    income: Income
     car_ownership: CarOwnershipEnum | None = None 
     house_ownership: HouseOwnershipEnum | None = None 
-    current_house_yrs: StrictInt | StrictFloat = Field(..., ge=10, le=14)
+    current_house_yrs: CurrentHouseYrs
     city: CityEnum 
     state: StateEnum 
     profession: ProfessionEnum  
-    experience: StrictInt | StrictFloat = Field(..., ge=0, le=20)
-    current_job_yrs: StrictInt | StrictFloat = Field(..., ge=0, le=14)
+    experience: Experience
+    current_job_yrs: CurrentJobYrs
 
     @field_validator("age", "income", "current_house_yrs", "experience", "current_job_yrs")
     def convert_float_to_int(cls, value):
