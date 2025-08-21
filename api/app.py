@@ -130,10 +130,10 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]):  # JSON object
         prediction_result = PredictionResult(prediction=prediction_enum, probabilities=probabilities)
         results.append(prediction_result)
 
-    return {
-        "n_predictions": len(results),
-        "results": results
-    }
+    return PredictionResponse(
+        n_predictions=len(results),
+        results=results
+    )
 
 
 # Launch API
