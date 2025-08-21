@@ -45,6 +45,12 @@ CityEnum = Enum("CityEnum", {label.upper(): label for label in CITY_LABELS})
 StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS})
 
 
+# Enum for possible prediction strings
+class PredictionEnum(Enum):
+    DEFAULT = "Default"
+    NO_DEFAULT = "No Default"
+
+
 # --- Pydantic Data Models ---
 # Pipeline input
 class PipelineInput(BaseModel):
@@ -69,7 +75,7 @@ class PipelineInput(BaseModel):
 
 # Prediction result
 class PredictionResult(BaseModel):
-    prediction: str 
+    prediction: PredictionEnum 
     probabilities: Dict[str, float] 
 
 
@@ -104,12 +110,12 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]):  # JSON object
     # Create API response 
     results = []
     for prediction, predicted_probability in zip(predictions, predicted_probabilities):
-        prediction_str = "Default" if prediction else "No Default"
+        prediction_enum = PredictionEnum("Default" if prediction else "No Default")
         probabilities = {
             "Default": predicted_probability[1],  # class 1 is "Default"
             "No Default": predicted_probability[0]  # class 0 is "No Default"
         }
-        prediction_result = PredictionResult(prediction=prediction_str, probabilities=probabilities)
+        prediction_result = PredictionResult(prediction=prediction_enum, probabilities=probabilities)
         results.append(prediction_result)
 
     return {
