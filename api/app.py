@@ -1,3 +1,4 @@
+# --- Imports ---
 # Standard library imports
 import os
 import pickle
@@ -77,18 +78,14 @@ with open(pipeline_path, "rb") as file:
 app = FastAPI()
 
 
-# Single prediction endpoint 
+# Prediction endpoint 
 @app.post("/predict")
-def single_predict(pipeline_input: PipelineInput):
-    pipeline_input_dict = pipeline_input.model_dump()
-    # pipeline_input_df = pd.DataFrame([pipeline_input_dict])
-    return pipeline_input_dict
-
-
-# Batch prediction endpoint
-@app.post("/batch-predict")
-def batch_predict(pipeline_inputs: List[PipelineInput]):
-    pipeline_input_dict_ls = [input.model_dump() for input in pipeline_inputs]
+def predict(pipeline_input: PipelineInput | List[PipelineInput]):
+    # Standardize input (JSON object or JSON array) to list of dictionaries
+    if isinstance(pipeline_input, list):
+        pipeline_input_dict_ls = [input.model_dump() for input in pipeline_input]
+    else:  # isinstance(pipeline_input, PipelineInput)
+        pipeline_input_dict_ls = [pipeline_input.model_dump()]
     # pipeline_input_df = pd.DataFrame(pipeline_input_dict_ls)
     return pipeline_input_dict_ls
 
