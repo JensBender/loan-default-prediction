@@ -35,6 +35,10 @@ from app.global_constants import (
     STATE_LABELS
 )
 
+# --- Constants ---
+# Variable constraints for Pydantic data models
+AGE_CONSTRAINTS = Field(strict=True, ge=21, le=79)
+
 # --- Enums ---
 # Create custom Enum classes for string inputs from global constants (for Pydantic data validation)
 MarriedEnum = Enum("MarriedEnum", {label.upper(): label for label in MARRIED_LABELS})
@@ -51,9 +55,12 @@ class PredictionEnum(str, Enum):
     NO_DEFAULT = "No Default"
     
 # --- Pydantic Data Models ---
+# Custom data types for validation (that annotate existing types with custom constraints and combine them)
+Age = Annotated[int, AGE_CONSTRAINTS] | Annotated[float, AGE_CONSTRAINTS]
+
 # Pipeline input model
 class PipelineInput(BaseModel):
-    age: StrictInt | StrictFloat = Field(..., ge=21, le=79)
+    age: Age
     married: MarriedEnum | None = None 
     income: StrictInt | StrictFloat = Field(..., ge=0)
     car_ownership: CarOwnershipEnum | None = None 
