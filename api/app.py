@@ -85,6 +85,12 @@ class PredictionResult(BaseModel):
     probabilities: PredictedProbabilities
 
 
+# Prediction response model
+class PredictionResponse(BaseModel):
+    n_predictions: int 
+    results: List[PredictionResult]
+
+
 # --- Pipeline ---
 # Load the pre-trained ML pipeline to predict loan default (including data preprocessing and Random Forest Classifier model)
 pipeline_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models", "loan_default_rf_pipeline.pkl")
@@ -97,7 +103,7 @@ app = FastAPI()
 
 
 # Prediction endpoint 
-@app.post("/predict")
+@app.post("/predict", response_model=PredictionResponse)
 def predict(pipeline_input: PipelineInput | List[PipelineInput]):  # JSON object -> PipelineInput | JSON array -> List[PipelineInput]
     # Standardize input to list of dictionaries
     if isinstance(pipeline_input, list):
