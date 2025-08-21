@@ -80,14 +80,33 @@ app = FastAPI()
 
 # Prediction endpoint 
 @app.post("/predict")
-def predict(pipeline_input: PipelineInput | List[PipelineInput]):
-    # Standardize input (JSON object or JSON array) to list of dictionaries
+def predict(pipeline_input: PipelineInput | List[PipelineInput]):  # JSON object -> PipelineInput | JSON array -> List[PipelineInput]
+    # Standardize input to list of dictionaries
     if isinstance(pipeline_input, list):
         pipeline_input_dict_ls = [input.model_dump() for input in pipeline_input]
     else:  # isinstance(pipeline_input, PipelineInput)
         pipeline_input_dict_ls = [pipeline_input.model_dump()]
-    # pipeline_input_df = pd.DataFrame(pipeline_input_dict_ls)
-    return pipeline_input_dict_ls
+        
+    # Use pipeline to predict probabilities 
+    pipeline_input_df = pd.DataFrame(pipeline_input_dict_ls)
+    pred_proba_np = pipeline.predict_proba(pipeline_input_df)
+    pred_proba_ls = pred_proba_np.tolist()
+
+    # Create API response 
+    results = []
+    for pred_proba in pred_proba_ls:
+        results.append({
+            "prediction": "placeholder",
+            "probabilities": {
+                "Default": pred_proba[1],  # "Default" is class 1
+                "No Default": pred_proba[0]  # "No Default" is class 0
+            }
+        })
+
+    return {
+        "n_predictions": len(results),
+        "results": results
+    }
 
 
 # Launch API
