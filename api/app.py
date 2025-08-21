@@ -3,7 +3,7 @@
 import os
 import pickle
 from enum import Enum
-from typing import List
+from typing import List, Annotated
 
 # Third-party library imports
 from fastapi import FastAPI
@@ -50,21 +50,20 @@ class PredictionEnum(str, Enum):
     DEFAULT = "Default"
     NO_DEFAULT = "No Default"
     
-
 # --- Pydantic Data Models ---
 # Pipeline input model
 class PipelineInput(BaseModel):
     age: StrictInt | StrictFloat = Field(..., ge=21, le=79)
     married: MarriedEnum | None = None 
-    income: StrictInt | StrictFloat
+    income: StrictInt | StrictFloat = Field(..., ge=0)
     car_ownership: CarOwnershipEnum | None = None 
     house_ownership: HouseOwnershipEnum | None = None 
-    current_house_yrs: StrictInt | StrictFloat
+    current_house_yrs: StrictInt | StrictFloat = Field(..., ge=10, le=14)
     city: CityEnum 
     state: StateEnum 
     profession: ProfessionEnum  
-    experience: StrictInt | StrictFloat
-    current_job_yrs: StrictInt | StrictFloat
+    experience: StrictInt | StrictFloat = Field(..., ge=0, le=20)
+    current_job_yrs: StrictInt | StrictFloat = Field(..., ge=0, le=14)
 
     @field_validator("age", "income", "current_house_yrs", "experience", "current_job_yrs")
     def convert_float_to_int(cls, value):
