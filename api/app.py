@@ -3,7 +3,7 @@
 import os
 import pickle
 from enum import Enum
-from typing import List
+from typing import List, Dict
 
 # Third-party library imports
 from fastapi import FastAPI
@@ -45,7 +45,7 @@ CityEnum = Enum("CityEnum", {label.upper(): label for label in CITY_LABELS})
 StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS})
 
 
-# --- Pydantic Data Model ---
+# --- Pydantic Data Models ---
 # Pipeline input
 class PipelineInput(BaseModel):
     age: StrictInt | StrictFloat = Field(..., ge=21, le=79)
@@ -65,6 +65,12 @@ class PipelineInput(BaseModel):
         if isinstance(value, float):
             return int(round(value))
         return value
+
+
+# Prediction result
+class PredictionResult(BaseModel):
+    prediction: str 
+    probabilities: Dict[str, float] 
 
 
 # --- Pipeline ---
@@ -98,13 +104,13 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]):  # JSON object
     # Create API response 
     results = []
     for prediction, predicted_probability in zip(predictions, predicted_probabilities):
-        results.append({
-            "prediction": "Default" if prediction else "No Default",
-            "probabilities": {
-                "Default": predicted_probability[1],  # Class 1 is "Default"
-                "No Default": predicted_probability[0]  # Class 0 is "No Default"
-            }
-        })
+        prediction_str = "Default" if prediction else "No Default"
+        probabilities = {
+            "Default": predicted_probability[1],  # class 1 is "Default"
+            "No Default": predicted_probability[0]  # class 0 is "No Default"
+        }
+        prediction_result = PredictionResult(prediction=prediction_str, probabilities=probabilities)
+        results.append(prediction_result)
 
     return {
         "n_predictions": len(results),
