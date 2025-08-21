@@ -46,7 +46,7 @@ StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS})
 
 
 # Enum for possible prediction strings
-class PredictionEnum(Enum):
+class PredictionEnum(str, Enum):
     DEFAULT = "Default"
     NO_DEFAULT = "No Default"
     
@@ -122,7 +122,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]):  # JSON object
     # Create API response 
     results = []
     for prediction, predicted_probability in zip(predictions, predicted_probabilities):
-        prediction_enum = PredictionEnum("Default" if prediction else "No Default")
+        prediction_enum = PredictionEnum.DEFAULT if prediction else PredictionEnum.NO_DEFAULT 
         probabilities = PredictedProbabilities(
             default=predicted_probability[1],  # class 1 is "Default"
             no_default=predicted_probability[0]  # class 0 is "No Default"
