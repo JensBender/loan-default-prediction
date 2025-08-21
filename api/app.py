@@ -89,21 +89,20 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]):  # JSON object
         
     # Use pipeline to predict probabilities 
     pipeline_input_df = pd.DataFrame(pipeline_input_dict_ls)
-    pred_proba_np = pipeline.predict_proba(pipeline_input_df)
-    pred_proba_ls = pred_proba_np.tolist()
+    predicted_probabilities = pipeline.predict_proba(pipeline_input_df)
 
     # Apply optimized threshold to convert probabilities to binary predictions
     optimized_threshold = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
-    predictions = (pred_proba_np[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
+    predictions = (predicted_probabilities[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
 
     # Create API response 
     results = []
-    for prediction, pred_proba in zip(predictions, pred_proba_ls):
+    for prediction, predicted_probability in zip(predictions, predicted_probabilities):
         results.append({
             "prediction": "Default" if prediction else "No Default",
             "probabilities": {
-                "Default": pred_proba[1],  # "Default" is class 1
-                "No Default": pred_proba[0]  # "No Default" is class 0
+                "Default": predicted_probability[1],  # Class 1 is "Default"
+                "No Default": predicted_probability[0]  # Class 0 is "No Default"
             }
         })
 
