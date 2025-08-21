@@ -3,7 +3,7 @@
 import os
 import pickle
 from enum import Enum
-from typing import List, Dict
+from typing import List
 
 # Third-party library imports
 from fastapi import FastAPI
@@ -123,11 +123,10 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]):  # JSON object
     results = []
     for prediction, predicted_probability in zip(predictions, predicted_probabilities):
         prediction_enum = PredictionEnum.DEFAULT if prediction else PredictionEnum.NO_DEFAULT 
-        probabilities = PredictedProbabilities(
-            default=predicted_probability[1],  # class 1 is "Default"
-            no_default=predicted_probability[0]  # class 0 is "No Default"
-        )
-        prediction_result = PredictionResult(prediction=prediction_enum, probabilities=probabilities)
+        prob_class_1 = round(predicted_probability[1], 3)
+        prob_class_0 = round(predicted_probability[0], 3)
+        probs = PredictedProbabilities(default=prob_class_1, no_default=prob_class_0)
+        prediction_result = PredictionResult(prediction=prediction_enum, probabilities=probs)
         results.append(prediction_result)
 
     return PredictionResponse(
