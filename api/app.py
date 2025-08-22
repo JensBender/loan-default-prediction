@@ -45,12 +45,12 @@ CURRENT_HOUSE_YRS_CONSTRAINTS = Field(strict=True, ge=10, le=14)
 
 # --- Enums ---
 # Custom Enum classes for string inputs based on global constants (for Pydantic data model)
-MarriedEnum = Enum("MarriedEnum", {label.upper(): label for label in MARRIED_LABELS})
-HouseOwnershipEnum = Enum("HouseOwnershipEnum", {label.upper(): label for label in HOUSE_OWNERSHIP_LABELS})
-CarOwnershipEnum = Enum("CarOwnershipEnum", {label.upper(): label for label in CAR_OWNERSHIP_LABELS})
-ProfessionEnum = Enum("ProfessionEnum", {label.upper(): label for label in PROFESSION_LABELS})
-CityEnum = Enum("CityEnum", {label.upper(): label for label in CITY_LABELS})
-StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS})
+MarriedEnum = Enum("MarriedEnum", {label.upper(): label for label in MARRIED_LABELS}, type=str)
+HouseOwnershipEnum = Enum("HouseOwnershipEnum", {label.upper(): label for label in HOUSE_OWNERSHIP_LABELS}, type=str)
+CarOwnershipEnum = Enum("CarOwnershipEnum", {label.upper(): label for label in CAR_OWNERSHIP_LABELS}, type=str)
+ProfessionEnum = Enum("ProfessionEnum", {label.upper(): label for label in PROFESSION_LABELS}, type=str)
+CityEnum = Enum("CityEnum", {label.upper(): label for label in CITY_LABELS}, type=str)
+StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS}, type=str)
 
 
 # Enum for possible prediction strings
