@@ -36,7 +36,7 @@ from app.global_constants import (
 )
 
 # --- Constants ---
-# Variable constraints for Pydantic data models
+# Input constraints (for Pydantic data model)
 AGE_CONSTRAINTS = Field(strict=True, ge=21, le=79)
 INCOME_CONSTRAINTS = Field(strict=True, ge=0)
 CURRENT_HOUSE_YRS_CONSTRAINTS = Field(strict=True, ge=10, le=14)
@@ -44,7 +44,7 @@ EXPERIENCE_CONSTRAINTS = Field(strict=True, ge=0, le=20)
 CURRENT_JOB_YRS_CONSTRAINTS = Field(strict=True, ge=0, le=14)
 
 # --- Enums ---
-# Create custom Enum classes for string inputs from global constants (for Pydantic data validation)
+# Custom Enum classes for string inputs based on global constants (for Pydantic data model)
 MarriedEnum = Enum("MarriedEnum", {label.upper(): label for label in MARRIED_LABELS})
 CarOwnershipEnum = Enum("CarOwnershipEnum", {label.upper(): label for label in CAR_OWNERSHIP_LABELS})
 HouseOwnershipEnum = Enum("HouseOwnershipEnum", {label.upper(): label for label in HOUSE_OWNERSHIP_LABELS})
@@ -60,7 +60,7 @@ class PredictionEnum(str, Enum):
   
     
 # --- Pydantic Data Models ---
-# Custom data types for validation (that annotate existing types with custom constraints and combine them)
+# Custom data types for validation (that annotate and combine existing types with custom constraints)
 Age = Annotated[int, AGE_CONSTRAINTS] | Annotated[float, AGE_CONSTRAINTS]
 Income = Annotated[int, INCOME_CONSTRAINTS] | Annotated[float, INCOME_CONSTRAINTS]
 CurrentHouseYrs = Annotated[int, CURRENT_HOUSE_YRS_CONSTRAINTS] | Annotated[float, CURRENT_HOUSE_YRS_CONSTRAINTS]
@@ -121,7 +121,7 @@ app = FastAPI()
 # Prediction endpoint 
 @app.post("/predict", response_model=PredictionResponse)
 def predict(pipeline_input: PipelineInput | List[PipelineInput]):  # JSON object -> PipelineInput | JSON array -> List[PipelineInput]
-    # Standardize input to list of dictionaries
+    # Standardize input to List[dict]
     if isinstance(pipeline_input, list):
         pipeline_input_dict_ls = [input.model_dump() for input in pipeline_input]
     else:  # isinstance(pipeline_input, PipelineInput)
@@ -129,20 +129,20 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]):  # JSON object
         
     # Use pipeline to predict probabilities 
     pipeline_input_df = pd.DataFrame(pipeline_input_dict_ls)
-    predicted_probabilities = pipeline.predict_proba(pipeline_input_df)
+    pred_proba_np = pipeline.predict_proba(pipeline_input_df)
 
     # Apply optimized threshold to convert probabilities to binary predictions
     optimized_threshold = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
-    predictions = (predicted_probabilities[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
+    pred_np = (pred_proba_np[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
 
     # Create API response 
     results = []
-    for prediction, predicted_probability in zip(predictions, predicted_probabilities):
-        prediction_enum = PredictionEnum.DEFAULT if prediction else PredictionEnum.NO_DEFAULT 
-        prob_class_1 = round(predicted_probability[1], 3)
-        prob_class_0 = round(predicted_probability[0], 3)
-        probs = PredictedProbabilities(default=prob_class_1, no_default=prob_class_0)
-        prediction_result = PredictionResult(prediction=prediction_enum, probabilities=probs)
+    for pred, pred_proba in zip(pred_np, pred_proba_np):  
+        prediction_enum = PredictionEnum.DEFAULT if pred else PredictionEnum.NO_DEFAULT 
+        prob_class_1 = round(pred_proba[1], 3)
+        prob_class_0 = round(pred_proba[0], 3)
+        predicted_probabilities = PredictedProbabilities(default=prob_class_1, no_default=prob_class_0)
+        prediction_result = PredictionResult(prediction=prediction_enum, probabilities=predicted_probabilities)
         results.append(prediction_result)
 
     return PredictionResponse(
