@@ -91,8 +91,8 @@ class PipelineInput(BaseModel):
 
 # Predicted probabilities model
 class PredictedProbabilities(BaseModel):
-    default: float = Field(..., alias="Default")
-    no_default: float = Field(..., alias="No Default")
+    default: float = Field(..., serialization_alias="Default")
+    no_default: float = Field(..., serialization_alias="No Default")
 
 
 # Prediction result model
