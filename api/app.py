@@ -28,8 +28,8 @@ from app.custom_transformers import (
 )
 from app.global_constants import (
     MARRIED_LABELS,
-    CAR_OWNERSHIP_LABELS,
     HOUSE_OWNERSHIP_LABELS,
+    CAR_OWNERSHIP_LABELS,
     PROFESSION_LABELS,
     CITY_LABELS,
     STATE_LABELS
@@ -37,17 +37,17 @@ from app.global_constants import (
 
 # --- Constants ---
 # Input constraints (for Pydantic data model)
-AGE_CONSTRAINTS = Field(strict=True, ge=21, le=79)
 INCOME_CONSTRAINTS = Field(strict=True, ge=0)
-CURRENT_HOUSE_YRS_CONSTRAINTS = Field(strict=True, ge=10, le=14)
+AGE_CONSTRAINTS = Field(strict=True, ge=21, le=79)
 EXPERIENCE_CONSTRAINTS = Field(strict=True, ge=0, le=20)
 CURRENT_JOB_YRS_CONSTRAINTS = Field(strict=True, ge=0, le=14)
+CURRENT_HOUSE_YRS_CONSTRAINTS = Field(strict=True, ge=10, le=14)
 
 # --- Enums ---
 # Custom Enum classes for string inputs based on global constants (for Pydantic data model)
 MarriedEnum = Enum("MarriedEnum", {label.upper(): label for label in MARRIED_LABELS})
-CarOwnershipEnum = Enum("CarOwnershipEnum", {label.upper(): label for label in CAR_OWNERSHIP_LABELS})
 HouseOwnershipEnum = Enum("HouseOwnershipEnum", {label.upper(): label for label in HOUSE_OWNERSHIP_LABELS})
+CarOwnershipEnum = Enum("CarOwnershipEnum", {label.upper(): label for label in CAR_OWNERSHIP_LABELS})
 ProfessionEnum = Enum("ProfessionEnum", {label.upper(): label for label in PROFESSION_LABELS})
 CityEnum = Enum("CityEnum", {label.upper(): label for label in CITY_LABELS})
 StateEnum = Enum("StateEnum", {label.upper(): label for label in STATE_LABELS})
@@ -61,28 +61,28 @@ class PredictionEnum(str, Enum):
     
 # --- Pydantic Data Models ---
 # Custom data types for validation (that annotate and combine existing types with custom constraints)
-Age = Annotated[int, AGE_CONSTRAINTS] | Annotated[float, AGE_CONSTRAINTS]
 Income = Annotated[int, INCOME_CONSTRAINTS] | Annotated[float, INCOME_CONSTRAINTS]
-CurrentHouseYrs = Annotated[int, CURRENT_HOUSE_YRS_CONSTRAINTS] | Annotated[float, CURRENT_HOUSE_YRS_CONSTRAINTS]
+Age = Annotated[int, AGE_CONSTRAINTS] | Annotated[float, AGE_CONSTRAINTS]
 Experience = Annotated[int, EXPERIENCE_CONSTRAINTS] | Annotated[float, EXPERIENCE_CONSTRAINTS]
 CurrentJobYrs =  Annotated[int, CURRENT_JOB_YRS_CONSTRAINTS] | Annotated[float, CURRENT_JOB_YRS_CONSTRAINTS]
+CurrentHouseYrs = Annotated[int, CURRENT_HOUSE_YRS_CONSTRAINTS] | Annotated[float, CURRENT_HOUSE_YRS_CONSTRAINTS]
 
 
 # Pipeline input model
 class PipelineInput(BaseModel):
-    age: Age
-    married: MarriedEnum | None = None 
     income: Income
-    car_ownership: CarOwnershipEnum | None = None 
+    age: Age
+    experience: Experience
+    married: MarriedEnum | None = None 
     house_ownership: HouseOwnershipEnum | None = None 
-    current_house_yrs: CurrentHouseYrs
+    car_ownership: CarOwnershipEnum | None = None 
+    profession: ProfessionEnum  
     city: CityEnum 
     state: StateEnum 
-    profession: ProfessionEnum  
-    experience: Experience
     current_job_yrs: CurrentJobYrs
+    current_house_yrs: CurrentHouseYrs
 
-    @field_validator("age", "income", "current_house_yrs", "experience", "current_job_yrs")
+    @field_validator("income", "age", "experience", "current_job_yrs", "current_house_yrs")
     def convert_float_to_int(cls, value):
         if isinstance(value, float):
             return int(round(value))
