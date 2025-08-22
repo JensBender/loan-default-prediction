@@ -1,7 +1,6 @@
 # --- Imports ---
 # Standard library imports
 import os
-import pickle
 from enum import Enum
 from typing import List, Annotated
 
@@ -9,6 +8,7 @@ from typing import List, Annotated
 from fastapi import FastAPI
 from pydantic import BaseModel, Field, field_validator 
 import pandas as pd
+import joblib
 import uvicorn
 
 # Local imports
@@ -109,9 +109,8 @@ class PredictionResponse(BaseModel):
 
 # --- Pipeline ---
 # Load the pre-trained ML pipeline to predict loan default (including data preprocessing and Random Forest Classifier model)
-pipeline_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models", "loan_default_rf_pipeline.pkl")
-with open(pipeline_path, "rb") as file:
-    pipeline = pickle.load(file)
+pipeline_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models", "loan_default_rf_pipeline.joblib")
+pipeline = joblib.load(pipeline_path)
 
 # --- API ---
 # Create FastAPI app
