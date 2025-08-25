@@ -76,9 +76,11 @@ The final selected model, a Random Forest classifier with optimized threshold, a
 - [![Matplotlib][Matplotlib-badge]][Matplotlib-url] 
 - [![Seaborn][Seaborn-badge]][Seaborn-url]
 - [![scikit-learn][scikit-learn-badge]][scikit-learn-url]
-- [![Jupyter Notebook][JupyterNotebook-badge]][JupyterNotebook-url]
 - [![FastAPI][FastAPI-badge]][FastAPI-url]
 - [![Pydantic][Pydantic-badge]][Pydantic-url]
+- [![pytest][pytest-badge]][pytest-url]
+- [![Visual Studio Code][VisualStudioCode-badge]][VisualStudioCode-url]
+- [![Jupyter Notebook][JupyterNotebook-badge]][JupyterNotebook-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -393,9 +395,13 @@ Training Data
 [Seaborn-url]: https://seaborn.pydata.org/
 [scikit-learn-badge]: https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white
 [scikit-learn-url]: https://scikit-learn.org/stable/
-[JupyterNotebook-badge]: https://img.shields.io/badge/Jupyter-F37626.svg?style=for-the-badge&logo=Jupyter&logoColor=white
-[JupyterNotebook-url]: https://jupyter.org/
 [FastAPI-badge]: https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white
 [FastAPI-url]: https://fastapi.tiangolo.com/
 [Pydantic-badge]: https://img.shields.io/badge/Pydantic-3776AB?style=for-the-badge&logo=pydantic&logoColor=white
 [Pydantic-url]: https://docs.pydantic.dev/
+[pytest-badge]: https://img.shields.io/badge/pytest-00A9E5?style=for-the-badge&logo=pytest&logoColor=white
+[pytest-url]: https://docs.pytest.org/
+[VisualStudioCode-badge]: https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white
+[VisualStudioCode-url]: https://code.visualstudio.com/
+[JupyterNotebook-badge]: https://img.shields.io/badge/Jupyter-F37626.svg?style=for-the-badge&logo=Jupyter&logoColor=white
+[JupyterNotebook-url]: https://jupyter.org/
