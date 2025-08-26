@@ -77,8 +77,10 @@ The final selected model, a Random Forest classifier with optimized threshold, a
 - [![Seaborn][Seaborn-badge]][Seaborn-url]
 - [![scikit-learn][scikit-learn-badge]][scikit-learn-url]
 - [![FastAPI][FastAPI-badge]][FastAPI-url]
+- [![Gradio][Gradio-badge]][Gradio-url]
 - [![Pydantic][Pydantic-badge]][Pydantic-url]
 - [![pytest][pytest-badge]][pytest-url]
+- [![Hugging Face][HuggingFace-badge]][HuggingFace-url]
 - [![Visual Studio Code][VisualStudioCode-badge]][VisualStudioCode-url]
 - [![Jupyter Notebook][JupyterNotebook-badge]][JupyterNotebook-url]
 
@@ -398,9 +400,13 @@ Training Data
 [FastAPI-badge]: https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white
 [FastAPI-url]: https://fastapi.tiangolo.com/
 [Pydantic-badge]: https://img.shields.io/badge/Pydantic-3776AB?style=for-the-badge&logo=pydantic&logoColor=white
+[Gradio-badge]: https://img.shields.io/badge/Gradio-fc7404?style=for-the-badge&logo=gradio&logoColor=white
+[Gradio-url]: https://gradio.app
 [Pydantic-url]: https://docs.pydantic.dev/
 [pytest-badge]: https://img.shields.io/badge/pytest-00A9E5?style=for-the-badge&logo=pytest&logoColor=white
 [pytest-url]: https://docs.pytest.org/
+[HuggingFace-badge]: https://img.shields.io/badge/Hugging%20Face-ffcc00?style=for-the-badge&logo=huggingface&logoColor=black
+[HuggingFace-url]: https://huggingface.co/
 [VisualStudioCode-badge]: https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white
 [VisualStudioCode-url]: https://code.visualstudio.com/
 [JupyterNotebook-badge]: https://img.shields.io/badge/Jupyter-F37626.svg?style=for-the-badge&logo=Jupyter&logoColor=white
