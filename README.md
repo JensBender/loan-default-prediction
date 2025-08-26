@@ -400,9 +400,9 @@ Training Data
 [FastAPI-badge]: https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white
 [FastAPI-url]: https://fastapi.tiangolo.com/
 [Pydantic-badge]: https://img.shields.io/badge/Pydantic-3776AB?style=for-the-badge&logo=pydantic&logoColor=white
+[Pydantic-url]: https://docs.pydantic.dev/
 [Gradio-badge]: https://img.shields.io/badge/Gradio-fc7404?style=for-the-badge&logo=gradio&logoColor=white
 [Gradio-url]: https://gradio.app
-[Pydantic-url]: https://docs.pydantic.dev/
 [pytest-badge]: https://img.shields.io/badge/pytest-00A9E5?style=for-the-badge&logo=pytest&logoColor=white
 [pytest-url]: https://docs.pytest.org/
 [HuggingFace-badge]: https://img.shields.io/badge/Hugging%20Face-ffcc00?style=for-the-badge&logo=huggingface&logoColor=black
