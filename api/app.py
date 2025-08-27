@@ -83,7 +83,7 @@ class PipelineInput(BaseModel):
     current_house_yrs: CurrentHouseYrs
 
     @field_validator("income", "age", "experience", "current_job_yrs", "current_house_yrs")
-    def convert_float_to_int(cls, value):
+    def convert_float_to_int(cls, value: float | int) -> int:
         if isinstance(value, float):
             return int(round(value))
         return value
