@@ -23,9 +23,9 @@ from api.app import (
 
 
 # --- Fixtures ----
-# Define valid input as dictionary for testing 
+# Define valid pipeline input for testing 
 @pytest.fixture
-def valid_pipeline_input():
+def valid_pipeline_input() -> Dict[str, Any]:
     return {
         "age": 30,
         "married": "married",
