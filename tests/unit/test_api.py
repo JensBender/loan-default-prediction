@@ -19,3 +19,22 @@ from api.app import (
     PredictionResult,
     PredictionResponse
 )
+
+
+# --- Fixtures ----
+# Define valid input as dictionary for testing 
+@pytest.fixture
+def valid_pipeline_input():
+    return {
+        "age": 30,
+        "married": "married",
+        "income": 1000000,
+        "car_ownership": "yes",
+        "house_ownership": "rented",
+        "current_house_yrs": 12,
+        "city": "delhi_city",
+        "state": "assam",
+        "profession": "architect",
+        "experience": 10,
+        "current_job_yrs": 7        
+    }
