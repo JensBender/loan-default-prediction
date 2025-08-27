@@ -2,6 +2,7 @@
 import os
 import sys
 import warnings
+from typing import Dict, Any
 
 # Third-party library imports
 import pytest
@@ -42,7 +43,7 @@ def valid_pipeline_input():
 
 # --- Pydantic Model Classes ---
 @pytest.mark.unit
-def test_pipeline_input_happy_path(valid_pipeline_input):
+def test_pipeline_input_happy_path(valid_pipeline_input: Dict[str, Any]) -> None:
     pipeline_input = PipelineInput(**valid_pipeline_input)
     assert pipeline_input == PipelineInput(
         age=30,
@@ -57,4 +58,3 @@ def test_pipeline_input_happy_path(valid_pipeline_input):
         experience=10,
         current_job_yrs=7          
     )
-    
