@@ -2,12 +2,14 @@
 # Standard library imports
 import os
 from enum import Enum
-from typing import List, Annotated
+from typing import List, Annotated, Dict, Any
 
 # Third-party library imports
 from fastapi import FastAPI
 from pydantic import BaseModel, Field, field_validator 
 import pandas as pd
+import numpy as np
+from sklearn.pipeline import Pipeline
 import joblib
 import uvicorn
 
@@ -114,7 +116,7 @@ class PredictionResponse(BaseModel):
 # --- Pipeline ---
 # Load the pre-trained ML pipeline to predict loan default (including data preprocessing and Random Forest Classifier model)
 pipeline_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models", "loan_default_rf_pipeline.joblib")
-pipeline = joblib.load(pipeline_path)
+pipeline: Pipeline = joblib.load(pipeline_path)
 
 # --- API ---
 # Create FastAPI app
@@ -123,23 +125,24 @@ app = FastAPI()
 
 # Prediction endpoint 
 @app.post("/predict", response_model=PredictionResponse)
-def predict(pipeline_input: PipelineInput | List[PipelineInput]):  # JSON object -> PipelineInput | JSON array -> List[PipelineInput]
+def predict(pipeline_input: PipelineInput | List[PipelineInput]) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> List[PipelineInput]
     # Standardize input to List[dict]
+    pipeline_input_dict_ls: List[Dict[str, Any]]
     if isinstance(pipeline_input, list):
         pipeline_input_dict_ls = [input.model_dump() for input in pipeline_input]
     else:  # isinstance(pipeline_input, PipelineInput)
         pipeline_input_dict_ls = [pipeline_input.model_dump()]
         
     # Use pipeline to predict probabilities 
-    pipeline_input_df = pd.DataFrame(pipeline_input_dict_ls)
-    pred_proba_np = pipeline.predict_proba(pipeline_input_df)
+    pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_dict_ls)
+    pred_proba_np: np.ndarray = pipeline.predict_proba(pipeline_input_df)
 
     # Apply optimized threshold to convert probabilities to binary predictions
-    optimized_threshold = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
-    pred_np = (pred_proba_np[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
+    optimized_threshold: float = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
+    pred_np: np.ndarray = (pred_proba_np[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
 
     # Create API response 
-    results = []
+    results: List[PredictionResult] = []
     for pred, pred_proba in zip(pred_np, pred_proba_np):  
         prediction_enum = PredictionEnum.DEFAULT if pred else PredictionEnum.NO_DEFAULT 
         predicted_probabilities = PredictedProbabilities(default=pred_proba[1], no_default=pred_proba[0])
