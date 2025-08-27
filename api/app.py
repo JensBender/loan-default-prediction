@@ -113,10 +113,16 @@ class PredictionResponse(BaseModel):
     results: List[PredictionResult]
 
 
-# --- Pipeline ---
-# Load the pre-trained ML pipeline to predict loan default (including data preprocessing and Random Forest Classifier model)
+# --- ML Pipeline ---
+# Function to load a pre-trained scikit-learn pipeline
+def load_pipeline(path: str) -> Pipeline:
+    pipeline = joblib.load(pipeline_path)
+    return pipeline
+
+
+# Use function to load the loan default prediction pipeline (including data preprocessing and Random Forest Classifier model)
 pipeline_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models", "loan_default_rf_pipeline.joblib")
-pipeline: Pipeline = joblib.load(pipeline_path)
+pipeline = load_pipeline(path=pipeline_path)
 
 # --- API ---
 # Create FastAPI app
