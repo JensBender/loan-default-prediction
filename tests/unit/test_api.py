@@ -13,4 +13,9 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))  
 
 # Local imports
-from api.app import PipelineInput
+from api.app import (
+    PipelineInput,
+    PredictedProbabilities,
+    PredictionResult,
+    PredictionResponse
+)
