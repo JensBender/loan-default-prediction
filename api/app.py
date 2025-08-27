@@ -94,6 +94,10 @@ class PredictedProbabilities(BaseModel):
     default: float = Field(..., serialization_alias="Default")
     no_default: float = Field(..., serialization_alias="No Default")
 
+    @field_validator("default", "no_default")
+    def round_to_3_decimals(cls, value: float) -> float:
+        return round(value, 3)
+
 
 # Prediction result model
 class PredictionResult(BaseModel):
@@ -138,9 +142,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]):  # JSON object
     results = []
     for pred, pred_proba in zip(pred_np, pred_proba_np):  
         prediction_enum = PredictionEnum.DEFAULT if pred else PredictionEnum.NO_DEFAULT 
-        prob_class_1 = round(pred_proba[1], 3)
-        prob_class_0 = round(pred_proba[0], 3)
-        predicted_probabilities = PredictedProbabilities(default=prob_class_1, no_default=prob_class_0)
+        predicted_probabilities = PredictedProbabilities(default=pred_proba[1], no_default=pred_proba[0])
         prediction_result = PredictionResult(prediction=prediction_enum, probabilities=predicted_probabilities)
         results.append(prediction_result)
 
