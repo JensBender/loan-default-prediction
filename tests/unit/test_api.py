@@ -3,6 +3,7 @@ from typing import Dict, Any
 
 # Third-party library imports
 import pytest
+from pydantic import ValidationError 
 
 # Local imports
 from api.app import (
@@ -76,10 +77,25 @@ class TestPipelineInput:
         pipeline_input = PipelineInput(**pipeline_input_dict)
         assert getattr(pipeline_input, field) == expected_value
 
-# Missing required field
-# Missing optional field
-# Missing values in required field
-# Missing value in optional field
-# Wrong type
-# Out-of-range numeric value
-# Invalid string enum value
+    # Missing required field
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("field", [
+        "income", "age", "experience", "profession", "city", 
+        "state", "current_job_yrs", "current_house_yrs"
+    ])
+    def test_raises_validation_error_for_missing_required_field(
+            self, 
+            valid_pipeline_input: Dict[str, Any],
+            field: str
+    ) -> None:
+        pipeline_input_with_missing_field = valid_pipeline_input.copy()
+        del pipeline_input_with_missing_field[field]
+        with pytest.raises(ValidationError):
+            PipelineInput(**pipeline_input_with_missing_field)
+
+    # Missing optional field
+    # Missing values in required field
+    # Missing value in optional field
+    # Wrong type
+    # Out-of-range numeric value
+    # Invalid string enum value
