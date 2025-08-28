@@ -1,5 +1,5 @@
 # Standard library imports
-from typing import Dict, Any
+from typing import List, Dict, Any
 
 # Third-party library imports
 import pytest
@@ -12,6 +12,12 @@ from api.app import (
     PredictionResult,
     PredictionResponse
 )
+
+# --- Constants ----
+REQUIRED_FIELDS: List[str] = [
+    "income", "age", "experience", "profession", "city", 
+    "state", "current_job_yrs", "current_house_yrs"
+]
 
 
 # --- Fixtures ----
@@ -79,10 +85,7 @@ class TestPipelineInput:
 
     # Missing required field
     @pytest.mark.unit 
-    @pytest.mark.parametrize("required_field", [
-        "income", "age", "experience", "profession", "city", 
-        "state", "current_job_yrs", "current_house_yrs"
-    ])
+    @pytest.mark.parametrize("required_field", REQUIRED_FIELDS)
     def test_raises_validation_error_for_missing_required_field(
             self, 
             valid_pipeline_input: Dict[str, Any],
@@ -111,10 +114,7 @@ class TestPipelineInput:
 
     # Missing value in required field
     @pytest.mark.unit 
-    @pytest.mark.parametrize("required_field", [
-        "income", "age", "experience", "profession", "city", 
-        "state", "current_job_yrs", "current_house_yrs"
-    ])
+    @pytest.mark.parametrize("required_field", REQUIRED_FIELDS)
     def test_raises_validation_error_for_missing_required_value(
             self, 
             valid_pipeline_input: Dict[str, Any],
