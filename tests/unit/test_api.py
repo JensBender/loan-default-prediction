@@ -33,6 +33,7 @@ def valid_pipeline_input() -> Dict[str, Any]:
 
 
 # --- Pydantic Model: PipelineInput ---
+# Happy path
 @pytest.mark.unit
 def test_pipeline_input_happy_path(valid_pipeline_input: Dict[str, Any]) -> None:
     pipeline_input = PipelineInput(**valid_pipeline_input)
@@ -48,6 +49,7 @@ def test_pipeline_input_happy_path(valid_pipeline_input: Dict[str, Any]) -> None
     assert pipeline_input.current_job_yrs == 7
     assert pipeline_input.current_house_yrs == 12
 
+# Convert float to int
 @pytest.mark.unit
 @pytest.mark.parametrize("field, input_value, expected_value", [
     ("income", 100000.6, 100001),  # round up
@@ -71,3 +73,11 @@ def test_pipeline_input_converts_float_to_int(
     pipeline_input_dict[field] = input_value
     pipeline_input = PipelineInput(**pipeline_input_dict)
     assert getattr(pipeline_input, field) == expected_value
+
+# Missing required field
+# Missing optional field
+# Missing values in required field
+# Missing value in optional field
+# Wrong type
+# Out-of-range numeric value
+# Invalid string enum value
