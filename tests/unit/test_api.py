@@ -160,6 +160,28 @@ class TestPipelineInput:
         with pytest.raises(ValidationError):
             PipelineInput(**pipeline_input_with_wrong_type)
 
-    # Wrong data type of numerical fields
+    # Wrong data type of numeric fields
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("numeric_field", ["income", "age", "experience", "current_job_yrs", "current_house_yrs"])
+    @pytest.mark.parametrize("wrong_data_type", [
+        "a string",
+        "1.23",
+        False,
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a": "dictionary"},
+        {"a", "set"}
+    ])
+    def test_raises_validation_error_for_wrong_type_in_numeric_field(
+            self, 
+            valid_pipeline_input: Dict[str, Any],
+            numeric_field: str, 
+            wrong_data_type: Any
+    ) -> None:
+        pipeline_input_with_wrong_type = valid_pipeline_input.copy()
+        pipeline_input_with_wrong_type[numeric_field] = wrong_data_type
+        with pytest.raises(ValidationError):
+            PipelineInput(**pipeline_input_with_wrong_type)
+
     # Out-of-range numeric value
     # Invalid string enum value
