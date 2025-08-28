@@ -137,6 +137,29 @@ class TestPipelineInput:
         pipeline_input = PipelineInput(**pipeline_input_with_missing_optional_value)
         assert pipeline_input.model_dump()[optional_field] is None
 
-    # Wrong type
+    # Wrong data type of string fields
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("string_field", ["married", "house_ownership", "car_ownership", "profession", "city", "state"])
+    @pytest.mark.parametrize("wrong_data_type", [
+        1,
+        1.23,
+        False,
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a": "dictionary"},
+        {"a", "set"}
+    ])
+    def test_raises_validation_error_for_wrong_type_in_string_field(
+            self, 
+            valid_pipeline_input: Dict[str, Any],
+            string_field: str, 
+            wrong_data_type: Any
+    ) -> None:
+        pipeline_input_with_wrong_type = valid_pipeline_input.copy()
+        pipeline_input_with_wrong_type[string_field] = wrong_data_type
+        with pytest.raises(ValidationError):
+            PipelineInput(**pipeline_input_with_wrong_type)
+
+    # Wrong data type of numerical fields
     # Out-of-range numeric value
     # Invalid string enum value
