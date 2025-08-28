@@ -1,17 +1,8 @@
 # Standard library imports
-import os
-import sys
-import warnings
 from typing import Dict, Any
 
 # Third-party library imports
 import pytest
-
-# Suppress deprecation warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)  
-
-# Add project root directory to the path for local imports (by going up two levels from current directory)
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))  
 
 # Local imports
 from api.app import (
@@ -41,7 +32,7 @@ def valid_pipeline_input() -> Dict[str, Any]:
     }
 
 
-# --- Pydantic Model Classes ---
+# --- Pydantic Model: PipelineInput ---
 @pytest.mark.unit
 def test_pipeline_input_happy_path(valid_pipeline_input: Dict[str, Any]) -> None:
     pipeline_input = PipelineInput(**valid_pipeline_input)
