@@ -49,12 +49,25 @@ def test_pipeline_input_happy_path(valid_pipeline_input: Dict[str, Any]) -> None
     assert pipeline_input.current_house_yrs == 12
 
 @pytest.mark.unit
-@pytest.mark.parametrize("field, float_value, expected_int", [
-    ("age", 29.5, 30),
-    ("income", 1000000.5, 1000000)
+@pytest.mark.parametrize("field, input_value, expected_value", [
+    ("income", 100000.6, 100001),  # round up
+    ("income", 100000.4, 100000),  # round down
+    ("age", 25.5, 26),  # round up for odd numbers
+    ("age", 26.5, 26),  # round down for even numbers (banker's rounding)
+    ("experience", 10.0, 10),  # whole float
+    ("experience", 0.0, 0),  
+    ("current_job_yrs", 5, 5),  # passthrough int
+    ("current_job_yrs", 14, 14),  
+    ("current_house_yrs", 10.2, 10),  # round at lower boundary
+    ("current_house_yrs", 13.9, 14),  # round at upper boundary
 ])
-def test_pipeline_input_converts_float_to_int(valid_pipeline_input: Dict[str, Any], field: str, float_value: float, expected_int: int) -> None:
-    pipeline_input_with_float = valid_pipeline_input.copy()
-    pipeline_input_with_float[field] = float_value
-    pipeline_input = PipelineInput(**pipeline_input_with_float)
-    assert getattr(pipeline_input, field) == expected_int
+def test_pipeline_input_converts_float_to_int(
+    valid_pipeline_input: Dict[str, Any], 
+    field: str, 
+    input_value: float | int, 
+    expected_value: int
+) -> None:
+    pipeline_input_dict = valid_pipeline_input.copy()
+    pipeline_input_dict[field] = input_value
+    pipeline_input = PipelineInput(**pipeline_input_dict)
+    assert getattr(pipeline_input, field) == expected_value
