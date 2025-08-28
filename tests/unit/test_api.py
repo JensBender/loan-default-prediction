@@ -121,8 +121,18 @@ class TestPipelineInput:
     ) -> None:
         pipeline_input_with_missing_required_value = valid_pipeline_input.copy()
         pipeline_input_with_missing_required_value[required_field] = None
-        with pytest.raises(ValidationError):
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
             PipelineInput(**pipeline_input_with_missing_required_value)
+        # Ensure at least one error
+        errors = exc_info.value.errors()
+        assert len(errors) >= 1
+        # Iterate over errors
+        for error in errors:
+            # Ensure error location is the required field we are testing
+            assert error["loc"][0] == required_field
+            # Ensure error type is "int_type", "float_type" or "enum" (which take precedence over "none_forbidden")
+            assert error["type"] in ["int_type", "float_type", "enum"]
 
     # Missing value in optional field
     @pytest.mark.unit 
