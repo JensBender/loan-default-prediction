@@ -109,7 +109,22 @@ class TestPipelineInput:
         assert hasattr(pipeline_input, optional_field)
         assert pipeline_input.model_dump()[optional_field] is None
 
-    # Missing values in required field
+    # Missing value in required field
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("required_field", [
+        "income", "age", "experience", "profession", "city", 
+        "state", "current_job_yrs", "current_house_yrs"
+    ])
+    def test_raises_validation_error_for_missing_required_value(
+            self, 
+            valid_pipeline_input: Dict[str, Any],
+            required_field: str
+    ) -> None:
+        pipeline_input_with_missing_required_value = valid_pipeline_input.copy()
+        pipeline_input_with_missing_required_value[required_field] = None
+        with pytest.raises(ValidationError):
+            PipelineInput(**pipeline_input_with_missing_required_value)
+
     # Missing value in optional field
     # Wrong type
     # Out-of-range numeric value
