@@ -157,8 +157,16 @@ class TestPipelineInput:
     ) -> None:
         pipeline_input_with_wrong_type = valid_pipeline_input.copy()
         pipeline_input_with_wrong_type[string_field] = wrong_data_type
-        with pytest.raises(ValidationError):
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
             PipelineInput(**pipeline_input_with_wrong_type)
+        # Ensure one error
+        errors = exc_info.value.errors()
+        assert len(errors) == 1
+        # Ensure error location is the string field we are testing
+        assert errors[0]["loc"][0] == string_field
+        # Ensure error type is "enum"
+        assert errors[0]["type"] == "enum"
 
     # Wrong data type of numeric fields
     @pytest.mark.unit 
@@ -190,7 +198,7 @@ class TestPipelineInput:
         for error in errors:
             # Ensure error location is the numeric field we are testing
             assert error["loc"][0] == numeric_field
-            # Ensure error type is "int_type" or "float_type"
+            # Ensure error type is "int_type" or "float_type" (due to strict mode)
             assert error["type"] == "int_type" or error["type"] == "float_type" 
 
     # Out-of-range numeric value
