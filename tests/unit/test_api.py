@@ -18,6 +18,7 @@ REQUIRED_FIELDS: List[str] = [
     "income", "age", "experience", "profession", "city", 
     "state", "current_job_yrs", "current_house_yrs"
 ]
+OPTIONAL_FIELDS: List[str] = ["married", "house_ownership", "car_ownership"]
 
 
 # --- Fixtures ----
@@ -98,9 +99,7 @@ class TestPipelineInput:
 
     # Missing optional field
     @pytest.mark.unit 
-    @pytest.mark.parametrize("optional_field", [
-        "married", "house_ownership", "car_ownership"
-    ])
+    @pytest.mark.parametrize("optional_field", OPTIONAL_FIELDS)
     def test_assigns_none_for_missing_optional_field(
             self, 
             valid_pipeline_input: Dict[str, Any],
