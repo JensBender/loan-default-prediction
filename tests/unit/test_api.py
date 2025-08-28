@@ -125,6 +125,18 @@ class TestPipelineInput:
             PipelineInput(**pipeline_input_with_missing_required_value)
 
     # Missing value in optional field
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("optional_field", OPTIONAL_FIELDS)
+    def test_passes_through_none_for_missing_optional_value(
+            self, 
+            valid_pipeline_input: Dict[str, Any],
+            optional_field: str
+    ) -> None:
+        pipeline_input_with_missing_optional_value = valid_pipeline_input.copy()
+        pipeline_input_with_missing_optional_value[optional_field] = None
+        pipeline_input = PipelineInput(**pipeline_input_with_missing_optional_value)
+        assert pipeline_input.model_dump()[optional_field] is None
+
     # Wrong type
     # Out-of-range numeric value
     # Invalid string enum value
