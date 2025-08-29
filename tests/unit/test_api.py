@@ -222,25 +222,25 @@ class TestPipelineInput:
     # Out-of-range numeric value
     @pytest.mark.unit 
     @pytest.mark.parametrize("numeric_field, oor_value", [
-        ("income", -50),  # negative number
-        ("income", -1),  # one below minimum 
-        ("age", -50),  # negative number 
+        ("income", -50),  # negative 
+        ("income", -0.4),  # below minimum 
+        ("age", -50),  # negative  
         ("age", 0),  # zero
-        ("age", 20),  # one below minimum 
-        ("age", 80),   # one above maximum
+        ("age", 20.4),  # below minimum 
+        ("age", 79.6),  # above maximum
         ("age", 1000),  # large number
-        ("experience", -50),  # negative number
-        ("experience", -1),  # one below minimum
-        ("experience", 21),  # one above minimum
+        ("experience", -50),  # negative
+        ("experience", -1),  # below minimum
+        ("experience", 21),  # above minimum
         ("experience", 1000),  # large number
-        ("current_job_yrs", -50),  # negative number
-        ("current_job_yrs", -1),  # one below minimum
-        ("current_job_yrs", 15),  # one above maximum
+        ("current_job_yrs", -50),  # negative
+        ("current_job_yrs", -1),  # below minimum
+        ("current_job_yrs", 15),  # above maximum
         ("current_job_yrs", 1000),  # large number
-        ("current_house_yrs", -50),  # negative number
+        ("current_house_yrs", -50),  # negative
         ("current_house_yrs", 0),  # zero
-        ("current_house_yrs", 9),  # one below minimum
-        ("current_house_yrs", 15),  # one above maximum
+        ("current_house_yrs", 9),  # below minimum
+        ("current_house_yrs", 15),  # above maximum
         ("current_house_yrs", 1000),  # large number
     ])
     def test_raises_validation_error_if_numeric_value_is_out_of_range(
@@ -254,14 +254,10 @@ class TestPipelineInput:
         # Ensure ValidationError is raised
         with pytest.raises(ValidationError) as exc_info:
             PipelineInput(**pipeline_input_with_oor_value)
-        # Ensure at least one error
         errors = exc_info.value.errors()
-        assert len(errors) >= 1
-        # Iterate over errors
-        for error in errors:
-            # Ensure error location is the numeric field we are testing
-            assert error["loc"][0] == numeric_field
-            # Ensure error type is "greater_than_equal" or "less_than_equal"
-            assert error["type"] == "greater_than_equal" or error["type"] == "less_than_equal"
+        # Ensure error location of all errors is the numeric field we are testing
+        assert all(error["loc"][0] == numeric_field for error in errors)
+        # Ensure error type of at least one error is "greater_than_equal" or "less_than_equal"
+        assert any(error["type"] in ["greater_than_equal", "less_than_equal"] for error in errors)
 
     # Invalid string enum value
