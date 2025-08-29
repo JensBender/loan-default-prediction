@@ -289,6 +289,10 @@ class TestPipelineInput:
         ("car_ownership", "maybe"), 
         ("car_ownership", "lamborghini"), 
         ("car_ownership", "soon"), 
+        ("profession", "unknown"), 
+        ("profession", "jedi_knight"), 
+        ("profession", "princess"), 
+        ("profession", "divorce_lawyer"), 
     ])
     def test_raises_validation_error_for_invalid_string_enum(
             self, 
