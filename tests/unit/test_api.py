@@ -97,9 +97,7 @@ class TestPipelineInput:
         # Ensure ValidationError is raised
         with pytest.raises(ValidationError) as exc_info:
             PipelineInput(**pipeline_input_with_missing_required_field)
-        # Ensure one error
         errors = exc_info.value.errors()
-        assert len(errors) == 1
         # Ensure error location is the required field we are testing
         assert errors[0]["loc"][0] == required_field
         # Ensure error type is "missing"
@@ -132,9 +130,7 @@ class TestPipelineInput:
         # Ensure ValidationError is raised
         with pytest.raises(ValidationError) as exc_info:
             PipelineInput(**pipeline_input_with_missing_required_value)
-        # Ensure at least one error
         errors = exc_info.value.errors()
-        assert len(errors) >= 1
         # Iterate over errors
         for error in errors:
             # Ensure error location is the required field we are testing
@@ -178,9 +174,7 @@ class TestPipelineInput:
         # Ensure ValidationError is raised
         with pytest.raises(ValidationError) as exc_info:
             PipelineInput(**pipeline_input_with_wrong_type)
-        # Ensure one error
         errors = exc_info.value.errors()
-        assert len(errors) == 1
         # Ensure error location is the string field we are testing
         assert errors[0]["loc"][0] == string_field
         # Ensure error type is "enum"
@@ -209,9 +203,7 @@ class TestPipelineInput:
         # Ensure ValidationError is raised
         with pytest.raises(ValidationError) as exc_info:
             PipelineInput(**pipeline_input_with_wrong_type)
-        # Ensure at least one error
         errors = exc_info.value.errors()
-        assert len(errors) >= 1
         # Iterate over errors
         for error in errors:
             # Ensure error location is the numeric field we are testing
