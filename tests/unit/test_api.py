@@ -293,6 +293,13 @@ class TestPipelineInput:
         ("profession", "jedi_knight"), 
         ("profession", "princess"), 
         ("profession", "divorce_lawyer"), 
+        ("city", "unknown"), 
+        ("city", "metropolis"), 
+        ("city", "new_york"), 
+        ("city", "tokyo"), 
+        ("state", "unknown"), 
+        ("state", "india"), 
+        ("state", "california"), 
     ])
     def test_raises_validation_error_for_invalid_string_enum(
             self, 
