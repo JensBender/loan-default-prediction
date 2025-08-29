@@ -276,4 +276,27 @@ class TestPipelineInput:
         assert value == expected_value
 
     # Invalid string enum values
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("string_field, invalid_string_enum", [
+        ("married", "divorced"), 
+        ("married", "yes"), 
+        ("married", "no"), 
+    ])
+    def test_raises_validation_error_for_invalid_string_enum(
+            self, 
+            valid_pipeline_input: Dict[str, Any],
+            string_field: str, 
+            invalid_string_enum: str 
+    ) -> None:
+        pipeline_input_with_invalid_string = valid_pipeline_input.copy()
+        pipeline_input_with_invalid_string[string_field] = invalid_string_enum
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PipelineInput(**pipeline_input_with_invalid_string)
+        errors = exc_info.value.errors()
+        # Ensure error location of all errors is the string field we are testing
+        assert all(error["loc"][0] == string_field for error in errors)
+        # Ensure error type of all errors is "enum"
+        assert all(error["type"] == "enum" for error in errors)
+
     # Valid string enum values
