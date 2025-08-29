@@ -207,28 +207,28 @@ class TestPipelineInput:
         # Ensure error type of at least one error is "int_type" or "float_type" (due to strict mode)
         assert any(error["type"] in ["int_type", "float_type"] for error in errors)
 
-    # Out-of-range numeric value
+    # Out-of-range numeric values
     @pytest.mark.unit 
     @pytest.mark.parametrize("numeric_field, oor_value", [
         ("income", -50),  # negative 
-        ("income", -0.4),  # below minimum 
+        ("income", -0.01),  # below minimum 
         ("age", -50),  # negative  
         ("age", 0),  # zero
-        ("age", 20.4),  # below minimum 
-        ("age", 79.6),  # above maximum
+        ("age", 20.99),  # below minimum 
+        ("age", 79.01),  # above maximum
         ("age", 1000),  # large number
         ("experience", -50),  # negative
-        ("experience", -1),  # below minimum
-        ("experience", 21),  # above minimum
+        ("experience", -0.01),  # below minimum
+        ("experience", 20.01),  # above minimum
         ("experience", 1000),  # large number
         ("current_job_yrs", -50),  # negative
-        ("current_job_yrs", -1),  # below minimum
-        ("current_job_yrs", 15),  # above maximum
+        ("current_job_yrs", -0.01),  # below minimum
+        ("current_job_yrs", 14.01),  # above maximum
         ("current_job_yrs", 1000),  # large number
         ("current_house_yrs", -50),  # negative
         ("current_house_yrs", 0),  # zero
-        ("current_house_yrs", 9),  # below minimum
-        ("current_house_yrs", 15),  # above maximum
+        ("current_house_yrs", 9.99),  # below minimum
+        ("current_house_yrs", 14.01),  # above maximum
         ("current_house_yrs", 1000),  # large number
     ])
     def test_raises_validation_error_if_numeric_value_is_out_of_range(
@@ -248,4 +248,6 @@ class TestPipelineInput:
         # Ensure error type of at least one error is "greater_than_equal" or "less_than_equal"
         assert any(error["type"] in ["greater_than_equal", "less_than_equal"] for error in errors)
 
-    # Invalid string enum value
+    # Boundary numeric values
+    # Invalid string enum values
+    # Valid string enum values
