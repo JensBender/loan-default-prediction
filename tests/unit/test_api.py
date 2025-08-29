@@ -225,10 +225,14 @@ class TestPipelineInput:
         ("income", -50), 
         ("age", -50), 
         ("age", 0), 
+        ("age", 1000), 
         ("experience", -50), 
+        ("experience", 1000), 
         ("current_job_yrs", -50), 
+        ("current_job_yrs", 1000), 
         ("current_house_yrs", -50),
         ("current_house_yrs", 0),
+        ("current_house_yrs", 1000),
     ])
     def test_raises_validation_error_if_numeric_value_is_out_of_range(
             self, 
@@ -241,5 +245,14 @@ class TestPipelineInput:
         # Ensure ValidationError is raised
         with pytest.raises(ValidationError) as exc_info:
             PipelineInput(**pipeline_input_with_oor_value)
+        # Ensure at least one error
+        errors = exc_info.value.errors()
+        assert len(errors) >= 1
+        # Iterate over errors
+        for error in errors:
+            # Ensure error location is the numeric field we are testing
+            assert error["loc"][0] == numeric_field
+            # Ensure error type is "greater_than_equal" or "less_than_equal"
+            assert error["type"] == "greater_than_equal" or error["type"] == "less_than_equal"
 
     # Invalid string enum value
