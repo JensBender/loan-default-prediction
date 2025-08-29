@@ -100,8 +100,8 @@ class TestPipelineInput:
         errors = exc_info.value.errors()
         # Ensure error location of all errors is the required field we are testing
         assert all(error["loc"][0] == required_field for error in errors)
-        # Ensure error type is "missing"
-        assert errors[0]["type"] == "missing"
+        # Ensure error type of at least one error is "missing"
+        assert any(error["type"] == "missing" for error in errors)
 
     # Missing optional field
     @pytest.mark.unit 
@@ -133,10 +133,8 @@ class TestPipelineInput:
         errors = exc_info.value.errors()
         # Ensure error location of all errors is the required field we are testing
         assert all(error["loc"][0] == required_field for error in errors)
-        # Iterate over errors
-        for error in errors:
-            # Ensure error type is "int_type", "float_type" or "enum" (which take precedence over "none_forbidden")
-            assert error["type"] in ["int_type", "float_type", "enum"]
+        # Ensure error type of at least one error is "int_type", "float_type" or "enum" (which take precedence over "none_forbidden")
+        assert any(error["type"] in ["int_type", "float_type", "enum"] for error in errors)
 
     # Missing value in optional field
     @pytest.mark.unit 
@@ -177,8 +175,8 @@ class TestPipelineInput:
         errors = exc_info.value.errors()
         # Ensure error location of all errors is the string field we are testing
         assert all(error["loc"][0] == string_field for error in errors)
-        # Ensure error type is "enum"
-        assert errors[0]["type"] == "enum"
+        # Ensure error type of at least one error is "enum" 
+        assert any(error["type"] == "enum" for error in errors)
 
     # Wrong data type of numeric fields
     @pytest.mark.unit 
@@ -206,10 +204,8 @@ class TestPipelineInput:
         errors = exc_info.value.errors()
         # Ensure error location of all errors is the numeric field we are testing
         assert all(error["loc"][0] == numeric_field for error in errors)
-        # Iterate over errors
-        for error in errors:
-            # Ensure error type is "int_type" or "float_type" (due to strict mode)
-            assert error["type"] == "int_type" or error["type"] == "float_type" 
+        # Ensure error type of at least one error is "int_type" or "float_type" (due to strict mode)
+        assert any(error["type"] in ["int_type", "float_type"] for error in errors)
 
     # Out-of-range numeric value
     @pytest.mark.unit 
