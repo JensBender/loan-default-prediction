@@ -198,7 +198,7 @@ class TestPipelineInput:
         {"a": "dictionary"},
         {"a", "set"}
     ])
-    def test_raises_validation_error__if_numeric_field_has_wrong_type(
+    def test_raises_validation_error_if_numeric_field_has_wrong_type(
             self, 
             valid_pipeline_input: Dict[str, Any],
             numeric_field: str, 
@@ -220,4 +220,26 @@ class TestPipelineInput:
             assert error["type"] == "int_type" or error["type"] == "float_type" 
 
     # Out-of-range numeric value
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("numeric_field, oor_value", [
+        ("income", -50), 
+        ("age", -50), 
+        ("age", 0), 
+        ("experience", -50), 
+        ("current_job_yrs", -50), 
+        ("current_house_yrs", -50),
+        ("current_house_yrs", 0),
+    ])
+    def test_raises_validation_error_if_numeric_value_is_out_of_range(
+            self, 
+            valid_pipeline_input: Dict[str, Any],
+            numeric_field: str, 
+            oor_value: int | float
+    ) -> None:
+        pipeline_input_with_oor_value = valid_pipeline_input.copy()
+        pipeline_input_with_oor_value[numeric_field] = oor_value
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PipelineInput(**pipeline_input_with_oor_value)
+
     # Invalid string enum value
