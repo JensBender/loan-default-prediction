@@ -251,15 +251,15 @@ class TestPipelineInput:
     # Boundary numeric values
     @pytest.mark.unit
     @pytest.mark.parametrize("numeric_field, boundary_value", [
-        ("income", 0),  # minimum 
-        ("age", 21),  # minimum 
-        ("age", 79),  # maximum
-        ("experience", 0),  
-        ("experience", 20), 
-        ("current_job_yrs", 0),  
-        ("current_job_yrs", 14),  
-        ("current_house_yrs", 10), 
-        ("current_house_yrs", 14),  
+        ("income", 0), ("income", 0.0),  # minimum 
+        ("age", 21),  ("age", 21.0),  # minimum 
+        ("age", 79),  ("age", 79.0),  # maximum
+        ("experience", 0),  ("experience", 0.0), 
+        ("experience", 20),  ("experience", 20.0), 
+        ("current_job_yrs", 0),  ("current_job_yrs", 0.0), 
+        ("current_job_yrs", 14),  ("current_job_yrs", 14.0), 
+        ("current_house_yrs", 10),  ("current_house_yrs", 10.0), 
+        ("current_house_yrs", 14),  ("current_house_yrs", 14.0), 
     ])
     def test_boundary_values_are_valid_for_numeric_fields(
         self, 
@@ -270,7 +270,10 @@ class TestPipelineInput:
         pipeline_input_with_boundary_value = valid_pipeline_input.copy()
         pipeline_input_with_boundary_value[numeric_field] = boundary_value
         pipeline_input = PipelineInput(**pipeline_input_with_boundary_value)
-        assert getattr(pipeline_input, numeric_field) == boundary_value
+        value = getattr(pipeline_input, numeric_field)
+        expected_value = int(boundary_value)
+        assert isinstance(value, int)
+        assert value == expected_value
 
     # Invalid string enum values
     # Valid string enum values
