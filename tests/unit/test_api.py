@@ -98,8 +98,8 @@ class TestPipelineInput:
         with pytest.raises(ValidationError) as exc_info:
             PipelineInput(**pipeline_input_with_missing_required_field)
         errors = exc_info.value.errors()
-        # Ensure error location is the required field we are testing
-        assert errors[0]["loc"][0] == required_field
+        # Ensure error location of all errors is the required field we are testing
+        assert all(error["loc"][0] == required_field for error in errors)
         # Ensure error type is "missing"
         assert errors[0]["type"] == "missing"
 
@@ -131,10 +131,10 @@ class TestPipelineInput:
         with pytest.raises(ValidationError) as exc_info:
             PipelineInput(**pipeline_input_with_missing_required_value)
         errors = exc_info.value.errors()
+        # Ensure error location of all errors is the required field we are testing
+        assert all(error["loc"][0] == required_field for error in errors)
         # Iterate over errors
         for error in errors:
-            # Ensure error location is the required field we are testing
-            assert error["loc"][0] == required_field
             # Ensure error type is "int_type", "float_type" or "enum" (which take precedence over "none_forbidden")
             assert error["type"] in ["int_type", "float_type", "enum"]
 
@@ -175,8 +175,8 @@ class TestPipelineInput:
         with pytest.raises(ValidationError) as exc_info:
             PipelineInput(**pipeline_input_with_wrong_type)
         errors = exc_info.value.errors()
-        # Ensure error location is the string field we are testing
-        assert errors[0]["loc"][0] == string_field
+        # Ensure error location of all errors is the string field we are testing
+        assert all(error["loc"][0] == string_field for error in errors)
         # Ensure error type is "enum"
         assert errors[0]["type"] == "enum"
 
@@ -204,10 +204,10 @@ class TestPipelineInput:
         with pytest.raises(ValidationError) as exc_info:
             PipelineInput(**pipeline_input_with_wrong_type)
         errors = exc_info.value.errors()
+        # Ensure error location of all errors is the numeric field we are testing
+        assert all(error["loc"][0] == numeric_field for error in errors)
         # Iterate over errors
         for error in errors:
-            # Ensure error location is the numeric field we are testing
-            assert error["loc"][0] == numeric_field
             # Ensure error type is "int_type" or "float_type" (due to strict mode)
             assert error["type"] == "int_type" or error["type"] == "float_type" 
 
