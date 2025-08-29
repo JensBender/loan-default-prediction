@@ -281,6 +281,14 @@ class TestPipelineInput:
         ("married", "divorced"), 
         ("married", "yes"), 
         ("married", "no"), 
+        ("house_ownership", "maybe"), 
+        ("house_ownership", "yes"), 
+        ("house_ownership", "no"), 
+        ("house_ownership", "mortgaged"), 
+        ("house_ownership", "hopefully_in_the_future"), 
+        ("car_ownership", "maybe"), 
+        ("car_ownership", "lamborghini"), 
+        ("car_ownership", "soon"), 
     ])
     def test_raises_validation_error_for_invalid_string_enum(
             self, 
