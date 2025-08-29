@@ -249,5 +249,28 @@ class TestPipelineInput:
         assert any(error["type"] in ["greater_than_equal", "less_than_equal"] for error in errors)
 
     # Boundary numeric values
+    @pytest.mark.unit
+    @pytest.mark.parametrize("numeric_field, boundary_value", [
+        ("income", 0),  # minimum 
+        ("age", 21),  # minimum 
+        ("age", 79),  # maximum
+        ("experience", 0),  
+        ("experience", 20), 
+        ("current_job_yrs", 0),  
+        ("current_job_yrs", 14),  
+        ("current_house_yrs", 10), 
+        ("current_house_yrs", 14),  
+    ])
+    def test_boundary_values_are_valid_for_numeric_fields(
+        self, 
+        valid_pipeline_input: Dict[str, Any],
+        numeric_field: str,
+        boundary_value: int | float
+    ) -> None:
+        pipeline_input_with_boundary_value = valid_pipeline_input.copy()
+        pipeline_input_with_boundary_value[numeric_field] = boundary_value
+        pipeline_input = PipelineInput(**pipeline_input_with_boundary_value)
+        assert getattr(pipeline_input, numeric_field) == boundary_value
+
     # Invalid string enum values
     # Valid string enum values
