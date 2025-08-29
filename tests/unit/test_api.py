@@ -222,17 +222,26 @@ class TestPipelineInput:
     # Out-of-range numeric value
     @pytest.mark.unit 
     @pytest.mark.parametrize("numeric_field, oor_value", [
-        ("income", -50), 
-        ("age", -50), 
-        ("age", 0), 
-        ("age", 1000), 
-        ("experience", -50), 
-        ("experience", 1000), 
-        ("current_job_yrs", -50), 
-        ("current_job_yrs", 1000), 
-        ("current_house_yrs", -50),
-        ("current_house_yrs", 0),
-        ("current_house_yrs", 1000),
+        ("income", -50),  # negative number
+        ("income", -1),  # one below minimum 
+        ("age", -50),  # negative number 
+        ("age", 0),  # zero
+        ("age", 20),  # one below minimum 
+        ("age", 80),   # one above maximum
+        ("age", 1000),  # large number
+        ("experience", -50),  # negative number
+        ("experience", -1),  # one below minimum
+        ("experience", 21),  # one above minimum
+        ("experience", 1000),  # large number
+        ("current_job_yrs", -50),  # negative number
+        ("current_job_yrs", -1),  # one below minimum
+        ("current_job_yrs", 15),  # one above maximum
+        ("current_job_yrs", 1000),  # large number
+        ("current_house_yrs", -50),  # negative number
+        ("current_house_yrs", 0),  # zero
+        ("current_house_yrs", 9),  # one below minimum
+        ("current_house_yrs", 15),  # one above maximum
+        ("current_house_yrs", 1000),  # large number
     ])
     def test_raises_validation_error_if_numeric_value_is_out_of_range(
             self, 
