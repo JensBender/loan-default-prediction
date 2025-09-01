@@ -8,6 +8,11 @@ from pydantic import ValidationError
 # Local imports
 from api.schemas import (
     MarriedEnum,
+    HouseOwnershipEnum,
+    CarOwnershipEnum,
+    ProfessionEnum,
+    CityEnum,
+    StateEnum,
     PipelineInput,
     PredictedProbabilities,
     PredictionResult,
@@ -339,7 +344,11 @@ class TestPipelineInput:
     @pytest.mark.parametrize("string_field, valid_string_enum", [
         ("married", "single"), 
         ("married", "married"),  
-
+        ("house_ownership", "rented"),  
+        ("house_ownership", "owned"),  
+        ("house_ownership", "norent_noown"),  
+        ("car_ownership", "yes"), 
+        ("car_ownership", "no"), 
     ])
     def test_accepts_valid_string_enum(
             self, 
@@ -351,9 +360,18 @@ class TestPipelineInput:
         pipeline_input_with_valid_string[string_field] = valid_string_enum
         pipeline_input = PipelineInput(**pipeline_input_with_valid_string)
         enum_member = getattr(pipeline_input, string_field)
-        expected_enum_member = MarriedEnum(valid_string_enum)
+        field_to_enum_map = {
+            "married": MarriedEnum,
+            "house_ownership": HouseOwnershipEnum,
+            "car_ownership": CarOwnershipEnum,
+            "profession": ProfessionEnum,
+            "city": CityEnum,
+            "state": StateEnum,
+        }
+        enum_cls = field_to_enum_map[string_field]
+        expected_enum_member = enum_cls(valid_string_enum)
         # Ensure correct Enum type
-        assert isinstance(enum_member, MarriedEnum)
+        assert isinstance(enum_member, enum_cls)
         # Ensure correct enum member
         assert enum_member == expected_enum_member
         # Ensure stored value is correct
