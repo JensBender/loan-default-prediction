@@ -281,11 +281,18 @@ class TestPipelineInput:
         ("married", "divorced"), 
         ("married", "yes"), 
         ("married", "no"), 
+        ("married", "Single"),  # wrong casing
+        ("married", "SINGLE"),  # wrong casing
+        ("married", "Married"),  # wrong casing
+        ("married", "MARRIED"),  # wrong casing
         ("house_ownership", "maybe"), 
         ("house_ownership", "yes"), 
         ("house_ownership", "no"), 
         ("house_ownership", "mortgaged"), 
         ("house_ownership", "hopefully_in_the_future"), 
+        ("house_ownership", "Rented"),  # wrong casing
+        ("house_ownership", "OWNED"),  # wrong casing
+        ("house_ownership", "Norent_Noown"),  # wrong casing
         ("car_ownership", "maybe"), 
         ("car_ownership", "lamborghini"), 
         ("car_ownership", "soon"), 
