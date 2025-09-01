@@ -389,3 +389,16 @@ class TestPredictedProbabilities:
             "No Default": 0.2
         }
         assert serialized_output == expected_output
+
+    # Round to 3 decimals is applied to all fields
+    @pytest.mark.unit
+    @pytest.mark.parametrize("field", ["default", "no_default"])
+    def test_rounding_is_applied_to_all_fields(self, field: str) -> None:
+        valid_input: Dict[str, float] = {
+            "default": 0.8,
+            "no_default": 0.2
+        }
+        valid_input[field] = 0.123456
+        predicted_probabilities = PredictedProbabilities(**valid_input)
+        assert getattr(predicted_probabilities, field) == 0.123
+    
