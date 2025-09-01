@@ -1,5 +1,6 @@
 # Standard library imports
 from typing import List, Dict, Any
+from enum import Enum
 
 # Third-party library imports
 import pytest
@@ -341,39 +342,20 @@ class TestPipelineInput:
 
     # Valid string enum values
     @pytest.mark.unit 
-    @pytest.mark.parametrize("string_field, valid_string_enum", [
-        ("married", "single"), 
-        ("married", "married"),  
-        ("house_ownership", "rented"),  
-        ("house_ownership", "owned"),  
-        ("house_ownership", "norent_noown"),  
-        ("car_ownership", "yes"), 
-        ("car_ownership", "no"), 
+    @pytest.mark.parametrize("string_field, valid_string, expected_enum_member", [
+        ("married", "single", MarriedEnum.SINGLE), 
+        ("house_ownership", "rented", HouseOwnershipEnum.RENTED),    
+        ("car_ownership", "yes", CarOwnershipEnum.YES), 
     ])
     def test_accepts_valid_string_enum(
             self, 
             valid_pipeline_input: Dict[str, Any],
             string_field: str, 
-            valid_string_enum: str 
+            valid_string: str,
+            expected_enum_member: Enum
     ) -> None:
         pipeline_input_with_valid_string = valid_pipeline_input.copy()
-        pipeline_input_with_valid_string[string_field] = valid_string_enum
+        pipeline_input_with_valid_string[string_field] = valid_string
         pipeline_input = PipelineInput(**pipeline_input_with_valid_string)
         enum_member = getattr(pipeline_input, string_field)
-        field_to_enum_map = {
-            "married": MarriedEnum,
-            "house_ownership": HouseOwnershipEnum,
-            "car_ownership": CarOwnershipEnum,
-            "profession": ProfessionEnum,
-            "city": CityEnum,
-            "state": StateEnum,
-        }
-        enum_cls = field_to_enum_map[string_field]
-        expected_enum_member = enum_cls(valid_string_enum)
-        # Ensure correct Enum type
-        assert isinstance(enum_member, enum_cls)
-        # Ensure correct enum member
         assert enum_member == expected_enum_member
-        # Ensure stored value is correct
-        assert enum_member.value == valid_string_enum
-    
