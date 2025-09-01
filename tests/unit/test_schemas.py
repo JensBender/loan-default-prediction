@@ -346,6 +346,9 @@ class TestPipelineInput:
         ("married", "single", MarriedEnum.SINGLE), 
         ("house_ownership", "rented", HouseOwnershipEnum.RENTED),    
         ("car_ownership", "yes", CarOwnershipEnum.YES), 
+        ("profession", "air_traffic_controller", ProfessionEnum.AIR_TRAFFIC_CONTROLLER), 
+        ("city", "adoni", CityEnum.ADONI), 
+        ("state", "andhra_pradesh", StateEnum.ANDHRA_PRADESH)
     ])
     def test_accepts_valid_string_enum(
             self, 
