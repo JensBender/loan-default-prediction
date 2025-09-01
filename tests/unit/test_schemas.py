@@ -296,17 +296,25 @@ class TestPipelineInput:
         ("car_ownership", "maybe"), 
         ("car_ownership", "lamborghini"), 
         ("car_ownership", "soon"), 
+        ("car_ownership", "Yes"),  # wrong casing
+        ("car_ownership", "NO"),  # wrong casing
         ("profession", "unknown"), 
         ("profession", "jedi_knight"), 
         ("profession", "princess"), 
         ("profession", "divorce_lawyer"), 
+        ("profession", "Air_Traffic_Controller"),  # wrong casing
+        ("profession", "Army_officer"),  # wrong casing
         ("city", "unknown"), 
         ("city", "metropolis"), 
         ("city", "new_york"), 
         ("city", "tokyo"), 
+        ("city", "Chandigarh_City"),  # wrong casing
+        ("city", "ADONI"),  # wrong casing
         ("state", "unknown"), 
         ("state", "india"), 
         ("state", "california"), 
+        ("state", "Andhra_Pradesh"),  # wrong casing 
+        ("state", "ASSAM"),  # wrong casing 
     ])
     def test_raises_validation_error_for_invalid_string_enum(
             self, 
