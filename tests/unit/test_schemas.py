@@ -368,9 +368,9 @@ class TestPipelineInput:
 
 # --- Pydantic Model: PredictedProbabilities ---
 class TestPredictedProbabilities:
-    # Happy path
+    # Instantiation happy path
     @pytest.mark.unit
-    def test_happy_path(self) -> None:
+    def test_instantiation_happy_path(self) -> None:
         valid_input: Dict[str, float] = {
             "default": 0.8,
             "no_default": 0.2
@@ -379,3 +379,13 @@ class TestPredictedProbabilities:
         assert predicted_probabilities.default == 0.8
         assert predicted_probabilities.no_default == 0.2
 
+    # Ensure serialization_alias="Default" and "No Default" works
+    @pytest.mark.unit
+    def test_serialization_alias_happy_path(self) -> None:
+        predicted_probabilities = PredictedProbabilities(default=0.8, no_default=0.2)
+        serialized_output = predicted_probabilities.model_dump(by_alias=True)
+        expected_output: Dict[str, float] = {
+            "Default": 0.8,
+            "No Default": 0.2
+        }
+        assert serialized_output == expected_output
