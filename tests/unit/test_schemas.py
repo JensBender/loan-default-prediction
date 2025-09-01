@@ -7,6 +7,7 @@ from pydantic import ValidationError
 
 # Local imports
 from api.schemas import (
+    MarriedEnum,
     PipelineInput,
     PredictedProbabilities,
     PredictionResult,
@@ -334,3 +335,27 @@ class TestPipelineInput:
         assert all(error["type"] == "enum" for error in errors)
 
     # Valid string enum values
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("string_field, valid_string_enum", [
+        ("married", "single"), 
+        ("married", "married"),  
+
+    ])
+    def test_accepts_valid_string_enum(
+            self, 
+            valid_pipeline_input: Dict[str, Any],
+            string_field: str, 
+            valid_string_enum: str 
+    ) -> None:
+        pipeline_input_with_valid_string = valid_pipeline_input.copy()
+        pipeline_input_with_valid_string[string_field] = valid_string_enum
+        pipeline_input = PipelineInput(**pipeline_input_with_valid_string)
+        enum_member = getattr(pipeline_input, string_field)
+        expected_enum_member = MarriedEnum(valid_string_enum)
+        # Ensure correct Enum type
+        assert isinstance(enum_member, MarriedEnum)
+        # Ensure correct enum member
+        assert enum_member == expected_enum_member
+        # Ensure stored value is correct
+        assert enum_member.value == valid_string_enum
+    
