@@ -1,3 +1,4 @@
+# --- Imports ---
 # Standard library imports
 from typing import List, Dict, Any
 from enum import Enum
@@ -14,6 +15,7 @@ from api.schemas import (
     ProfessionEnum,
     CityEnum,
     StateEnum,
+    PredictionEnum,
     PipelineInput,
     PredictedProbabilities,
     PredictionResult,
@@ -362,3 +364,18 @@ class TestPipelineInput:
         pipeline_input = PipelineInput(**pipeline_input_with_valid_string)
         enum_member = getattr(pipeline_input, string_field)
         assert enum_member == expected_enum_member
+
+
+# --- Pydantic Model: PredictedProbabilities ---
+class TestPredictedProbabilities:
+    # Happy path
+    @pytest.mark.unit
+    def test_happy_path(self) -> None:
+        valid_input: Dict[str, float] = {
+            "default": 0.8,
+            "no_default": 0.2
+        }
+        predicted_probabilities = PredictedProbabilities(**valid_input)
+        assert predicted_probabilities.default == 0.8
+        assert predicted_probabilities.no_default == 0.2
+
