@@ -6,7 +6,7 @@ import pytest
 from pydantic import ValidationError 
 
 # Local imports
-from api.app import (
+from api.schemas import (
     PipelineInput,
     PredictedProbabilities,
     PredictionResult,
