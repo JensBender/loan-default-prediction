@@ -509,3 +509,23 @@ class TestPredictedProbabilities:
         assert errors[0]["loc"][0] == float_field 
         # Ensure error type is "float_type" or "float_parsing" 
         assert errors[0]["type"] in ["float_type", "float_parsing"] 
+  
+    # Data type coersion 
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("float_field", ["default", "no_default"])
+    @pytest.mark.parametrize("coercible_input, expected_output", [
+        ("0.123", 0.123),
+        (0, 0.0),
+        (True, 1.0),
+        (False, 0.0),
+    ])
+    def test_coerces_valid_types_to_float(
+            self, 
+            float_field: str, 
+            coercible_input: Any,
+            expected_output: float
+    ) -> None:
+        input_with_coercible_type = {"default": 0.5, "no_default": 0.5}
+        input_with_coercible_type[float_field] = coercible_input
+        predicted_probabilities = PredictedProbabilities(**input_with_coercible_type)
+        assert getattr(predicted_probabilities, float_field) == expected_output
