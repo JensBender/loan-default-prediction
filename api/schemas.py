@@ -72,8 +72,8 @@ class PipelineInput(BaseModel):
 
 # Predicted probabilities model
 class PredictedProbabilities(BaseModel):
-    default: float = Field(..., serialization_alias="Default")
-    no_default: float = Field(..., serialization_alias="No Default")
+    default: float = Field(..., ge=0.0, le=1.0, serialization_alias="Default")
+    no_default: float = Field(..., ge=0.0, le=1.0, serialization_alias="No Default")
 
     @field_validator("default", "no_default")
     def round_to_3_decimals(cls, value: float) -> float:
