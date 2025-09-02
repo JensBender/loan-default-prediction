@@ -425,6 +425,22 @@ class TestPredictedProbabilities:
         predicted_probabilities = PredictedProbabilities(default=input, no_default=1-input)
         assert predicted_probabilities.default == expected_output
 
+    # Probabilities sum to 1
+    @pytest.mark.unit
+    @pytest.mark.parametrize("prob_default, prob_no_default", [
+        ([1.0, 0.0]), 
+        ([0.75, 0.25]), 
+        ([0.5, 0.5]),         
+    ])
+    def test_probabilities_sum_to_one_happy_path(
+        self,
+        prob_default: float,
+        prob_no_default: float
+    ) -> None:
+        predicted_probabilities = PredictedProbabilities(default=prob_default, no_default=prob_no_default)
+        assert predicted_probabilities.default == prob_default
+        assert predicted_probabilities.no_default == prob_no_default
+
     # Extra field 
     @pytest.mark.unit
     def test_extra_field_is_ignored(self) -> None:
