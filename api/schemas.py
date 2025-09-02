@@ -2,9 +2,10 @@
 # Standard library imports
 from enum import Enum
 from typing import List, Annotated
+import math
 
 # Third-party library imports
-from pydantic import BaseModel, Field, field_validator 
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 # Local imports
 from app.global_constants import (
@@ -78,6 +79,12 @@ class PredictedProbabilities(BaseModel):
     @field_validator("default", "no_default")
     def round_to_3_decimals(cls, value: float) -> float:
         return round(value, 3)
+
+    @model_validator(mode="after")  # happens after rounding
+    def check_probabilities_sum_to_one(self) -> "PredictedProbabilities":
+        if not math.isclose(self.default + self.no_default, 1.0, abs_tol=0.001):
+            raise ValueError("Probabilities must sum to 1.0")
+        return self
 
 
 # Prediction result model
