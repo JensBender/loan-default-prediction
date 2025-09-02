@@ -394,11 +394,11 @@ class TestPredictedProbabilities:
     @pytest.mark.unit
     @pytest.mark.parametrize("field", ["default", "no_default"])
     def test_rounding_is_applied_to_all_fields(self, field: str) -> None:
-        valid_input: Dict[str, float] = {
-            "default": 0.0,
-            "no_default": 0.0
+        other_field = "default" if field == "no_default" else "no_default"
+        valid_input = {
+            field: 0.123456,
+            other_field: 1 - 0.123456
         }
-        valid_input[field] = 0.123456
         predicted_probabilities = PredictedProbabilities(**valid_input)
         assert getattr(predicted_probabilities, field) == 0.123
     
@@ -422,7 +422,7 @@ class TestPredictedProbabilities:
         input: float,
         expected_output: float
     ) -> None:
-        predicted_probabilities = PredictedProbabilities(default=input, no_default=0.0)
+        predicted_probabilities = PredictedProbabilities(default=input, no_default=1-input)
         assert predicted_probabilities.default == expected_output
 
     # Extra field 
@@ -512,7 +512,7 @@ class TestPredictedProbabilities:
   
     # Data type coersion 
     @pytest.mark.unit 
-    @pytest.mark.parametrize("float_field", ["default", "no_default"])
+    @pytest.mark.parametrize("field", ["default", "no_default"])
     @pytest.mark.parametrize("coercible_input, expected_output", [
         ("0.123", 0.123),
         (0, 0.0),
@@ -521,14 +521,17 @@ class TestPredictedProbabilities:
     ])
     def test_coerces_valid_types_to_float(
             self, 
-            float_field: str, 
+            field: str, 
             coercible_input: Any,
             expected_output: float
     ) -> None:
-        input_with_coercible_type = {"default": 0.5, "no_default": 0.5}
-        input_with_coercible_type[float_field] = coercible_input
+        other_field = "default" if field == "no_default" else "no_default"
+        input_with_coercible_type = {
+            field: coercible_input, 
+            other_field: 1 - expected_output
+        }
         predicted_probabilities = PredictedProbabilities(**input_with_coercible_type)
-        assert getattr(predicted_probabilities, float_field) == expected_output
+        assert getattr(predicted_probabilities, field) == expected_output
 
     # Out-of-range values
     @pytest.mark.unit 
