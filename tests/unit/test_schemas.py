@@ -447,3 +447,24 @@ class TestPredictedProbabilities:
         assert all(error["loc"][0] in required_fields for error in errors)
         # Ensure error type of all errors is "missing"
         assert all(error["type"] == "missing" for error in errors)
+
+    # Missing value
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("field", ["default", "no_default"])
+    def test_raises_validation_error_if_field_is_none(
+            self, 
+            field: str
+    ) -> None:
+        input_with_missing_value = {"default": 0.5, "no_default": 0.5}
+        input_with_missing_value[field] = None
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictedProbabilities(**input_with_missing_value)
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the field with a missing value
+        assert errors[0]["loc"][0] == field 
+        # Ensure error type is "float_type" (which takes precedence over "none_forbidden")
+        assert errors[0]["type"] == "float_type" 
+    
