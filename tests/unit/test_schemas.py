@@ -533,7 +533,13 @@ class TestPredictedProbabilities:
     # Out-of-range values
     @pytest.mark.unit 
     @pytest.mark.parametrize("float_field", ["default", "no_default"])
-    @pytest.mark.parametrize("oor_value", [-0.001, 1.001])
+    @pytest.mark.parametrize("oor_value", [
+        -0.001,  # just below minimum
+        1.001,  # just above maximum
+        float("nan"),  # not a number
+        float("inf"),  # infinity
+        float("-inf"),  # negative infinity
+    ])
     def test_raises_validation_error_if_value_is_out_of_range(
             self, 
             float_field: str, 
