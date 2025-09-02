@@ -453,8 +453,17 @@ class TestPredictedProbabilities:
         prob_default: float,
         prob_no_default: float
     ) -> None:
-        with pytest.raises(ValueError):
+        with pytest.raises(ValidationError) as exc_info:
             PredictedProbabilities(default=prob_default, no_default=prob_no_default)
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is an empty tuple (error in "whole model")
+        assert errors[0]["loc"] == ()
+        # Ensure error type is "value_error"
+        assert errors[0]["type"] == "value_error"
+        # Ensure expected error message 
+        assert "Probabilities must sum to 1.0" in errors[0]["msg"]  
 
     # Extra field 
     @pytest.mark.unit
