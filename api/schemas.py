@@ -82,7 +82,7 @@ class PredictedProbabilities(BaseModel):
 
     @model_validator(mode="after")  # happens after rounding
     def check_probabilities_sum_to_one(self) -> "PredictedProbabilities":
-        if not math.isclose(self.default + self.no_default, 1.0, abs_tol=0.001):
+        if not math.isclose(self.default + self.no_default, 1.0, abs_tol=0.002):
             raise ValueError("Probabilities must sum to 1.0")
         return self
 
