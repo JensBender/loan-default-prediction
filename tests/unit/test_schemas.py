@@ -529,3 +529,25 @@ class TestPredictedProbabilities:
         input_with_coercible_type[float_field] = coercible_input
         predicted_probabilities = PredictedProbabilities(**input_with_coercible_type)
         assert getattr(predicted_probabilities, float_field) == expected_output
+
+    # Out-of-range values
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("float_field", ["default", "no_default"])
+    @pytest.mark.parametrize("oor_value", [-0.001, 1.001])
+    def test_raises_validation_error_if_value_is_out_of_range(
+            self, 
+            float_field: str, 
+            oor_value: float
+    ) -> None:
+        input_with_oor_value = {"default": 0.5, "no_default": 0.5}
+        input_with_oor_value[float_field] = oor_value
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictedProbabilities(**input_with_oor_value)
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the float field we are testing
+        assert errors[0]["loc"][0] == float_field 
+        # Ensure error type is "greater_than_equal" or "less_than_equal"
+        assert errors[0]["type"] in ["greater_than_equal", "less_than_equal"]
