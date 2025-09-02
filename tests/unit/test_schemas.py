@@ -427,18 +427,23 @@ class TestPredictedProbabilities:
 
     # Missing field
     @pytest.mark.unit 
-    @pytest.mark.parametrize("required_field", ["default", "no_default"])
-    def test_raises_validation_error_if_field_is_missing(
+    @pytest.mark.parametrize("required_fields", [
+        ["default"], 
+        ["no_default"], 
+        ["default", "no_default"]
+    ])
+    def test_raises_validation_error_if_fields_are_missing(
             self, 
-            required_field: str
+            required_fields: List[str]
     ) -> None:
-        input_with_missing_field = {"default": 0.5, "no_default": 0.5}
-        del input_with_missing_field[required_field]
+        input_with_missing_fields = {"default": 0.5, "no_default": 0.5}
+        for required_field in required_fields:
+            del input_with_missing_fields[required_field]
         # Ensure ValidationError is raised
         with pytest.raises(ValidationError) as exc_info:
-            PredictedProbabilities(**input_with_missing_field)
+            PredictedProbabilities(**input_with_missing_fields)
         errors = exc_info.value.errors()
-        # Ensure error location of all errors is the required field we are testing
-        assert all(error["loc"][0] == required_field for error in errors)
+        # Ensure error location of all errors is one of the required fields
+        assert all(error["loc"][0] in required_fields for error in errors)
         # Ensure error type of all errors is "missing"
         assert all(error["type"] == "missing" for error in errors)
