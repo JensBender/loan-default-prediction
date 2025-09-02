@@ -67,7 +67,7 @@ class TestPipelineInput:
         assert pipeline_input.current_job_yrs == 7
         assert pipeline_input.current_house_yrs == 12
 
-    # Convert float to int
+    # Field validator: Convert float to int
     @pytest.mark.unit
     @pytest.mark.parametrize("field, input_value, expected_value", [
         ("income", 100000.6, 100001),  # round up
@@ -560,15 +560,17 @@ class TestPredictedProbabilities:
 
     # Boundary values
     @pytest.mark.unit
-    @pytest.mark.parametrize("float_field", ["default", "no_default"])
+    @pytest.mark.parametrize("field", ["default", "no_default"])
     @pytest.mark.parametrize("boundary_value", [0.0, 1.0])
     def test_boundary_values_are_valid(
         self, 
-        float_field: str,
+        field: str,
         boundary_value: float
     ) -> None:
-        input_with_boundary_value = {"default": 0.5, "no_default": 0.5}
-        input_with_boundary_value[float_field] = boundary_value
+        other_field = "default" if field == "no_default" else "no_default"
+        input_with_boundary_value = {
+            field: boundary_value,
+            other_field: 1 - boundary_value
+        }
         predicted_probabilities = PredictedProbabilities(**input_with_boundary_value)
-        assert getattr(predicted_probabilities, float_field) == boundary_value
-    
+        assert getattr(predicted_probabilities, field) == boundary_value
