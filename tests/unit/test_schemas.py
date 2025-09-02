@@ -390,7 +390,7 @@ class TestPredictedProbabilities:
         }
         assert output == expected_output
 
-    # Rounding is applied to all fields
+    # Field validator: Rounding is applied to all fields
     @pytest.mark.unit
     @pytest.mark.parametrize("field", ["default", "no_default"])
     def test_rounding_is_applied_to_all_fields(self, field: str) -> None:
@@ -402,7 +402,7 @@ class TestPredictedProbabilities:
         predicted_probabilities = PredictedProbabilities(**valid_input)
         assert getattr(predicted_probabilities, field) == 0.123
     
-    # Rounding edge cases
+    # Field validator: Rounding edge cases
     @pytest.mark.unit
     @pytest.mark.parametrize("input, expected_output", [
         (0.1234, 0.123),  # round down 
@@ -425,12 +425,13 @@ class TestPredictedProbabilities:
         predicted_probabilities = PredictedProbabilities(default=input, no_default=1-input)
         assert predicted_probabilities.default == expected_output
 
-    # Probabilities sum to 1
+    # Model validator: Probabilities sum to 1
     @pytest.mark.unit
     @pytest.mark.parametrize("prob_default, prob_no_default", [
         ([1.0, 0.0]), 
         ([0.75, 0.25]), 
         ([0.5, 0.5]),         
+        ([0.0, 1.0]),         
     ])
     def test_probabilities_sum_to_one_happy_path(
         self,
@@ -440,6 +441,20 @@ class TestPredictedProbabilities:
         predicted_probabilities = PredictedProbabilities(default=prob_default, no_default=prob_no_default)
         assert predicted_probabilities.default == prob_default
         assert predicted_probabilities.no_default == prob_no_default
+
+    # Model validator: Probabilities do not sum to 1
+    @pytest.mark.unit
+    @pytest.mark.parametrize("prob_default, prob_no_default", [
+        ([0.8, 0.3]),  # > 1      
+        ([0.8, 0.1]),  # < 1         
+    ])
+    def test_raises_value_error_if_probabilities_do_not_sum_to_one(
+        self,
+        prob_default: float,
+        prob_no_default: float
+    ) -> None:
+        with pytest.raises(ValueError):
+            PredictedProbabilities(default=prob_default, no_default=prob_no_default)
 
     # Extra field 
     @pytest.mark.unit
