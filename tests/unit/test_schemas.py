@@ -481,4 +481,31 @@ class TestPredictedProbabilities:
         assert errors[0]["loc"][0] == field 
         # Ensure error type is "float_type" (which takes precedence over "none_forbidden")
         assert errors[0]["type"] == "float_type" 
-    
+
+    # Wrong data type 
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("float_field", ["default", "no_default"])
+    @pytest.mark.parametrize("wrong_data_type", [
+        "a string",
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a": "dictionary"},
+        {"a", "set"}
+    ])
+    def test_raises_validation_error_if_field_has_wrong_type(
+            self, 
+            float_field: str, 
+            wrong_data_type: Any
+    ) -> None:
+        input_with_wrong_type = {"default": 0.5, "no_default": 0.5}
+        input_with_wrong_type[float_field] = wrong_data_type
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictedProbabilities(**input_with_wrong_type)
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the float field we are testing
+        assert errors[0]["loc"][0] == float_field 
+        # Ensure error type is "float_type" or "float_parsing" 
+        assert errors[0]["type"] in ["float_type", "float_parsing"] 
