@@ -379,26 +379,48 @@ class TestPredictedProbabilities:
         assert predicted_probabilities.default == 0.8
         assert predicted_probabilities.no_default == 0.2
 
-    # Ensure serialization_alias="Default" and "No Default" works
+    # Ensure serialization_alias ("Default" and "No Default") works
     @pytest.mark.unit
     def test_serialization_alias_happy_path(self) -> None:
         predicted_probabilities = PredictedProbabilities(default=0.8, no_default=0.2)
-        serialized_output = predicted_probabilities.model_dump(by_alias=True)
+        output = predicted_probabilities.model_dump(by_alias=True)
         expected_output: Dict[str, float] = {
             "Default": 0.8,
             "No Default": 0.2
         }
-        assert serialized_output == expected_output
+        assert output == expected_output
 
-    # Round to 3 decimals is applied to all fields
+    # Rounding is applied to all fields
     @pytest.mark.unit
     @pytest.mark.parametrize("field", ["default", "no_default"])
     def test_rounding_is_applied_to_all_fields(self, field: str) -> None:
         valid_input: Dict[str, float] = {
-            "default": 0.8,
-            "no_default": 0.2
+            "default": 0.0,
+            "no_default": 0.0
         }
         valid_input[field] = 0.123456
         predicted_probabilities = PredictedProbabilities(**valid_input)
         assert getattr(predicted_probabilities, field) == 0.123
     
+    # Rounding edge cases
+    @pytest.mark.unit
+    @pytest.mark.parametrize("input, expected_output", [
+        (0.1234, 0.123),  # round down 
+        (0.1236, 0.124),  # round up
+        (0.12354, 0.124), 
+        (0.12356, 0.124), 
+        (0.0004, 0.0),  # round at bottom boundary
+        (0.9996, 1.0),  # round at top boundary
+        (0.1235, 0.123),  # stored as 0.12349999..., so rounds down
+        (0.1245, 0.124),  # stored as 0.12449999..., so rounds down 
+        (0.1255, 0.126),   # stored as 0.12550000000000003, so rounds up 
+        (0.0005, 0.001),  # stored as 0.00050000000000000001..., so rounds up
+        (0.9995, 1.0),  # stored as 0.99950000000000005..., so rounds up
+    ])
+    def test_rounding_edge_cases(
+        self, 
+        input: float,
+        expected_output: float
+    ) -> None:
+        predicted_probabilities = PredictedProbabilities(default=input, no_default=0.0)
+        assert predicted_probabilities.default == expected_output
