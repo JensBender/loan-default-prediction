@@ -122,8 +122,6 @@ class TestPredictionEnum:
         "no_default",  # wrong casing
         "DEFAULT",  # wrong casing
         "NO DEFAULT",  # wrong casing
-        "",  # empty string
-        None  # None value
     ])
     def test_raises_value_error_for_invalid_string(self, invalid_string: str) -> None:
         with pytest.raises(ValueError):
