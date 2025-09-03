@@ -49,6 +49,20 @@ def valid_pipeline_input() -> Dict[str, Any]:
     }
 
 
+# --- Enums ---
+# PredictionEnum
+class TestPredictionEnum:
+    # Happy path
+    @pytest.mark.unit
+    @pytest.mark.parametrize("input_string, expected_enum", [
+        ("Default", PredictionEnum.DEFAULT),
+        ("No Default", PredictionEnum.NO_DEFAULT)
+    ])
+    def test_happy_path(self, input_string: str, expected_enum: PredictionEnum) -> None:
+        prediction_enum = PredictionEnum(input_string)
+        assert prediction_enum == expected_enum    
+
+
 # --- Pydantic Model: PipelineInput ---
 class TestPipelineInput:
     # Happy path
