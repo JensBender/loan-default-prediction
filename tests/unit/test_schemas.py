@@ -121,7 +121,8 @@ class TestEnums:
     ])
     @pytest.mark.parametrize("wrong_casing", [
         str.upper,
-        str.title
+        str.title,
+        str.capitalize
     ])
     def test_raises_value_error_for_wrong_casing(
         self, 
