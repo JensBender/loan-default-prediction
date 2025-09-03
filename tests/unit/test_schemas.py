@@ -433,10 +433,12 @@ class TestPredictedProbabilities:
     # Model validator: Probabilities sum to 1 happy path
     @pytest.mark.unit
     @pytest.mark.parametrize("prob_default, prob_no_default", [
-        ([1.0, 0.0]), 
         ([0.75, 0.25]), 
         ([0.5, 0.5]),         
-        ([0.0, 1.0]),         
+        ([1.0, 0.0]),  # boundary
+        ([0.0, 1.0]),  # boundary         
+        ([0.999, 0.002]),  # 1.001 within tolerance          
+        ([0.998, 0.001]),  # 0.999 within tolerance          
     ])
     def test_probabilities_sum_to_one_happy_path(
         self,
