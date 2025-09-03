@@ -754,3 +754,20 @@ class TestPredictedProbabilities:
         }
         predicted_probabilities = PredictedProbabilities(**input_with_boundary_value)
         assert getattr(predicted_probabilities, field) == boundary_value
+
+
+# --- Pydantic Model: PredictionResult ---
+class TestPredictionResult:
+    # Happy path
+    @pytest.mark.unit
+    def test_happy_path(self) -> None:
+        valid_input: Dict[str, float | Dict[str, float]] = {
+            "prediction": "Default",
+            "probabilities": {
+                "default": 0.8,
+                "no_default": 0.2
+            }
+        }
+        prediction_result = PredictionResult(**valid_input)
+        assert prediction_result.prediction == PredictionEnum.DEFAULT
+        assert prediction_result.probabilities == PredictedProbabilities(default=0.8, no_default=0.2)
