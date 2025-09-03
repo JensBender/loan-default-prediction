@@ -60,7 +60,7 @@ def valid_pipeline_input() -> Dict[str, Any]:
 # --- Enums ---
 # Basic tests for all string Enum classes
 class TestEnums:
-    # String labels
+    # Correct string labels
     @pytest.mark.unit
     @pytest.mark.parametrize("enum_class, expected_string_labels", [
         (MarriedEnum, MARRIED_LABELS),
@@ -82,7 +82,7 @@ class TestEnums:
         assert not missing_values, f"Missing values in {enum_class.__name__}: {missing_values}"
         assert not extra_values, f"Extra values in {enum_class.__name__}: {extra_values}"
 
-    # Invalid input values
+    # Invalid values (wrong string, empty string, None, wrong data type)
     @pytest.mark.unit
     @pytest.mark.parametrize("enum_class", [
         MarriedEnum,
@@ -94,12 +94,21 @@ class TestEnums:
         PredictionEnum
     ])
     @pytest.mark.parametrize("invalid_value", [
-        "",  # empty string
-        None  # None value
+        "wrong string that is not an Enum member",  
+        "",  
+        None,  
+        1,
+        1.23,
+        False,
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a": "dictionary"},
+        {"a", "set"}
     ])
     def test_raises_value_error_for_invalid_value(self, enum_class: Enum, invalid_value: Any) -> None:
         with pytest.raises(ValueError):
             enum_class(invalid_value)
+
 
 # PredictionEnum
 class TestPredictionEnum:
