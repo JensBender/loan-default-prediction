@@ -505,9 +505,9 @@ class TestPredictedProbabilities:
         assert predicted_probabilities.default == 0.8
         assert predicted_probabilities.no_default == 0.2
 
-    # serialization_alias happy path
+    # Serialization alias
     @pytest.mark.unit
-    def test_serialization_alias_happy_path(self) -> None:
+    def test_serialization_alias(self) -> None:
         predicted_probabilities = PredictedProbabilities(default=0.8, no_default=0.2)
         output = predicted_probabilities.model_dump(by_alias=True)
         # Ensure "default" is serialized to "Default"
@@ -771,3 +771,24 @@ class TestPredictionResult:
         prediction_result = PredictionResult(**valid_input)
         assert prediction_result.prediction == PredictionEnum.DEFAULT
         assert prediction_result.probabilities == PredictedProbabilities(default=0.8, no_default=0.2)
+
+    # Serialization aliases 
+    @pytest.mark.unit
+    def test_serialization_alias(self) -> None:
+        valid_input: Dict[str, float | Dict[str, float]] = {
+            "prediction": "Default",
+            "probabilities": {
+                "default": 0.8,
+                "no_default": 0.2
+            }
+        }
+        prediction_result = PredictionResult(**valid_input)
+        output = prediction_result.model_dump(by_alias=True)
+        expected_output: Dict[str, float | Dict[str, float]] = {
+            "prediction": "Default",
+            "probabilities": {
+                "Default": 0.8,
+                "No Default": 0.2
+            }
+        }
+        assert output == expected_output 
