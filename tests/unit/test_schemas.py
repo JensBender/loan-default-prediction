@@ -761,7 +761,7 @@ class TestPredictionResult:
     # Happy path
     @pytest.mark.unit
     def test_happy_path(self) -> None:
-        valid_input: Dict[str, float | Dict[str, float]] = {
+        valid_input: Dict[str, str | Dict[str, float]] = {
             "prediction": "Default",
             "probabilities": {
                 "default": 0.8,
@@ -775,16 +775,15 @@ class TestPredictionResult:
     # Serialization aliases 
     @pytest.mark.unit
     def test_serialization_alias(self) -> None:
-        valid_input: Dict[str, float | Dict[str, float]] = {
-            "prediction": "Default",
-            "probabilities": {
-                "default": 0.8,
-                "no_default": 0.2
-            }
-        }
-        prediction_result = PredictionResult(**valid_input)
+        prediction_result = PredictionResult(
+            prediction=PredictionEnum.DEFAULT,
+            probabilities=PredictedProbabilities(
+                default=0.8,
+                no_default=0.2
+            )
+        )
         output = prediction_result.model_dump(by_alias=True)
-        expected_output: Dict[str, float | Dict[str, float]] = {
+        expected_output: Dict[str, str | Dict[str, float]] = {
             "prediction": "Default",
             "probabilities": {
                 "Default": 0.8,
