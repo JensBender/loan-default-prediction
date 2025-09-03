@@ -152,10 +152,12 @@ class TestPredictionEnum:
     @pytest.mark.parametrize("invalid_string", [
         "Yes",
         "No",
-        "default",  # wrong casing
-        "no_default",  # wrong casing
-        "DEFAULT",  # wrong casing
-        "NO DEFAULT",  # wrong casing
+        "default",     # wrong case (lowercase)
+        "DEFAULT",     # wrong case (uppercase)
+        "no default",  # wrong case (lowercase)
+        "NO DEFAULT",  # wrong case (uppercase)
+        "no_default",  # wrong separator and case (snake case)
+        "No_default",  # wrong separator and case (captical case)
     ])
     def test_raises_value_error_for_invalid_string(self, invalid_string: str) -> None:
         with pytest.raises(ValueError):
