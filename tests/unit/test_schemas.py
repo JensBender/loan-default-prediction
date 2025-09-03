@@ -93,6 +93,17 @@ class TestPipelineInput:
         pipeline_input = PipelineInput(**pipeline_input_dict)
         assert getattr(pipeline_input, field) == expected_value
 
+    # Extra field 
+    @pytest.mark.unit
+    def test_extra_field_is_ignored(self, valid_pipeline_input: Dict[str, Any]) -> None:
+        input_with_extra_field = valid_pipeline_input.copy()
+        input_with_extra_field["extra_field"] = "should be ignored"
+        pipeline_input = PipelineInput(**input_with_extra_field)
+        # Ensure extra field is not present
+        assert not hasattr(pipeline_input, "extra_field")
+        # Ensure instance is as expected
+        assert pipeline_input == PipelineInput(**valid_pipeline_input)
+
     # Missing required field
     @pytest.mark.unit 
     @pytest.mark.parametrize("required_field", REQUIRED_FIELDS)
