@@ -93,6 +93,22 @@ class TestPredictionEnum:
         prediction_enum = PredictionEnum(input_string)
         assert prediction_enum == expected_enum    
 
+    # Invalid string enum values
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_string", [
+        "Yes",
+        "No",
+        "default",  # wrong casing
+        "no_default",  # wrong casing
+        "DEFAULT",  # wrong casing
+        "NO DEFAULT",  # wrong casing
+        "",  # empty string
+        None  # None value
+    ])
+    def test_raises_value_error_for_invalid_string(self, invalid_string: str) -> None:
+        with pytest.raises(ValueError):
+            PredictionEnum(invalid_string)
+
 
 # --- Pydantic Model: PipelineInput ---
 class TestPipelineInput:
