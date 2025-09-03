@@ -109,6 +109,30 @@ class TestEnums:
         with pytest.raises(ValueError):
             enum_class(invalid_value)
 
+    # Wrong casing (Enum values are snake_case)
+    @pytest.mark.unit
+    @pytest.mark.parametrize("enum_class, enum_values", [
+        (MarriedEnum, MARRIED_LABELS),
+        (HouseOwnershipEnum, HOUSE_OWNERSHIP_LABELS),
+        (CarOwnershipEnum, CAR_OWNERSHIP_LABELS),
+        (ProfessionEnum, PROFESSION_LABELS),
+        (CityEnum, CITY_LABELS),
+        (StateEnum, STATE_LABELS)
+    ])
+    @pytest.mark.parametrize("wrong_casing", [
+        str.upper,
+        str.title
+    ])
+    def test_raises_value_error_for_wrong_casing(
+        self, 
+        enum_class: Enum, 
+        enum_values: List[str], 
+        wrong_casing: Any
+    ) -> None:
+        for enum_value in enum_values:
+            value_with_wrong_casing = wrong_casing(enum_value)
+            with pytest.raises(ValueError):
+                enum_class(value_with_wrong_casing)
 
 # PredictionEnum
 class TestPredictionEnum:
