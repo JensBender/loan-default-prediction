@@ -21,6 +21,14 @@ from api.schemas import (
     PredictionResult,
     PredictionResponse
 )
+from app.global_constants import (
+    MARRIED_LABELS,
+    HOUSE_OWNERSHIP_LABELS,
+    CAR_OWNERSHIP_LABELS,
+    PROFESSION_LABELS,
+    CITY_LABELS,
+    STATE_LABELS
+)
 
 # --- Constants ----
 REQUIRED_FIELDS: List[str] = [
@@ -50,6 +58,29 @@ def valid_pipeline_input() -> Dict[str, Any]:
 
 
 # --- Enums ---
+# Basic tests for all Enum classes
+class TestEnums:
+    @pytest.mark.unit
+    @pytest.mark.parametrize("enum_class, expected_string_labels", [
+        (MarriedEnum, MARRIED_LABELS),
+        (HouseOwnershipEnum, HOUSE_OWNERSHIP_LABELS),
+        (CarOwnershipEnum, CAR_OWNERSHIP_LABELS),
+        (ProfessionEnum, PROFESSION_LABELS),
+        (CityEnum, CITY_LABELS),
+        (StateEnum, STATE_LABELS),
+        (PredictionEnum, ["Default", "No Default"])
+    ])
+    def test_enum_contains_all_string_labels(
+        self, 
+        enum_class: Enum, 
+        expected_string_labels: List[str]
+    ) -> None:
+        enum_values = {member.value for member in enum_class}
+        missing_values = set(expected_string_labels) - enum_values
+        extra_values = enum_values - set(expected_string_labels)
+        assert not missing_values, f"Missing values in {enum_class.__name__}: {missing_values}"
+        assert not extra_values, f"Extra values in {enum_class.__name__}: {extra_values}"
+
 # PredictionEnum
 class TestPredictionEnum:
     # Happy path
