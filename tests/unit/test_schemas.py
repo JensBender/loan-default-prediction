@@ -1,6 +1,6 @@
 # --- Imports ---
 # Standard library imports
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Callable
 from enum import Enum
 
 # Third-party library imports
@@ -128,7 +128,7 @@ class TestEnums:
         self, 
         enum_class: Enum, 
         enum_values: List[str], 
-        wrong_casing: Any
+        wrong_casing: Callable[[str], str]
     ) -> None:
         for enum_value in enum_values:
             value_with_wrong_casing = wrong_casing(enum_value)
