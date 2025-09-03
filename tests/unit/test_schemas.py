@@ -430,7 +430,7 @@ class TestPredictedProbabilities:
         predicted_probabilities = PredictedProbabilities(default=input, no_default=1-input)
         assert predicted_probabilities.default == expected_output
 
-    # Model validator: Probabilities sum to 1
+    # Model validator: Probabilities sum to 1 happy path
     @pytest.mark.unit
     @pytest.mark.parametrize("prob_default, prob_no_default", [
         ([1.0, 0.0]), 
@@ -447,11 +447,15 @@ class TestPredictedProbabilities:
         assert predicted_probabilities.default == prob_default
         assert predicted_probabilities.no_default == prob_no_default
 
-    # Model validator: Probabilities do not sum to 1
+    # Model validator: Probabilities sum to 1 failure path
     @pytest.mark.unit
     @pytest.mark.parametrize("prob_default, prob_no_default", [
-        ([0.8, 0.3]),  # > 1      
-        ([0.8, 0.1]),  # < 1         
+        ([0.8, 0.3]),  # 1.1 above     
+        ([0.8, 0.1]),  # 0.9 below         
+        ([1.0, 1.0]),  # 2.0 max above         
+        ([0.0, 0.0]),  # 0.0 max below         
+        ([0.999, 0.004]),  # 1.003 just above         
+        ([0.996, 0.001]),  # 0.997 just below         
     ])
     def test_raises_value_error_if_probabilities_do_not_sum_to_one(
         self,
@@ -463,11 +467,11 @@ class TestPredictedProbabilities:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is an empty tuple (error in "whole model")
+        # Ensure error location is an empty tuple (error in "whole model" not specific location)
         assert errors[0]["loc"] == ()
         # Ensure error type is "value_error"
         assert errors[0]["type"] == "value_error"
-        # Ensure expected error message 
+        # Ensure error message is as expected 
         assert "Probabilities must sum to 1.0" in errors[0]["msg"]  
 
     # Extra field 
