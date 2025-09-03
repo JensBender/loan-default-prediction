@@ -379,16 +379,21 @@ class TestPredictedProbabilities:
         assert predicted_probabilities.default == 0.8
         assert predicted_probabilities.no_default == 0.2
 
-    # Ensure serialization_alias ("Default" and "No Default") works
+    # serialization_alias happy path
     @pytest.mark.unit
     def test_serialization_alias_happy_path(self) -> None:
         predicted_probabilities = PredictedProbabilities(default=0.8, no_default=0.2)
         output = predicted_probabilities.model_dump(by_alias=True)
+        # Ensure "default" is serialized to "Default"
+        assert "Default" in output
+        # Ensure "no_default" is serialized to "No Default"
+        assert "No Default" in output 
+        # Ensure entire output is as expected
         expected_output: Dict[str, float] = {
             "Default": 0.8,
             "No Default": 0.2
         }
-        assert output == expected_output
+        assert output == expected_output        
 
     # Field validator: Rounding is applied to all fields
     @pytest.mark.unit
