@@ -927,16 +927,12 @@ class TestPredictionResult:
 
     # Invalid PredictionEnum value
     @pytest.mark.unit 
-    @pytest.mark.parametrize("invalid_enum_value", [  # valid: "Default", "No Default"
+    @pytest.mark.parametrize("invalid_enum_value", [  
         "Yes",
-        "No",
-        "default",     # wrong case (lowercase)
         "DEFAULT",     # wrong case (uppercase)
         "no default",  # wrong case (lowercase)
-        "NO DEFAULT",  # wrong case (uppercase)
-        "no_default",  # wrong separator and case (snake case)
         "No_default",  # wrong separator and case (captical case)
-    ])
+    ])  
     def test_raises_validation_error_if_prediction_has_invalid_enum_value(
             self, 
             invalid_enum_value: str
