@@ -846,3 +846,30 @@ class TestPredictionResult:
         assert {error["loc"][0] for error in errors} == set(required_fields)
         # Ensure error type of all errors is "missing"
         assert all(error["type"] == "missing" for error in errors)
+
+    # None value
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("fields", [
+        ["prediction"], 
+        ["probabilities"],
+        ["prediction", "probabilities"]
+    ])
+    def test_raises_validation_error_if_fields_are_none(
+            self, 
+            fields: List[str]
+    ) -> None:
+        input_with_none = {
+            "prediction": PredictionEnum.DEFAULT, 
+            "probabilities": PredictedProbabilities(default=0.5, no_default=0.5)
+        }
+        for field in fields:
+            input_with_none[field] = None
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResult(**input_with_none)
+        errors = exc_info.value.errors()
+        # Ensure error location is the field or fields with a None value
+        assert {error["loc"][0] for error in errors} == set(fields)
+        # Ensure error type of all errors is "enum" or "model_type" (which take precedence over "none_forbidden")
+        assert all(error["type"] in ["enum", "model_type"] for error in errors)
+    
