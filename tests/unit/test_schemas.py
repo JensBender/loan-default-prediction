@@ -873,7 +873,7 @@ class TestPredictionResult:
         # Ensure error type of all errors is "enum" or "model_type" (which take precedence over "none_forbidden")
         assert all(error["type"] in ["enum", "model_type"] for error in errors)
 
-    # Wrong data type: "prediction" field 
+    # Wrong "prediction" data type
     @pytest.mark.unit 
     @pytest.mark.parametrize("wrong_data_type", [
         1,
@@ -899,7 +899,7 @@ class TestPredictionResult:
         # Ensure error type is "enum" 
         assert errors[0]["type"] == "enum" 
 
-    # Wrong data type: "probabilities" field 
+    # Wrong "probabilities" data type 
     @pytest.mark.unit 
     @pytest.mark.parametrize("wrong_data_type", [
         "a string",
@@ -924,3 +924,33 @@ class TestPredictionResult:
         assert errors[0]["loc"][0] == "probabilities" 
         # Ensure error type is "model_type" 
         assert errors[0]["type"] == "model_type" 
+
+    # Invalid PredictionEnum value
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("invalid_enum_value", [  # valid: "Default", "No Default"
+        "Yes",
+        "No",
+        "default",     # wrong case (lowercase)
+        "DEFAULT",     # wrong case (uppercase)
+        "no default",  # wrong case (lowercase)
+        "NO DEFAULT",  # wrong case (uppercase)
+        "no_default",  # wrong separator and case (snake case)
+        "No_default",  # wrong separator and case (captical case)
+    ])
+    def test_raises_validation_error_if_prediction_has_invalid_enum_value(
+            self, 
+            invalid_enum_value: str
+    ) -> None:
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResult(
+                prediction=invalid_enum_value,
+                probabilities=PredictedProbabilities(default=0.5, no_default=0.5)
+            )
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the prediction field
+        assert errors[0]["loc"][0] == "prediction" 
+        # Ensure error type is "enum" 
+        assert errors[0]["type"] == "enum" 
