@@ -950,3 +950,29 @@ class TestPredictionResult:
         assert errors[0]["loc"][0] == "prediction" 
         # Ensure error type is "enum" 
         assert errors[0]["type"] == "enum" 
+
+    # Missing field in PredictedProbabilities 
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("missing_field", ["default", "no_default"])  
+    def test_raises_validation_error_if_predicted_probabilities_has_missing_field(
+            self, 
+            missing_field: str
+    ) -> None:
+        predicted_probabilities = {
+            "default": 0.5,
+            "no_default": 0.5
+        }
+        del predicted_probabilities[missing_field]
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResult(
+                prediction=PredictionEnum.DEFAULT,
+                probabilities=predicted_probabilities
+            )
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the probabilities field
+        assert errors[0]["loc"][0] == "probabilities" 
+        # Ensure error type is "missing" 
+        assert errors[0]["type"] == "missing" 
