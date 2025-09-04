@@ -147,7 +147,7 @@ class TestPredictionEnum:
         prediction_enum = PredictionEnum(input_string)
         assert prediction_enum == expected_enum    
 
-    # Invalid string enum values
+    # Invalid string values
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_string", [
         "Yes",
@@ -791,3 +791,29 @@ class TestPredictionResult:
             }
         }
         assert output == expected_output 
+
+    # Missing field
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("required_fields", [
+        ["prediction"], 
+        ["probabilities"], 
+        ["prediction", "probabilities"]
+    ])
+    def test_raises_validation_error_if_fields_are_missing(
+            self, 
+            required_fields: List[str]
+    ) -> None:
+        input_with_missing_fields = {
+            "prediction": PredictionEnum.DEFAULT, 
+            "probabilities": PredictedProbabilities(default=0.5, no_default=0.5)
+        }
+        for required_field in required_fields:
+            del input_with_missing_fields[required_field]
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResult(**input_with_missing_fields)
+        errors = exc_info.value.errors()
+        # Ensure error location is the required field or fields
+        assert {error["loc"][0] for error in errors} == set(required_fields)
+        # Ensure error type of all errors is "missing"
+        assert all(error["type"] == "missing" for error in errors)
