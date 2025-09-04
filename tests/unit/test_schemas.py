@@ -634,8 +634,8 @@ class TestPredictedProbabilities:
         with pytest.raises(ValidationError) as exc_info:
             PredictedProbabilities(**input_with_missing_fields)
         errors = exc_info.value.errors()
-        # Ensure error location of all errors is one of the required fields
-        assert all(error["loc"][0] in required_fields for error in errors)
+        # Ensure error location is the required field or fields
+        assert {error["loc"][0] for error in errors} == set(required_fields)
         # Ensure error type of all errors is "missing"
         assert all(error["type"] == "missing" for error in errors)
 
