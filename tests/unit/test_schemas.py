@@ -798,6 +798,29 @@ class TestPredictionResult:
         }
         assert output == expected_output 
 
+    # Extra field 
+    @pytest.mark.unit
+    def test_extra_field_is_ignored(self) -> None:
+        input_with_extra_field = {
+            "prediction": "Default",
+            "probabilities": {
+                "default": 0.5,
+                "no_default": 0.5
+            },
+            "extra_field": "should be ignored"
+        }
+        prediction_result = PredictionResult(**input_with_extra_field)
+        # Ensure extra field is not present
+        assert not hasattr(prediction_result, "extra_field")
+        # Ensure instance is as expected
+        assert prediction_result == PredictionResult(
+            prediction=PredictionEnum.DEFAULT,
+            probabilities=PredictedProbabilities(
+                default=0.5,
+                no_default=0.5
+            )
+        )
+
     # Missing field
     @pytest.mark.unit 
     @pytest.mark.parametrize("required_fields", [
