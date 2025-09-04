@@ -639,25 +639,28 @@ class TestPredictedProbabilities:
         # Ensure error type of all errors is "missing"
         assert all(error["type"] == "missing" for error in errors)
 
-    # Missing value
+    # None value
     @pytest.mark.unit 
-    @pytest.mark.parametrize("field", ["default", "no_default"])
-    def test_raises_validation_error_if_field_is_none(
+    @pytest.mark.parametrize("fields", [
+        ["default"], 
+        ["no_default"],
+        ["default", "no_default"]
+    ])
+    def test_raises_validation_error_if_fields_are_none(
             self, 
-            field: str
+            fields: List[str]
     ) -> None:
-        input_with_missing_value = {"default": 0.5, "no_default": 0.5}
-        input_with_missing_value[field] = None
+        input_with_none = {"default": 0.5, "no_default": 0.5}
+        for field in fields:
+            input_with_none[field] = None
         # Ensure ValidationError is raised
         with pytest.raises(ValidationError) as exc_info:
-            PredictedProbabilities(**input_with_missing_value)
+            PredictedProbabilities(**input_with_none)
         errors = exc_info.value.errors()
-        # Ensure exactly one error
-        assert len(errors) == 1
-        # Ensure error location is the field with a missing value
-        assert errors[0]["loc"][0] == field 
-        # Ensure error type is "float_type" (which takes precedence over "none_forbidden")
-        assert errors[0]["type"] == "float_type" 
+        # Ensure error location is the field or fields with a None value
+        assert {error["loc"][0] for error in errors} == set(fields)
+        # Ensure error type of all errors is "float_type" (which takes precedence over "none_forbidden")
+        assert all(error["type"] == "float_type" for error in errors)
 
     # Wrong data type 
     @pytest.mark.unit 
