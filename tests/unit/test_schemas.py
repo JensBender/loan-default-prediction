@@ -873,39 +873,54 @@ class TestPredictionResult:
         # Ensure error type of all errors is "enum" or "model_type" (which take precedence over "none_forbidden")
         assert all(error["type"] in ["enum", "model_type"] for error in errors)
 
-    # Wrong data type 
+    # Wrong data type: "prediction" field 
     @pytest.mark.unit 
-    @pytest.mark.parametrize("fields", [
-        ["prediction"], 
-        ["probabilities"],
-        ["prediction", "probabilities"]
-    ])
     @pytest.mark.parametrize("wrong_data_type", [
-        "wrong string not matching Enum values",
         1,
         1.23,
         True,
         ["a", "list"],
         ("a", "tuple"),
-        {"wrong key": "a dictionary with missing required keys"},
+        {"a": "dictionary"},
         {"a", "set"}
     ])
-    def test_raises_validation_error_if_fields_have_wrong_type(
-            self, 
-            fields: List[str], 
-            wrong_data_type: Any
-    ) -> None:
-        input_with_wrong_type = {
-            "prediction": PredictionEnum.DEFAULT, 
-            "probabilities": PredictedProbabilities(default=0.5, no_default=0.5)
-        }
-        for field in fields:
-            input_with_wrong_type[field] = wrong_data_type
+    def test_raises_validation_error_if_prediction_has_wrong_type(self, wrong_data_type: Any) -> None:
         # Ensure ValidationError is raised
         with pytest.raises(ValidationError) as exc_info:
-            PredictionResult(**input_with_wrong_type)
+            PredictionResult(
+                prediction=wrong_data_type,
+                probabilities=PredictedProbabilities(default=0.5, no_default=0.5)
+            )
         errors = exc_info.value.errors()
-        # Ensure error location is the field or fields with wrong data type
-        assert {error["loc"][0] for error in errors} == set(fields) 
-        # Ensure error type of all errors is "enum" or "model_type" or "missing"
-        assert all(error["type"] in ["enum", "model_type", "missing"] for error in errors) 
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the prediction field
+        assert errors[0]["loc"][0] == "prediction" 
+        # Ensure error type is "enum" 
+        assert errors[0]["type"] == "enum" 
+
+    # Wrong data type: "probabilities" field 
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("wrong_data_type", [
+        "a string",
+        1,
+        1.23,
+        True,
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a", "set"}
+    ])
+    def test_raises_validation_error_if_probabilities_has_wrong_type(self, wrong_data_type: Any) -> None:
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResult(
+                prediction=PredictionEnum.DEFAULT,
+                probabilities=wrong_data_type
+            )
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the probabilities field
+        assert errors[0]["loc"][0] == "probabilities" 
+        # Ensure error type is "model_type" 
+        assert errors[0]["type"] == "model_type" 
