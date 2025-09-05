@@ -5,7 +5,7 @@ from typing import List, Annotated
 import math
 
 # Third-party library imports
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator, computed_field
 
 # Local imports
 from app.global_constants import (
@@ -95,5 +95,8 @@ class PredictionResult(BaseModel):
 
 # Prediction response model
 class PredictionResponse(BaseModel):
-    n_predictions: int 
     results: List[PredictionResult]
+
+    @computed_field
+    def n_predictions(self) -> int:
+        return len(self.results)
