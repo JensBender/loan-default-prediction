@@ -1004,3 +1004,22 @@ class TestPredictionResult:
         assert errors[0]["loc"][1] == "no_default" 
         # Ensure error type is "float_parsing" 
         assert errors[0]["type"] == "float_parsing" 
+
+    # Data type coersion (within "probabilities" field)
+    @pytest.mark.unit 
+    def test_predicted_probabilities_field_coerces_string_type_to_float(self) -> None:
+        prediction_result = PredictionResult(
+            prediction=PredictionEnum.DEFAULT,
+            probabilities={
+                "default": 0.5, 
+                "no_default": "0.5"  # coerce "0.5" to 0.5
+            }
+        )
+        expected_prediction_result = PredictionResult(
+            prediction=PredictionEnum.DEFAULT,
+            probabilities=PredictedProbabilities(
+                default=0.5,
+                no_default=0.5
+            )
+        )
+        assert prediction_result == expected_prediction_result
