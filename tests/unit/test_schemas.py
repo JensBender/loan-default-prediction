@@ -873,7 +873,7 @@ class TestPredictionResult:
         # Ensure error type of all errors is "enum" or "model_type" (which take precedence over "none_forbidden")
         assert all(error["type"] in ["enum", "model_type"] for error in errors)
 
-    # Wrong PredictionEnum data type
+    # Wrong data type ("prediction" field) 
     @pytest.mark.unit 
     @pytest.mark.parametrize("wrong_data_type", [
         1,
@@ -899,69 +899,7 @@ class TestPredictionResult:
         # Ensure error type is "enum" 
         assert errors[0]["type"] == "enum" 
 
-    # Invalid PredictionEnum value
-    @pytest.mark.unit 
-    @pytest.mark.parametrize("invalid_enum_value", [  
-        "Yes",
-        "DEFAULT",     # wrong case (uppercase)
-        "no default",  # wrong case (lowercase)
-        "No_default",  # wrong separator and case (captical case)
-    ])  
-    def test_raises_validation_error_if_prediction_has_invalid_enum_value(
-            self, 
-            invalid_enum_value: str
-    ) -> None:
-        # Ensure ValidationError is raised
-        with pytest.raises(ValidationError) as exc_info:
-            PredictionResult(
-                prediction=invalid_enum_value,
-                probabilities=PredictedProbabilities(default=0.5, no_default=0.5)
-            )
-        errors = exc_info.value.errors()
-        # Ensure exactly one error
-        assert len(errors) == 1
-        # Ensure error location is the prediction field
-        assert errors[0]["loc"][0] == "prediction" 
-        # Ensure error type is "enum" 
-        assert errors[0]["type"] == "enum" 
-
-    # PredictedProbabilities field is missing 
-    @pytest.mark.unit 
-    def test_raises_validation_error_if_predicted_probabilities_field_is_missing(self) -> None:
-        # Ensure ValidationError is raised
-        with pytest.raises(ValidationError) as exc_info:
-            PredictionResult(
-                prediction="Default",
-                probabilities={"default": 0.5}  # "no_default" missing
-            )
-        errors = exc_info.value.errors()
-        # Ensure exactly one error
-        assert len(errors) == 1
-        # Ensure error location is the probabilities > no_default field
-        assert errors[0]["loc"][0] == "probabilities" 
-        assert errors[0]["loc"][1] == "no_default" 
-        # Ensure error type is "missing" 
-        assert errors[0]["type"] == "missing" 
-    
-    # PredictedProbabilities field is None
-    @pytest.mark.unit 
-    def test_raises_validation_error_if_predicted_probabilities_field_is_none(self) -> None:
-        # Ensure ValidationError is raised
-        with pytest.raises(ValidationError) as exc_info:
-            PredictionResult(
-                prediction="Default",
-                probabilities={"default": 0.5, "no_default": None} 
-            )
-        errors = exc_info.value.errors()
-        # Ensure exactly one error
-        assert len(errors) == 1
-        # Ensure error location is the probabilities > no_default field
-        assert errors[0]["loc"][0] == "probabilities" 
-        assert errors[0]["loc"][1] == "no_default" 
-        # Ensure error type is "float_type" 
-        assert errors[0]["type"] == "float_type" 
-
-    # Wrong PredictedProbabilities data type 
+    # Wrong data type ("probabilities" field) 
     @pytest.mark.unit 
     @pytest.mark.parametrize("wrong_data_type", [
         "a string",
@@ -987,7 +925,69 @@ class TestPredictionResult:
         # Ensure error type is "model_type" 
         assert errors[0]["type"] == "model_type" 
 
-    # PredictedProbabilities field has wrong data type 
+     # Invalid value ("prediction" field) 
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("invalid_enum_value", [  
+        "Yes",
+        "DEFAULT",     # wrong case (uppercase)
+        "no default",  # wrong case (lowercase)
+        "No_default",  # wrong separator and case (captical case)
+    ])  
+    def test_raises_validation_error_if_prediction_has_invalid_enum_value(
+            self, 
+            invalid_enum_value: str
+    ) -> None:
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResult(
+                prediction=invalid_enum_value,
+                probabilities=PredictedProbabilities(default=0.5, no_default=0.5)
+            )
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the prediction field
+        assert errors[0]["loc"][0] == "prediction" 
+        # Ensure error type is "enum" 
+        assert errors[0]["type"] == "enum" 
+
+    # Missing field (within "probabilities" field) 
+    @pytest.mark.unit 
+    def test_raises_validation_error_if_predicted_probabilities_field_is_missing(self) -> None:
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResult(
+                prediction="Default",
+                probabilities={"default": 0.5}  # "no_default" missing
+            )
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the probabilities > no_default field
+        assert errors[0]["loc"][0] == "probabilities" 
+        assert errors[0]["loc"][1] == "no_default" 
+        # Ensure error type is "missing" 
+        assert errors[0]["type"] == "missing" 
+    
+    # None value (within "probabilities" field) 
+    @pytest.mark.unit 
+    def test_raises_validation_error_if_predicted_probabilities_field_is_none(self) -> None:
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResult(
+                prediction="Default",
+                probabilities={"default": 0.5, "no_default": None} 
+            )
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the probabilities > no_default field
+        assert errors[0]["loc"][0] == "probabilities" 
+        assert errors[0]["loc"][1] == "no_default" 
+        # Ensure error type is "float_type" 
+        assert errors[0]["type"] == "float_type" 
+
+   # Wrong data type (within "probabilities" field)  
     @pytest.mark.unit 
     def test_raises_validation_error_if_predicted_probabilities_field_has_wrong_type(self) -> None:
         # Ensure ValidationError is raised
