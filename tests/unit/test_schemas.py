@@ -1110,3 +1110,38 @@ class TestPredictionResponse:
             "n_predictions": 2
         }
         assert output == expected_output 
+
+    # Extra field 
+    @pytest.mark.unit
+    def test_extra_field_is_ignored(self) -> None:
+        input_with_extra_field = {
+            "results": [
+                {
+                    "prediction": "Default",
+                    "probabilities": {"default": 0.8, "no_default": 0.2} 
+                },
+                {
+                    "prediction": "No Default",
+                    "probabilities": {"default": 0.2, "no_default": 0.8} 
+                },
+            ],
+            "extra_field": "should be ignored"
+        } 
+        prediction_response = PredictionResponse(**input_with_extra_field)
+        # Ensure extra field is not present
+        assert not hasattr(prediction_response, "extra_field")
+        # Ensure instance is as expected
+        expected_prediction_response = PredictionResponse(
+            results=[
+                PredictionResult(
+                    prediction=PredictionEnum.DEFAULT, 
+                    probabilities=PredictedProbabilities(default=0.8, no_default=0.2)
+                ),
+                PredictionResult(
+                    prediction=PredictionEnum.NO_DEFAULT, 
+                    probabilities=PredictedProbabilities(default=0.2, no_default=0.8)
+                )
+            ],
+            n_predictions=2
+        )
+        assert prediction_response == expected_prediction_response
