@@ -1160,3 +1160,18 @@ class TestPredictionResponse:
         assert errors[0]["loc"][0] == "results"
         # Ensure error type is "missing"
         assert errors[0]["type"] == "missing" 
+
+    # None value
+    @pytest.mark.unit 
+    def test_raises_validation_error_if_results_field_is_none(self) -> None:
+        input_with_none = {"results": None}
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResponse(**input_with_none)
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the "results" field
+        assert errors[0]["loc"][0] == "results"
+        # Ensure error type is "list_type" (which take precedence over "none_forbidden")
+        assert errors[0]["type"] == "list_type"
