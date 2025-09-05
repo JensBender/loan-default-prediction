@@ -1161,7 +1161,7 @@ class TestPredictionResponse:
         # Ensure error type is "missing"
         assert errors[0]["type"] == "missing" 
 
-    # None value
+    # None ("results" field) 
     @pytest.mark.unit 
     def test_raises_validation_error_if_results_field_is_none(self) -> None:
         input_with_none = {"results": None}
@@ -1175,3 +1175,27 @@ class TestPredictionResponse:
         assert errors[0]["loc"][0] == "results"
         # Ensure error type is "list_type" (which take precedence over "none_forbidden")
         assert errors[0]["type"] == "list_type"
+ 
+    # Wrong data type ("results" field) 
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("wrong_data_type", [
+        "a string",
+        1,
+        1.23,
+        True,
+        ("a", "tuple"),
+        {"a": "dictionary"},
+        {"a", "set"}
+    ])
+    def test_raises_validation_error_if_results_field_has_wrong_type(self, wrong_data_type: Any) -> None:
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResponse(results=wrong_data_type)
+        errors = exc_info.value.errors()
+        print(errors)
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the "results" field
+        assert errors[0]["loc"][0] == "results" 
+        # Ensure error type is "list_type" 
+        assert errors[0]["type"] == "list_type" 
