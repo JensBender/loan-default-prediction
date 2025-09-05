@@ -95,7 +95,7 @@ class PredictionResult(BaseModel):
 
 # Prediction response model
 class PredictionResponse(BaseModel):
-    results: List[PredictionResult]
+    results: List[PredictionResult] = Field(strict=True)
 
     @computed_field
     def n_predictions(self) -> int:
