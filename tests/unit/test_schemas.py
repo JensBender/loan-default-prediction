@@ -987,3 +987,20 @@ class TestPredictionResult:
         # Ensure error type is "model_type" 
         assert errors[0]["type"] == "model_type" 
 
+    # PredictedProbabilities field has wrong data type 
+    @pytest.mark.unit 
+    def test_raises_validation_error_if_predicted_probabilities_field_has_wrong_type(self) -> None:
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResult(
+                prediction=PredictionEnum.DEFAULT,
+                probabilities={"default": 0.5, "no_default": "wrong data type"}
+            )
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the probabilities and no_default field
+        assert errors[0]["loc"][0] == "probabilities" 
+        assert errors[0]["loc"][1] == "no_default" 
+        # Ensure error type is "float_parsing" 
+        assert errors[0]["type"] == "float_parsing" 
