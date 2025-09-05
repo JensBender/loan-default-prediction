@@ -1044,4 +1044,50 @@ class TestPredictionResult:
         assert errors[0]["loc"][1] == "no_default" 
         # Ensure error type is "greater_than_equal" 
         assert errors[0]["type"] == "greater_than_equal" 
+
+# --- Pydantic Model: PredictionResponse ---
+class TestPredictionResponse:
+    # Instantiation happy path
+    @pytest.mark.unit
+    def test_instantiation_happy_path(self) -> None:
+        prediction_result_list = [
+            {
+                "prediction": "Default",
+                "probabilities": {
+                    "default": 0.8,
+                    "no_default": 0.2
+                } 
+            },
+            {
+                "prediction": "No Default",
+                "probabilities": {
+                    "default": 0.2,
+                    "no_default": 0.8
+                } 
+            },
+        ]
+        n_predictions = len(prediction_result_list)
+        expected_results = [
+            PredictionResult(
+                prediction=PredictionEnum.DEFAULT, 
+                probabilities=PredictedProbabilities(
+                    default=0.8, 
+                    no_default=0.2
+                )
+            ),
+            PredictionResult(
+                prediction=PredictionEnum.NO_DEFAULT, 
+                probabilities=PredictedProbabilities(
+                    default=0.2, 
+                    no_default=0.8
+                )
+            )
+        ]
+        expected_n_predictions = 2
+        prediction_response = PredictionResponse(
+            n_predictions=n_predictions,
+            results=prediction_result_list
+        )
+        assert prediction_response.n_predictions == expected_n_predictions
+        assert prediction_response.results == expected_results
     
