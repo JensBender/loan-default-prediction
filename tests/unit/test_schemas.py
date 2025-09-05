@@ -1070,17 +1070,11 @@ class TestPredictionResponse:
         expected_results = [
             PredictionResult(
                 prediction=PredictionEnum.DEFAULT, 
-                probabilities=PredictedProbabilities(
-                    default=0.8, 
-                    no_default=0.2
-                )
+                probabilities=PredictedProbabilities(default=0.8, no_default=0.2)
             ),
             PredictionResult(
                 prediction=PredictionEnum.NO_DEFAULT, 
-                probabilities=PredictedProbabilities(
-                    default=0.2, 
-                    no_default=0.8
-                )
+                probabilities=PredictedProbabilities(default=0.2, no_default=0.8)
             )
         ]
         expected_n_predictions = 2
