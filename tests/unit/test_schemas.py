@@ -1023,3 +1023,25 @@ class TestPredictionResult:
             )
         )
         assert prediction_result == expected_prediction_result
+
+    # Out-of-range value (within "probabilities" field)
+    @pytest.mark.unit 
+    def test_raises_validation_error_if_predicted_probabilities_value_is_out_of_range(self) -> None:
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResult(
+                prediction=PredictionEnum.DEFAULT,
+                probabilities={
+                    "default": 0.5, 
+                    "no_default": -0.001  # just below minimum of 0
+                }
+            )
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the probabilities and no_default field
+        assert errors[0]["loc"][0] == "probabilities" 
+        assert errors[0]["loc"][1] == "no_default" 
+        # Ensure error type is "greater_than_equal" 
+        assert errors[0]["type"] == "greater_than_equal" 
+    
