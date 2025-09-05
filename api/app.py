@@ -94,10 +94,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]) -> PredictionRe
         prediction_result = PredictionResult(prediction=prediction_enum, probabilities=predicted_probabilities)
         results.append(prediction_result)
 
-    return PredictionResponse(
-        n_predictions=len(results),
-        results=results
-    )
+    return PredictionResponse(results=results)
 
 
 # Launch API
