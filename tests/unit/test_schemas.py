@@ -1091,3 +1091,35 @@ class TestPredictionResponse:
         assert prediction_response.n_predictions == expected_n_predictions
         assert prediction_response.results == expected_results
     
+    # Serialization aliases 
+    @pytest.mark.unit
+    def test_serialization_alias(self) -> None:
+        prediction_response = PredictionResponse(
+            n_predictions=2,
+            results=[
+                PredictionResult(
+                    prediction=PredictionEnum.DEFAULT, 
+                    probabilities=PredictedProbabilities(default=0.8, no_default=0.2)
+                ),
+                PredictionResult(
+                    prediction=PredictionEnum.NO_DEFAULT, 
+                    probabilities=PredictedProbabilities(default=0.2, no_default=0.8)
+                )
+            ]
+        )
+        output = prediction_response.model_dump(by_alias=True)
+        expected_output = {
+            "n_predictions": 2,
+            "results": [
+                {
+                    "prediction": "Default",
+                    "probabilities": {"Default": 0.8, "No Default": 0.2}
+                },
+                {
+                    "prediction": "No Default",
+                    "probabilities": {"Default": 0.2, "No Default": 0.8}
+                }
+            ]
+
+        }
+        assert output == expected_output 
