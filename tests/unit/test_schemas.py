@@ -1145,3 +1145,18 @@ class TestPredictionResponse:
             n_predictions=2
         )
         assert prediction_response == expected_prediction_response
+
+    # Missing "results" field
+    @pytest.mark.unit 
+    def test_raises_validation_error_if_results_field_is_missing(self) -> None:
+        input_with_missing_field = {}
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResponse(**input_with_missing_field)
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the "results" field
+        assert errors[0]["loc"][0] == "results"
+        # Ensure error type is "missing"
+        assert errors[0]["type"] == "missing" 
