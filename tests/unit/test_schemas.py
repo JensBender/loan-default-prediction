@@ -821,7 +821,7 @@ class TestPredictionResult:
             )
         )
 
-    # Missing field
+    # Missing field 
     @pytest.mark.unit 
     @pytest.mark.parametrize("required_fields", [
         ["prediction"], 
@@ -1161,7 +1161,7 @@ class TestPredictionResponse:
         # Ensure error type is "missing"
         assert errors[0]["type"] == "missing" 
 
-    # None value (in "results" field) 
+    # None value in "results" field 
     @pytest.mark.unit 
     def test_raises_validation_error_if_results_field_is_none(self) -> None:
         input_with_none = {"results": None}
@@ -1176,7 +1176,7 @@ class TestPredictionResponse:
         # Ensure error type is "list_type" (which take precedence over "none_forbidden")
         assert errors[0]["type"] == "list_type"
  
-    # Wrong data type (in "results" field) 
+    # Wrong data type in "results" field (must be a list) 
     @pytest.mark.unit 
     @pytest.mark.parametrize("wrong_data_type", [
         "a string",
@@ -1200,4 +1200,15 @@ class TestPredictionResponse:
         # Ensure error type is "list_type" 
         assert errors[0]["type"] == "list_type" 
 
-    
+    # None value in List[PredictionResult]
+    # Wrong data type in List[PredictionResult]
+    # Missing field in PredictionResult
+    # None value in a PredictionResult field
+    # Wrong data type for PredictionEnum (in PredictionResult) 
+    # Invalid value for PredictionEnum (in PredictionResult) 
+    # Missing field in PredictedProbabilities (in PredictionResult) 
+    # Wrong data type for PredictedProbabilities (in PredictionResult) 
+    # None value in a PredictedProbabilities field (in PredictionResult)
+    # Wrong data type in a PredictedProbabilities field (in PredictionResult) 
+    # Out-of-range value in a PredictedProbabilities field (in PredictionResult)
+    # Probabilities sum to 1 error in PredictedProbabilities (in PredictionResult)
