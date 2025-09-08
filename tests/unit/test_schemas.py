@@ -873,7 +873,7 @@ class TestPredictionResult:
         # Ensure error type of all errors is "enum" or "model_type" (which take precedence over "none_forbidden")
         assert all(error["type"] in ["enum", "model_type"] for error in errors)
 
-    # Wrong data type ("prediction" field) 
+    # Wrong data type (in "prediction" field) 
     @pytest.mark.unit 
     @pytest.mark.parametrize("wrong_data_type", [
         1,
@@ -899,33 +899,7 @@ class TestPredictionResult:
         # Ensure error type is "enum" 
         assert errors[0]["type"] == "enum" 
 
-    # Wrong data type ("probabilities" field) 
-    @pytest.mark.unit 
-    @pytest.mark.parametrize("wrong_data_type", [
-        "a string",
-        1,
-        1.23,
-        True,
-        ["a", "list"],
-        ("a", "tuple"),
-        {"a", "set"}
-    ])
-    def test_raises_validation_error_if_probabilities_has_wrong_type(self, wrong_data_type: Any) -> None:
-        # Ensure ValidationError is raised
-        with pytest.raises(ValidationError) as exc_info:
-            PredictionResult(
-                prediction=PredictionEnum.DEFAULT,
-                probabilities=wrong_data_type
-            )
-        errors = exc_info.value.errors()
-        # Ensure exactly one error
-        assert len(errors) == 1
-        # Ensure error location is the probabilities field
-        assert errors[0]["loc"][0] == "probabilities" 
-        # Ensure error type is "model_type" 
-        assert errors[0]["type"] == "model_type" 
-
-     # Invalid value ("prediction" field) 
+     # Invalid value (in "prediction" field) 
     @pytest.mark.unit 
     @pytest.mark.parametrize("invalid_enum_value", [  
         "Yes",
@@ -951,6 +925,32 @@ class TestPredictionResult:
         # Ensure error type is "enum" 
         assert errors[0]["type"] == "enum" 
 
+    # Wrong data type (in "probabilities" field) 
+    @pytest.mark.unit 
+    @pytest.mark.parametrize("wrong_data_type", [
+        "a string",
+        1,
+        1.23,
+        True,
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a", "set"}
+    ])
+    def test_raises_validation_error_if_probabilities_has_wrong_type(self, wrong_data_type: Any) -> None:
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResult(
+                prediction=PredictionEnum.DEFAULT,
+                probabilities=wrong_data_type
+            )
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the probabilities field
+        assert errors[0]["loc"][0] == "probabilities" 
+        # Ensure error type is "model_type" 
+        assert errors[0]["type"] == "model_type" 
+
     # Missing field (within "probabilities" field) 
     @pytest.mark.unit 
     def test_raises_validation_error_if_predicted_probabilities_field_is_missing(self) -> None:
@@ -969,7 +969,7 @@ class TestPredictionResult:
         # Ensure error type is "missing" 
         assert errors[0]["type"] == "missing" 
     
-    # None value (within "probabilities" field) 
+    # None value (in "probabilities" field) 
     @pytest.mark.unit 
     def test_raises_validation_error_if_predicted_probabilities_field_is_none(self) -> None:
         # Ensure ValidationError is raised
@@ -987,7 +987,7 @@ class TestPredictionResult:
         # Ensure error type is "float_type" 
         assert errors[0]["type"] == "float_type" 
 
-   # Wrong data type (within "probabilities" field)  
+   # Wrong data type (in "probabilities" field)  
     @pytest.mark.unit 
     def test_raises_validation_error_if_predicted_probabilities_field_has_wrong_type(self) -> None:
         # Ensure ValidationError is raised
@@ -1005,7 +1005,7 @@ class TestPredictionResult:
         # Ensure error type is "float_parsing" 
         assert errors[0]["type"] == "float_parsing" 
 
-    # Data type coersion (within "probabilities" field)
+    # Data type coersion (in "probabilities" field)
     @pytest.mark.unit 
     def test_predicted_probabilities_field_coerces_string_type_to_float(self) -> None:
         prediction_result = PredictionResult(
@@ -1024,7 +1024,7 @@ class TestPredictionResult:
         )
         assert prediction_result == expected_prediction_result
 
-    # Out-of-range value (within "probabilities" field)
+    # Out-of-range value (in "probabilities" field)
     @pytest.mark.unit 
     def test_raises_validation_error_if_predicted_probabilities_value_is_out_of_range(self) -> None:
         # Ensure ValidationError is raised
@@ -1161,7 +1161,7 @@ class TestPredictionResponse:
         # Ensure error type is "missing"
         assert errors[0]["type"] == "missing" 
 
-    # None ("results" field) 
+    # None value (in "results" field) 
     @pytest.mark.unit 
     def test_raises_validation_error_if_results_field_is_none(self) -> None:
         input_with_none = {"results": None}
@@ -1176,7 +1176,7 @@ class TestPredictionResponse:
         # Ensure error type is "list_type" (which take precedence over "none_forbidden")
         assert errors[0]["type"] == "list_type"
  
-    # Wrong data type ("results" field) 
+    # Wrong data type (in "results" field) 
     @pytest.mark.unit 
     @pytest.mark.parametrize("wrong_data_type", [
         "a string",
@@ -1199,3 +1199,5 @@ class TestPredictionResponse:
         assert errors[0]["loc"][0] == "results" 
         # Ensure error type is "list_type" 
         assert errors[0]["type"] == "list_type" 
+
+    
