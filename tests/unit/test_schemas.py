@@ -1192,7 +1192,6 @@ class TestPredictionResponse:
         with pytest.raises(ValidationError) as exc_info:
             PredictionResponse(results=wrong_data_type)
         errors = exc_info.value.errors()
-        print(errors)
         # Ensure exactly one error
         assert len(errors) == 1
         # Ensure error location is the "results" field
@@ -1201,6 +1200,27 @@ class TestPredictionResponse:
         assert errors[0]["type"] == "list_type" 
 
     # None value in List[PredictionResult]
+    @pytest.mark.unit
+    def test_raises_validation_error_if_prediction_result_list_contains_none(self) -> None:
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResponse(results=[
+                {
+                    "prediction": "Default",
+                    "probabilities": {
+                        "default": 0.8,
+                        "no_default": 0.2
+                    } 
+                },
+                None,  # None value in list at index 1
+            ])
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the results list at index 1
+        assert errors[0]["loc"] == ("results", 1)
+        # Ensure errory type is "model_type"
+        assert errors[0]["type"] == "model_type"
+
     # Wrong data type in List[PredictionResult]
     # Missing field in PredictionResult
     # None value in a PredictionResult field
