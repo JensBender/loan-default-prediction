@@ -5,11 +5,10 @@ from typing import List, Dict, Any
 
 # Third-party library imports
 from fastapi import FastAPI
+from sklearn.pipeline import Pipeline
 import pandas as pd
 import numpy as np
-from sklearn.pipeline import Pipeline
 import joblib
-import uvicorn
 
 # Local imports
 from app.custom_transformers import (
@@ -101,8 +100,3 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]) -> PredictionRe
         results.append(prediction_result)
 
     return PredictionResponse(results=results)
-
-
-# Launch API
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
