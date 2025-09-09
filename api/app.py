@@ -27,12 +27,13 @@ from app.custom_transformers import (
     FeatureSelector
 )
 from api.schemas import (
-    PredictionEnum,
     PipelineInput,
+    PredictionEnum,
     PredictedProbabilities,
     PredictionResult,
     PredictionResponse    
 )
+
 
 # --- ML Pipeline ---
 # Function to load a pre-trained scikit-learn pipeline
@@ -41,7 +42,7 @@ def load_pipeline(path: str) -> Pipeline:
     if not os.path.exists(path):
         raise FileNotFoundError(f"Pipeline file not found at '{path}'")
     
-    # Load pipeline with error handling
+    # Load pipeline 
     try:
         pipeline = joblib.load(path)
     except Exception as e:
@@ -54,7 +55,7 @@ def load_pipeline(path: str) -> Pipeline:
     return pipeline
 
 
-# Use function to load the loan default prediction pipeline (including data preprocessing and Random Forest Classifier model)
+# Load loan default prediction pipeline (including data preprocessing and Random Forest Classifier model)
 pipeline_path = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 
     "..", 
@@ -71,27 +72,32 @@ app = FastAPI()
 # Prediction endpoint 
 @app.post("/predict", response_model=PredictionResponse)
 def predict(pipeline_input: PipelineInput | List[PipelineInput]) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> List[PipelineInput]
-    # Standardize input to List[dict]
+    # Standardize input
     pipeline_input_dict_ls: List[Dict[str, Any]]
     if isinstance(pipeline_input, list):
         pipeline_input_dict_ls = [input.model_dump() for input in pipeline_input]
     else:  # isinstance(pipeline_input, PipelineInput)
         pipeline_input_dict_ls = [pipeline_input.model_dump()]
+    pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_dict_ls)
         
     # Use pipeline to predict probabilities 
-    pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_dict_ls)
-    pred_proba_np: np.ndarray = pipeline.predict_proba(pipeline_input_df)
+    predicted_probabilities: np.ndarray = pipeline.predict_proba(pipeline_input_df)
 
     # Apply optimized threshold to convert probabilities to binary predictions
     optimized_threshold: float = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
-    pred_np: np.ndarray = (pred_proba_np[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
+    predictions: np.ndarray = (predicted_probabilities[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
 
     # Create API response 
     results: List[PredictionResult] = []
-    for pred, pred_proba in zip(pred_np, pred_proba_np):  
+    for pred, pred_proba in zip(predictions, predicted_probabilities):  
         prediction_enum = PredictionEnum.DEFAULT if pred else PredictionEnum.NO_DEFAULT 
-        predicted_probabilities = PredictedProbabilities(default=pred_proba[1], no_default=pred_proba[0])
-        prediction_result = PredictionResult(prediction=prediction_enum, probabilities=predicted_probabilities)
+        prediction_result = PredictionResult(
+            prediction=prediction_enum, 
+            probabilities=PredictedProbabilities(
+                default=pred_proba[1], 
+                no_default=pred_proba[0]
+            )
+        )
         results.append(prediction_result)
 
     return PredictionResponse(results=results)
