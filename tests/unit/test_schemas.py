@@ -1335,6 +1335,31 @@ class TestPredictionResponse:
         assert errors[0]["type"] == "enum"
 
     # Wrong data type for PredictedProbabilities (in PredictionResult) 
+    @pytest.mark.unit 
+    def test_raises_validation_error_if_probabilities_has_wrong_type(self) -> None:
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResponse(results=[
+                {
+                    "prediction": "Default",
+                    "probabilities": {
+                        "default": 0.8,
+                        "no_default": 0.2
+                    } 
+                },
+                {
+                    "prediction": "No Default",
+                    "probabilities": "a string"  # wrong data type 
+                }            
+            ])
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is PredictionResponse "results" field > list at index 1 > PredictionResult "probabilities" field 
+        assert errors[0]["loc"] == ("results", 1, "probabilities") 
+        # Ensure error type is "model_type" (expects PredictedProbabilities model)
+        assert errors[0]["type"] == "model_type" 
+
     # Missing field in PredictedProbabilities (in PredictionResult) 
     # None value in a PredictedProbabilities field (in PredictionResult)
     # Wrong data type in a PredictedProbabilities field (in PredictionResult) 
