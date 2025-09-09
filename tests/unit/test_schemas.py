@@ -1107,6 +1107,13 @@ class TestPredictionResponse:
         }
         assert output == expected_output 
 
+    # Empty "results" list
+    @pytest.mark.unit
+    def test_empty_results_list_is_valid(self) -> None:
+        prediction_response = PredictionResponse(results=[])
+        assert prediction_response.results == []
+        assert prediction_response.n_predictions == 0 
+
     # Extra field 
     @pytest.mark.unit
     def test_extra_field_is_ignored(self) -> None:
@@ -1492,5 +1499,5 @@ class TestPredictionResponse:
         # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field 
         assert errors[0]["loc"] == ("results", 1, "probabilities") 
         # Ensure error type is "value_error" 
-        assert errors[0]["type"] == "value_error" 
+        assert errors[0]["type"] == "value_error"
     
