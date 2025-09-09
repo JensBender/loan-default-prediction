@@ -1381,7 +1381,7 @@ class TestPredictionResponse:
         # Ensure exactly one error
         assert len(errors) == 1
         # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
-        assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default" ) 
+        assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default") 
         # Ensure error type is "missing" 
         assert errors[0]["type"] == "missing" 
 
@@ -1410,7 +1410,7 @@ class TestPredictionResponse:
         # Ensure exactly one error
         assert len(errors) == 1
         # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
-        assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default" ) 
+        assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default") 
         # Ensure error type is "float_type" 
         assert errors[0]["type"] == "float_type" 
 
@@ -1439,7 +1439,7 @@ class TestPredictionResponse:
         # Ensure exactly one error
         assert len(errors) == 1
         # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
-        assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default" ) 
+        assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default") 
         # Ensure error type is "float_type" 
         assert errors[0]["type"] == "float_type" 
 
@@ -1468,8 +1468,36 @@ class TestPredictionResponse:
         # Ensure exactly one error
         assert len(errors) == 1
         # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
-        assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default" ) 
+        assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default") 
         # Ensure error type is "less_than_equal" 
         assert errors[0]["type"] == "less_than_equal" 
 
     # Probabilities must sum to 1 error in PredictedProbabilities (in PredictionResult)
+    @pytest.mark.unit 
+    def test_raises_validation_error_if_predicted_probabilities_do_not_sum_to_one(self) -> None:
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResponse(results=[
+                {
+                    "prediction": "Default",
+                    "probabilities": {
+                        "default": 0.8,
+                        "no_default": 0.2
+                    } 
+                },
+                {
+                    "prediction": "No Default",
+                    "probabilities": {
+                        "default": 0.2,
+                        "no_default": 0.9  # sum 1.1   
+                    }  
+                }            
+            ])
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field 
+        assert errors[0]["loc"] == ("results", 1, "probabilities") 
+        # Ensure error type is "value_error" 
+        assert errors[0]["type"] == "value_error" 
+    
