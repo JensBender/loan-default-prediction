@@ -1444,4 +1444,32 @@ class TestPredictionResponse:
         assert errors[0]["type"] == "float_type" 
 
     # Out-of-range value in a PredictedProbabilities field (in PredictionResult)
+    @pytest.mark.unit 
+    def test_raises_validation_error_if_predicted_probabilities_are_out_of_range(self) -> None:
+        # Ensure ValidationError is raised
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResponse(results=[
+                {
+                    "prediction": "Default",
+                    "probabilities": {
+                        "default": 0.8,
+                        "no_default": 0.2
+                    } 
+                },
+                {
+                    "prediction": "No Default",
+                    "probabilities": {
+                        "default": 0.2,
+                        "no_default": 1.1  # out-of-range value 
+                    }  
+                }            
+            ])
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
+        assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default" ) 
+        # Ensure error type is "less_than_equal" 
+        assert errors[0]["type"] == "less_than_equal" 
+
     # Probabilities must sum to 1 error in PredictedProbabilities (in PredictionResult)
