@@ -1176,7 +1176,7 @@ class TestPredictionResponse:
         # Ensure error type is "list_type" (which take precedence over "none_forbidden")
         assert errors[0]["type"] == "list_type"
  
-    # Wrong data type in "results" field (must be a list) 
+    # Wrong data type in "results" field (must be List[PredictionResult]) 
     @pytest.mark.unit 
     @pytest.mark.parametrize("wrong_data_type", [
         "a string",
@@ -1297,11 +1297,46 @@ class TestPredictionResponse:
         # Ensure errory type is "float_type"
         assert errors[0]["type"] == "float_type"
 
-    # Wrong data type for PredictionEnum (in PredictionResult) 
     # Invalid value for PredictionEnum (in PredictionResult) 
-    # Missing field in PredictedProbabilities (in PredictionResult) 
+    # Invalid values , None, )
+    @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_prediction_enum", [
+        "wrong string",  # the string must be an Enum member
+        "DEFAULT",  # correct string but wrong casing
+        "",  # empty string
+        None,  
+        1,  # wrong data type
+        ["a", "list"],  # wrong data type
+    ])
+    def test_raises_validation_error_for_invalid_prediction_enum(self, invalid_prediction_enum: Any) -> None:
+        with pytest.raises(ValidationError) as exc_info:
+            PredictionResponse(results=[
+                {
+                    "prediction": "Default",
+                    "probabilities": {
+                        "default": 0.8,
+                        "no_default": 0.2
+                    } 
+                },
+                {
+                    "prediction": invalid_prediction_enum,
+                    "probabilities": {
+                        "default": 0.2,
+                        "no_default": 0.8  
+                    } 
+                }            
+            ])
+        errors = exc_info.value.errors()
+        # Ensure exactly one error
+        assert len(errors) == 1
+        # Ensure error location is the "prediction" field, at index 1 of the "results" list
+        assert errors[0]["loc"] == ("results", 1, "prediction")
+        # Ensure error type is "enum"
+        assert errors[0]["type"] == "enum"
+
     # Wrong data type for PredictedProbabilities (in PredictionResult) 
+    # Missing field in PredictedProbabilities (in PredictionResult) 
     # None value in a PredictedProbabilities field (in PredictionResult)
     # Wrong data type in a PredictedProbabilities field (in PredictionResult) 
     # Out-of-range value in a PredictedProbabilities field (in PredictionResult)
-    # Probabilities sum to 1 error in PredictedProbabilities (in PredictionResult)
+    # Probabilities must sum to 1 error in PredictedProbabilities (in PredictionResult)
