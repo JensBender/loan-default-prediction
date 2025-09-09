@@ -1260,11 +1260,11 @@ class TestPredictionResponse:
         assert len(errors) == 1
         # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field 
         assert errors[0]["loc"] == ("results", 1, "probabilities")
-        # Ensure errory type is "missing"
+        # Ensure error type is "missing"
         assert errors[0]["type"] == "missing"
 
     # None value in a PredictionResult field
-    def test_raises_validation_error_if_any_prediction_result_field_is_none(self) -> None:
+    def test_raises_validation_error_if_prediction_result_field_is_none(self) -> None:
         with pytest.raises(ValidationError) as exc_info:
             PredictionResponse(results=[
                 {
@@ -1276,19 +1276,16 @@ class TestPredictionResponse:
                 },
                 {
                     "prediction": "No Default",
-                    "probabilities": {
-                        "default": 0.2,
-                        "no_default": None  
-                    } 
+                    "probabilities": None
                 }            
             ])
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
-        assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default")
-        # Ensure errory type is "float_type"
-        assert errors[0]["type"] == "float_type"
+        # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field
+        assert errors[0]["loc"] == ("results", 1, "probabilities")
+        # Ensure errory type is "model_type"
+        assert errors[0]["type"] == "model_type"
 
     # Invalid value for PredictionEnum (in PredictionResult) 
     @pytest.mark.unit
