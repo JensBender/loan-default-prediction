@@ -1156,7 +1156,7 @@ class TestPredictionResponse:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the "results" field
+        # Ensure error location is the PredictionResponse "results" field
         assert errors[0]["loc"][0] == "results"
         # Ensure error type is "missing"
         assert errors[0]["type"] == "missing" 
@@ -1171,7 +1171,7 @@ class TestPredictionResponse:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the "results" field
+        # Ensure error location is the PredictionResponse "results" field
         assert errors[0]["loc"][0] == "results"
         # Ensure error type is "list_type" (which take precedence over "none_forbidden")
         assert errors[0]["type"] == "list_type"
@@ -1194,7 +1194,7 @@ class TestPredictionResponse:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the "results" field
+        # Ensure error location is the PredictionResponse "results" field
         assert errors[0]["loc"][0] == "results" 
         # Ensure error type is "list_type" 
         assert errors[0]["type"] == "list_type" 
@@ -1216,7 +1216,7 @@ class TestPredictionResponse:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the results list at index 1
+        # Ensure error location is PredictionResponse "results" field > list index 1 
         assert errors[0]["loc"] == ("results", 1)
         # Ensure errory type is "model_type"
         assert errors[0]["type"] == "model_type"
@@ -1238,7 +1238,7 @@ class TestPredictionResponse:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the results list at index 1
+        # Ensure error location is PredictionResponse "results" field > list index 1 
         assert errors[0]["loc"] == ("results", 1)
         # Ensure errory type is "model_type"
         assert errors[0]["type"] == "model_type"
@@ -1265,7 +1265,7 @@ class TestPredictionResponse:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the "no_default" field in the "probabilities" field at index 1 of the "results" list 
+        # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
         assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default")
         # Ensure errory type is "missing"
         assert errors[0]["type"] == "missing"
@@ -1292,7 +1292,7 @@ class TestPredictionResponse:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the "no_default" field in the "probabilities" field at index 1 of the "results" list 
+        # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
         assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default")
         # Ensure errory type is "float_type"
         assert errors[0]["type"] == "float_type"
@@ -1329,7 +1329,7 @@ class TestPredictionResponse:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the "prediction" field, at index 1 of the "results" list
+        # Ensure error location is the PredictionResponse "results" field > list index 1 > PredictionResult "prediction" field
         assert errors[0]["loc"] == ("results", 1, "prediction")
         # Ensure error type is "enum"
         assert errors[0]["type"] == "enum"
@@ -1355,7 +1355,7 @@ class TestPredictionResponse:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is PredictionResponse "results" field > list at index 1 > PredictionResult "probabilities" field 
+        # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field 
         assert errors[0]["loc"] == ("results", 1, "probabilities") 
         # Ensure error type is "model_type" (expects PredictedProbabilities model)
         assert errors[0]["type"] == "model_type" 
@@ -1384,7 +1384,7 @@ class TestPredictionResponse:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is PredictionResponse "results" field > list at index 1 > PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
+        # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
         assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default" ) 
         # Ensure error type is "missing" 
         assert errors[0]["type"] == "missing" 
