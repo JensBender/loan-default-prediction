@@ -1240,7 +1240,7 @@ class TestPredictionResponse:
         assert errors[0]["type"] == "model_type"
 
     # Missing field in PredictionResult
-    def test_raises_validation_error_if_any_prediction_result_has_missing_field(self) -> None:
+    def test_raises_validation_error_if_prediction_result_field_is_missing(self) -> None:
         with pytest.raises(ValidationError) as exc_info:
             PredictionResponse(results=[
                 {
@@ -1251,18 +1251,15 @@ class TestPredictionResponse:
                     } 
                 },
                 {
-                    "prediction": "No Default",
-                    "probabilities": {
-                        "default": 0.2
-                        # "no_default" field is missing 
-                    } 
+                    "prediction": "No Default"
+                    # "probabilities" field is missing
                 }            
             ])
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
-        assert errors[0]["loc"] == ("results", 1, "probabilities", "no_default")
+        # Ensure error location is PredictionResponse "results" field > list index 1 > PredictionResult "probabilities" field 
+        assert errors[0]["loc"] == ("results", 1, "probabilities")
         # Ensure errory type is "missing"
         assert errors[0]["type"] == "missing"
 
@@ -1294,7 +1291,6 @@ class TestPredictionResponse:
         assert errors[0]["type"] == "float_type"
 
     # Invalid value for PredictionEnum (in PredictionResult) 
-    # Invalid values , None, )
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_prediction_enum", [
         "wrong string",  # the string must be an Enum member
