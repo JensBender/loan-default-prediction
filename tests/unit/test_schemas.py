@@ -894,7 +894,7 @@ class TestPredictionResult:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the prediction field
+        # Ensure error location is the PredictionResult "prediction" field
         assert errors[0]["loc"][0] == "prediction" 
         # Ensure error type is "enum" 
         assert errors[0]["type"] == "enum" 
@@ -920,7 +920,7 @@ class TestPredictionResult:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the prediction field
+        # Ensure error location is the PredictionResult "prediction" field
         assert errors[0]["loc"][0] == "prediction" 
         # Ensure error type is "enum" 
         assert errors[0]["type"] == "enum" 
@@ -946,7 +946,7 @@ class TestPredictionResult:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the probabilities field
+        # Ensure error location is the PredictionResult "probabilities" field
         assert errors[0]["loc"][0] == "probabilities" 
         # Ensure error type is "model_type" 
         assert errors[0]["type"] == "model_type" 
@@ -963,9 +963,8 @@ class TestPredictionResult:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the probabilities > no_default field
-        assert errors[0]["loc"][0] == "probabilities" 
-        assert errors[0]["loc"][1] == "no_default" 
+        # Ensure error location is the PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
+        assert errors[0]["loc"] == ("probabilities", "no_default") 
         # Ensure error type is "missing" 
         assert errors[0]["type"] == "missing" 
     
@@ -981,9 +980,8 @@ class TestPredictionResult:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the probabilities > no_default field
-        assert errors[0]["loc"][0] == "probabilities" 
-        assert errors[0]["loc"][1] == "no_default" 
+        # Ensure error location is the PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
+        assert errors[0]["loc"] == ("probabilities", "no_default")  
         # Ensure error type is "float_type" 
         assert errors[0]["type"] == "float_type" 
 
@@ -999,9 +997,8 @@ class TestPredictionResult:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the probabilities and no_default field
-        assert errors[0]["loc"][0] == "probabilities" 
-        assert errors[0]["loc"][1] == "no_default" 
+        # Ensure error location is the PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
+        assert errors[0]["loc"] == ("probabilities", "no_default") 
         # Ensure error type is "float_parsing" 
         assert errors[0]["type"] == "float_parsing" 
 
@@ -1039,9 +1036,8 @@ class TestPredictionResult:
         errors = exc_info.value.errors()
         # Ensure exactly one error
         assert len(errors) == 1
-        # Ensure error location is the probabilities and no_default field
-        assert errors[0]["loc"][0] == "probabilities" 
-        assert errors[0]["loc"][1] == "no_default" 
+        # Ensure error location is the PredictionResult "probabilities" field > PredictedProbabilities "no_default" field
+        assert errors[0]["loc"] == ("probabilities", "no_default") 
         # Ensure error type is "greater_than_equal" 
         assert errors[0]["type"] == "greater_than_equal" 
 
