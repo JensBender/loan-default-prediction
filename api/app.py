@@ -47,6 +47,10 @@ def load_pipeline(path: str) -> Pipeline:
     except Exception as e:
         raise RuntimeError(f"Failed to load pipeline from '{path}'") from e
     
+    # Ensure loaded object is a scikit-learn Pipeline
+    if not isinstance(pipeline, Pipeline):
+        raise TypeError(f"Loaded object is not a scikit-learn Pipeline")
+
     # Ensure pipeline has .predict_proba() method
     if not hasattr(pipeline, "predict_proba"):
         raise TypeError(f"Loaded pipeline does not have a .predict_proba() method")
