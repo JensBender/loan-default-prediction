@@ -36,16 +36,19 @@ from api.schemas import (
 
 # --- ML Pipeline ---
 # Function to load a pre-trained scikit-learn pipeline
-def load_pipeline(path: str) -> Pipeline:
+def load_pipeline(path: str | os.PathLike) -> Pipeline:
+    # Convert path-like objects to string
+    path_str = str(path)
+
     # Ensure file exists
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"Pipeline file not found at '{path}'")
+    if not os.path.exists(path_str):
+        raise FileNotFoundError(f"Pipeline file not found at '{path_str}'")
     
     # Load pipeline 
     try:
-        pipeline = joblib.load(path)
+        pipeline = joblib.load(path_str)
     except Exception as e:
-        raise RuntimeError(f"Failed to load pipeline from '{path}'") from e
+        raise RuntimeError(f"Failed to load pipeline from '{path_str}'") from e
     
     # Ensure loaded object is a scikit-learn Pipeline
     if not isinstance(pipeline, Pipeline):
