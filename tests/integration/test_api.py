@@ -52,7 +52,6 @@ class TestLoadPipeline:
         root_dir = request.config.rootdir
         # Get path to pipeline
         pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"   
-        pipeline_path = str(pipeline_path)
         # Valid pipeline input (single-row DataFrame)
         valid_input = pd.DataFrame({
             "income": [300000],
