@@ -55,9 +55,12 @@ class TestLoadPipeline:
         mock_joblib_load.side_effect = Exception("joblib load error")
 
         # Ensure RuntimeError is raised
-        with pytest.raises(RuntimeError):
+        with pytest.raises(RuntimeError) as exc_info:
             load_pipeline("some_path.joblib")
-
+        # Ensure error message is as expected
+        error_msg = str(exc_info.value)
+        assert "Failed to load pipeline" in error_msg
+        assert "some_path.joblib" in error_msg
         # Ensure os.path.exists() and joblib.load() were called
         mock_os_path_exists.assert_called_once_with("some_path.joblib")
         mock_joblib_load.assert_called_once_with("some_path.joblib")
