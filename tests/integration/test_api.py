@@ -47,14 +47,12 @@ class TestLoadPipeline:
         assert predicted_probabilities.shape == (1, 2)
 
     @pytest.mark.integration
-    def test_happy_path_with_real_pipeline(self):
-        # Create the pipeline path
-        pipeline_path = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)),  # path to directory of current file
-            "../..",  # two levels up to root directory 
-            "models", 
-            "loan_default_rf_pipeline.joblib"
-        )      
+    def test_happy_path_with_real_pipeline(self, request):
+        # Get path to root directory using pytest's built-in request fixture
+        root_dir = request.config.rootdir
+        # Get path to pipeline
+        pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"   
+        pipeline_path = str(pipeline_path)
         # Valid pipeline input (single-row DataFrame)
         valid_input = pd.DataFrame({
             "income": [300000],
