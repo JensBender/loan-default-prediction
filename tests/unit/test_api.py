@@ -72,6 +72,24 @@ class TestLoadPipeline:
 
     @patch("api.app.joblib.load")
     @patch("api.app.os.path.exists")
+    def test_raises_type_error_if_loaded_object_is_not_pipeline(self, mock_os_path_exists, mock_joblib_load):
+        # Simulate that pipeline file exists
+        mock_os_path_exists.return_value = True
+        # Simulate loaded object that is not a pipeline
+        mock_joblib_load.return_value = "not a pipeline"
+
+        # Ensure .load_pipeline() raises TypeError
+        with pytest.raises(TypeError) as exc_info:
+            load_pipeline("some_path.joblib")
+        # Ensure error message is as expected
+        error_msg = str(exc_info.value)
+        assert "Loaded object is not a scikit-learn Pipeline" in error_msg
+        # Ensure os.path.exists() and joblib.load() were called
+        mock_os_path_exists.assert_called_once_with("some_path.joblib")
+        mock_joblib_load.assert_called_once_with("some_path.joblib")
+
+    @patch("api.app.joblib.load")
+    @patch("api.app.os.path.exists")
     def test_raises_type_error_if_predict_proba_does_not_exist(self, mock_os_path_exists, mock_joblib_load):
         # Simulate that pipeline file exists
         mock_os_path_exists.return_value = True 
