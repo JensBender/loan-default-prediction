@@ -1,4 +1,7 @@
 # --- Imports ---
+# Standard library imports
+import os
+
 # Third-party library imports
 import pytest 
 from sklearn.pipeline import Pipeline
@@ -12,7 +15,7 @@ from api.app import load_pipeline
 
 # --- Function .load_pipeline() ---
 class TestLoadPipeline:
-    def test_happy_path(self, tmp_path):
+    def test_happy_path_with_minimal_pipeline(self, tmp_path):
         # Create minimal pipeline
         pipeline = Pipeline([
             ("scaler", StandardScaler()),
@@ -39,3 +42,17 @@ class TestLoadPipeline:
         assert hasattr(loaded_pipeline, "predict_proba")
         # Ensure .predict_proba() returns numpy 2darray with 1 row and two columns (for classes 0 and 1)
         assert predicted_probabilities.shape == (1, 2)
+
+    def test_happy_path_with_real_pipeline(self):
+        # Create the pipeline path
+        pipeline_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),  # path to directory of current file
+            "../..",  # two levels up to root directory 
+            "models", 
+            "loan_default_rf_pipeline.joblib"
+        )        
+        # Call .load_pipeline() function
+        loaded_pipeline = load_pipeline(pipeline_path)
+        # Ensure pipeline is scikit-learn Pipeline class with "predict_proba" method
+        assert isinstance(loaded_pipeline, Pipeline)
+        assert hasattr(loaded_pipeline, "predict_proba")
