@@ -1,6 +1,6 @@
 # --- Imports ---
 # Standard library imports
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 # Third-party library imports
 import pytest 
@@ -11,6 +11,27 @@ from api.app import load_pipeline
 
 # --- Function .load_pipeline() ---
 class TestLoadPipeline:
+    @patch("api.app.joblib.load")
+    @patch("api.app.os.path.exists")
+    def test_happy_path(self, mock_os_path_exists, mock_joblib_load):
+        # Simulate that the file exists
+        mock_os_path_exists.return_value = True
+        # Simulate loaded pipeline instance
+        mock_pipeline = MagicMock()
+        mock_pipeline.predict_proba = MagicMock()
+        mock_joblib_load.return_value = mock_pipeline
+
+        # Call .load_pipeline()
+        pipeline = load_pipeline(path="some_path.joblib")
+
+        # Ensure loaded pipeline is a mock pipeline with a "predict_proba" attribute
+        assert pipeline is mock_pipeline
+        assert hasattr(pipeline, "predict_proba")
+        # Ensure os.path.exists was called once
+        mock_os_path_exists.assert_called_once_with("some_path.joblib")
+        # Ensure joblib.load was called once
+        mock_joblib_load.assert_called_once_with("some_path.joblib")
+
     @patch("api.app.os.path.exists")
     def test_raises_file_not_found_error_for_non_existent_file(self, mock_os_path_exists):
         # Simulate that the file does not exist
