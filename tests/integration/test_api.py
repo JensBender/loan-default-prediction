@@ -7,6 +7,8 @@ import pytest
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
+import pandas as pd
+import numpy as np
 import joblib
 
 # Local imports
@@ -52,9 +54,30 @@ class TestLoadPipeline:
             "../..",  # two levels up to root directory 
             "models", 
             "loan_default_rf_pipeline.joblib"
-        )        
+        )      
+        # Valid pipeline input (single-row DataFrame)
+        valid_input = pd.DataFrame({
+            "income": [300000],
+            "age": [30],
+            "experience": [3],
+            "married": ["single"],
+            "house_ownership": ["rented"],
+            "car_ownership": ["no"],
+            "profession": ["Artist"],
+            "city": ["Sikar"],
+            "state": ["Rajasthan"],
+            "current_job_yrs": [3],
+            "current_house_yrs": [11],
+        })  
+
         # Call .load_pipeline() function
         loaded_pipeline = load_pipeline(pipeline_path)
+        # Predict probabilities with valid input
+        predicted_probabilities = loaded_pipeline.predict_proba(valid_input)
+
         # Ensure pipeline is scikit-learn Pipeline class with "predict_proba" method
         assert isinstance(loaded_pipeline, Pipeline)
         assert hasattr(loaded_pipeline, "predict_proba")
+        # Ensure .pred_proba() returns numpy array with 1 row and 2 columns (for the 2 classes)
+        assert isinstance(predicted_probabilities, np.ndarray)
+        assert predicted_probabilities.shape == (1, 2)
