@@ -45,3 +45,20 @@ class TestLoadPipeline:
         assert "non_existent_file.joblib" in error_msg
         # Ensure os.path.exists was called 
         mock_os_path_exists.assert_called_once_with("non_existent_file.joblib")
+
+    @patch("api.app.joblib.load")
+    @patch("api.app.os.path.exists")
+    def test_raises_runtime_error_if_joblib_load_fails(self, mock_os_path_exists, mock_joblib_load):
+        # Simulate that the file exists
+        mock_os_path_exists.return_value = True
+        # Simulate an error when loading joblib file
+        mock_joblib_load.side_effect = Exception("joblib load error")
+
+        # Ensure RuntimeError is raised
+        with pytest.raises(RuntimeError):
+            load_pipeline("some_path.joblib")
+
+        # Ensure os.path.exists() and joblib.load() were called
+        mock_os_path_exists.assert_called_once_with("some_path.joblib")
+        mock_joblib_load.assert_called_once_with("some_path.joblib")
+    
