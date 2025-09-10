@@ -3,7 +3,8 @@
 from unittest.mock import patch, MagicMock
 
 # Third-party library imports
-import pytest 
+import pytest
+from sklearn.pipeline import Pipeline
 
 # Local imports
 from api.app import load_pipeline
@@ -17,12 +18,12 @@ class TestLoadPipeline:
         # Simulate that the file exists
         mock_os_path_exists.return_value = True
         # Simulate loaded pipeline instance
-        mock_pipeline = MagicMock()
+        mock_pipeline = MagicMock(spec=Pipeline)
         mock_pipeline.predict_proba = MagicMock()
         mock_joblib_load.return_value = mock_pipeline
 
         # Call .load_pipeline()
-        pipeline = load_pipeline(path="some_path.joblib")
+        pipeline = load_pipeline("some_path.joblib")
 
         # Ensure loaded pipeline is a mock pipeline with a "predict_proba" attribute
         assert pipeline is mock_pipeline
@@ -38,7 +39,7 @@ class TestLoadPipeline:
         mock_os_path_exists.return_value = False
         # Ensure FileNotFoundError is raised
         with pytest.raises(FileNotFoundError) as exc_info:
-            load_pipeline(path="non_existent_file.joblib")
+            load_pipeline("non_existent_file.joblib")
         # Ensure error message is as expected
         error_msg = str(exc_info.value)
         assert "Pipeline file not found at" in error_msg
@@ -75,7 +76,7 @@ class TestLoadPipeline:
         # Simulate that pipeline file exists
         mock_os_path_exists.return_value = True 
         # Simulate loaded pipeline instance without a "predict_proba" method
-        mock_pipeline = MagicMock()
+        mock_pipeline = MagicMock(spec=Pipeline)
         del mock_pipeline.predict_proba
         mock_joblib_load.return_value = mock_pipeline
 
