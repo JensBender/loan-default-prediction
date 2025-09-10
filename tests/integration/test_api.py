@@ -15,6 +15,7 @@ from api.app import load_pipeline
 
 # --- Function .load_pipeline() ---
 class TestLoadPipeline:
+    @pytest.mark.integration
     def test_happy_path_with_minimal_pipeline(self, tmp_path):
         # Create minimal pipeline
         pipeline = Pipeline([
@@ -43,6 +44,7 @@ class TestLoadPipeline:
         # Ensure .predict_proba() returns numpy 2darray with 1 row and two columns (for classes 0 and 1)
         assert predicted_probabilities.shape == (1, 2)
 
+    @pytest.mark.integration
     def test_happy_path_with_real_pipeline(self):
         # Create the pipeline path
         pipeline_path = os.path.join(
