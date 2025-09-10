@@ -80,8 +80,11 @@ class TestLoadPipeline:
         mock_joblib_load.return_value = mock_pipeline
 
         # Ensure .load_pipeline() raises TypeError
-        with pytest.raises(TypeError):
+        with pytest.raises(TypeError) as exc_info:
             load_pipeline("some_path.joblib")
+        # Ensure error message is as expected
+        error_msg = str(exc_info.value)
+        assert "Loaded pipeline does not have a .predict_proba() method" in error_msg
         # Ensure os.path.exists() and joblib.load() were called
         mock_os_path_exists.assert_called_once_with("some_path.joblib")
         mock_joblib_load.assert_called_once_with("some_path.joblib")
