@@ -61,6 +61,10 @@ class TestLoadPipeline:
         error_msg = str(exc_info.value)
         assert "Failed to load pipeline" in error_msg
         assert "some_path.joblib" in error_msg
+        # Ensure the original error was propagated
+        propagated_error = exc_info.value.__cause__
+        assert isinstance(propagated_error, Exception)
+        assert str(propagated_error) == "joblib load error"
         # Ensure os.path.exists() and joblib.load() were called
         mock_os_path_exists.assert_called_once_with("some_path.joblib")
         mock_joblib_load.assert_called_once_with("some_path.joblib")
