@@ -68,4 +68,20 @@ class TestLoadPipeline:
         # Ensure os.path.exists() and joblib.load() were called
         mock_os_path_exists.assert_called_once_with("some_path.joblib")
         mock_joblib_load.assert_called_once_with("some_path.joblib")
-    
+
+    @patch("api.app.joblib.load")
+    @patch("api.app.os.path.exists")
+    def test_raises_type_error_if_predict_proba_does_not_exist(self, mock_os_path_exists, mock_joblib_load):
+        # Simulate that pipeline file exists
+        mock_os_path_exists.return_value = True 
+        # Simulate loaded pipeline instance without a "predict_proba" method
+        mock_pipeline = MagicMock()
+        del mock_pipeline.predict_proba
+        mock_joblib_load.return_value = mock_pipeline
+
+        # Ensure .load_pipeline() raises TypeError
+        with pytest.raises(TypeError):
+            load_pipeline("some_path.joblib")
+        # Ensure os.path.exists() and joblib.load() were called
+        mock_os_path_exists.assert_called_once_with("some_path.joblib")
+        mock_joblib_load.assert_called_once_with("some_path.joblib")
