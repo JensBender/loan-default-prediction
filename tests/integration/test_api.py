@@ -101,3 +101,17 @@ class TestLoadPipeline:
         assert "Failed to load pipeline" in error_msg
         assert "corrupt.joblib" in error_msg
 
+    @pytest.mark.integration
+    def test_raises_type_error_if_loaded_object_is_not_pipeline(self, tmp_path):
+        # Create a joblib file that is not a Pipeline
+        not_a_pipeline = {"a": "dictionary"}
+        file_path = tmp_path / "not_a_pipeline.joblib"
+        joblib.dump(not_a_pipeline, file_path)
+
+        # Ensure .load_pipeline() raises TypeError
+        with pytest.raises(TypeError) as exc_info:
+            load_pipeline(file_path)
+        # Ensure error message is as expected
+        error_msg = str(exc_info.value)
+        assert "Loaded object is not a scikit-learn Pipeline" in error_msg    
+
