@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 from sklearn.pipeline import Pipeline
+import numpy as np
 
 # Local imports
 from api.app import load_pipeline, app
@@ -137,5 +138,27 @@ class TestLoadPipeline:
 client = TestClient(app)
 
 class TestPredict:
-    def test_happy_path_single_input(self):
-        pass
+    @patch("api.app.pipeline.predict_proba")
+    def test_happy_path_single_input(self, mock_predict_proba):
+        valid_input = {
+            "income": 300000,
+            "age": 30,
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "Artist",
+            "city": "Sikar",
+            "state": "Rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        }
+        mock_predict_proba.return_value = np.array([[0.8, 0.2]])
+        
+        response = client.post("/predict", json=valid_input)
+
+        # Ensure post request was successful
+        assert response.status_code == 200
+        # Ensure prediction result is as expected
+        prediction_result = response.json()["results"][0]
+        assert prediction_result["prediction"] == "No Default"  # 0.2 proba < 0.29 threshod
