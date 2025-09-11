@@ -147,9 +147,9 @@ class TestPredict:
             "married": "single",
             "house_ownership": "rented",
             "car_ownership": "no",
-            "profession": "Artist",
-            "city": "Sikar",
-            "state": "Rajasthan",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
             "current_job_yrs": 3,
             "current_house_yrs": 11           
         }
@@ -161,4 +161,4 @@ class TestPredict:
         assert response.status_code == 200
         # Ensure prediction result is as expected
         prediction_result = response.json()["results"][0]
-        assert prediction_result["prediction"] == "No Default"  # 0.2 proba < 0.29 threshod
+        assert prediction_result["prediction"] == "No Default"  # 0.2 proba < 0.29 threshold
