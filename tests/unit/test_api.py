@@ -5,10 +5,11 @@ from pathlib import Path
 
 # Third-party library imports
 import pytest
+from fastapi.testclient import TestClient
 from sklearn.pipeline import Pipeline
 
 # Local imports
-from api.app import load_pipeline
+from api.app import load_pipeline, app
 
 
 # --- Function .load_pipeline() ---
@@ -130,3 +131,11 @@ class TestLoadPipeline:
         # Ensure os.path.exists() and joblib.load() were called
         mock_os_path_exists.assert_called_once_with("some_path.joblib")
         mock_joblib_load.assert_called_once_with("some_path.joblib")
+
+
+# --- FastAPI endpoint "/predict" ---
+client = TestClient(app)
+
+class TestPredict:
+    def test_happy_path_single_input(self):
+        pass
