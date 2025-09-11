@@ -2,7 +2,6 @@
 # Standard library imports
 import os
 from typing import List, Dict, Any
-from pathlib import Path
 
 # Third-party library imports
 from fastapi import FastAPI
@@ -33,18 +32,9 @@ from api.schemas import (
     PredictionResult,
     PredictionResponse    
 )
-
+from api.utils import get_root_directory
 
 # --- ML Pipeline ---
-# Helper function to get path to root directory 
-def get_root_directory(anchor_file: str = "pytest.ini") -> Path:
-    file_path = Path(__file__).resolve()
-    for parent in file_path.parents:
-        if (parent / anchor_file).exists():
-            return parent
-    raise FileNotFoundError(f"Root directory not found: anchor file '{anchor_file}' is missing.")
-
-
 # Get path to the pipeline .joblib file
 root_dir = get_root_directory()
 pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"
@@ -77,7 +67,7 @@ def load_pipeline(path: str | os.PathLike) -> Pipeline:
 
 
 # Load loan default prediction pipeline (including data preprocessing and Random Forest Classifier model)
-pipeline = load_pipeline(path=pipeline_path)
+pipeline = load_pipeline(pipeline_path)
 
 # --- API ---
 # Create FastAPI app
