@@ -1,7 +1,4 @@
 # --- Imports ---
-# Standard library imports
-import os
-
 # Third-party library imports
 import pytest 
 from sklearn.pipeline import Pipeline
@@ -78,3 +75,14 @@ class TestLoadPipeline:
         # Ensure .pred_proba() returns numpy array with 1 row and 2 columns (for the 2 classes)
         assert isinstance(predicted_probabilities, np.ndarray)
         assert predicted_probabilities.shape == (1, 2)
+
+    @pytest.mark.integration
+    def test_raises_file_not_found_error_for_non_existent_file(self):
+        # Ensure FileNotFoundError is raised
+        with pytest.raises(FileNotFoundError) as exc_info:
+            load_pipeline("non_existent_file.joblib")
+        # Ensure error message is as expected
+        error_msg = str(exc_info.value)
+        assert "Pipeline file not found at" in error_msg
+        assert "non_existent_file.joblib" in error_msg
+
