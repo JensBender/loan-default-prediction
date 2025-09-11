@@ -1,10 +1,20 @@
 from pathlib import Path
 
-
 # Helper function to get path to root directory 
-def get_root_directory(anchor_file: str = "pytest.ini") -> Path:
+def get_root_directory(anchor_files: str | list[str] = [".git", "Readme.md"]) -> Path:
+    # Standardize inputs to list[str]
+    if isinstance(anchor_files, str):
+        anchor_files = [anchor_files]
+
+    # Get absolute path to current file
     file_path = Path(__file__).resolve()
+
+    # Iterate over each parent directory
     for parent in file_path.parents:
-        if (parent / anchor_file).exists():
-            return parent
-    raise FileNotFoundError(f"Root directory not found: anchor file '{anchor_file}' is missing.")
+        # Iterate over each anchor file
+        for anchor_file in anchor_files:
+            # Check if anchor file exists in parent directory
+            if (parent / anchor_file).exists():
+                # Return the parent directory in which the anchor file was found, i.e. the root directory
+                return parent
+    raise FileNotFoundError(f"Root directory not found: None of the anchor files '{anchor_files}' were found in any parent directory.")
