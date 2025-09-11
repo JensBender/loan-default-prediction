@@ -36,13 +36,13 @@ from api.schemas import (
 
 
 # --- ML Pipeline ---
-# Helper function to get the path to the root directory 
+# Helper function to get path to root directory 
 def get_root_directory(anchor_file: str = "pytest.ini") -> Path:
-    current_path = Path(__file__).resolve()
-    for parent in current_path.parents:
+    file_path = Path(__file__).resolve()
+    for parent in file_path.parents:
         if (parent / anchor_file).exists():
             return parent
-    raise FileNotFoundError(f"Project root not found: anchor file '{anchor_file}' is missing.")
+    raise FileNotFoundError(f"Root directory not found: anchor file '{anchor_file}' is missing.")
 
 
 # Get path to the pipeline .joblib file
