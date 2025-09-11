@@ -78,11 +78,26 @@ class TestLoadPipeline:
 
     @pytest.mark.integration
     def test_raises_file_not_found_error_for_non_existent_file(self):
-        # Ensure FileNotFoundError is raised
+        # Ensure .load_pipeline() raises FileNotFoundError
         with pytest.raises(FileNotFoundError) as exc_info:
             load_pipeline("non_existent_file.joblib")
         # Ensure error message is as expected
         error_msg = str(exc_info.value)
         assert "Pipeline file not found at" in error_msg
         assert "non_existent_file.joblib" in error_msg
+
+    @pytest.mark.integration
+    def test_raises_runtime_error_if_joblib_load_fails(self, tmp_path):
+        # Create a corrupt (non-joblib) file
+        corrupt_file_path = tmp_path / "corrupt.joblib"
+        with open(corrupt_file_path, "w") as file:
+            file.write("This is not a joblib file")
+
+        # Ensure .load_pipeline() raises RuntimeError 
+        with pytest.raises(RuntimeError) as exc_info:
+            load_pipeline(corrupt_file_path)
+        # Ensure error message is as expected
+        error_msg = str(exc_info.value)
+        assert "Failed to load pipeline" in error_msg
+        assert "corrupt.joblib" in error_msg
 
