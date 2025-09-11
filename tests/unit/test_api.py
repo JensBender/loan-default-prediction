@@ -15,7 +15,7 @@ from api.app import load_pipeline
 class TestLoadPipeline:
     @patch("api.app.joblib.load")
     @patch("api.app.os.path.exists")
-    def test_happy_path_mock_pipeline(self, mock_os_path_exists, mock_joblib_load):
+    def test_happy_path_with_mock_pipeline(self, mock_os_path_exists, mock_joblib_load):
         # Simulate that the file exists
         mock_os_path_exists.return_value = True
         # Simulate loaded pipeline instance
