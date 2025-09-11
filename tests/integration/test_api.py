@@ -2,7 +2,7 @@
 # Third-party library imports
 import pytest 
 from sklearn.pipeline import Pipeline
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import numpy as np
@@ -115,3 +115,21 @@ class TestLoadPipeline:
         error_msg = str(exc_info.value)
         assert "Loaded object is not a scikit-learn Pipeline" in error_msg    
 
+    @pytest.mark.integration
+    def test_raises_type_error_if_predict_proba_does_not_exist(self, tmp_path):
+        # Create a pipeline without .predict_proba() method (Regressor instead of Classifier)
+        pipeline = Pipeline([
+            ("scaler", StandardScaler()),
+            ("rf_regressor", RandomForestRegressor())
+        ])
+        # Save pipeline to temporary file
+        pipeline_path = tmp_path / "pipeline.joblib"
+        joblib.dump(pipeline, pipeline_path)
+
+        # Ensure .load_pipeline() raises TypeError
+        with pytest.raises(TypeError) as exc_info:
+            load_pipeline(pipeline_path)
+        # Ensure error message is as expected
+        error_msg = str(exc_info.value)
+        assert "Loaded pipeline does not have a .predict_proba() method" in error_msg
+    
