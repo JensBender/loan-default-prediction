@@ -1,6 +1,7 @@
 # --- Imports ---
 # Standard library imports
 from unittest.mock import patch, MagicMock
+from pathlib import Path
 
 # Third-party library imports
 import pytest
@@ -14,7 +15,7 @@ from api.app import load_pipeline
 class TestLoadPipeline:
     @patch("api.app.joblib.load")
     @patch("api.app.os.path.exists")
-    def test_happy_path(self, mock_os_path_exists, mock_joblib_load):
+    def test_happy_path_mock_pipeline(self, mock_os_path_exists, mock_joblib_load):
         # Simulate that the file exists
         mock_os_path_exists.return_value = True
         # Simulate loaded pipeline instance
@@ -32,6 +33,28 @@ class TestLoadPipeline:
         mock_os_path_exists.assert_called_once_with("some_path.joblib")
         # Ensure joblib.load was called once
         mock_joblib_load.assert_called_once_with("some_path.joblib")
+
+    @patch("api.app.joblib.load")
+    @patch("api.app.os.path.exists")
+    def test_accepts_pathlike_object(self, mock_os_path_exists, mock_joblib_load):
+        # Simulate that the file exists
+        mock_os_path_exists.return_value = True
+        # Simulate loaded pipeline instance
+        mock_pipeline = MagicMock(spec=Pipeline)
+        mock_pipeline.predict_proba = MagicMock()
+        mock_joblib_load.return_value = mock_pipeline
+
+        # Call .load_pipeline() with a pathlib.Path object (path-like object)
+        path_like_object = Path("some_path.joblib")
+        pipeline = load_pipeline(path_like_object)
+
+        # Ensure loaded pipeline is a mock pipeline with a "predict_proba" attribute
+        assert pipeline is mock_pipeline
+        assert hasattr(pipeline, "predict_proba")
+        # Ensure os.path.exists was called once with converted string 
+        mock_os_path_exists.assert_called_once_with(str(path_like_object))
+        # Ensure joblib.load was called once with converted string 
+        mock_joblib_load.assert_called_once_with(str(path_like_object))
 
     @patch("api.app.os.path.exists")
     def test_raises_file_not_found_error_for_non_existent_file(self, mock_os_path_exists):
