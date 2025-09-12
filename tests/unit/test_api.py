@@ -8,6 +8,7 @@ import pytest
 from fastapi.testclient import TestClient
 from sklearn.pipeline import Pipeline
 import numpy as np
+import pandas as pd
 
 # Local imports
 from api.app import load_pipeline, app
@@ -231,3 +232,29 @@ class TestPredict:
             "n_predictions": 2
         }
         assert prediction_response == expected_prediction_response
+
+    @patch("api.app.pipeline.predict_proba")
+    def test_happy_path_input_standardization(self, mock_predict_proba):
+        valid_single_input = {
+            "income": 300000,
+            "age": 30,
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        }
+        mock_predict_proba.return_value = np.array([[0.8, 0.2]])
+        expected_df = pd.DataFrame([valid_single_input])
+        
+        # Make post request to predict endpoint with test client
+        client.post("/predict", json=valid_single_input)
+
+        # Ensure .predict_proba() was called once
+        mock_predict_proba.assert_called_once()
+        # Ensure .predict_proba() used the expected DataFrame
+    
