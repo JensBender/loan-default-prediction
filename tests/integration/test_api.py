@@ -83,8 +83,14 @@ class TestLoadPipeline:
 
     @pytest.mark.integration
     @pytest.mark.parametrize("invalid_path_type", [
+        None,  
         1,
-        1.23
+        1.23,
+        False,
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a": "dictionary"},
+        {"a", "set"}
     ])
     def test_raises_type_error_for_invalid_path_type(self, invalid_path_type):
         # Ensure .load_pipeline() raises TypeError
@@ -92,7 +98,6 @@ class TestLoadPipeline:
             load_pipeline(invalid_path_type)
         # Ensure error message is as expected
         error_msg = str(exc_info.value)
-        print(error_msg)
         assert "'path' must be a string or Path object" in error_msg
         
 
