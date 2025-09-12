@@ -159,6 +159,16 @@ class TestPredict:
 
         # Ensure post request was successful
         assert response.status_code == 200
-        # Ensure prediction result is as expected
-        prediction_result = response.json()["results"][0]
-        assert prediction_result["prediction"] == "No Default"  # 0.2 proba < 0.29 threshold
+        # Ensure prediction response is as expected
+        prediction_response = response.json()
+        expected_prediction_response = {
+            "results": [{
+                "prediction": "No Default",  # 0.2 < 0.29 threshold
+                "probabilities": {
+                    "Default": 0.2, 
+                    "No Default": 0.8
+                }
+            }],
+            "n_predictions": 1
+        }
+        assert prediction_response == expected_prediction_response
