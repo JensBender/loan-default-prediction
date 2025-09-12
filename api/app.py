@@ -1,6 +1,6 @@
 # --- Imports ---
 # Standard library imports
-import os
+from pathlib import Path
 from typing import List, Dict, Any
 
 # Third-party library imports
@@ -41,12 +41,16 @@ pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"
 
 
 # Function to load a pre-trained scikit-learn pipeline
-def load_pipeline(path: str | os.PathLike) -> Pipeline:
-    # Convert path-like objects to string
-    path_str = str(path)
+def load_pipeline(path: str | Path) -> Pipeline:
+    # Get path as both string and Path object
+    if isinstance(path, Path):
+        path_str = str(path)
+    else:  # isinstance(path, str)
+        path_str = path 
+        path = Path(path)
 
     # Ensure file exists
-    if not os.path.exists(path_str):
+    if not path.exists():
         raise FileNotFoundError(f"Pipeline file not found at '{path_str}'")
     
     # Load pipeline 
