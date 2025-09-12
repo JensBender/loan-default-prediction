@@ -18,24 +18,29 @@ from api.app import load_pipeline
 # --- Function .load_pipeline() ---
 class TestLoadPipeline:
     @pytest.mark.integration
-    def test_happy_path_with_minimal_pipeline(self, tmp_path):
+    @pytest.mark.parametrize("path_input_type", ["str", "Path"])
+    def test_happy_path_with_minimal_pipeline(self, path_input_type, tmp_path):
         # Create minimal pipeline
         pipeline = Pipeline([
             ("scaler", StandardScaler()),
             ("rf_classifier", RandomForestClassifier())
         ])
-
         # Train with minimal data
         X = [[0, 0], [1, 1]]
         y = [0, 1]
         pipeline.fit(X, y)
+        # Create path to pipeline .joblib file as both Path object and string
+        pipeline_path: Path = tmp_path / "example_pipeline.joblib"
+        pipeline_path_str: str = str(pipeline_path)
 
         # Save to temporary file
-        pipeline_path = tmp_path / "example_pipeline.joblib"
-        joblib.dump(pipeline, pipeline_path)
+        joblib.dump(pipeline, pipeline_path_str)
 
         # Call .load_pipeline() function
-        loaded_pipeline = load_pipeline(pipeline_path)
+        if path_input_type == "str":
+            loaded_pipeline = load_pipeline(pipeline_path_str)
+        else:  # path_input_type == "Path"
+            loaded_pipeline = load_pipeline(pipeline_path)
 
         # Call .pred_proba() method (with single sample)
         predicted_probabilities = loaded_pipeline.predict_proba([[0, 0]])
@@ -98,8 +103,7 @@ class TestLoadPipeline:
             load_pipeline(invalid_path_type)
         # Ensure error message is as expected
         error_msg = str(exc_info.value)
-        assert "'path' must be a string or Path object" in error_msg
-        
+        assert "'path' must be a string or Path object" in error_msg   
 
     @pytest.mark.integration
     def test_raises_file_not_found_error_for_non_existent_file(self):
