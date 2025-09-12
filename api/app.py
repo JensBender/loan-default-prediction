@@ -45,9 +45,11 @@ def load_pipeline(path: str | Path) -> Pipeline:
     # Get path as both string and Path object
     if isinstance(path, Path):
         path_str = str(path)
-    else:  # isinstance(path, str)
+    elif isinstance(path, str):
         path_str = path 
         path = Path(path)
+    else:
+        raise TypeError(f"'path' must be a string or Path object, got {type(path).__name__}")
 
     # Ensure file exists
     if not path.exists():
