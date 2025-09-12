@@ -42,14 +42,16 @@ pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"
 
 # Function to load a pre-trained scikit-learn pipeline
 def load_pipeline(path: str | Path) -> Pipeline:
+    # Input type validation
+    if not isinstance(path, (str, Path)):
+        raise TypeError(f"'path' must be a string or Path object, got {type(path).__name__}")
+
     # Get path as both string and Path object
     if isinstance(path, Path):
         path_str = str(path)
-    elif isinstance(path, str):
+    else:  # isinstance(path, str)
         path_str = path 
         path = Path(path)
-    else:
-        raise TypeError(f"'path' must be a string or Path object, got {type(path).__name__}")
 
     # Ensure file exists
     if not path.exists():
