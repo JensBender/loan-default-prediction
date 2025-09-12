@@ -29,7 +29,7 @@ class TestLoadPipeline:
         X = [[0, 0], [1, 1]]
         y = [0, 1]
         pipeline.fit(X, y)
-        # Create path to pipeline .joblib file as both Path object and string
+        # Create path to pipeline as both Path object and string
         pipeline_path: Path = tmp_path / "example_pipeline.joblib"
         pipeline_path_str: str = str(pipeline_path)
 
@@ -52,13 +52,14 @@ class TestLoadPipeline:
         assert predicted_probabilities.shape == (1, 2)
 
     @pytest.mark.integration
-    def test_happy_path_with_real_pipeline(self, request):
+    @pytest.mark.parametrize("path_input_type", ["str", "Path"])
+    def test_happy_path_with_real_pipeline(self, path_input_type, request):
         # Get LocalPath to root directory using pytest's built-in request fixture
         root_dir = request.config.rootdir
-        # Convert LocalPath to Path object
+        # Convert LocalPath to Path object 
         root_dir = Path(str(root_dir))
-        # Get path to pipeline
-        pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"   
+        # Get path to pipeline 
+        pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"  
         # Valid pipeline input (single-row DataFrame)
         valid_input = pd.DataFrame({
             "income": [300000],
@@ -75,6 +76,8 @@ class TestLoadPipeline:
         })  
 
         # Call .load_pipeline() function
+        if path_input_type == "str":
+            pipeline_path = str(pipeline_path)
         loaded_pipeline = load_pipeline(pipeline_path)
         # Predict probabilities with valid input
         predicted_probabilities = loaded_pipeline.predict_proba(valid_input)
