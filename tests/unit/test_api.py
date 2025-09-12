@@ -140,7 +140,7 @@ client = TestClient(app)
 class TestPredict:
     @patch("api.app.pipeline.predict_proba")
     def test_happy_path_single_input(self, mock_predict_proba):
-        valid_input = {
+        valid_single_input = {
             "income": 300000,
             "age": 30,
             "experience": 3,
@@ -155,7 +155,7 @@ class TestPredict:
         }
         mock_predict_proba.return_value = np.array([[0.8, 0.2]])
         
-        response = client.post("/predict", json=valid_input)
+        response = client.post("/predict", json=valid_single_input)
 
         # Ensure post request was successful
         assert response.status_code == 200
@@ -170,5 +170,64 @@ class TestPredict:
                 }
             }],
             "n_predictions": 1
+        }
+        assert prediction_response == expected_prediction_response
+
+    @patch("api.app.pipeline.predict_proba")
+    def test_happy_path_batch_input(self, mock_predict_proba):
+        valid_batch_input = [
+            {
+                "income": 300000,
+                "age": 30,
+                "experience": 3,
+                "married": "single",
+                "house_ownership": "rented",
+                "car_ownership": "no",
+                "profession": "artist",
+                "city": "sikar",
+                "state": "rajasthan",
+                "current_job_yrs": 3,
+                "current_house_yrs": 11           
+            },
+            {
+                "income": 1000000,
+                "age": 30,
+                "experience": 10,
+                "married": "married",
+                "house_ownership": "rented",
+                "car_ownership": "yes",
+                "profession": "architect",
+                "city": "delhi_city",
+                "state": "assam",
+                "current_job_yrs": 7,
+                "current_house_yrs": 12           
+            }            
+        ]
+        mock_predict_proba.return_value = np.array([[0.8, 0.2], [0.3, 0.7]])
+        
+        response = client.post("/predict", json=valid_batch_input)
+
+        # Ensure post request was successful
+        assert response.status_code == 200
+        # Ensure prediction response is as expected
+        prediction_response = response.json()
+        expected_prediction_response = {
+            "results": [
+                {
+                    "prediction": "No Default",  # 0.2 < 0.29 threshold
+                    "probabilities": {
+                        "Default": 0.2, 
+                        "No Default": 0.8
+                    }
+                },
+                {
+                    "prediction": "Default",  
+                    "probabilities": {
+                        "Default": 0.7, 
+                        "No Default": 0.3
+                    }
+                }
+            ],
+            "n_predictions": 2
         }
         assert prediction_response == expected_prediction_response
