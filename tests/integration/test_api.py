@@ -1,4 +1,7 @@
 # --- Imports ---
+# Standard library imports
+from pathlib import Path 
+
 # Third-party library imports
 import pytest 
 from sklearn.pipeline import Pipeline
@@ -45,8 +48,10 @@ class TestLoadPipeline:
 
     @pytest.mark.integration
     def test_happy_path_with_real_pipeline(self, request):
-        # Get path to root directory using pytest's built-in request fixture
+        # Get LocalPath to root directory using pytest's built-in request fixture
         root_dir = request.config.rootdir
+        # Convert LocalPath to Path object
+        root_dir = Path(str(root_dir))
         # Get path to pipeline
         pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"   
         # Valid pipeline input (single-row DataFrame)
