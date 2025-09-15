@@ -9,6 +9,7 @@ from fastapi.testclient import TestClient
 from sklearn.pipeline import Pipeline
 import numpy as np
 import pandas as pd
+from pandas.testing import assert_frame_equal
 
 # Local imports
 from api.app import load_pipeline, app
@@ -256,5 +257,9 @@ class TestPredict:
 
         # Ensure .predict_proba() was called once
         mock_predict_proba.assert_called_once()
-        # Ensure .predict_proba() used the expected DataFrame
-    
+        # Get positional and keyword arguments used in the .predict_proba() method call
+        args, kwargs = mock_predict_proba.call_args
+        # Get DataFrame used in call (first positional argument)
+        df = args[0]
+        # Ensure .predict_proba() was called with the expected DataFrame
+        assert_frame_equal(df, expected_df)
