@@ -360,7 +360,11 @@ class TestPredict:
 
         # Ensure response has status code 422 (Unprocessable Entity)
         assert response.status_code == 422
-        print(response.json())
+        # Ensure error location of at least one error is response body > PipelineInput > "age" field 
+        error_detail = response.json()["detail"]
+        assert any(error["loc"] == ["body", "PipelineInput", "age"] for error in error_detail)
+        # Ensure error location of at least one error is "missing"
+        assert any(error["type"] == "missing" for error in error_detail)
 
     # Empty input
     # Internal server error (HTTP 500)
