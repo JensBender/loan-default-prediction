@@ -235,7 +235,7 @@ class TestPredict:
         assert prediction_response == expected_prediction_response
 
     @patch("api.app.pipeline.predict_proba")
-    def test_happy_path_input_standardization(self, mock_predict_proba):
+    def test_standardize_input_happy_path(self, mock_predict_proba):
         valid_single_input = {
             "income": 300000,
             "age": 30,
@@ -263,3 +263,9 @@ class TestPredict:
         df = args[0]
         # Ensure .predict_proba() was called with the expected DataFrame
         assert_frame_equal(df, expected_df)
+
+    def test_apply_threshold_happy_path(self):
+        pass
+
+    def tests_create_prediction_response_happy_path(self):
+        pass
