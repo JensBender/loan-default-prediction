@@ -264,8 +264,34 @@ class TestPredict:
         # Ensure .predict_proba() was called with the expected DataFrame
         assert_frame_equal(df, expected_df)
 
-    def test_apply_threshold_happy_path(self):
-        pass
+    @patch("api.app.pipeline.predict_proba")
+    @patch("api.app.zip")
+    def test_apply_threshold_happy_path(self, mock_zip, mock_predict_proba):
+        valid_single_input = {
+            "income": 300000,
+            "age": 30,
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        }
+        mock_predict_proba.return_value = np.array([[0.8, 0.2]])
+
+        # Make post request to predict endpoint with test client
+        client.post("/predict", json=valid_single_input)
+
+        # Ensure .predict_proba() and .zip() were called once
+        mock_predict_proba.assert_called_once()
+        mock_zip.assert_called_once()
+        # Ensure .zip() was called with the expected predictions
+        expected_predictions = np.array([False])  # 0.2 < 0.29 threshold
+        predictions = mock_zip.call_args[0][0]
+        assert predictions == expected_predictions
 
     def tests_create_prediction_response_happy_path(self):
         pass
