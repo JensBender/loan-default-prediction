@@ -339,3 +339,28 @@ class TestPredict:
             "n_predictions": 1
         }
         assert prediction_response == expected_prediction_response
+
+    def test_returns_http_422_for_pydantic_validation_error(self):
+        invalid_single_input = {
+            "income": 300000,
+            # "age" field missing as isrepresentative pydantic validation error
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        }      
+
+        # Make post request to predict endpoint with test client
+        response = client.post("/predict", json=invalid_single_input)  
+
+        # Ensure response has status code 422 (Unprocessable Entity)
+        assert response.status_code == 422
+        print(response.json())
+
+    # Empty input
+    # Internal server error (HTTP 500)
