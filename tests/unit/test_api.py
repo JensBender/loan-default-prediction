@@ -265,9 +265,14 @@ class TestPredict:
         # Ensure .predict_proba() was called with the expected DataFrame
         assert_frame_equal(df, expected_df)
 
+    @pytest.mark.parametrize("predicted_probabilities, expected_predictions", [
+        (np.array([[0.8, 0.2]]), np.array([False])),
+        (np.array([[0.2, 0.8]]), np.array([True])),
+        (np.array([[0.71, 0.29]]), np.array([True])),  # threshold value
+    ])
     @patch("api.app.pipeline.predict_proba")
     @patch("api.app.zip")
-    def test_apply_threshold_happy_path(self, mock_zip, mock_predict_proba):
+    def test_apply_threshold_happy_path(self, mock_zip, mock_predict_proba, predicted_probabilities, expected_predictions):
         valid_single_input = {
             "income": 300000,
             "age": 30,
@@ -281,7 +286,7 @@ class TestPredict:
             "current_job_yrs": 3,
             "current_house_yrs": 11           
         }
-        mock_predict_proba.return_value = np.array([[0.8, 0.2]])
+        mock_predict_proba.return_value = predicted_probabilities
 
         # Make post request to predict endpoint with test client
         client.post("/predict", json=valid_single_input)
@@ -290,7 +295,6 @@ class TestPredict:
         mock_predict_proba.assert_called_once()
         mock_zip.assert_called_once()
         # Ensure .zip() was called with the expected predictions
-        expected_predictions = np.array([False])  # 0.2 < 0.29 threshold
         predictions = mock_zip.call_args[0][0]
         assert_array_equal(predictions, expected_predictions)
 
