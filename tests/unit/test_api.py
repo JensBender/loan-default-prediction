@@ -8,6 +8,7 @@ import pytest
 from fastapi.testclient import TestClient
 from sklearn.pipeline import Pipeline
 import numpy as np
+from numpy.testing import assert_array_equal
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
@@ -291,7 +292,7 @@ class TestPredict:
         # Ensure .zip() was called with the expected predictions
         expected_predictions = np.array([False])  # 0.2 < 0.29 threshold
         predictions = mock_zip.call_args[0][0]
-        assert predictions == expected_predictions
+        assert_array_equal(predictions, expected_predictions)
 
     def tests_create_prediction_response_happy_path(self):
         pass
