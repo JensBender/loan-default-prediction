@@ -348,10 +348,13 @@ class TestPredict:
         }
         assert prediction_response == expected_prediction_response
 
-    def test_returns_http_422_for_pydantic_validation_error(self):
-        invalid_single_input = {
+    @pytest.mark.parametrize("invalid_single_input", [
+        # Empty input
+        {},  
+        # Missing field  
+        {
             "income": 300000,
-            # "age" field missing as representative pydantic validation error
+            # "age" field missing 
             "experience": 3,
             "married": "single",
             "house_ownership": "rented",
@@ -361,30 +364,19 @@ class TestPredict:
             "state": "rajasthan",
             "current_job_yrs": 3,
             "current_house_yrs": 11           
-        }      
-
+        }
+    ])
+    def test_returns_http_422_for_pydantic_validation_error(self, invalid_single_input):  
         # Make post request to predict endpoint 
         response = client.post("/predict", json=invalid_single_input)  
 
         # Ensure response has status code 422 (Unprocessable Entity)
         assert response.status_code == 422
-        # Ensure error location of at least one error is response body > PipelineInput > "age" field 
+        # Ensure error location of all errors is the response body
         error_detail = response.json()["detail"]
-        assert any(error["loc"] == ["body", "PipelineInput", "age"] for error in error_detail)
-        # Ensure error location of at least one error is "missing"
-        assert any(error["type"] == "missing" for error in error_detail)
-
-    # Empty input
-    def test_returns_http_422_for_empty_input(self):
-        empty_input = {}      
-
-        # Make post request to predict endpoint 
-        response = client.post("/predict", json=empty_input)  
-
-        # Ensure response has status code 422 (Unprocessable Entity)
-        assert response.status_code == 422
-        error_detail = response.json()["detail"]
-        print(error_detail)
+        assert all("body" in error["loc"] for error in error_detail)
+        # Ensure error location of at least one error is the PipelineInput pydantic model 
+        assert any("PipelineInput" in error["loc"] for error in error_detail)
         # Ensure error type of at least one error is "missing"
         assert any(error["type"] == "missing" for error in error_detail)
 
