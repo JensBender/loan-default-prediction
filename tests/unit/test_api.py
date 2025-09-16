@@ -424,10 +424,10 @@ class TestPredict:
             "current_job_yrs": 3,
             "current_house_yrs": 11           
         }
-        # Use pytest's built-in monkeypatch fixture with a custom function to simulate pipeline failure
-        def simulate_pipeline_failure(X: pd.DataFrame):
-            raise RuntimeError("Simulated pipeline failure")
-        monkeypatch.setattr("api.app.pipeline.predict_proba", simulate_pipeline_failure)
+        # Use pytest's built-in monkeypatch fixture with a custom function to simulate failure when calling .predict_proba()
+        def simulate_predict_proba_failure(X: pd.DataFrame):
+            raise RuntimeError("Simulated failure of .predict_proba()")
+        monkeypatch.setattr("api.app.pipeline.predict_proba", simulate_predict_proba_failure)
 
         # Post request to predict endpoint 
         response = client.post("/predict", json=valid_single_input)
