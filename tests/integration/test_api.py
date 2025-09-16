@@ -10,9 +10,10 @@ from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import numpy as np
 import joblib
+from fastapi.testclient import TestClient
 
 # Local imports
-from api.app import load_pipeline
+from api.app import load_pipeline, app
 
 
 # --- Function .load_pipeline() ---
@@ -164,4 +165,12 @@ class TestLoadPipeline:
         # Ensure error message is as expected
         error_msg = str(exc_info.value)
         assert "Loaded pipeline does not have a .predict_proba() method" in error_msg
-    
+
+
+# --- FastAPI endpoint "/predict" ---
+client = TestClient(app)
+
+class TestPredict:
+    @pytest.mark.integration
+    def test_happy_path(self):
+        pass
