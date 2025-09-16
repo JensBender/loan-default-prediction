@@ -467,7 +467,8 @@ class TestPredict:
         assert "Internal server error during loan default prediction" in response.text 
 
     # Prediction response creation failure 
-    def test_return_http_500_for_malformed_pipeline_output(self, monkeypatch):
+    @patch("api.app.pipeline.predict_proba")
+    def test_return_http_500_for_malformed_pipeline_output(self, mock_predict_proba):
         valid_single_input = {
             "income": 300000,
             "age": 30,
@@ -481,14 +482,15 @@ class TestPredict:
             "current_job_yrs": 3,
             "current_house_yrs": 11           
         }
-        malformed_pipeline_output = np.array([[0.8]])  # instead of np.array([[0.8, 0.2]]) 
-        # Use pytest's built-in monkeypatch fixture to simulate malformed .predict_proba() output
-        monkeypatch.setattr("api.app.pipeline.predict_proba", malformed_pipeline_output)
+        # Simulate malformed pipeline output of .predict_proba()
+        mock_predict_proba.return_value = np.array([[0.8]])  # instead of np.array([[0.8, 0.2]]) 
 
         # Post request to predict endpoint 
         response = client.post("/predict", json=valid_single_input)
 
-        # Ensure response status code is 500
+        # Ensure .predict_proba() was called once
+        mock_predict_proba.assert_called_once()
+        # Ensure response status code is 500 (Internal Server Error)
         assert response.status_code == 500
         # Ensure error message is as expected
         assert "Internal server error during loan default prediction" in response.text 
