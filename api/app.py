@@ -103,7 +103,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]) -> PredictionRe
         optimized_threshold: float = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
         predictions: np.ndarray = (predicted_probabilities[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
 
-        # Create API response 
+        # Create prediction response 
         results: List[PredictionResult] = []
         for pred, pred_proba in zip(predictions, predicted_probabilities):  
             prediction_enum = PredictionEnum.DEFAULT if pred else PredictionEnum.NO_DEFAULT 
@@ -117,6 +117,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]) -> PredictionRe
             results.append(prediction_result)
 
         return PredictionResponse(results=results)
+
     except Exception as e:
         raise HTTPException(
             status_code=500, 
