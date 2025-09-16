@@ -359,8 +359,10 @@ class TestPredict:
         assert prediction_response == expected_prediction_response
 
     @pytest.mark.parametrize("invalid_single_input", [
-        # Empty input
-        {},  
+        # Empty single input
+        {}, 
+        # Empty batch input
+        [{}, {}], 
         # Missing required field  
         {
             "income": 300000,
@@ -446,3 +448,5 @@ class TestPredict:
         assert response.status_code == 500
         # Ensure error message is as expected
         assert "Internal server error during loan default prediction" in response.text 
+
+    # Prediction response creation failure 
