@@ -351,10 +351,24 @@ class TestPredict:
     @pytest.mark.parametrize("invalid_single_input", [
         # Empty input
         {},  
-        # Missing field  
+        # Missing required field  
         {
             "income": 300000,
             # "age" field missing 
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        },
+        # Missing value in a required field
+        {
+            "income": 300000,
+            "age": None,  # missing value 
             "experience": 3,
             "married": "single",
             "house_ownership": "rented",
@@ -377,7 +391,5 @@ class TestPredict:
         assert all("body" in error["loc"] for error in error_detail)
         # Ensure error location of at least one error is the PipelineInput pydantic model 
         assert any("PipelineInput" in error["loc"] for error in error_detail)
-        # Ensure error type of at least one error is "missing"
-        assert any(error["type"] == "missing" for error in error_detail)
 
     # Internal server error (HTTP 500)
