@@ -386,10 +386,13 @@ class TestPredict:
 
         # Ensure response has status code 422 (Unprocessable Entity)
         assert response.status_code == 422
-        # Ensure error location of all errors is the response body
+        # Ensure error location of all errors contains the response body
         error_detail = response.json()["detail"]
         assert all("body" in error["loc"] for error in error_detail)
-        # Ensure error location of at least one error is the PipelineInput pydantic model 
-        assert any("PipelineInput" in error["loc"] for error in error_detail)
+        # Ensure error location of all errors contains either PipelineInput or list[PipelineInput] pydantic model 
+        assert all(
+            any(input in error["loc"] for input in ["PipelineInput", "list[PipelineInput]"]) 
+            for error in error_detail
+        )
 
     # Internal server error (HTTP 500)
