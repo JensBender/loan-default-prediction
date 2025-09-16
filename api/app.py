@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List, Dict, Any
 
 # Third-party library imports
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from sklearn.pipeline import Pipeline
 import pandas as pd
 import numpy as np
@@ -85,32 +85,38 @@ app = FastAPI()
 # Prediction endpoint 
 @app.post("/predict", response_model=PredictionResponse)
 def predict(pipeline_input: PipelineInput | List[PipelineInput]) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> List[PipelineInput]
-    # Standardize input
-    pipeline_input_dict_ls: List[Dict[str, Any]]
-    if isinstance(pipeline_input, list):
-        pipeline_input_dict_ls = [input.model_dump() for input in pipeline_input]
-    else:  # isinstance(pipeline_input, PipelineInput)
-        pipeline_input_dict_ls = [pipeline_input.model_dump()]
-    pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_dict_ls)
-        
-    # Use pipeline to predict probabilities 
-    predicted_probabilities: np.ndarray = pipeline.predict_proba(pipeline_input_df)
+    try:
+        # Standardize input
+        pipeline_input_dict_ls: List[Dict[str, Any]]
+        if isinstance(pipeline_input, list):
+            pipeline_input_dict_ls = [input.model_dump() for input in pipeline_input]
+        else:  # isinstance(pipeline_input, PipelineInput)
+            pipeline_input_dict_ls = [pipeline_input.model_dump()]
+        pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_dict_ls)
+            
+        # Use pipeline to predict probabilities 
+        predicted_probabilities: np.ndarray = pipeline.predict_proba(pipeline_input_df)
 
-    # Apply optimized threshold to convert probabilities to binary predictions
-    optimized_threshold: float = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
-    predictions: np.ndarray = (predicted_probabilities[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
+        # Apply optimized threshold to convert probabilities to binary predictions
+        optimized_threshold: float = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
+        predictions: np.ndarray = (predicted_probabilities[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
 
-    # Create API response 
-    results: List[PredictionResult] = []
-    for pred, pred_proba in zip(predictions, predicted_probabilities):  
-        prediction_enum = PredictionEnum.DEFAULT if pred else PredictionEnum.NO_DEFAULT 
-        prediction_result = PredictionResult(
-            prediction=prediction_enum, 
-            probabilities=PredictedProbabilities(
-                default=pred_proba[1], 
-                no_default=pred_proba[0]
+        # Create API response 
+        results: List[PredictionResult] = []
+        for pred, pred_proba in zip(predictions, predicted_probabilities):  
+            prediction_enum = PredictionEnum.DEFAULT if pred else PredictionEnum.NO_DEFAULT 
+            prediction_result = PredictionResult(
+                prediction=prediction_enum, 
+                probabilities=PredictedProbabilities(
+                    default=pred_proba[1], 
+                    no_default=pred_proba[0]
+                )
             )
-        )
-        results.append(prediction_result)
+            results.append(prediction_result)
 
-    return PredictionResponse(results=results)
+        return PredictionResponse(results=results)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, 
+            detail="Internal server error during loan default prediction"
+        )
