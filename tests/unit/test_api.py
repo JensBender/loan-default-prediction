@@ -18,6 +18,7 @@ from api.app import load_pipeline, app
 
 # --- Function .load_pipeline() ---
 class TestLoadPipeline:
+    @pytest.mark.unit
     @patch("api.app.joblib.load")
     @patch("api.app.Path.exists")
     def test_happy_path_with_mock_pipeline(self, mock_path_exists, mock_joblib_load):
@@ -39,6 +40,7 @@ class TestLoadPipeline:
         # Ensure joblib.load was called once
         mock_joblib_load.assert_called_once_with("some_path.joblib")
 
+    @pytest.mark.unit
     @patch("api.app.joblib.load")
     @patch("api.app.Path.exists")
     def test_accepts_pathlike_object(self, mock_path_exists, mock_joblib_load):
@@ -61,6 +63,7 @@ class TestLoadPipeline:
         # Ensure joblib.load was called once with converted string 
         mock_joblib_load.assert_called_once_with(str(path_like_object))
 
+    @pytest.mark.unit
     @patch("api.app.Path.exists")
     def test_raises_file_not_found_error_for_non_existent_file(self, mock_path_exists):
         # Simulate that the file does not exist
@@ -75,6 +78,7 @@ class TestLoadPipeline:
         # Ensure Path.exists was called 
         mock_path_exists.assert_called_once()
 
+    @pytest.mark.unit
     @patch("api.app.joblib.load")
     @patch("api.app.Path.exists")
     def test_raises_runtime_error_if_joblib_load_fails(self, mock_path_exists, mock_joblib_load):
@@ -98,6 +102,7 @@ class TestLoadPipeline:
         mock_path_exists.assert_called_once()
         mock_joblib_load.assert_called_once_with("some_path.joblib")
 
+    @pytest.mark.unit
     @pytest.mark.parametrize("invalid_type", [
         "a string",
         1,
@@ -127,6 +132,7 @@ class TestLoadPipeline:
         mock_path_exists.assert_called_once()
         mock_joblib_load.assert_called_once_with("some_path.joblib")
 
+    @pytest.mark.unit
     @patch("api.app.joblib.load")
     @patch("api.app.Path.exists")
     def test_raises_type_error_if_predict_proba_does_not_exist(self, mock_path_exists, mock_joblib_load):
@@ -152,6 +158,7 @@ class TestLoadPipeline:
 client = TestClient(app)
 
 class TestPredict:
+    @pytest.mark.unit
     @patch("api.app.pipeline.predict_proba")
     def test_happy_path_single_input(self, mock_predict_proba):
         valid_single_input = {
@@ -189,6 +196,7 @@ class TestPredict:
         }
         assert prediction_response == expected_prediction_response
 
+    @pytest.mark.unit
     @patch("api.app.pipeline.predict_proba")
     def test_happy_path_batch_input(self, mock_predict_proba):
         valid_batch_input = [
@@ -250,6 +258,7 @@ class TestPredict:
         }
         assert prediction_response == expected_prediction_response
 
+    @pytest.mark.unit
     @patch("api.app.pipeline.predict_proba")
     def test_standardize_input_happy_path(self, mock_predict_proba):
         valid_single_input = {
@@ -281,6 +290,7 @@ class TestPredict:
         expected_df = pd.DataFrame([valid_single_input])
         assert_frame_equal(df, expected_df)
 
+    @pytest.mark.unit
     @pytest.mark.parametrize("predicted_probabilities, expected_predictions", [
         (np.array([[0.8, 0.2]]), np.array([False])), 
         (np.array([[0.2, 0.8]]), np.array([True])),  
@@ -315,6 +325,7 @@ class TestPredict:
         predictions = mock_zip.call_args[0][0]
         assert_array_equal(predictions, expected_predictions)
 
+    @pytest.mark.unit
     @patch("api.app.pipeline.predict_proba")
     @patch("api.app.zip")
     def test_create_prediction_response_happy_path(self, mock_zip, mock_predict_proba):
@@ -358,6 +369,7 @@ class TestPredict:
         }
         assert prediction_response == expected_prediction_response
 
+    @pytest.mark.unit
     @pytest.mark.parametrize("invalid_single_input", [
         # Empty single input
         {}, 
@@ -422,6 +434,7 @@ class TestPredict:
         )
     
     # Empty batch 
+    @pytest.mark.unit
     def test_happy_path_empty_batch_input(self):  
         empty_batch_input = []
 
@@ -439,6 +452,7 @@ class TestPredict:
         assert prediction_response == expected_prediction_response
 
     # Pipeline failure 
+    @pytest.mark.unit
     def test_return_http_500_for_pipeline_failure(self, monkeypatch):
         valid_single_input = {
             "income": 300000,
@@ -467,6 +481,7 @@ class TestPredict:
         assert "Internal server error during loan default prediction" in response.text 
 
     # Prediction response creation failure 
+    @pytest.mark.unit
     @patch("api.app.pipeline.predict_proba")
     def test_return_http_500_for_malformed_pipeline_output(self, mock_predict_proba):
         valid_single_input = {
