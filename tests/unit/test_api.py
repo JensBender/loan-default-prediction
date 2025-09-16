@@ -14,7 +14,6 @@ from pandas.testing import assert_frame_equal
 
 # Local imports
 from api.app import load_pipeline, app
-from api.schemas import PredictionResponse
 
 
 # --- Function .load_pipeline() ---
@@ -99,13 +98,24 @@ class TestLoadPipeline:
         mock_path_exists.assert_called_once()
         mock_joblib_load.assert_called_once_with("some_path.joblib")
 
+    @pytest.mark.parametrize("invalid_type", [
+        "a string",
+        1,
+        1.23,
+        False,
+        None,  
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a": "dictionary"},
+        {"a", "set"}
+    ])
     @patch("api.app.joblib.load")
     @patch("api.app.Path.exists")
-    def test_raises_type_error_if_loaded_object_is_not_pipeline(self, mock_path_exists, mock_joblib_load):
+    def test_raises_type_error_if_loaded_object_is_not_pipeline(self, mock_path_exists, mock_joblib_load, invalid_type):
         # Simulate that pipeline file exists
         mock_path_exists.return_value = True
         # Simulate loaded object that is not a pipeline
-        mock_joblib_load.return_value = "not a pipeline"
+        mock_joblib_load.return_value = invalid_type
 
         # Ensure .load_pipeline() raises TypeError
         with pytest.raises(TypeError) as exc_info:
