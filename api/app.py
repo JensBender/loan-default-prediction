@@ -89,6 +89,8 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]) -> PredictionRe
         # Standardize input
         pipeline_input_dict_ls: List[Dict[str, Any]]
         if isinstance(pipeline_input, list):
+            if pipeline_input == []:  # handle empty batch input
+                return PredictionResponse(results=[])
             pipeline_input_dict_ls = [input.model_dump() for input in pipeline_input]
         else:  # isinstance(pipeline_input, PipelineInput)
             pipeline_input_dict_ls = [pipeline_input.model_dump()]
