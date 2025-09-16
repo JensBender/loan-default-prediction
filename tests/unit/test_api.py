@@ -375,4 +375,17 @@ class TestPredict:
         assert any(error["type"] == "missing" for error in error_detail)
 
     # Empty input
+    def test_returns_http_422_for_empty_input(self):
+        empty_input = {}      
+
+        # Make post request to predict endpoint 
+        response = client.post("/predict", json=empty_input)  
+
+        # Ensure response has status code 422 (Unprocessable Entity)
+        assert response.status_code == 422
+        error_detail = response.json()["detail"]
+        print(error_detail)
+        # Ensure error type of at least one error is "missing"
+        assert any(error["type"] == "missing" for error in error_detail)
+
     # Internal server error (HTTP 500)
