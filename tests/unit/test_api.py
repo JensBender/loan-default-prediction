@@ -157,8 +157,10 @@ class TestPredict:
             "current_job_yrs": 3,
             "current_house_yrs": 11           
         }
+        # Simulate the return value of pipeline.predict_proba()
         mock_predict_proba.return_value = np.array([[0.8, 0.2]])
         
+        # Make post request to predict endpoint with test client
         response = client.post("/predict", json=valid_single_input)
 
         # Ensure post request was successful
@@ -207,8 +209,10 @@ class TestPredict:
                 "current_house_yrs": 12           
             }            
         ]
+        # Simulate the return value of pipeline.predict_proba()
         mock_predict_proba.return_value = np.array([[0.8, 0.2], [0.3, 0.7]])
         
+        # Make post request to predict endpoint 
         response = client.post("/predict", json=valid_batch_input)
 
         # Ensure post request was successful
@@ -251,10 +255,10 @@ class TestPredict:
             "current_job_yrs": 3,
             "current_house_yrs": 11           
         }
+        # Simulate the return value of pipeline.predict_proba()
         mock_predict_proba.return_value = np.array([[0.8, 0.2]])
-        expected_df = pd.DataFrame([valid_single_input])
         
-        # Make post request to predict endpoint with test client
+        # Make post request to predict endpoint 
         client.post("/predict", json=valid_single_input)
 
         # Ensure .predict_proba() was called once
@@ -264,6 +268,7 @@ class TestPredict:
         # Get DataFrame used in call (first positional argument)
         df = args[0]
         # Ensure .predict_proba() was called with the expected DataFrame
+        expected_df = pd.DataFrame([valid_single_input])
         assert_frame_equal(df, expected_df)
 
     @pytest.mark.parametrize("predicted_probabilities, expected_predictions", [
@@ -287,9 +292,10 @@ class TestPredict:
             "current_job_yrs": 3,
             "current_house_yrs": 11           
         }
+        # Simulate the return value of pipeline.predict_proba()
         mock_predict_proba.return_value = predicted_probabilities
 
-        # Make post request to predict endpoint with test client
+        # Make post request to predict endpoint 
         client.post("/predict", json=valid_single_input)
 
         # Ensure .predict_proba() and .zip() were called once
@@ -315,12 +321,14 @@ class TestPredict:
             "current_job_yrs": 3,
             "current_house_yrs": 11           
         }
+        # Simulate the return value of pipeline.predict_proba()
         mock_predict_proba.return_value = np.array([[0.8, 0.2]])
+        # Simulate the return value of zip(predictions, predicted_probabilities)
         mock_zip.return_value = [
             (False, np.array([0.8, 0.2]))
         ]
 
-        # Make post request to predict endpoint with test client
+        # Make post request to predict endpoint 
         response = client.post("/predict", json=valid_single_input)
 
         # Ensure .predict_proba() and .zip() were called once
@@ -343,7 +351,7 @@ class TestPredict:
     def test_returns_http_422_for_pydantic_validation_error(self):
         invalid_single_input = {
             "income": 300000,
-            # "age" field missing as isrepresentative pydantic validation error
+            # "age" field missing as representative pydantic validation error
             "experience": 3,
             "married": "single",
             "house_ownership": "rented",
@@ -355,7 +363,7 @@ class TestPredict:
             "current_house_yrs": 11           
         }      
 
-        # Make post request to predict endpoint with test client
+        # Make post request to predict endpoint 
         response = client.post("/predict", json=invalid_single_input)  
 
         # Ensure response has status code 422 (Unprocessable Entity)
