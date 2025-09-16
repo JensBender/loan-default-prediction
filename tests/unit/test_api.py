@@ -420,6 +420,23 @@ class TestPredict:
             any(input in error["loc"] for input in ["PipelineInput", "list[PipelineInput]"]) 
             for error in error_detail
         )
+    
+    # Empty batch 
+    def test_happy_path_empty_batch_input(self):  
+        empty_batch_input = []
+
+        # Make post request to predict endpoint 
+        response = client.post("/predict", json=empty_batch_input)  
+
+        # Ensure post request was successful
+        assert response.status_code == 200
+        # Ensure prediction response is as expected
+        prediction_response = response.json()
+        expected_prediction_response = {
+            "results": [],
+            "n_predictions": 0
+        }
+        assert prediction_response == expected_prediction_response
 
     # Pipeline failure 
     def test_return_http_500_for_pipeline_failure(self, monkeypatch):
