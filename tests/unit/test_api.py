@@ -378,9 +378,23 @@ class TestPredict:
             "state": "rajasthan",
             "current_job_yrs": 3,
             "current_house_yrs": 11           
+        },
+        # Out-of-range value
+        {
+            "income": 300000,
+            "age": 999,  # out-of-range value 
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
         }
     ])
-    def test_returns_http_422_for_pydantic_validation_error(self, invalid_single_input):  
+    def test_return_http_422_for_pydantic_validation_error(self, invalid_single_input):  
         # Make post request to predict endpoint 
         response = client.post("/predict", json=invalid_single_input)  
 
@@ -395,4 +409,30 @@ class TestPredict:
             for error in error_detail
         )
 
-    # Internal server error (HTTP 500)
+    # Pipeline failure 
+    def test_return_http_500_for_pipeline_failure(self, monkeypatch):
+        valid_single_input = {
+            "income": 300000,
+            "age": 30,
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        }
+        # Use pytest's built-in monkeypatch fixture with a custom function to simulate pipeline failure
+        def simulate_pipeline_failure(X: pd.DataFrame):
+            raise RuntimeError("Simulated pipeline failure")
+        monkeypatch.setattr("api.app.pipeline.predict_proba", simulate_pipeline_failure)
+
+        # Post request to predict endpoint 
+        response = client.post("/predict", json=valid_single_input)
+
+        # Ensure response status code is 500
+        assert response.status_code == 500
+        # Ensure error message is as expected
+        assert "Internal server error during loan default prediction" in response.text 
