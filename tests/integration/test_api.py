@@ -172,5 +172,38 @@ client = TestClient(app)
 
 class TestPredict:
     @pytest.mark.integration
-    def test_happy_path(self):
-        pass
+    def test_single_input_happy_path(self):
+        valid_single_input = {
+            "income": 300000,
+            "age": 30,
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        }
+
+        # Post request to predict endpoint
+        response = client.post("/predict", json=valid_single_input)
+
+        # Ensure post request was successful
+        assert response.status_code == 200
+        # Ensure response contains expected "results" 
+        prediction_response = response.json()
+        assert "results" in prediction_response
+        assert isinstance(prediction_response["results"], list)
+        assert len(prediction_response["results"]) == 1
+        assert isinstance(prediction_response["results"][0], dict)
+        assert "prediction" in prediction_response["results"][0]
+        assert "probabilities" in prediction_response["results"][0]
+        assert isinstance(prediction_response["results"][0]["probabilities"], dict)
+        assert "Default" in prediction_response["results"][0]["probabilities"]
+        assert "No Default" in prediction_response["results"][0]["probabilities"]
+        # Ensure response contains expected "n_predictions"
+        assert "n_predictions" in prediction_response
+        assert isinstance(prediction_response["n_predictions"], int)
+        assert prediction_response["n_predictions"] == 1
