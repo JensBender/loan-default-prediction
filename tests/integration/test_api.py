@@ -275,7 +275,86 @@ class TestPredict:
         }
         assert prediction_response == expected_prediction_response
 
-    # test_return_http_422_for_pydantic_validation_error
+    # Pydantic validation error
+    @pytest.mark.integration
+    @pytest.mark.parametrize("invalid_input", [
+        # Empty single input
+        {}, 
+        # Batch input with empty dictionaries
+        [{}, {}], 
+        # Missing required field  
+        {
+            "income": 300000,
+            # "age" field missing 
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        },
+        # Invalid data type
+        {
+            "income": 300000,
+            "age": "a string",  # invalid type
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        },
+        # Missing value in a required field
+        {
+            "income": 300000,
+            "age": None,  # missing value 
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        },
+        # Out-of-range value
+        {
+            "income": 300000,
+            "age": 999,  # out-of-range value 
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        }
+    ])
+    def test_return_http_422_for_pydantic_validation_error(self, invalid_input):
+        # Make post request to predict endpoint 
+        response = client.post("/predict", json=invalid_input)  
+
+        # Ensure response has status code 422 (Unprocessable Entity)
+        assert response.status_code == 422
+        # Ensure error location of all errors contains the response body
+        error_detail = response.json()["detail"]
+        print(error_detail)
+        assert all("body" in error["loc"] for error in error_detail)
+        # Ensure error location of all errors contains either PipelineInput or list[PipelineInput] pydantic model 
+        assert all(
+            any(input in error["loc"] for input in ["PipelineInput", "list[PipelineInput]"]) 
+            for error in error_detail
+        )
+    
     # test_low_risk_features_predict_low_default_probability    
     # test_high_risk_features_predict_high_default_probability
     # test_high_vs_low_risk_features_predict_higher_default_probability
