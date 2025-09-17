@@ -266,7 +266,6 @@ class TestPredict:
 
         # Ensure post request is successful
         assert response.status_code == 200
-
         # Ensure prediction response is as expected
         prediction_response = response.json()
         expected_prediction_response = {
@@ -347,7 +346,6 @@ class TestPredict:
         assert response.status_code == 422
         # Ensure error location of all errors contains the response body
         error_detail = response.json()["detail"]
-        print(error_detail)
         assert all("body" in error["loc"] for error in error_detail)
         # Ensure error location of all errors contains either PipelineInput or list[PipelineInput] pydantic model 
         assert all(
