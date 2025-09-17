@@ -207,3 +207,11 @@ class TestPredict:
         assert "n_predictions" in prediction_response
         assert isinstance(prediction_response["n_predictions"], int)
         assert prediction_response["n_predictions"] == 1
+
+    # test_batch_input_happy_path
+    # test_empty_batch_input_happy_path
+    # test_return_http_422_for_pydantic_validation_error
+    # test_low_risk_features_predict_low_default_probability    
+    # test_high_risk_features_predict_high_default_probability
+    # test_high_vs_low_risk_features_predict_higher_default_probability
+    # test_ignores_extra_feature
