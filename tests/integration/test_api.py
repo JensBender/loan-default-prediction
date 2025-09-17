@@ -171,7 +171,7 @@ class TestLoadPipeline:
 client = TestClient(app)
 
 class TestPredict:
-    # Valid single input returns HTTP 200 OK status, a valid response schema and probabilities sum to 1
+    # Valid input returns HTTP 200 OK status, a valid response schema and probabilities sum to 1
     @pytest.mark.integration
     @pytest.mark.parametrize("valid_input", [
         # Single input dict
@@ -256,8 +256,25 @@ class TestPredict:
             # Ensure probabilities sum to approximately 1
             assert (predicted_probabilities["Default"] + predicted_probabilities["No Default"]) == pytest.approx(1.0)  # default relative tolerance of 1e-6 (0.0001%) and absolute tolerance of 1e-12
 
-    # test_batch_input_happy_path
-    # test_empty_batch_input_happy_path
+    # Empty batch input
+    @pytest.mark.integration
+    def test_empty_batch_input_happy_path(self):
+        empty_batch_input = []
+        
+        # Post request to predict endpoint
+        response = client.post("/predict", json=empty_batch_input)
+
+        # Ensure post request is successful
+        assert response.status_code == 200
+
+        # Ensure prediction response is as expected
+        prediction_response = response.json()
+        expected_prediction_response = {
+            "results": [],
+            "n_predictions": 0
+        }
+        assert prediction_response == expected_prediction_response
+
     # test_return_http_422_for_pydantic_validation_error
     # test_low_risk_features_predict_low_default_probability    
     # test_high_risk_features_predict_high_default_probability
