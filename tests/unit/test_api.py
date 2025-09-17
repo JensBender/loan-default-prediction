@@ -389,6 +389,20 @@ class TestPredict:
             "current_job_yrs": 3,
             "current_house_yrs": 11           
         },
+        # Invalid data type
+        {
+            "income": 300000,
+            "age": "a string",  # invalid type
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        },
         # Missing value in a required field
         {
             "income": 300000,
