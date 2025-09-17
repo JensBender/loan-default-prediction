@@ -380,5 +380,49 @@ class TestPredict:
         prob_default = prediction_response["results"][0]["probabilities"]["Default"]
         assert prob_default < 0.1
 
-    # test_high_vs_low_risk_features_predict_higher_default_probability
+    # Higher risk age > higher default probability
+    @pytest.mark.integration
+    def test_high_vs_low_risk_age_predicts_higher_default_probability(self):
+        batch_input = [
+            # low risk age
+            { 
+                "income": 8_000_000,
+                "age": 30,  
+                "experience": 10,
+                "married": "married",
+                "house_ownership": "rented",
+                "car_ownership": "yes",
+                "profession": "architect",
+                "city": "delhi_city",
+                "state": "assam",
+                "current_job_yrs": 10,
+                "current_house_yrs": 14           
+            },
+            # high risk age, otherwise identical
+            { 
+                "income": 8_000_000,
+                "age": 75,
+                "experience": 10,
+                "married": "married",
+                "house_ownership": "rented",
+                "car_ownership": "yes",
+                "profession": "architect",
+                "city": "delhi_city",
+                "state": "assam",
+                "current_job_yrs": 10,
+                "current_house_yrs": 14           
+            }
+        ]
+
+        # Post request to predict endpoint
+        response = client.post("/predict", json=batch_input)
+        prediction_response = response.json()
+
+        # Ensure post request was successful
+        assert response.status_code == 200
+        # Ensure probability of default is higher for high compared to low risk age
+        low_risk_age_default_prob = prediction_response["results"][0]["probabilities"]["Default"]
+        high_risk_age_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
+        assert low_risk_age_default_prob < high_risk_age_default_prob 
+
     # test_ignores_extra_feature
