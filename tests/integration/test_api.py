@@ -353,7 +353,32 @@ class TestPredict:
             for error in error_detail
         )
     
-    # test_low_risk_features_predict_low_default_probability    
-    # test_high_risk_features_predict_high_default_probability
+    # Low income predicts low default probability    
+    @pytest.mark.integration
+    def test_low_risk_features_predict_low_default_probability(self):
+        low_risk_input = { 
+                "income": 8_000_000,
+                "age": 30,
+                "experience": 10,
+                "married": "married",
+                "house_ownership": "rented",
+                "car_ownership": "yes",
+                "profession": "architect",
+                "city": "delhi_city",
+                "state": "assam",
+                "current_job_yrs": 10,
+                "current_house_yrs": 14           
+            }
+
+        # Post request to predict endpoint
+        response = client.post("/predict", json=low_risk_input)
+        prediction_response = response.json()
+
+        # Ensure post request was successful
+        assert response.status_code == 200
+        # Ensure probability of default is low (less than 10%)
+        prob_default = prediction_response["results"][0]["probabilities"]["Default"]
+        assert prob_default < 0.1
+
     # test_high_vs_low_risk_features_predict_higher_default_probability
     # test_ignores_extra_feature
