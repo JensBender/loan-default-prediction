@@ -173,8 +173,9 @@ client = TestClient(app)
 class TestPredict:
     # Valid single input returns HTTP 200 OK status, a valid response schema and probabilities sum to 1
     @pytest.mark.integration
-    def test_single_input_happy_path(self):
-        valid_single_input = {
+    @pytest.mark.parametrize("valid_input", [
+        # Single input dict
+        {
             "income": 300000,
             "age": 30,
             "experience": 3,
@@ -186,10 +187,40 @@ class TestPredict:
             "state": "rajasthan",
             "current_job_yrs": 3,
             "current_house_yrs": 11           
-        }
-
+        },
+        # Batch input List[dict]
+        [
+            {
+                "income": 300000,
+                "age": 30,
+                "experience": 3,
+                "married": "single",
+                "house_ownership": "rented",
+                "car_ownership": "no",
+                "profession": "artist",
+                "city": "sikar",
+                "state": "rajasthan",
+                "current_job_yrs": 3,
+                "current_house_yrs": 11           
+            },
+            {
+                "income": 1000000,
+                "age": 30,
+                "experience": 10,
+                "married": "married",
+                "house_ownership": "rented",
+                "car_ownership": "yes",
+                "profession": "architect",
+                "city": "delhi_city",
+                "state": "assam",
+                "current_job_yrs": 7,
+                "current_house_yrs": 12           
+            }            
+        ]
+    ])
+    def test_happy_path(self, valid_input):
         # Post request to predict endpoint
-        response = client.post("/predict", json=valid_single_input)
+        response = client.post("/predict", json=valid_input)
         prediction_response = response.json()
 
         # Ensure post request was successful
@@ -199,27 +230,31 @@ class TestPredict:
         assert isinstance(prediction_response["results"], list)
         assert "n_predictions" in prediction_response
         assert isinstance(prediction_response["n_predictions"], int)
-        # Ensure prediction response has single result
-        assert len(prediction_response["results"]) == 1
-        assert prediction_response["n_predictions"] == 1
-        # Ensure the prediction result has expected schema
-        prediction_result = prediction_response["results"][0]
-        assert isinstance(prediction_result, dict)
-        assert "prediction" in prediction_result
-        assert "probabilities" in prediction_result
-        # Ensure prediction has expected schema
-        prediction = prediction_result["prediction"]
-        assert isinstance(prediction, str)
-        assert prediction in ["Default", "No Default"]
-        # Ensure probabilities has expected schema
-        predicted_probabilities = prediction_result["probabilities"]
-        assert isinstance(predicted_probabilities, dict)
-        assert "Default" in predicted_probabilities
-        assert "No Default" in predicted_probabilities
-        assert isinstance(predicted_probabilities["Default"], float)
-        assert isinstance(predicted_probabilities["No Default"], float)
-        # Ensure probabilities sum to approximately 1
-        assert (predicted_probabilities["Default"] + predicted_probabilities["No Default"]) == pytest.approx(1.0)  # default relative tolerance of 1e-6 (0.0001%) and absolute tolerance of 1e-12
+        # Ensure prediction response has expected number of results
+        if isinstance(valid_input, list):  # batch input list
+            expected_n_results = len(valid_input)
+        else:  # single input dict
+            expected_n_results = 1
+        assert len(prediction_response["results"]) == expected_n_results
+        assert prediction_response["n_predictions"] == expected_n_results
+        # Ensure each prediction result has expected schema
+        for prediction_result in prediction_response["results"]:
+            assert isinstance(prediction_result, dict)
+            assert "prediction" in prediction_result
+            assert "probabilities" in prediction_result
+            # Ensure prediction has expected schema
+            prediction = prediction_result["prediction"]
+            assert isinstance(prediction, str)
+            assert prediction in ["Default", "No Default"]
+            # Ensure probabilities has expected schema
+            predicted_probabilities = prediction_result["probabilities"]
+            assert isinstance(predicted_probabilities, dict)
+            assert "Default" in predicted_probabilities
+            assert "No Default" in predicted_probabilities
+            assert isinstance(predicted_probabilities["Default"], float)
+            assert isinstance(predicted_probabilities["No Default"], float)
+            # Ensure probabilities sum to approximately 1
+            assert (predicted_probabilities["Default"] + predicted_probabilities["No Default"]) == pytest.approx(1.0)  # default relative tolerance of 1e-6 (0.0001%) and absolute tolerance of 1e-12
 
     # test_batch_input_happy_path
     # test_empty_batch_input_happy_path
