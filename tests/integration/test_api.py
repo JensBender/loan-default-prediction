@@ -479,6 +479,45 @@ class TestPredict:
         # Ensure prediction result for input with and without extra field are identical
         assert prediction_response["results"][0] == prediction_response["results"][1]
 
+    # Missing optional field
+    @pytest.mark.integration
+    def test_input_with_and_without_missing_optional_field_predict_same_result(self):
+        input = {
+            "income": 300000,
+            "age": 30,
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        }
+        input_with_missing_optional_field = {
+            "income": 300000,
+            "age": 30,
+            "experience": 3,
+            # "married" field missing, should impute the mode "single"
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11
+        }
+
+        # Post request to predict endpoint
+        response = client.post("/predict", json=[input, input_with_missing_optional_field])
+        prediction_response = response.json()
+
+        # Ensure post request was successful
+        assert response.status_code == 200
+        # Ensure prediction result for input with and without missing optional field is identical
+        assert prediction_response["results"][0] == prediction_response["results"][1]
+
     # Rounding float to int
     @pytest.mark.integration
     def test_rounding_float_vs_int_input_predict_same_result(self):
