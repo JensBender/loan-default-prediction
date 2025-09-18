@@ -441,7 +441,7 @@ class TestPredict:
 
     # Extra field in input
     @pytest.mark.integration
-    def test_extra_field_in_input_is_ignored(self):
+    def test_input_with_and_without_extra_field_predict_same_result(self):
         valid_input = {
             "income": 300000,
             "age": 30,
@@ -479,4 +479,4 @@ class TestPredict:
         # Ensure prediction result for input with and without extra field are identical
         assert prediction_response["results"][0] == prediction_response["results"][1]
 
-    # test_identical_prediction_for_int_and_rounded_float
+    # test_rounding_float_vs_int_input_predict_same_result
