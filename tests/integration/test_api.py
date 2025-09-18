@@ -323,6 +323,20 @@ class TestPredict:
             "current_job_yrs": 3,
             "current_house_yrs": 11           
         },
+        # Invalid string Enum 
+        {
+            "income": 300000,
+            "age": 30,   
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "hopefully_in_the_future",  # invalid Enum
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        },
         # Out-of-range value
         {
             "income": 300000,
@@ -426,3 +440,4 @@ class TestPredict:
         assert low_risk_age_default_prob < high_risk_age_default_prob 
 
     # test_ignores_extra_feature
+    # test_identical_prediction_for_int_and_rounded_float
