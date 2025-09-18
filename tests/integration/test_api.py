@@ -573,3 +573,45 @@ class TestPredict:
         assert response.status_code == 200
         # Ensure prediction result for int and float input is identical
         assert prediction_response["results"][0] == prediction_response["results"][1]
+
+    # Internal server error
+    @pytest.mark.integration
+    def test_return_http_500_for_pipeline_failure(self, monkeypatch, request):
+        # --- Create a faulty pipeline ---
+        # Load the real pipeline
+        root_dir = Path(str(request.config.rootdir))
+        pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"
+        real_pipeline = joblib.load(pipeline_path)
+
+        # Get the original job stability map and create a faulty version by removing a category
+        original_map = real_pipeline.named_steps["job_stability_transformer"].job_stability_map
+        faulty_map = original_map.copy()
+        del faulty_map["firefighter"]
+
+        # Create a new pipeline instance with the faulty map
+        faulty_pipeline = real_pipeline.set_params(job_stability_transformer__job_stability_map=faulty_map)
+
+        # --- Inject the faulty pipeline into the application ---
+        monkeypatch.setattr("api.app.pipeline", faulty_pipeline)
+
+        # --- Post request with unknown "firefighter" category ---
+        input_with_unknown_category = {
+            "income": 300000,
+            "age": 30,
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "firefighter",  # unknown category will cause pipeline failure
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11
+        }
+
+        response = client.post("/predict", json=input_with_unknown_category)
+
+        # Ensure response has status code 500 (Internal Server Error)
+        assert response.status_code == 500
+        # Ensure error detail is as expected
+        assert "Internal server error during loan default prediction" in response.text
