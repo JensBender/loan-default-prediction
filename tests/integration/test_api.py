@@ -479,9 +479,39 @@ class TestPredict:
         # Ensure prediction result for input with and without extra field are identical
         assert prediction_response["results"][0] == prediction_response["results"][1]
 
-    # Missing optional field
+    # Optional field or its value is missing
     @pytest.mark.integration
-    def test_input_with_and_without_missing_optional_field_predict_same_result(self):
+    @pytest.mark.parametrize("missing_optional_input", [
+        # Missing field
+        {
+            "income": 300000,
+            "age": 30,
+            "experience": 3,
+            # "married" field missing, should impute the mode "single"
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11
+        },
+        # Field is present, but its value is missing
+        {
+            "income": 300000,
+            "age": 30,
+            "experience": 3,
+            "married": None,  # missing value, should impute the mode "single"
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11
+        }
+    ])
+    def test_input_with_and_without_missing_optional_input_predict_same_result(self, missing_optional_input):
         input = {
             "income": 300000,
             "age": 30,
@@ -495,22 +525,9 @@ class TestPredict:
             "current_job_yrs": 3,
             "current_house_yrs": 11           
         }
-        input_with_missing_optional_field = {
-            "income": 300000,
-            "age": 30,
-            "experience": 3,
-            # "married" field missing, should impute the mode "single"
-            "house_ownership": "rented",
-            "car_ownership": "no",
-            "profession": "artist",
-            "city": "sikar",
-            "state": "rajasthan",
-            "current_job_yrs": 3,
-            "current_house_yrs": 11
-        }
 
         # Post request to predict endpoint
-        response = client.post("/predict", json=[input, input_with_missing_optional_field])
+        response = client.post("/predict", json=[input, missing_optional_input])
         prediction_response = response.json()
 
         # Ensure post request was successful
