@@ -353,7 +353,7 @@ class TestPredict:
             for error in error_detail
         )
     
-    # Low risk features > low default probability    
+    # Low risk features predict low default probability    
     @pytest.mark.integration
     def test_low_risk_features_predict_low_default_probability(self):
         low_risk_input = { 
@@ -380,7 +380,7 @@ class TestPredict:
         prob_default = prediction_response["results"][0]["probabilities"]["Default"]
         assert prob_default < 0.1
 
-    # High vs. low risk age > higher default probability
+    # High vs. low risk age predicts higher default probability
     @pytest.mark.integration
     def test_high_vs_low_risk_age_predicts_higher_default_probability(self):
         batch_input = [
