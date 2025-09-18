@@ -439,5 +439,44 @@ class TestPredict:
         high_risk_age_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
         assert low_risk_age_default_prob < high_risk_age_default_prob 
 
-    # test_ignores_extra_feature
+    # Extra field in input
+    @pytest.mark.integration
+    def test_extra_field_in_input_is_ignored(self):
+        valid_input = {
+            "income": 300000,
+            "age": 30,
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11           
+        }
+        valid_input_with_extra_field = {
+            "income": 300000,
+            "age": 30,
+            "experience": 3,
+            "married": "single",
+            "house_ownership": "rented",
+            "car_ownership": "no",
+            "profession": "artist",
+            "city": "sikar",
+            "state": "rajasthan",
+            "current_job_yrs": 3,
+            "current_house_yrs": 11,
+            "extra_field": "should be ignored"  # extra field, otherwise identical      
+        }
+
+        # Post requets to predict endpoint
+        response = client.post("/predict", json=[valid_input, valid_input_with_extra_field])
+        prediction_response = response.json()
+
+        # Ensure post request was successful
+        assert response.status_code == 200
+        # Ensure prediction result for input with and without extra field are identical
+        assert prediction_response["results"][0] == prediction_response["results"][1]
+
     # test_identical_prediction_for_int_and_rounded_float
