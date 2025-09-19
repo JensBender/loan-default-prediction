@@ -13,7 +13,7 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.custom_transformers import StateDefaultRateTargetEncoder, MissingValueError, CategoricalLabelError
+from src.custom_transformers import StateDefaultRateTargetEncoder, MissingValueError, CategoricalLabelError
 from tests.unit.base_transformer_tests import BaseSupervisedTransformerTests
 
 

@@ -13,8 +13,8 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.custom_transformers import BooleanColumnTransformer, ColumnMismatchError, MissingValueError, CategoricalLabelError
-from app.global_constants import BOOLEAN_COLUMN_MAPPINGS
+from src.custom_transformers import BooleanColumnTransformer, ColumnMismatchError, MissingValueError, CategoricalLabelError
+from src.global_constants import BOOLEAN_COLUMN_MAPPINGS
 from tests.unit.base_transformer_tests import BaseTransformerTests
 
 

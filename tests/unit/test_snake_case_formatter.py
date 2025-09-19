@@ -12,8 +12,8 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.custom_transformers import SnakeCaseFormatter, ColumnMismatchError
-from app.global_constants import COLUMNS_FOR_SNAKE_CASING
+from src.custom_transformers import SnakeCaseFormatter, ColumnMismatchError
+from src.global_constants import COLUMNS_FOR_SNAKE_CASING
 from tests.unit.base_transformer_tests import BaseTransformerTests
 
 

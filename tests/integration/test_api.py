@@ -13,7 +13,7 @@ import joblib
 from fastapi.testclient import TestClient
 
 # Local imports
-from api.app import load_pipeline, app
+from backend.app import load_pipeline, app
 
 
 # --- Function .load_pipeline() ---
@@ -592,7 +592,7 @@ class TestPredict:
         faulty_pipeline = real_pipeline.set_params(job_stability_transformer__job_stability_map=faulty_map)
 
         # --- Inject the faulty pipeline into the application ---
-        monkeypatch.setattr("api.app.pipeline", faulty_pipeline)
+        monkeypatch.setattr("backend.app.pipeline", faulty_pipeline)
 
         # --- Post request with unknown "firefighter" category ---
         input_with_unknown_category = {

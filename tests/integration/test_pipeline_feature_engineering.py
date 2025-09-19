@@ -12,8 +12,8 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.pipeline import create_feature_engineering_pipeline
-from app.custom_transformers import ColumnMismatchError, CategoricalLabelError, MissingValueError
+from src.pipeline import create_feature_engineering_pipeline
+from src.custom_transformers import ColumnMismatchError, CategoricalLabelError, MissingValueError
 from tests.integration.base_pipeline_tests import BaseSupervisedPipelineTests
 
 

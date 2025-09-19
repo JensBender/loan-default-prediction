@@ -13,8 +13,8 @@ from sklearn.preprocessing import OrdinalEncoder
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.custom_transformers import RobustOrdinalEncoder
-from app.global_constants import ORDINAL_COLUMN_ORDERS
+from src.custom_transformers import RobustOrdinalEncoder
+from src.global_constants import ORDINAL_COLUMN_ORDERS
 
 
 # --- Fixtures ---
