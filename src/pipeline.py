@@ -4,7 +4,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 
 # Local imports
-from app.custom_transformers import (
+from .custom_transformers import (
     MissingValueChecker, 
     MissingValueStandardizer, 
     RobustSimpleImputer,
@@ -18,7 +18,7 @@ from app.custom_transformers import (
     RobustOrdinalEncoder,
     FeatureSelector
 )
-from app.global_constants import (
+from .global_constants import (
     CRITICAL_FEATURES, 
     NON_CRITICAL_FEATURES, 
     COLUMNS_FOR_SNAKE_CASING,

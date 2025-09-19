@@ -11,7 +11,14 @@ import numpy as np
 import joblib
 
 # Local imports
-from app.custom_transformers import (
+from backend.schemas import (
+    PipelineInput,
+    PredictionEnum,
+    PredictedProbabilities,
+    PredictionResult,
+    PredictionResponse    
+)
+from src.custom_transformers import (
     MissingValueChecker, 
     MissingValueStandardizer, 
     RobustSimpleImputer,
@@ -25,14 +32,7 @@ from app.custom_transformers import (
     RobustOrdinalEncoder,
     FeatureSelector
 )
-from api.schemas import (
-    PipelineInput,
-    PredictionEnum,
-    PredictedProbabilities,
-    PredictionResult,
-    PredictionResponse    
-)
-from api.utils import get_root_directory
+from src.utils import get_root_directory
 
 # --- ML Pipeline ---
 # Get path to the pipeline .joblib file
