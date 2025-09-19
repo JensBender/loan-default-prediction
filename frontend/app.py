@@ -8,7 +8,7 @@ import gradio as gr
 import pandas as pd
 
 # Local imports
-from app.custom_transformers import (
+from src.custom_transformers import (
     MissingValueChecker, 
     MissingValueStandardizer, 
     RobustSimpleImputer,
@@ -22,7 +22,7 @@ from app.custom_transformers import (
     RobustOrdinalEncoder,
     FeatureSelector
 )
-from app.global_constants import (
+from src.global_constants import (
     MARRIED_LABELS,
     CAR_OWNERSHIP_LABELS,
     HOUSE_OWNERSHIP_LABELS,

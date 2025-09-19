@@ -8,7 +8,7 @@ import math
 from pydantic import BaseModel, Field, field_validator, model_validator, computed_field
 
 # Local imports
-from app.global_constants import (
+from src.global_constants import (
     MARRIED_LABELS,
     HOUSE_OWNERSHIP_LABELS,
     CAR_OWNERSHIP_LABELS,
