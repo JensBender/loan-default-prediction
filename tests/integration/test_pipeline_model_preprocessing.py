@@ -12,7 +12,7 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.pipeline import create_model_preprocessing_pipeline
+from src.pipeline import create_model_preprocessing_pipeline
 from tests.integration.base_pipeline_tests import BasePipelineTests
 
 

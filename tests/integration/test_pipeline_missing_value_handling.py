@@ -12,9 +12,9 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.pipeline import create_missing_value_handling_pipeline
-from app.custom_transformers import MissingValueError, ColumnMismatchError
-from app.global_constants import CRITICAL_FEATURES, NON_CRITICAL_FEATURES
+from src.pipeline import create_missing_value_handling_pipeline
+from src.custom_transformers import MissingValueError, ColumnMismatchError
+from src.global_constants import CRITICAL_FEATURES, NON_CRITICAL_FEATURES
 from tests.integration.base_pipeline_tests import BasePipelineTests
 
 

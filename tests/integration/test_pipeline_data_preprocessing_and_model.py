@@ -16,9 +16,9 @@ from sklearn.exceptions import NotFittedError
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.pipeline import create_data_preprocessing_and_model_pipeline
-from app.custom_transformers import MissingValueError, ColumnMismatchError, CategoricalLabelError
-from app.global_constants import CRITICAL_FEATURES, NON_CRITICAL_FEATURES
+from src.pipeline import create_data_preprocessing_and_model_pipeline
+from src.custom_transformers import MissingValueError, ColumnMismatchError, CategoricalLabelError
+from src.global_constants import CRITICAL_FEATURES, NON_CRITICAL_FEATURES
 
 
 # --- Fixtures ---

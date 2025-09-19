@@ -8,7 +8,7 @@ import pytest
 from pydantic import ValidationError 
 
 # Local imports
-from api.schemas import (
+from backend.schemas import (
     MarriedEnum,
     HouseOwnershipEnum,
     CarOwnershipEnum,
@@ -21,7 +21,7 @@ from api.schemas import (
     PredictionResult,
     PredictionResponse
 )
-from app.global_constants import (
+from src.global_constants import (
     MARRIED_LABELS,
     HOUSE_OWNERSHIP_LABELS,
     CAR_OWNERSHIP_LABELS,

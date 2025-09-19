@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))  
 
 # Local imports
-from app.app import (
+from frontend.app import (
     snake_case_format, 
     snake_case_format_inputs, 
     format_house_ownership,

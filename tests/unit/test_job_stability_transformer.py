@@ -12,8 +12,8 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.custom_transformers import JobStabilityTransformer, MissingValueError, CategoricalLabelError
-from app.global_constants import JOB_STABILITY_MAP
+from src.custom_transformers import JobStabilityTransformer, MissingValueError, CategoricalLabelError
+from src.global_constants import JOB_STABILITY_MAP
 from tests.unit.base_transformer_tests import BaseTransformerTests
 
 

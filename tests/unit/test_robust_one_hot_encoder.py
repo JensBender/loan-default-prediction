@@ -13,8 +13,8 @@ from sklearn.preprocessing import OneHotEncoder
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # Local imports
-from app.custom_transformers import RobustOneHotEncoder
-from app.global_constants import NOMINAL_COLUMN_CATEGORIES
+from src.custom_transformers import RobustOneHotEncoder
+from src.global_constants import NOMINAL_COLUMN_CATEGORIES
 
 
 # --- Fixtures ---
