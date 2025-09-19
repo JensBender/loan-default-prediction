@@ -14,6 +14,7 @@ models/
 models/baseline_models.pkl
 models/tuned_models.pkl
 models/*random_search*.pkl
+frontend/old_gradio_app.py
 *venv*/
 .ipynb_checkpoints/
 .vscode/
