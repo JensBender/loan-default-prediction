@@ -1,0 +1,166 @@
+# --- Imports ---
+# Standard library imports
+import re
+
+# Third-party library imports
+import gradio as gr
+
+# Local imports
+from src.global_constants import (
+    MARRIED_LABELS,
+    CAR_OWNERSHIP_LABELS,
+    HOUSE_OWNERSHIP_LABELS,
+    PROFESSION_LABELS,
+    CITY_LABELS,
+    STATE_LABELS
+)
+
+# --- Constants ---
+# Format categorical string labels for display in UI
+MARRIED_DISPLAY_LABELS = [label.title() for label in MARRIED_LABELS]
+CAR_OWNERSHIP_DISPLAY_LABELS = [label.title() for label in CAR_OWNERSHIP_LABELS]
+HOUSE_OWNERSHIP_DISPLAY_LABELS = [label.replace("norent_noown", "Neither Rented Nor Owned").title() for label in HOUSE_OWNERSHIP_LABELS]
+PROFESSION_DISPLAY_LABELS = [label.replace("_", " ").title() for label in PROFESSION_LABELS]
+CITY_DISPLAY_LABELS = [label.replace("_", " ").title() for label in CITY_LABELS]
+STATE_DISPLAY_LABELS = [label.replace("_", " ").title() for label in STATE_LABELS]
+
+
+# --- Input Preprocessing Functions ---
+# Format a single string input in snake_case  
+def snake_case_format(value):
+    if isinstance(value, str):
+        # Remove leading/trailing whitespace, convert to lowercase, and replace single or multiple hyphens, forward slashes, and inner whitespaces with a single underscore
+        return re.sub(r"[-/\s]+", "_", value.strip().lower())
+    return value  # return non-string values unchanged
+
+
+# Format all string inputs in a dictionary in snake_case
+def snake_case_format_inputs(inputs_dict):
+    return {key: snake_case_format(value) for key, value in inputs_dict.items()}
+
+
+# Format "house_ownership" label as expected by API backend
+def format_house_ownership(display_label):
+    if isinstance(display_label, str):
+        return display_label.replace("neither_rented_nor_owned", "norent_noown")
+    return display_label  # return non-string values unchanged
+
+
+# --- Function: Predict Loan Default for Gradio UI ---
+def predict_loan_default(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
+    try:
+        # --- Input preprocessing ---
+        # Create inputs dictionary 
+        inputs = {
+            "income": income, 
+            "age": age,
+            "experience": experience,
+            "married": married,
+            "house_ownership": house_ownership,
+            "car_ownership": car_ownership,
+            "profession": profession,
+            "city": city,
+            "state": state,
+            "current_job_yrs": current_job_yrs,
+            "current_house_yrs": current_house_yrs
+        }
+
+        # Format string inputs in snake_case
+        inputs = snake_case_format_inputs(inputs)
+
+        # Format "house_ownership" label as expected by API backend 
+        inputs["house_ownership"] = format_house_ownership(inputs["house_ownership"])
+
+        # Create input DataFrame for pipeline
+        pipeline_input_df = pd.DataFrame([inputs])   
+        
+        # --- Predict loan default ---       
+        # Use FastAPI backend to get prediction 
+        pred_proba = pipeline.predict_proba(pipeline_input_df)
+
+        # Create predicted probabilities dictionary (for gr.Label output)
+        pred_proba_dict = {
+            "Default": pred_proba[0, 1],  # "Default" is class 1
+            "No Default": pred_proba[0, 0]  # "No Default" is class 0
+        }
+
+        return prediction_str, pred_proba_dict
+
+    except Exception as e:
+        return f"Error: {str(e)}", ""
+
+
+# --- Gradio App UI ---
+# Custom CSS 
+custom_css = """
+.narrow-centered-column {
+    max-width: 700px; 
+    width: 100%; 
+    margin: 0 auto; 
+}
+#predict-button-wrapper {
+    max-width: 250px;
+    margin: 0 auto;
+}
+#prediction-text textarea {font-size: 1.8em; font-weight: bold; text-align: center;}
+#pred-proba-label {margin-top: -15px;}
+#markdown-note {margin-top: -13px;}
+"""
+
+# Create Gradio app UI using Blocks
+with gr.Blocks(css=custom_css) as app_ui:
+    # Title and description
+    gr.Markdown(
+        """
+        <h1 style='text-align:center'>Loan Default Prediction</h1>
+        <p style='text-align:center'>Submit the customer application data to receive an automated loan default prediction powered by machine learning.</p>
+        """
+    )
+
+    # Inputs
+    with gr.Group():
+        with gr.Row():
+            age = gr.Number(label="Age", value="")
+            married = gr.Dropdown(label="Married/Single", choices=MARRIED_DISPLAY_LABELS, value=None)
+            income = gr.Number(label="Income", value="")
+        with gr.Row():
+            car_ownership = gr.Dropdown(label="Car Ownership", choices=CAR_OWNERSHIP_DISPLAY_LABELS, value=None)
+            house_ownership = gr.Dropdown(label="House Ownership", choices=HOUSE_OWNERSHIP_DISPLAY_LABELS, value=None)
+            current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
+        with gr.Row():
+            city = gr.Dropdown(label="City", choices=CITY_DISPLAY_LABELS, value=None)
+            state = gr.Dropdown(label="State", choices=STATE_DISPLAY_LABELS, value=None)
+            profession = gr.Dropdown(label="Profession", choices=PROFESSION_DISPLAY_LABELS, value=None)
+        with gr.Row():
+            experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
+            current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
+            gr.Markdown("")  # empty space for layout
+
+    # Predict button 
+    with gr.Column(elem_id="predict-button-wrapper"):
+        predict = gr.Button("Predict")
+    
+    # Outputs
+    with gr.Column(elem_classes="narrow-centered-column"):
+        prediction_text = gr.Textbox(placeholder="Prediction Result", show_label=False, container=False, elem_id="prediction-text")   
+        pred_proba = gr.Label(show_label=False, show_heading=False, elem_id="pred-proba-label")
+        gr.Markdown(
+            "<small>Note: Prediction uses an optimized decision threshold of 0.29 "
+            "(predicts 'Default' if probability ≥ 29%, otherwise 'No Default').</small>",
+            elem_id="markdown-note"
+        )
+
+    # Predict button click event
+    predict.click(
+        predict_loan_default,
+        inputs=[
+            age, married, income, car_ownership, house_ownership, current_house_yrs, 
+            city, state, profession, experience, current_job_yrs
+        ],
+        outputs=[prediction_text, pred_proba]
+    )
+
+
+# --- Launch Web App UI ---
+if __name__ == "__main__":
+    app_ui.launch()
