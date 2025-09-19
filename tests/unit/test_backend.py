@@ -388,7 +388,7 @@ class TestPredict:
         # Use pytest's built-in monkeypatch fixture with a custom function to simulate failure when calling .predict_proba()
         def simulate_predict_proba_failure(X: pd.DataFrame):
             raise RuntimeError("Simulated failure of .predict_proba()")
-        monkeypatch.setattr("api.app.pipeline.predict_proba", simulate_predict_proba_failure)
+        monkeypatch.setattr("backend.app.pipeline.predict_proba", simulate_predict_proba_failure)
 
         # Post request to predict endpoint 
         response = client.post("/predict", json=valid_single_input)
