@@ -4,6 +4,7 @@ import re
 
 # Third-party library imports
 import gradio as gr
+import requests
 
 # Local imports
 from src.global_constants import (
@@ -16,6 +17,9 @@ from src.global_constants import (
 )
 
 # --- Constants ---
+# Backend URL to FastAPI predict endpoint
+BACKEND_URL = "127.0.0.1:8000/predict"
+
 # Format categorical string labels for display in UI
 MARRIED_DISPLAY_LABELS = [label.title() for label in MARRIED_LABELS]
 CAR_OWNERSHIP_DISPLAY_LABELS = [label.title() for label in CAR_OWNERSHIP_LABELS]
@@ -70,21 +74,17 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
 
         # Format "house_ownership" label as expected by API backend 
         inputs["house_ownership"] = format_house_ownership(inputs["house_ownership"])
-
-        # Create input DataFrame for pipeline
-        pipeline_input_df = pd.DataFrame([inputs])   
         
         # --- Predict loan default ---       
-        # Use FastAPI backend to get prediction 
-        pred_proba = pipeline.predict_proba(pipeline_input_df)
-
-        # Create predicted probabilities dictionary (for gr.Label output)
-        pred_proba_dict = {
-            "Default": pred_proba[0, 1],  # "Default" is class 1
-            "No Default": pred_proba[0, 0]  # "No Default" is class 0
-        }
-
-        return prediction_str, pred_proba_dict
+        # Get prediction via post request to FastAPI backend
+        response = requests.post(BACKEND_URL, json=inputs) 
+        # Get prediction and probabilities for Gradio output
+        prediction_response = response.json()
+        prediction_result = prediction_response["results"][0]
+        prediction = prediction_result["prediction"]
+        probabilities = prediction_result["probabilities"]
+        
+        return prediction, probabilities
 
     except Exception as e:
         return f"Error: {str(e)}", ""
