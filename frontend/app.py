@@ -6,6 +6,7 @@ from typing import Any
 # Third-party library imports
 import gradio as gr
 import requests
+from requests.exceptions import ConnectionError, Timeout
 
 # Local imports
 from src.global_constants import (
@@ -83,6 +84,7 @@ def predict_loan_default(
         ]:
             print(f"{var_name}: {type(var_value)} = {var_value}")
         print("=================================")
+  
         # --- Input preprocessing ---
         # Create inputs dictionary 
         inputs = {
@@ -120,8 +122,12 @@ def predict_loan_default(
         
         return prediction, probabilities
 
+    except ConnectionError:
+        return "Connection Error", "Could not connect to the FastAPI backend service. Please ensure the backend is running and try again."
+    except Timeout:
+        return "Timeout Error", "The request to the FastAPI backend timed out. The service may be busy. Please try again later."
     except Exception as e:
-        return f"Error: {str(e)}", ""
+        return "Error", f"{str(e)}"
 
 
 # --- Gradio App UI ---
