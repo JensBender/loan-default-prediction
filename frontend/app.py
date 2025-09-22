@@ -108,6 +108,10 @@ def predict_loan_default(
         # --- Predict loan default ---       
         # Get prediction via post request to FastAPI backend
         response = requests.post(BACKEND_URL, json=inputs) 
+        # Handle HTTP errors
+        if response.status_code != 200:
+            error_detail = response.json()
+            return f"Error: HTTP {response.status_code}", f"{error_detail}"
         # Get prediction and probabilities for Gradio output
         prediction_response = response.json()
         prediction_result = prediction_response["results"][0]
