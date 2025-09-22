@@ -52,6 +52,18 @@ def format_house_ownership(display_label: Any) -> Any:
     return display_label  # return non-string unchanged
 
 
+# --- Error Handling ---
+# Function to format Pydantic validation error from FastAPI backend into a user-friendly message for Gradio output
+def _format_validation_error(error_detail: dict) -> str:
+    if "detail" in error_detail and isinstance(error_detail["detail"], list):
+        wrong_inputs = []
+        for error in error_detail["detail"]:
+            wrong_input = error["loc"]
+            type = error["type"]
+            wrong_input_msg = f"{wrong_input} should be a valid {type}"
+            wrong_inputs.append(wrong_input_msg)
+    return "Please correct the following error:\n" + "\n".join(wrong_inputs)
+
 # --- Function to Predict Loan Default for Gradio UI ---
 def predict_loan_default(
     age: int | float, 
@@ -111,9 +123,10 @@ def predict_loan_default(
         # Get prediction via post request to FastAPI backend
         response = requests.post(BACKEND_URL, json=inputs) 
         # Handle HTTP errors
-        if response.status_code != 200:
+        if response.status_code == 422:
             error_detail = response.json()
-            return f"Error: HTTP {response.status_code}", f"{error_detail}"
+            error_message = _format_validation_error(error_detail)
+            return f"Error: Wrong Input", error_message
         # Get prediction and probabilities for Gradio output
         prediction_response = response.json()
         prediction_result = prediction_response["results"][0]
