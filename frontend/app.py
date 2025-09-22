@@ -6,7 +6,7 @@ from typing import Any
 # Third-party library imports
 import gradio as gr
 import requests
-from requests.exceptions import ConnectionError, Timeout
+from requests.exceptions import ConnectionError, Timeout, RequestException
 
 # Local imports
 from src.global_constants import (
@@ -123,9 +123,11 @@ def predict_loan_default(
         return prediction, probabilities
 
     except ConnectionError:
-        return "Connection Error", "Could not connect to the FastAPI backend service. Please ensure the backend is running and try again."
+        return "Connection Error", "Could not connect to the prediction service. Please ensure the backend is running and try again."
     except Timeout:
-        return "Timeout Error", "The request to the FastAPI backend timed out. The service may be busy. Please try again later."
+        return "Timeout Error", "The request to the prediction service timed out. The service may be busy or slow. Please try again later."
+    except RequestException as e:  # catches other frontend-to-backend communication errors
+        return "Error" "The prediction service is temporarily unavailable due to an internal communication issue. Please try again later."
     except Exception as e:
         return "Error", f"{str(e)}"
 
