@@ -45,10 +45,10 @@ def snake_case_str_values_in_dict(inputs: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # Format "house_ownership" label as expected by API backend
-def format_house_ownership(display_label):
-    if isinstance(display_label, str):
-        return display_label.replace("neither_rented_nor_owned", "norent_noown")
-    return display_label  # return non-string values unchanged
+def format_house_ownership(display_label: str) -> str:
+    if not isinstance(display_label, str):
+        raise ValueError("'house_ownership' must be a string.")
+    return display_label.replace("neither_rented_nor_owned", "norent_noown")
 
 
 # --- Function to Predict Loan Default for Gradio UI ---
@@ -70,8 +70,8 @@ def predict_loan_default(age, married, income, car_ownership, house_ownership, c
             "current_house_yrs": current_house_yrs
         }
 
-        # Format string inputs in snake_case
-        inputs = snake_case_format_inputs(inputs)
+        # Format string values in snake_case
+        inputs = snake_case_str_values_in_dict(inputs)
 
         # Format "house_ownership" label as expected by API backend 
         inputs["house_ownership"] = format_house_ownership(inputs["house_ownership"])
