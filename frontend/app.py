@@ -45,10 +45,10 @@ def snake_case_str_values_in_dict(inputs: dict[str, Any]) -> dict[str, Any]:
 
 
 # Format "house_ownership" label as expected by API backend
-def format_house_ownership(display_label: str) -> str:
-    if not isinstance(display_label, str):
-        raise ValueError("'house_ownership' must be a string.")
-    return display_label.replace("neither_rented_nor_owned", "norent_noown")
+def format_house_ownership(display_label: Any) -> Any:
+    if isinstance(display_label, str):
+        return display_label.replace("neither_rented_nor_owned", "norent_noown")
+    return display_label  # return non-string unchanged
 
 
 # --- Function to Predict Loan Default for Gradio UI ---
@@ -66,13 +66,22 @@ def predict_loan_default(
     current_job_yrs: int | float 
 ) -> tuple[str, dict[str, float]] | tuple[str, str]:
     try:
-        # TEMPORARY: Test actual types returned by Gradio components
+        # TEMPORARY: Print types and values for all inputs returned by Gradio components
         print("=== GRADIO COMPONENT TYPES ===")
-        print(f"age: {type(age)} = {age}")
-        print(f"income: {type(income)} = {income}")
-        print(f"current_house_yrs: {type(current_house_yrs)} = {current_house_yrs}")
-        print(f"experience: {type(experience)} = {experience}")
-        print(f"current_job_yrs: {type(current_job_yrs)} = {current_job_yrs}")
+        for var_name, var_value in [
+            ("age", age),
+            ("married", married),
+            ("income", income),
+            ("car_ownership", car_ownership),
+            ("house_ownership", house_ownership),
+            ("current_house_yrs", current_house_yrs),
+            ("city", city),
+            ("state", state),
+            ("profession", profession),
+            ("experience", experience),
+            ("current_job_yrs", current_job_yrs)
+        ]:
+            print(f"{var_name}: {type(var_value)} = {var_value}")
         print("=================================")
         # --- Input preprocessing ---
         # Create inputs dictionary 
