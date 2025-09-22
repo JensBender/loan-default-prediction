@@ -19,7 +19,7 @@ from src.global_constants import (
 
 # --- Constants ---
 # Backend URL to FastAPI predict endpoint
-BACKEND_URL = "127.0.0.1:8000/predict"
+BACKEND_URL = "http://127.0.0.1:8000/predict"
 
 # Format categorical string labels (snake_case) for display in UI
 MARRIED_DISPLAY_LABELS = [label.title() for label in MARRIED_LABELS]
