@@ -1,7 +1,7 @@
 # --- Imports ---
 # Standard library imports
 import re
-from typing import Any, Dict
+from typing import Any
 
 # Third-party library imports
 import gradio as gr
@@ -40,7 +40,7 @@ def format_snake_case(value: Any) -> Any:
 
 
 # Format all string values in a dictionary in snake_case
-def snake_case_str_values_in_dict(inputs: Dict[str, Any]) -> Dict[str, Any]:
+def snake_case_str_values_in_dict(inputs: dict[str, Any]) -> dict[str, Any]:
     return {key: format_snake_case(value) for key, value in inputs.items()}
 
 
@@ -52,8 +52,28 @@ def format_house_ownership(display_label: str) -> str:
 
 
 # --- Function to Predict Loan Default for Gradio UI ---
-def predict_loan_default(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
+def predict_loan_default(
+    age: int | float, 
+    married: str, 
+    income: int | float, 
+    car_ownership: str, 
+    house_ownership: str, 
+    current_house_yrs: int | float, 
+    city: str, 
+    state: str, 
+    profession: str, 
+    experience: int | float, 
+    current_job_yrs: int | float 
+) -> tuple[str, dict[str, float]] | tuple[str, str]:
     try:
+        # TEMPORARY: Test actual types returned by Gradio components
+        print("=== GRADIO COMPONENT TYPES ===")
+        print(f"age: {type(age)} = {age}")
+        print(f"income: {type(income)} = {income}")
+        print(f"current_house_yrs: {type(current_house_yrs)} = {current_house_yrs}")
+        print(f"experience: {type(experience)} = {experience}")
+        print(f"current_job_yrs: {type(current_job_yrs)} = {current_job_yrs}")
+        print("=================================")
         # --- Input preprocessing ---
         # Create inputs dictionary 
         inputs = {
