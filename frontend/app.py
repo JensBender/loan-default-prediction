@@ -1,6 +1,7 @@
 # --- Imports ---
 # Standard library imports
 import re
+from typing import Any
 
 # Third-party library imports
 import gradio as gr
@@ -20,7 +21,7 @@ from src.global_constants import (
 # Backend URL to FastAPI predict endpoint
 BACKEND_URL = "127.0.0.1:8000/predict"
 
-# Format categorical string labels for display in UI
+# Format categorical string labels (snake_case) for display in UI
 MARRIED_DISPLAY_LABELS = [label.title() for label in MARRIED_LABELS]
 CAR_OWNERSHIP_DISPLAY_LABELS = [label.title() for label in CAR_OWNERSHIP_LABELS]
 HOUSE_OWNERSHIP_DISPLAY_LABELS = [label.replace("norent_noown", "Neither Rented Nor Owned").title() for label in HOUSE_OWNERSHIP_LABELS]
@@ -30,17 +31,17 @@ STATE_DISPLAY_LABELS = [label.replace("_", " ").title() for label in STATE_LABEL
 
 
 # --- Input Preprocessing Functions ---
-# Format a single string input in snake_case  
-def snake_case_format(value):
+# Format a string in snake_case (return non-string unchanged)
+def format_snake_case(value: Any) -> Any:
     if isinstance(value, str):
         # Remove leading/trailing whitespace, convert to lowercase, and replace single or multiple hyphens, forward slashes, and inner whitespaces with a single underscore
         return re.sub(r"[-/\s]+", "_", value.strip().lower())
-    return value  # return non-string values unchanged
+    return value  # return non-string unchanged
 
 
 # Format all string inputs in a dictionary in snake_case
 def snake_case_format_inputs(inputs_dict):
-    return {key: snake_case_format(value) for key, value in inputs_dict.items()}
+    return {key: format_snake_case(value) for key, value in inputs_dict.items()}
 
 
 # Format "house_ownership" label as expected by API backend
