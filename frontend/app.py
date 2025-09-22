@@ -1,7 +1,7 @@
 # --- Imports ---
 # Standard library imports
 import re
-from typing import Any
+from typing import Any, Dict
 
 # Third-party library imports
 import gradio as gr
@@ -39,9 +39,9 @@ def format_snake_case(value: Any) -> Any:
     return value  # return non-string unchanged
 
 
-# Format all string inputs in a dictionary in snake_case
-def snake_case_format_inputs(inputs_dict):
-    return {key: format_snake_case(value) for key, value in inputs_dict.items()}
+# Format all string values in a dictionary in snake_case
+def snake_case_str_values_in_dict(inputs: Dict[str, Any]) -> Dict[str, Any]:
+    return {key: format_snake_case(value) for key, value in inputs.items()}
 
 
 # Format "house_ownership" label as expected by API backend
@@ -51,7 +51,7 @@ def format_house_ownership(display_label):
     return display_label  # return non-string values unchanged
 
 
-# --- Function: Predict Loan Default for Gradio UI ---
+# --- Function to Predict Loan Default for Gradio UI ---
 def predict_loan_default(age, married, income, car_ownership, house_ownership, current_house_yrs, city, state, profession, experience, current_job_yrs):
     try:
         # --- Input preprocessing ---
