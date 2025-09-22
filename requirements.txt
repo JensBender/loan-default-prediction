@@ -6,6 +6,7 @@ joblib==1.4.2
 
 # Frontend
 gradio==5.29.0
+requests==2.32.5
 
 # Shared
 numpy==2.2.1
