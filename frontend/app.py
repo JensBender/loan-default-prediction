@@ -56,14 +56,14 @@ def format_house_ownership(display_label: Any) -> Any:
 # Map internal input field names (snake_case) to user-friendly error messages
 field_to_error_map = {
     "age": "Age must be a number between 21 and 79.",
-    "married": "Married/Single",
+    "married": "Married/Single: Please select 'Married' or 'Single'",
     "income": "Income must be a number 0 or greater.",
-    "car_ownership": "Car Ownership",
-    "house_ownership": "House Ownership",
+    "car_ownership": "Car Ownership: Please select 'Yes' or 'No'.",
+    "house_ownership": "House Ownership: Please select 'Rented', 'Owned' or 'Neither Rented Nor Owned'.",
     "current_house_yrs": "Current House Years must be a number between 10 and 14.",
-    "city": "City",
-    "state": "State",
-    "profession": "Profession",
+    "city": "City: Please select a city from the dropdown menu.",
+    "state": "State: Please select a state from the dropdown menu.",
+    "profession": "Profession: Please select a profession from the dropdown menu.",
     "experience": "Experience must be a number between 0 and 20.",
     "current_job_yrs": "Current Job Years must be a number between 0 and 14.",
 }
