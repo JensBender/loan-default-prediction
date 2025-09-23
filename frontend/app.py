@@ -53,7 +53,7 @@ def format_house_ownership(display_label: Any) -> Any:
 
 
 # --- Error Handling ---
-# Function to format Pydantic validation error from FastAPI backend into a user-friendly message for Gradio output
+# Function to format Pydantic validation error from FastAPI backend into a user-friendly message for Gradio frontend output
 def _format_validation_error(error_detail: dict) -> str:
     if "detail" in error_detail and isinstance(error_detail["detail"], list):
         wrong_inputs = []
@@ -62,7 +62,7 @@ def _format_validation_error(error_detail: dict) -> str:
             type = error["type"]
             wrong_input_msg = f"{wrong_input} should be a valid {type}"
             wrong_inputs.append(wrong_input_msg)
-    return "Please correct the following error:\n" + "\n".join(wrong_inputs)
+    return "Please correct the following:\n" + "\n".join(wrong_inputs)
 
 # --- Function to Predict Loan Default for Gradio UI ---
 def predict_loan_default(
@@ -126,7 +126,7 @@ def predict_loan_default(
         if response.status_code == 422:
             error_detail = response.json()
             error_message = _format_validation_error(error_detail)
-            return f"Error: Wrong Input", error_message
+            return f"Input Error:\n{error_message}", f"{error_detail}" 
         # Get prediction and probabilities for Gradio output
         prediction_response = response.json()
         prediction_result = prediction_response["results"][0]
@@ -139,7 +139,7 @@ def predict_loan_default(
         return "Connection Error", "Could not connect to the prediction service. Please ensure the backend is running and try again."
     except Timeout:
         return "Timeout Error", "The request to the prediction service timed out. The service may be busy or slow. Please try again later."
-    except RequestException as e:  # catches other frontend-to-backend communication errors
+    except RequestException:  # catches other frontend-to-backend communication errors
         return "Error" "The prediction service is temporarily unavailable due to an internal communication issue. Please try again later."
     except Exception as e:
         return "Error", f"{str(e)}"
