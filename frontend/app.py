@@ -54,7 +54,7 @@ def format_house_ownership(display_label: Any) -> Any:
 
 # --- Error Handling ---
 # Map internal input field names (snake_case) to user-friendly names
-inputs_map = {
+field_to_error_map = {
     "age": "Age",
     "married": "Married/Single",
     "income": "Income",
@@ -72,13 +72,12 @@ inputs_map = {
 # Function to format Pydantic validation error from FastAPI backend into a user-friendly message for Gradio frontend output
 def _format_validation_error(error_detail: dict) -> str:
     if "detail" in error_detail and isinstance(error_detail["detail"], list):
-        wrong_inputs = []
-        for error in error_detail["detail"]:
-            wrong_input = error["loc"]
-            type = error["type"]
-            wrong_input_msg = f"{wrong_input} should be a valid {type}"
-            wrong_inputs.append(wrong_input_msg)
-    return "Please correct the following:\n" + "\n".join(wrong_inputs)
+        all_errors = error_detail["detail"]
+        error_msg = "Please correct the following:\n"
+        for field in field_to_error_map:
+            if any(field in error["loc"] for error in all_errors):
+                error_msg += f"Error in {field_to_error_map.get(field)} field.\n"
+    return error_msg
 
 # --- Function to Predict Loan Default for Gradio UI ---
 def predict_loan_default(
