@@ -55,17 +55,17 @@ def format_house_ownership(display_label: Any) -> Any:
 # --- Error Handling ---
 # Map internal input field names (snake_case) to user-friendly error messages
 field_to_error_map = {
-    "age": "Age must be a number between 21 and 79.",
-    "married": "Married/Single: Please select 'Married' or 'Single'",
-    "income": "Income must be a number 0 or greater.",
-    "car_ownership": "Car Ownership: Please select 'Yes' or 'No'.",
-    "house_ownership": "House Ownership: Please select 'Rented', 'Owned' or 'Neither Rented Nor Owned'.",
-    "current_house_yrs": "Current House Years must be a number between 10 and 14.",
-    "city": "City: Please select a city from the dropdown menu.",
-    "state": "State: Please select a state from the dropdown menu.",
-    "profession": "Profession: Please select a profession from the dropdown menu.",
-    "experience": "Experience must be a number between 0 and 20.",
-    "current_job_yrs": "Current Job Years must be a number between 0 and 14.",
+    "age": "Age: Enter a number between 21 and 79.",
+    "married": "Married/Single: Select 'Married' or 'Single'",
+    "income": "Income: Enter a number that is 0 or greater.",
+    "car_ownership": "Car Ownership: Select 'Yes' or 'No'.",
+    "house_ownership": "House Ownership: Select 'Rented', 'Owned', or 'Neither Rented Nor Owned'.",
+    "current_house_yrs": "Current House Years: Enter a number between 10 and 14.",
+    "city": "City: Select a city from the list.",
+    "state": "State: Select a state from the list.",
+    "profession": "Profession: Select a profession from the list.",
+    "experience": "Experience: Enter a number between 0 and 20.",
+    "current_job_yrs": "Current Job Years: Enter a number between 0 and 14.",
 }
 
 
@@ -73,7 +73,7 @@ field_to_error_map = {
 def _format_validation_error(error_detail: dict) -> str:
     if "detail" in error_detail and isinstance(error_detail["detail"], list):
         all_errors = error_detail["detail"]
-        error_msg = "Input Error:\n"
+        error_msg = "Input Error!\n"
         for field in field_to_error_map:
             if any(field in error["loc"] for error in all_errors):
                 error_msg += f"{field_to_error_map.get(field)}\n"
