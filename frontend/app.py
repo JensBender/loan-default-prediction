@@ -53,19 +53,19 @@ def format_house_ownership(display_label: Any) -> Any:
 
 
 # --- Error Handling ---
-# Map internal input field names (snake_case) to user-friendly names
+# Map internal input field names (snake_case) to user-friendly error messages
 field_to_error_map = {
-    "age": "Age",
+    "age": "Age must be a number between 21 and 79.",
     "married": "Married/Single",
-    "income": "Income",
+    "income": "Income must be a number 0 or greater.",
     "car_ownership": "Car Ownership",
     "house_ownership": "House Ownership",
-    "current_house_yrs": "Current House Years",
+    "current_house_yrs": "Current House Years must be a number between 10 and 14.",
     "city": "City",
     "state": "State",
     "profession": "Profession",
-    "experience": "Experience",
-    "current_job_yrs": "Current Job Years",
+    "experience": "Experience must be a number between 0 and 20.",
+    "current_job_yrs": "Current Job Years must be a number between 0 and 14.",
 }
 
 
@@ -73,10 +73,10 @@ field_to_error_map = {
 def _format_validation_error(error_detail: dict) -> str:
     if "detail" in error_detail and isinstance(error_detail["detail"], list):
         all_errors = error_detail["detail"]
-        error_msg = "Please correct the following:\n"
+        error_msg = "Input Error:\n"
         for field in field_to_error_map:
             if any(field in error["loc"] for error in all_errors):
-                error_msg += f"Error in {field_to_error_map.get(field)} field.\n"
+                error_msg += f"{field_to_error_map.get(field)}\n"
     return error_msg
 
 # --- Function to Predict Loan Default for Gradio UI ---
@@ -141,7 +141,7 @@ def predict_loan_default(
         if response.status_code == 422:
             error_detail = response.json()
             error_message = _format_validation_error(error_detail)
-            return f"Input Error! {error_message}", f"{error_detail}" 
+            return error_message, f"{error_detail}" 
         # Get prediction and probabilities for Gradio output
         prediction_response = response.json()
         prediction_result = prediction_response["results"][0]
