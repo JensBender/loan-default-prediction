@@ -1,5 +1,6 @@
 # --- Imports ---
 # Standard library imports
+import logging
 from pathlib import Path
 from typing import List, Dict, Any
 
@@ -33,6 +34,19 @@ from src.custom_transformers import (
     FeatureSelector
 )
 from src.utils import get_root_directory
+
+# --- Logger ---
+# Setup a named logger for the FastAPI backend (to distinguish logs from frontend)
+logger = logging.getLogger("fastapi_backend")
+logger.setLevel(logging.INFO)
+# Handler to write logs to the console
+stream_handler = logging.StreamHandler()
+# Formatter for the handler
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+stream_handler.setFormatter(formatter)
+# Add handler to logger
+if not logger.handlers:
+    logger.addHandler(stream_handler)
 
 # --- ML Pipeline ---
 # Get path to the pipeline .joblib file
