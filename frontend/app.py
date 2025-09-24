@@ -156,10 +156,13 @@ def predict_loan_default(
         return prediction, probabilities
 
     except ConnectionError:
+        logger.error("Connection to backend failed.", exc_info=True)
         return "Connection Error", "Could not connect to the prediction service. Please ensure the backend is running and try again."
     except Timeout:
+        logger.error("Request to backend timed out.", exc_info=True)
         return "Timeout Error", "The request to the prediction service timed out. The service may be busy or slow. Please try again later."
     except RequestException:  # catches other frontend-to-backend communication errors
+        logger.error("HTTP error while trying to communicate with backend.", exc_info=True)
         return "Communication Error", "There was a problem communicating with the prediction service. Please try again later."
     except (KeyError, IndexError):
         return "Prediction Response Error", "The prediction service returned a response with an invalid prediction format. Please ensure the prediction service is set up correctly."
