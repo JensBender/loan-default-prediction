@@ -146,7 +146,7 @@ def predict_loan_default(
     except (KeyError, IndexError):
         return "Prediction Response Error", "The prediction service returned a response with an invalid prediction format. Please ensure the prediction service is set up correctly."
     except Exception as e:
-        return "Error", f"An unexpected error has occurred: {str(e)}"
+        return "Error", f"An unexpected error has occurred. Please verify your inputs or try again later."
 
 
 # --- Gradio App UI ---
