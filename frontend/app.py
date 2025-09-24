@@ -118,7 +118,11 @@ def predict_loan_default(
         
         # --- Predict loan default ---       
         # Get prediction via post request to FastAPI backend
-        response = requests.post(BACKEND_URL, json=inputs) 
+        response = requests.post(
+            BACKEND_URL, 
+            json=inputs, 
+            timeout=(3, 60)  # 3s connect timeout, 60s read timeout (receive first byte of response)
+        ) 
 
         # Handle HTTP errors
         if response.status_code == 422:
