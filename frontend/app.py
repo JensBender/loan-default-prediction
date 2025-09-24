@@ -141,7 +141,7 @@ def predict_loan_default(
         if response.status_code == 422:
             error_detail = response.json()
             error_message = _format_validation_error(error_detail)
-            return error_message, f"{error_detail}" 
+            return error_message, "" 
         # Get prediction and probabilities for Gradio output
         prediction_response = response.json()
         prediction_result = prediction_response["results"][0]
