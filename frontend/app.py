@@ -94,24 +94,6 @@ def predict_loan_default(
     current_job_yrs: int | float 
 ) -> tuple[str, dict[str, float]] | tuple[str, str]:
     try:
-        # TEMPORARY: Print types and values for all inputs returned by Gradio components
-        print("=== GRADIO COMPONENT TYPES ===")
-        for var_name, var_value in [
-            ("age", age),
-            ("married", married),
-            ("income", income),
-            ("car_ownership", car_ownership),
-            ("house_ownership", house_ownership),
-            ("current_house_yrs", current_house_yrs),
-            ("city", city),
-            ("state", state),
-            ("profession", profession),
-            ("experience", experience),
-            ("current_job_yrs", current_job_yrs)
-        ]:
-            print(f"{var_name}: {type(var_value)} = {var_value}")
-        print("=================================")
-  
         # --- Input preprocessing ---
         # Create inputs dictionary 
         inputs = {
