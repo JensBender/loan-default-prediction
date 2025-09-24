@@ -142,9 +142,9 @@ def predict_loan_default(
     except Timeout:
         return "Timeout Error", "The request to the prediction service timed out. The service may be busy or slow. Please try again later."
     except RequestException:  # catches other frontend-to-backend communication errors
-        return "Error" "The prediction service is temporarily unavailable due to an internal communication issue. Please try again later."
+        return "Communication Error" "There was a problem communicating with the prediction service. Please try again later."
     except Exception as e:
-        return "Error", f"{str(e)}"
+        return "Error", f"An unexpected error has occurred: {str(e)}"
 
 
 # --- Gradio App UI ---
