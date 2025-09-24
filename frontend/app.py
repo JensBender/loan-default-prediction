@@ -1,6 +1,7 @@
 # --- Imports ---
 # Standard library imports
 import re
+import logging
 from typing import Any
 
 # Third-party library imports
@@ -17,6 +18,18 @@ from src.global_constants import (
     CITY_LABELS,
     STATE_LABELS
 )
+
+# --- Logger ---
+# Setup a named logger for the Gradio frontend (to distinguish logs from backend)
+logger = logging.getLogger("gradio_frontend")
+logger.setLevel(logging.INFO)
+# Handler to write logs to the console
+stream_handler = logging.StreamHandler()
+# Formatter for the handler
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+stream_handler.setFormatter(formatter)
+# Add handler to logger
+logger.addHandler(stream_handler)
 
 # --- Constants ---
 # Backend URL to FastAPI predict endpoint
