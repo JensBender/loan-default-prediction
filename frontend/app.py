@@ -29,7 +29,8 @@ stream_handler = logging.StreamHandler()
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 stream_handler.setFormatter(formatter)
 # Add handler to logger
-logger.addHandler(stream_handler)
+if not logger.handlers:
+    logger.addHandler(stream_handler)
 
 # --- Constants ---
 # Backend URL to FastAPI predict endpoint
