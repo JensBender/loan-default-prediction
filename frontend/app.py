@@ -140,6 +140,7 @@ def predict_loan_default(
         # Handle HTTP errors
         if response.status_code == 422:
             error_detail = response.json()
+            logger.warning("Received 422 validation error from backend: %s", error_detail) 
             error_message = _format_validation_error(error_detail)
             return error_message, "" 
 
