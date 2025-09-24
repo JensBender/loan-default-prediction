@@ -142,7 +142,9 @@ def predict_loan_default(
     except Timeout:
         return "Timeout Error", "The request to the prediction service timed out. The service may be busy or slow. Please try again later."
     except RequestException:  # catches other frontend-to-backend communication errors
-        return "Communication Error" "There was a problem communicating with the prediction service. Please try again later."
+        return "Communication Error", "There was a problem communicating with the prediction service. Please try again later."
+    except (KeyError, IndexError):
+        return "Prediction Response Error", "The prediction service returned a response with an invalid prediction format. Please ensure the prediction service is set up correctly."
     except Exception as e:
         return "Error", f"An unexpected error has occurred: {str(e)}"
 
