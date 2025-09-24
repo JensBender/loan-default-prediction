@@ -165,8 +165,10 @@ def predict_loan_default(
         logger.error("HTTP error while trying to communicate with backend.", exc_info=True)
         return "Communication Error", "There was a problem communicating with the prediction service. Please try again later."
     except (KeyError, IndexError):
+        logger.error("Failed to parse prediction response from backend.", exc_info=True)
         return "Prediction Response Error", "The prediction service returned a response with an invalid prediction format. Please ensure the prediction service is set up correctly."
-    except Exception as e:
+    except Exception:
+        logger.exception("Unexpected error in the frontend.")
         return "Error", f"An unexpected error has occurred. Please verify your inputs or try again later."
 
 
