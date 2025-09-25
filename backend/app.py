@@ -135,7 +135,5 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]) -> PredictionRe
         return PredictionResponse(results=results)
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, 
-            detail="Internal server error during loan default prediction"
-        )
+        logger.error("Error during predict: %s", e, exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal server error during loan default prediction")
