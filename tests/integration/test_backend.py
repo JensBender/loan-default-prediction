@@ -367,6 +367,7 @@ class TestPredict:
             for error in error_detail
         )
     
+    # --- Model Behavior Tests ---
     # Low risk features predict low default probability    
     @pytest.mark.integration
     def test_low_risk_features_predict_low_default_probability(self):
@@ -438,6 +439,51 @@ class TestPredict:
         low_risk_age_default_prob = prediction_response["results"][0]["probabilities"]["Default"]
         high_risk_age_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
         assert low_risk_age_default_prob < high_risk_age_default_prob 
+
+    # High vs. low risk age predicts higher default probability
+    @pytest.mark.integration
+    def test_house_owned_vs_rented_predicts_lower_default_probability(self):
+        batch_input = [
+            # house owned
+            { 
+                "income": 300000,
+                "age": 30,  
+                "experience": 10,
+                "married": "married",
+                "house_ownership": "owned",
+                "car_ownership": "yes",
+                "profession": "architect",
+                "city": "delhi_city",
+                "state": "assam",
+                "current_job_yrs": 10,
+                "current_house_yrs": 14           
+            },
+            # house rented, otherwise identical
+            { 
+                "income": 300000,
+                "age": 30,
+                "experience": 10,
+                "married": "married",
+                "house_ownership": "rented",
+                "car_ownership": "yes",
+                "profession": "architect",
+                "city": "delhi_city",
+                "state": "assam",
+                "current_job_yrs": 10,
+                "current_house_yrs": 14           
+            }
+        ]
+
+        # Post request to predict endpoint
+        response = client.post("/predict", json=batch_input)
+        prediction_response = response.json()
+
+        # Ensure post request was successful
+        assert response.status_code == 200
+        # Ensure probability of default is lower for house owned compared to rented
+        house_owned_default_prob = prediction_response["results"][0]["probabilities"]["Default"]
+        house_rented_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
+        assert house_owned_default_prob < house_rented_default_prob 
 
     # Extra field in input
     @pytest.mark.integration
