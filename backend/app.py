@@ -58,9 +58,7 @@ pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"
 def load_pipeline(path: str | Path) -> Pipeline:
     # Input type validation
     if not isinstance(path, (str, Path)):
-        error_msg = f"Error when loading pipeline: 'path' must be a string or Path object, got {type(path).__name__}"
-        logger.error(error_msg)
-        raise TypeError(error_msg)
+        raise TypeError(f"Error when loading pipeline: 'path' must be a string or Path object, got {type(path).__name__}")
 
     # Get path as both string and Path object
     if isinstance(path, Path):
@@ -71,29 +69,23 @@ def load_pipeline(path: str | Path) -> Pipeline:
 
     # Ensure file exists
     if not path.exists():
-        error_msg = f"Error when loading pipeline: File not found at '{path_str}'"
-        logger.error(error_msg)
-        raise FileNotFoundError(error_msg)
+        raise FileNotFoundError(f"Error when loading pipeline: File not found at '{path_str}'")
     
     # Load pipeline 
     try:
+        logger.info(f"Loading pipeline from '{path_str}'...")
         pipeline = joblib.load(path_str)
+        logger.info("Pipeline loaded successfully.")
     except Exception as e:
-        error_msg = f"Error when loading pipeline from '{path_str}'"
-        logger.error(error_msg)
-        raise RuntimeError(error_msg) from e
+        raise RuntimeError(f"Error when loading pipeline from '{path_str}'") from e
     
     # Ensure loaded object is a scikit-learn Pipeline
     if not isinstance(pipeline, Pipeline):
-        error_msg = f"Error when loading pipeline: Loaded object is not a scikit-learn Pipeline"
-        logger.error(error_msg)
-        raise TypeError(error_msg)
+        raise TypeError("Error when loading pipeline: Loaded object is not a scikit-learn Pipeline")
 
     # Ensure pipeline has .predict_proba() method
     if not hasattr(pipeline, "predict_proba"):
-        error_msg = f"Error when loading pipeline: Pipeline does not have a .predict_proba() method"
-        logger.error(error_msg)
-        raise TypeError(error_msg)
+        raise TypeError("Error when loading pipeline: Loaded pipeline does not have a .predict_proba() method")
 
     return pipeline
 
