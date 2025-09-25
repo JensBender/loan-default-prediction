@@ -36,8 +36,8 @@ from src.custom_transformers import (
 from src.utils import get_root_directory
 
 # --- Logger ---
-# Setup a named logger for the FastAPI backend (to distinguish logs from frontend)
-logger = logging.getLogger("fastapi_backend")
+# Setup a named logger "backend.app" to distinguish logs from frontend
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 # Handler to write logs to the console
 stream_handler = logging.StreamHandler()
