@@ -20,8 +20,8 @@ from src.global_constants import (
 )
 
 # --- Logger ---
-# Setup a named logger for the Gradio frontend (to distinguish logs from backend)
-logger = logging.getLogger("gradio_frontend")
+# Setup a named logger "frontend.app" to distinguish logs from backend
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 # Handler to write logs to the console
 stream_handler = logging.StreamHandler()
