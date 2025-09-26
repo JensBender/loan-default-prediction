@@ -577,7 +577,7 @@ class TestPredict:
         prob_default = prediction_response["results"][0]["probabilities"]["Default"]
         assert prob_default < 0.1
 
-    # High vs. low income predicts lower default probability
+    # High compared to low income predicts lower default probability
     @pytest.mark.integration
     def test_high_vs_low_income_predicts_lower_default_probability(self):
         batch_input = [
@@ -622,7 +622,7 @@ class TestPredict:
         low_income_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
         assert high_income_default_prob < low_income_default_prob 
 
-    # Low vs. high risk age predicts lower default probability
+    # Low compared to high risk age predicts lower default probability
     @pytest.mark.integration
     def test_low_vs_high_risk_age_predicts_lower_default_probability(self):
         batch_input = [
@@ -667,7 +667,7 @@ class TestPredict:
         high_risk_age_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
         assert low_risk_age_default_prob < high_risk_age_default_prob 
 
-    # House owned vs. rented predicts lower default probability
+    # House owned compared to rented predicts lower default probability
     @pytest.mark.integration
     def test_house_owned_vs_rented_predicts_lower_default_probability(self):
         batch_input = [
@@ -712,7 +712,7 @@ class TestPredict:
         house_rented_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
         assert house_owned_default_prob < house_rented_default_prob 
 
-    # High vs. low experience predicts lower default probability
+    # High compared to low experience predicts lower default probability
     @pytest.mark.integration
     def test_high_vs_low_experience_predicts_lower_default_probability(self):
         batch_input = [
