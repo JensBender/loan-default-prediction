@@ -143,4 +143,27 @@ class TestFormatHouseOwnership:
 
 
 # --- Function ._format_validation_error() ---
+class TestFormatValidationError:
+    # Happy path
+    @pytest.mark.unit
+    @pytest.mark.parametrize("field, partial_error_msg", [
+        ("age", "Age: Enter a number between 21 and 79."),
+        ("married", "Married/Single: Select 'Married' or 'Single'"),
+        ("income", "Income: Enter a number that is 0 or greater."),
+        ("car_ownership", "Car Ownership: Select 'Yes' or 'No'."),
+        ("house_ownership", "House Ownership: Select 'Rented', 'Owned', or 'Neither Rented Nor Owned'."),
+        ("current_house_yrs", "Current House Years: Enter a number between 10 and 14."),
+        ("city", "City: Select a city from the list."),
+        ("state", "State: Select a state from the list."),
+        ("profession", "Profession: Select a profession from the list."),
+        ("experience", "Experience: Enter a number between 0 and 20."),
+        ("current_job_yrs", "Current Job Years: Enter a number between 0 and 14."),
+    ])
+    def test_happy_path(self, field, partial_error_msg):
+        error_detail = {
+            "detail": [{"loc": field}]
+        }
+        expected_error_msg = f"Input Error!\n{partial_error_msg}\n"
+        assert _format_validation_error(error_detail) == expected_error_msg
+
 # --- Function .predict_loan_default() ---
