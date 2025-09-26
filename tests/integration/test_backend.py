@@ -620,8 +620,6 @@ class TestPredict:
         # Ensure probability of default is lower for house owned compared to rented
         high_income_default_prob = prediction_response["results"][0]["probabilities"]["Default"]
         low_income_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
-        print(f"High Income Default Probability: {high_income_default_prob}")
-        print(f"Low Income Default Probability: {low_income_default_prob}")
         assert high_income_default_prob < low_income_default_prob 
 
     # Low vs. high risk age predicts lower default probability
@@ -713,3 +711,48 @@ class TestPredict:
         house_owned_default_prob = prediction_response["results"][0]["probabilities"]["Default"]
         house_rented_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
         assert house_owned_default_prob < house_rented_default_prob 
+
+    # High vs. low experience predicts lower default probability
+    @pytest.mark.integration
+    def test_high_vs_low_experience_predicts_lower_default_probability(self):
+        batch_input = [
+            # high experience
+            { 
+                "income": 1_000_000,
+                "age": 50,
+                "experience": 15,
+                "married": "single",
+                "house_ownership": "owned",
+                "car_ownership": "no",
+                "profession": "artist",
+                "city": "sikar",
+                "state": "rajasthan",
+                "current_job_yrs": 3,
+                "current_house_yrs": 11            
+            },
+            # low experience, otherwise identical
+            { 
+                "income": 1_000_000,
+                "age": 50,
+                "experience": 0,
+                "married": "single",
+                "house_ownership": "owned",
+                "car_ownership": "no",
+                "profession": "artist",
+                "city": "sikar",
+                "state": "rajasthan",
+                "current_job_yrs": 3,
+                "current_house_yrs": 11           
+            }
+        ]
+
+        # Post request to predict endpoint
+        response = client.post("/predict", json=batch_input)
+        prediction_response = response.json()
+
+        # Ensure post request was successful
+        assert response.status_code == 200
+        # Ensure probability of default is lower for house owned compared to rented
+        high_experience_default_prob = prediction_response["results"][0]["probabilities"]["Default"]
+        low_experience_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
+        assert high_experience_default_prob < low_experience_default_prob 
