@@ -63,54 +63,55 @@ class TestFormatSnakeCase:
         assert format_snake_case(non_string_value) == non_string_value
 
 # --- Function .snake_case_str_values_in_dict() ---
-# Happy path
-@pytest.mark.unit
-def test_snake_case_str_values_in_dict_happy_path():
-    inputs = {
-        "age": 30,
-        "married": " Married  ",
-        "income": 1000000,
-        "car_ownership": "\t\tYes  ",
-        "house_ownership": "Neither \t Rented \n Nor  Owned",
-        "current_house_yrs": 12,
-        "city": "\nSangli-Miraj_&_Kupwad",
-        "state": " Uttar_Pradesh \t \n ",
-        "profession": "Hotel_Manager ",
-        "experience": 10,
-        "current_job_yrs": 7
-    }
-    expected_outputs = {
-        "age": 30,
-        "married": "married",
-        "income": 1000000,
-        "car_ownership": "yes",
-        "house_ownership": "neither_rented_nor_owned",
-        "current_house_yrs": 12,
-        "city": "sangli_miraj_&_kupwad",
-        "state": "uttar_pradesh",
-        "profession": "hotel_manager",
-        "experience": 10,
-        "current_job_yrs": 7
-    }
-    assert snake_case_str_values_in_dict(inputs) == expected_outputs
+class TestSnakeCaseInDict:
+    # Happy path
+    @pytest.mark.unit
+    def test_happy_path(self):
+        inputs = {
+            "age": 30,
+            "married": " Married  ",
+            "income": 1000000,
+            "car_ownership": "\t\tYes  ",
+            "house_ownership": "Neither \t Rented \n Nor  Owned",
+            "current_house_yrs": 12,
+            "city": "\nSangli-Miraj_&_Kupwad",
+            "state": " Uttar_Pradesh \t \n ",
+            "profession": "Hotel_Manager ",
+            "experience": 10,
+            "current_job_yrs": 7
+        }
+        expected_outputs = {
+            "age": 30,
+            "married": "married",
+            "income": 1000000,
+            "car_ownership": "yes",
+            "house_ownership": "neither_rented_nor_owned",
+            "current_house_yrs": 12,
+            "city": "sangli_miraj_&_kupwad",
+            "state": "uttar_pradesh",
+            "profession": "hotel_manager",
+            "experience": 10,
+            "current_job_yrs": 7
+        }
+        assert snake_case_str_values_in_dict(inputs) == expected_outputs
 
-# Inputs that are already in snake_case remain unchanged 
-@pytest.mark.unit
-def test_snake_case_formatted_inputs_remain_unchanged():
-    inputs_with_snake_case = {
-        "age": 30,
-        "married": "married",
-        "income": 1000000,
-        "car_ownership": "yes",
-        "house_ownership": "neither_rented_nor_owned",
-        "current_house_yrs": 12,
-        "city": "sangli_miraj_&_kupwad",
-        "state": "uttar_pradesh",
-        "profession": "hotel_manager",
-        "experience": 10,
-        "current_job_yrs": 7
-    }   
-    assert snake_case_str_values_in_dict(inputs_with_snake_case) == inputs_with_snake_case
+    # Inputs that are already in snake_case remain unchanged 
+    @pytest.mark.unit
+    def test_snake_case_formatted_inputs_remain_unchanged(self):
+        inputs_with_snake_case = {
+            "age": 30,
+            "married": "married",
+            "income": 1000000,
+            "car_ownership": "yes",
+            "house_ownership": "neither_rented_nor_owned",
+            "current_house_yrs": 12,
+            "city": "sangli_miraj_&_kupwad",
+            "state": "uttar_pradesh",
+            "profession": "hotel_manager",
+            "experience": 10,
+            "current_job_yrs": 7
+        }   
+        assert snake_case_str_values_in_dict(inputs_with_snake_case) == inputs_with_snake_case
 
 
 # --- Function .format_house_ownership() ---
