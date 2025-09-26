@@ -76,13 +76,18 @@ field_to_error_map = {
 
 # Function to format Pydantic validation error from FastAPI backend into a user-friendly message for Gradio frontend output
 def _format_validation_error(error_detail: dict) -> str:
-    if "detail" in error_detail and isinstance(error_detail["detail"], list):
+    error_msg = "Input Error! Please check your inputs and try again."
+    try:
+        # Parse the Pydantic error format to create an error message with information about each invalid field
         all_errors = error_detail["detail"]
-        error_msg = "Input Error!\n"
         for field in field_to_error_map:
             if any(field in error["loc"] for error in all_errors):
                 error_msg += f"{field_to_error_map.get(field)}\n"
-    return error_msg
+        return error_msg
+    except Exception as e:
+        # Fallback to generic error message without details if Pydantic validation error has unexpected format 
+        logger.warning("Failed to parse validation error from backend: %s", e, exc_info=True)
+        return error_msg
 
 # --- Function to Predict Loan Default for Gradio UI ---
 def predict_loan_default(
