@@ -107,6 +107,7 @@ class TestLoadPipeline:
             load_pipeline(invalid_path_type)
         # Ensure error message is as expected
         error_msg = str(exc_info.value)
+        assert "Error when loading pipeline"
         assert "'path' must be a string or Path object" in error_msg   
 
     @pytest.mark.integration
@@ -116,6 +117,7 @@ class TestLoadPipeline:
             load_pipeline("non_existent_file.joblib")
         # Ensure error message is as expected
         error_msg = str(exc_info.value)
+        assert "Error when loading pipeline"
         assert "File not found at" in error_msg
         assert "non_existent_file.joblib" in error_msg
 
@@ -146,6 +148,7 @@ class TestLoadPipeline:
             load_pipeline(file_path)
         # Ensure error message is as expected
         error_msg = str(exc_info.value)
+        assert "Error when loading pipeline"
         assert "Loaded object is not a scikit-learn Pipeline" in error_msg    
 
     @pytest.mark.integration
@@ -164,6 +167,7 @@ class TestLoadPipeline:
             load_pipeline(pipeline_path)
         # Ensure error message is as expected
         error_msg = str(exc_info.value)
+        assert "Error when loading pipeline"
         assert "Loaded pipeline does not have a .predict_proba() method" in error_msg
 
 
