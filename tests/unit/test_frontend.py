@@ -115,14 +115,32 @@ class TestSnakeCaseInDict:
 
 
 # --- Function .format_house_ownership() ---
-# Happy path
-@pytest.mark.parametrize("display_label, expected_pipeline_label", [
-    ("neither_rented_nor_owned", "norent_noown"),
-    ("rented", "rented"),
-    ("owned", "owned")
-])
-def test_format_house_ownership_happy_path(display_label, expected_pipeline_label):
-    assert format_house_ownership(display_label) == expected_pipeline_label
+class TestFormatHouseOwnership:
+    # Happy path
+    @pytest.mark.unit
+    @pytest.mark.parametrize("display_label, expected_pipeline_label", [
+        ("neither_rented_nor_owned", "norent_noown"),
+        ("rented", "rented"),
+        ("owned", "owned")
+    ])
+    def test_happy_path(self, display_label, expected_pipeline_label):
+        assert format_house_ownership(display_label) == expected_pipeline_label
+    
+    # Non-string values remain unchanged
+    @pytest.mark.unit
+    @pytest.mark.parametrize("non_string_value", [
+        1,
+        1.23,
+        False,
+        None,  
+        ["a", "list"],
+        ("a", "tuple"),
+        {"a": "dictionary"},
+        {"a", "set"}        
+    ])
+    def test_non_string_values_remain_unchanged(self, non_string_value):
+        assert format_house_ownership(non_string_value) == non_string_value 
+
 
 # --- Function ._format_validation_error() ---
 # --- Function .predict_loan_default() ---
