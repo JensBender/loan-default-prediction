@@ -440,37 +440,37 @@ class TestPredict:
         high_risk_age_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
         assert low_risk_age_default_prob < high_risk_age_default_prob 
 
-    # High vs. low risk age predicts higher default probability
+    # House owned vs. rented predicts lower default probability
     @pytest.mark.integration
     def test_house_owned_vs_rented_predicts_lower_default_probability(self):
         batch_input = [
             # house owned
             { 
-                "income": 300000,
-                "age": 30,  
-                "experience": 10,
-                "married": "married",
+                "income": 1_000_000,
+                "age": 50,
+                "experience": 3,
+                "married": "single",
                 "house_ownership": "owned",
-                "car_ownership": "yes",
-                "profession": "architect",
-                "city": "delhi_city",
-                "state": "assam",
-                "current_job_yrs": 10,
-                "current_house_yrs": 14           
+                "car_ownership": "no",
+                "profession": "artist",
+                "city": "sikar",
+                "state": "rajasthan",
+                "current_job_yrs": 3,
+                "current_house_yrs": 11            
             },
             # house rented, otherwise identical
             { 
-                "income": 300000,
-                "age": 30,
-                "experience": 10,
-                "married": "married",
+                "income": 1_000_000,
+                "age": 50,
+                "experience": 3,
+                "married": "single",
                 "house_ownership": "rented",
-                "car_ownership": "yes",
-                "profession": "architect",
-                "city": "delhi_city",
-                "state": "assam",
-                "current_job_yrs": 10,
-                "current_house_yrs": 14           
+                "car_ownership": "no",
+                "profession": "artist",
+                "city": "sikar",
+                "state": "rajasthan",
+                "current_job_yrs": 3,
+                "current_house_yrs": 11           
             }
         ]
 
