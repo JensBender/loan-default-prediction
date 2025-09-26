@@ -116,7 +116,7 @@ class TestLoadPipeline:
             load_pipeline("non_existent_file.joblib")
         # Ensure error message is as expected
         error_msg = str(exc_info.value)
-        assert "Pipeline file not found at" in error_msg
+        assert "File not found at" in error_msg
         assert "non_existent_file.joblib" in error_msg
 
     @pytest.mark.integration
@@ -131,7 +131,7 @@ class TestLoadPipeline:
             load_pipeline(corrupt_file_path)
         # Ensure error message is as expected
         error_msg = str(exc_info.value)
-        assert "Failed to load pipeline" in error_msg
+        assert "Error when loading pipeline" in error_msg
         assert "corrupt.joblib" in error_msg
 
     @pytest.mark.integration
