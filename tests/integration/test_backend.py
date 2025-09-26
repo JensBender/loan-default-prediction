@@ -624,9 +624,9 @@ class TestPredict:
         print(f"Low Income Default Probability: {low_income_default_prob}")
         assert high_income_default_prob < low_income_default_prob 
 
-    # High vs. low risk age predicts higher default probability
+    # Low vs. high risk age predicts lower default probability
     @pytest.mark.integration
-    def test_high_vs_low_risk_age_predicts_higher_default_probability(self):
+    def test_low_vs_high_risk_age_predicts_lower_default_probability(self):
         batch_input = [
             # low risk age
             { 
