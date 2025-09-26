@@ -367,124 +367,6 @@ class TestPredict:
             for error in error_detail
         )
     
-    # --- Model Behavior Tests ---
-    # Low risk features predict low default probability    
-    @pytest.mark.integration
-    def test_low_risk_features_predict_low_default_probability(self):
-        low_risk_input = { 
-                "income": 8_000_000,
-                "age": 30,
-                "experience": 10,
-                "married": "married",
-                "house_ownership": "rented",
-                "car_ownership": "yes",
-                "profession": "architect",
-                "city": "delhi_city",
-                "state": "assam",
-                "current_job_yrs": 10,
-                "current_house_yrs": 14           
-            }
-
-        # Post request to predict endpoint
-        response = client.post("/predict", json=low_risk_input)
-        prediction_response = response.json()
-
-        # Ensure post request was successful
-        assert response.status_code == 200
-        # Ensure probability of default is low (less than 10%)
-        prob_default = prediction_response["results"][0]["probabilities"]["Default"]
-        assert prob_default < 0.1
-
-    # High vs. low risk age predicts higher default probability
-    @pytest.mark.integration
-    def test_high_vs_low_risk_age_predicts_higher_default_probability(self):
-        batch_input = [
-            # low risk age
-            { 
-                "income": 8_000_000,
-                "age": 30,  
-                "experience": 10,
-                "married": "married",
-                "house_ownership": "rented",
-                "car_ownership": "yes",
-                "profession": "architect",
-                "city": "delhi_city",
-                "state": "assam",
-                "current_job_yrs": 10,
-                "current_house_yrs": 14           
-            },
-            # high risk age, otherwise identical
-            { 
-                "income": 8_000_000,
-                "age": 75,
-                "experience": 10,
-                "married": "married",
-                "house_ownership": "rented",
-                "car_ownership": "yes",
-                "profession": "architect",
-                "city": "delhi_city",
-                "state": "assam",
-                "current_job_yrs": 10,
-                "current_house_yrs": 14           
-            }
-        ]
-
-        # Post request to predict endpoint
-        response = client.post("/predict", json=batch_input)
-        prediction_response = response.json()
-
-        # Ensure post request was successful
-        assert response.status_code == 200
-        # Ensure probability of default is higher for high compared to low risk age
-        low_risk_age_default_prob = prediction_response["results"][0]["probabilities"]["Default"]
-        high_risk_age_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
-        assert low_risk_age_default_prob < high_risk_age_default_prob 
-
-    # House owned vs. rented predicts lower default probability
-    @pytest.mark.integration
-    def test_house_owned_vs_rented_predicts_lower_default_probability(self):
-        batch_input = [
-            # house owned
-            { 
-                "income": 1_000_000,
-                "age": 50,
-                "experience": 3,
-                "married": "single",
-                "house_ownership": "owned",
-                "car_ownership": "no",
-                "profession": "artist",
-                "city": "sikar",
-                "state": "rajasthan",
-                "current_job_yrs": 3,
-                "current_house_yrs": 11            
-            },
-            # house rented, otherwise identical
-            { 
-                "income": 1_000_000,
-                "age": 50,
-                "experience": 3,
-                "married": "single",
-                "house_ownership": "rented",
-                "car_ownership": "no",
-                "profession": "artist",
-                "city": "sikar",
-                "state": "rajasthan",
-                "current_job_yrs": 3,
-                "current_house_yrs": 11           
-            }
-        ]
-
-        # Post request to predict endpoint
-        response = client.post("/predict", json=batch_input)
-        prediction_response = response.json()
-
-        # Ensure post request was successful
-        assert response.status_code == 200
-        # Ensure probability of default is lower for house owned compared to rented
-        house_owned_default_prob = prediction_response["results"][0]["probabilities"]["Default"]
-        house_rented_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
-        assert house_owned_default_prob < house_rented_default_prob 
-
     # Extra field in input
     @pytest.mark.integration
     def test_input_with_and_without_extra_field_predict_same_result(self):
@@ -661,3 +543,121 @@ class TestPredict:
         assert response.status_code == 500
         # Ensure error detail is as expected
         assert "Internal server error during loan default prediction" in response.text
+
+    # --- Model Behavior Tests ---
+    # Low risk features predict low default probability    
+    @pytest.mark.integration
+    def test_low_risk_features_predict_low_default_probability(self):
+        low_risk_input = { 
+                "income": 8_000_000,
+                "age": 30,
+                "experience": 10,
+                "married": "married",
+                "house_ownership": "rented",
+                "car_ownership": "yes",
+                "profession": "architect",
+                "city": "delhi_city",
+                "state": "assam",
+                "current_job_yrs": 10,
+                "current_house_yrs": 14           
+            }
+
+        # Post request to predict endpoint
+        response = client.post("/predict", json=low_risk_input)
+        prediction_response = response.json()
+
+        # Ensure post request was successful
+        assert response.status_code == 200
+        # Ensure probability of default is low (less than 10%)
+        prob_default = prediction_response["results"][0]["probabilities"]["Default"]
+        assert prob_default < 0.1
+
+    # High vs. low risk age predicts higher default probability
+    @pytest.mark.integration
+    def test_high_vs_low_risk_age_predicts_higher_default_probability(self):
+        batch_input = [
+            # low risk age
+            { 
+                "income": 8_000_000,
+                "age": 30,  
+                "experience": 10,
+                "married": "married",
+                "house_ownership": "rented",
+                "car_ownership": "yes",
+                "profession": "architect",
+                "city": "delhi_city",
+                "state": "assam",
+                "current_job_yrs": 10,
+                "current_house_yrs": 14           
+            },
+            # high risk age, otherwise identical
+            { 
+                "income": 8_000_000,
+                "age": 75,
+                "experience": 10,
+                "married": "married",
+                "house_ownership": "rented",
+                "car_ownership": "yes",
+                "profession": "architect",
+                "city": "delhi_city",
+                "state": "assam",
+                "current_job_yrs": 10,
+                "current_house_yrs": 14           
+            }
+        ]
+
+        # Post request to predict endpoint
+        response = client.post("/predict", json=batch_input)
+        prediction_response = response.json()
+
+        # Ensure post request was successful
+        assert response.status_code == 200
+        # Ensure probability of default is higher for high compared to low risk age
+        low_risk_age_default_prob = prediction_response["results"][0]["probabilities"]["Default"]
+        high_risk_age_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
+        assert low_risk_age_default_prob < high_risk_age_default_prob 
+
+    # House owned vs. rented predicts lower default probability
+    @pytest.mark.integration
+    def test_house_owned_vs_rented_predicts_lower_default_probability(self):
+        batch_input = [
+            # house owned
+            { 
+                "income": 1_000_000,
+                "age": 50,
+                "experience": 3,
+                "married": "single",
+                "house_ownership": "owned",
+                "car_ownership": "no",
+                "profession": "artist",
+                "city": "sikar",
+                "state": "rajasthan",
+                "current_job_yrs": 3,
+                "current_house_yrs": 11            
+            },
+            # house rented, otherwise identical
+            { 
+                "income": 1_000_000,
+                "age": 50,
+                "experience": 3,
+                "married": "single",
+                "house_ownership": "rented",
+                "car_ownership": "no",
+                "profession": "artist",
+                "city": "sikar",
+                "state": "rajasthan",
+                "current_job_yrs": 3,
+                "current_house_yrs": 11           
+            }
+        ]
+
+        # Post request to predict endpoint
+        response = client.post("/predict", json=batch_input)
+        prediction_response = response.json()
+
+        # Ensure post request was successful
+        assert response.status_code == 200
+        # Ensure probability of default is lower for house owned compared to rented
+        house_owned_default_prob = prediction_response["results"][0]["probabilities"]["Default"]
+        house_rented_default_prob = prediction_response["results"][1]["probabilities"]["Default"]
+        assert house_owned_default_prob < house_rented_default_prob 
