@@ -9,34 +9,18 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # Local imports
 from frontend.app import (
-    snake_case_format, 
-    snake_case_format_inputs, 
-    format_house_ownership
+    format_snake_case, 
+    snake_case_str_values_in_dict, 
+    format_house_ownership,
+    _format_validation_error,
+    predict_loan_default
 )
 
 
-# Define valid input dictionary for testing 
-@pytest.fixture
-def valid_inputs():
-    return {
-        "age": 30,
-        "married": "married",
-        "income": 1000000,
-        "car_ownership": "yes",
-        "house_ownership": "rented",
-        "current_house_yrs": 12,
-        "city": "delhi_city",
-        "state": "assam",
-        "profession": "architect",
-        "experience": 10,
-        "current_job_yrs": 7
-    }
-
-
-# --- snake_case_format() ---
-# Ensure snake_case_format() converts strings to snake_case correctly
+# --- .format_snake_case() ---
+# Happy path
 @pytest.mark.unit
-@pytest.mark.parametrize("input_value, expected_output", [
+@pytest.mark.parametrize("input, expected_output", [
     ("   leading spaces", "leading_spaces"),
     ("trailing spaces   ", "trailing_spaces"),
     ("  Leading and Trailing Spaces  ", "leading_and_trailing_spaces"),
@@ -59,15 +43,15 @@ def valid_inputs():
     (("a", "tuple"), ("a", "tuple")),
     ({"a": "dictionary"}, {"a": "dictionary"}),
 ])
-def test_snake_case_format_happy_path(input_value, expected_output):
-    assert snake_case_format(input_value) == expected_output
+def test_format_snake_case_happy_path(input, expected_output):
+    assert format_snake_case(input) == expected_output
 
 
-# --- snake_case_format_inputs() ---
-# Ensure snake_case_format_inputs() formats all string values in a dictionary in snake_case
+# --- .snake_case_str_values_in_dict() ---
+# Happy path
 @pytest.mark.unit
-def test_snake_case_format_inputs_happy_path():
-    raw_inputs = {
+def test_snake_case_str_values_in_dict_happy_path():
+    inputs = {
         "age": 30,
         "married": " Married  ",
         "income": 1000000,
@@ -80,7 +64,7 @@ def test_snake_case_format_inputs_happy_path():
         "experience": 10,
         "current_job_yrs": 7
     }
-    expected_standardized_inputs = {
+    expected_outputs = {
         "age": 30,
         "married": "married",
         "income": 1000000,
@@ -93,12 +77,12 @@ def test_snake_case_format_inputs_happy_path():
         "experience": 10,
         "current_job_yrs": 7
     }
-    assert snake_case_format_inputs(raw_inputs) == expected_standardized_inputs
+    assert snake_case_str_values_in_dict(inputs) == expected_outputs
 
-# Ensure snake_case_format_inputs() leaves inputs that are already formatted in snake_case unchanged 
+# Inputs that are already in snake_case remain unchanged 
 @pytest.mark.unit
 def test_snake_case_formatted_inputs_remain_unchanged():
-    standardized_inputs = {
+    inputs_with_snake_case = {
         "age": 30,
         "married": "married",
         "income": 1000000,
@@ -111,12 +95,11 @@ def test_snake_case_formatted_inputs_remain_unchanged():
         "experience": 10,
         "current_job_yrs": 7
     }   
-    assert snake_case_format_inputs(standardized_inputs) == standardized_inputs
+    assert snake_case_str_values_in_dict(inputs_with_snake_case) == inputs_with_snake_case
 
 
-# --- format_house_ownership() ---
-# Ensure format_house_ownership() converts display label "neither_rented_nor_owned" to label "norent_noown" as pipeline expects
-@pytest.mark.unit
+# --- .format_house_ownership() ---
+# Happy path
 @pytest.mark.parametrize("display_label, expected_pipeline_label", [
     ("neither_rented_nor_owned", "norent_noown"),
     ("rented", "rented"),
@@ -124,3 +107,6 @@ def test_snake_case_formatted_inputs_remain_unchanged():
 ])
 def test_format_house_ownership_happy_path(display_label, expected_pipeline_label):
     assert format_house_ownership(display_label) == expected_pipeline_label
+
+# --- ._format_validation_error() ---
+# --- .predict_loan_default() ---
