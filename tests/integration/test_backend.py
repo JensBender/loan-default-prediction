@@ -601,7 +601,7 @@ class TestPredict:
                 "age": 50,
                 "experience": 3,
                 "married": "single",
-                "house_ownership": "rented",
+                "house_ownership": "owned",
                 "car_ownership": "no",
                 "profession": "artist",
                 "city": "sikar",
