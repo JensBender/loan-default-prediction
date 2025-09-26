@@ -161,7 +161,12 @@ class TestFormatValidationError:
     ])
     def test_happy_path(self, field, partial_error_msg):
         error_detail = {
-            "detail": [{"loc": field}]
+            "detail": [{
+                "type": "some error type",
+                "loc": ["body", "PipelineInput", field],
+                "msg": "some error message",
+                "input": "some invalid input"
+            }]
         }
         expected_error_msg = f"Input Error!\n{partial_error_msg}\n"
         assert _format_validation_error(error_detail) == expected_error_msg
