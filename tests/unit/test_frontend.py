@@ -168,7 +168,7 @@ class TestFormatValidationError:
                 "input": "some invalid input"
             }]
         }
-        expected_error_msg = f"Input Error!\n{partial_error_msg}\n"
+        expected_error_msg = f"Input Error! Please check your inputs and try again.\n{partial_error_msg}\n"
         assert _format_validation_error(error_detail) == expected_error_msg
 
 # --- Function .predict_loan_default() ---
