@@ -109,6 +109,7 @@ class TestLoadPipeline:
         error_msg = str(exc_info.value)
         assert "Error when loading pipeline"
         assert "'path' must be a string or Path object" in error_msg   
+        assert f"{type(invalid_path_type).__name__}" in error_msg
 
     @pytest.mark.integration
     def test_raises_file_not_found_error_for_non_existent_file(self):
