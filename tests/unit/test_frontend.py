@@ -10,7 +10,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 # Local imports
 from frontend.app import (
     format_snake_case, 
-    snake_case_str_values_in_dict, 
+    format_snake_case_in_dict, 
     format_house_ownership,
     _format_validation_error,
     predict_loan_default
@@ -62,7 +62,7 @@ class TestFormatSnakeCase:
     def test_non_string_values_remain_unchanged(self, non_string_value):
         assert format_snake_case(non_string_value) == non_string_value
 
-# --- Function .snake_case_str_values_in_dict() ---
+# --- Function .format_snake_case_in_dict() ---
 class TestSnakeCaseInDict:
     # Happy path
     @pytest.mark.unit
@@ -93,7 +93,7 @@ class TestSnakeCaseInDict:
             "experience": 10,
             "current_job_yrs": 7
         }
-        assert snake_case_str_values_in_dict(inputs) == expected_outputs
+        assert format_snake_case_in_dict(inputs) == expected_outputs
 
     # Inputs that are already in snake_case remain unchanged 
     @pytest.mark.unit
@@ -111,7 +111,7 @@ class TestSnakeCaseInDict:
             "experience": 10,
             "current_job_yrs": 7
         }   
-        assert snake_case_str_values_in_dict(inputs_with_snake_case) == inputs_with_snake_case
+        assert format_snake_case_in_dict(inputs_with_snake_case) == inputs_with_snake_case
 
 
 # --- Function .format_house_ownership() ---
