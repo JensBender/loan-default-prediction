@@ -1,5 +1,6 @@
 # Standard library imports
 import warnings
+import logging
 
 # Third-party library imports
 import pytest
@@ -227,8 +228,17 @@ class TestFormatValidationError:
         {"detail": ["a string"]},  # "detail" list element not a dictionary
         {"detail": [{}]}  # no "loc" key
     ])
-    def test_unexpected_error_format(self, unexpected_error_format):
+    def test_unexpected_error_format(self, unexpected_error_format, caplog):
         expected_error_msg = "Input Error! Please check your inputs and try again.\n"
-        assert _format_validation_error(unexpected_error_format) == expected_error_msg
+        with caplog.at_level(logging.WARNING):
+            error_msg = _format_validation_error(unexpected_error_format)
+            # Ensure error message is as expected
+            assert error_msg == expected_error_msg
+            # Ensure warning was logged
+            assert len(caplog.records) == 1
+            log_record = caplog.records[0]
+            assert log_record.levelname == "WARNING"
+            assert "Failed to parse validation error from backend" in log_record.message
+
 
 # --- Function .predict_loan_default() ---
