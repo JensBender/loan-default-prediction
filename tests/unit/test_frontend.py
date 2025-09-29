@@ -200,14 +200,17 @@ class TestFormatValidationError:
     
     # Empty error detail list
     @pytest.mark.unit
-    def test_empty_error_detail_list(self):
+    def test_empty_error_detail_list(self, caplog):
         error_detail = {"detail": []}
         expected_error_msg = "Input Error! Please check your inputs and try again.\n"
+        # Ensure error message is as expected
         assert _format_validation_error(error_detail) == expected_error_msg
+        # Ensure no error was logged
+        assert caplog.text == ""
 
     # All fields missing in error location
     @pytest.mark.unit
-    def test_all_fields_missing_in_error_location(self):
+    def test_all_fields_missing_in_error_location(self, caplog):
         error_detail = {
             "detail": [{
                 "type": "some error type",
@@ -217,7 +220,10 @@ class TestFormatValidationError:
             }]
         }
         expected_error_msg = "Input Error! Please check your inputs and try again.\n"
+        # Ensure error message is as expected
         assert _format_validation_error(error_detail) == expected_error_msg
+        # Ensure no error was logged
+        assert caplog.text == ""
 
     # Unexpected Pydantic error format
     @pytest.mark.unit
