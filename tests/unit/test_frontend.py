@@ -196,5 +196,11 @@ class TestFormatValidationError:
             "Married/Single: Select 'Married' or 'Single'\n"
         )
         assert _format_validation_error(error_detail) == expected_error_msg
+    
+    # Empty error detail list
+    def test_empty_error_detail_list(self):
+        error_detail = {"detail": []}
+        expected_error_msg = "Input Error! Please check your inputs and try again.\n"
+        assert _format_validation_error(error_detail) == expected_error_msg
 
 # --- Function .predict_loan_default() ---
