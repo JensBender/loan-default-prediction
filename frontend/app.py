@@ -122,7 +122,7 @@ def predict_loan_default(
         }
 
         # Format string values in snake_case
-        inputs = snake_case_str_values_in_dict(inputs)
+        inputs = format_snake_case_in_dict(inputs)
 
         # Format "house_ownership" label as expected by API backend 
         inputs["house_ownership"] = format_house_ownership(inputs["house_ownership"])
