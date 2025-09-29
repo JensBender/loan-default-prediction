@@ -236,7 +236,8 @@ class TestFormatValidationError:
         {},  # "detail" key missing
         {"detail": "a string"},  # "detail" value not a list
         {"detail": ["a string"]},  # "detail" list element not a dictionary
-        {"detail": [{}]}  # no "loc" key
+        {"detail": [{}]},  # no "loc" key
+        {"detail": [{"loc": 123}]}  # "loc" value not a list 
     ])
     def test_unexpected_error_format(self, unexpected_error_format, caplog):
         expected_error_msg = "Input Error! Please check your inputs and try again.\n"
