@@ -259,6 +259,34 @@ class TestPredictLoanDefault:
     @pytest.mark.unit
     @patch("frontend.app.requests.post")
     def test_input_preprocessing_happy_path(self, mock_post_request):
+        # Raw inputs from Gradio UI
+        raw_inputs = {
+            "age": 30, 
+            "married": "Single", 
+            "income": 300000, 
+            "car_ownership": "No", 
+            "house_ownership": "Neither Rented Nor Owned", 
+            "current_house_yrs": 11, 
+            "city": "Sikar", 
+            "state": "Rajasthan", 
+            "profession": "Artist", 
+            "experience": 3, 
+            "current_job_yrs": 3
+        }
+        # Expected JSON body of post request 
+        expected_json = {
+            "age": 30,
+            "married": "single",  # snake_case
+            "income": 300000,
+            "car_ownership": "no",  # snake_case
+            "house_ownership": "norent_noown",  # snake_case + special formatting
+            "current_house_yrs": 11,
+            "city": "sikar",  # snake_case
+            "state": "rajasthan",  # snake_case
+            "profession": "artist",  # snake_case
+            "experience": 3,
+            "current_job_yrs": 3
+        }
         # Simulate the post request 
         mock_response = MagicMock()
         mock_response.status_code = 200
@@ -274,40 +302,14 @@ class TestPredictLoanDefault:
         }
         mock_post_request.return_value = mock_response
 
-        # Call .predict_loan_default() with raw Gradio inputs
-        predict_loan_default(
-            age=30, 
-            married="Single", 
-            income=300000, 
-            car_ownership="No", 
-            house_ownership="Neither Rented Nor Owned", 
-            current_house_yrs=11, 
-            city="Sikar", 
-            state="Rajasthan", 
-            profession="Artist", 
-            experience=3, 
-            current_job_yrs=3
-        )
-        # Expected post request JSON body sent to backend
-        expected_post_body = {
-            "age": 30,
-            "married": "single",  # snake_case
-            "income": 300000,
-            "car_ownership": "no",  # snake_case
-            "house_ownership": "norent_noown",  # snake_case + special formatting
-            "current_house_yrs": 11,
-            "city": "sikar",  # snake_case
-            "state": "rajasthan",  # snake_case
-            "profession": "artist",  # snake_case
-            "experience": 3,
-            "current_job_yrs": 3
-        }
+        # Call .predict_loan_default() 
+        predict_loan_default(**raw_inputs)
 
         # Ensure requests.post() was called once
         mock_post_request.assert_called_once()
         # Get positional and keyword arguments used in the call
         args, kwargs = mock_post_request.call_args
         # Extract the JSON body from the keyword call arguments
-        post_body = kwargs["json"]
+        json = kwargs["json"]
         # Ensure requests.post() was called with the expected json body
-        assert post_body == expected_post_body
+        assert json == expected_json
