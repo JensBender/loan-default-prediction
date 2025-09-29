@@ -46,7 +46,7 @@ def format_snake_case(value: Any) -> Any:
 
 
 # Format all string values in a dictionary in snake_case
-def snake_case_str_values_in_dict(inputs: dict[str, Any]) -> dict[str, Any]:
+def format_snake_case_in_dict(inputs: dict[str, Any]) -> dict[str, Any]:
     return {key: format_snake_case(value) for key, value in inputs.items()}
 
 
@@ -74,9 +74,9 @@ field_to_error_map = {
 }
 
 
-# Function to format Pydantic validation error from FastAPI backend into a user-friendly message for Gradio frontend output
+# Function to format Pydantic validation error from FastAPI backend into a user-friendly message for Gradio frontend 
 def _format_validation_error(error_detail: dict) -> str:
-    error_msg = "Input Error! Please check your inputs and try again."
+    error_msg = "Input Error! Please check your inputs and try again.\n"
     try:
         # Parse the Pydantic error format to create an error message with information about each invalid field
         all_errors = error_detail["detail"]
@@ -88,6 +88,7 @@ def _format_validation_error(error_detail: dict) -> str:
         # Fallback to generic error message without details if Pydantic validation error has unexpected format 
         logger.warning("Failed to parse validation error from backend: %s", e, exc_info=True)
         return error_msg
+
 
 # --- Function to Predict Loan Default for Gradio UI ---
 def predict_loan_default(
