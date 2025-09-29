@@ -174,28 +174,32 @@ class TestFormatValidationError:
 
     # Multiple fields happy path
     @pytest.mark.unit
-    def test_multiple_fields_happy_path(self):
+    @pytest.mark.parametrize("field_1, field_2, partial_error_message", [
+        ("age", "married", "Age: Enter a number between 21 and 79.\nMarried/Single: Select 'Married' or 'Single'\n"),
+        ("income", "car_ownership", "Income: Enter a number that is 0 or greater.\nCar Ownership: Select 'Yes' or 'No'.\n"),
+        ("house_ownership", "current_house_yrs", "House Ownership: Select 'Rented', 'Owned', or 'Neither Rented Nor Owned'.\nCurrent House Years: Enter a number between 10 and 14.\n"),
+        ("city", "state", "City: Select a city from the list.\nState: Select a state from the list.\n"),
+        ("profession", "experience", "Profession: Select a profession from the list.\nExperience: Enter a number between 0 and 20.\n"),
+        ("age", "current_job_yrs", "Age: Enter a number between 21 and 79.\nCurrent Job Years: Enter a number between 0 and 14.\n")
+    ])
+    def test_multiple_fields_happy_path(self, field_1, field_2, partial_error_message):
         error_detail = {
             "detail": [
                 {
                     "type": "some error type",
-                    "loc": ["body", "PipelineInput", "age"],
+                    "loc": ["body", "PipelineInput", field_1],
                     "msg": "some error message",
                     "input": "some invalid input"
                 },
                 {
                     "type": "some error type",
-                    "loc": ["body", "PipelineInput", "married"],
+                    "loc": ["body", "PipelineInput", field_2],
                     "msg": "some error message",
                     "input": "some invalid input"
                 }
             ]
         }
-        expected_error_msg = (
-            "Input Error! Please check your inputs and try again.\n"
-            "Age: Enter a number between 21 and 79.\n"
-            "Married/Single: Select 'Married' or 'Single'\n"
-        )
+        expected_error_msg = f"Input Error! Please check your inputs and try again.\n{partial_error_message}"
         assert _format_validation_error(error_detail) == expected_error_msg
     
     # Empty error detail list
