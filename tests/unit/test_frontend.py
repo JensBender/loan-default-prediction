@@ -203,4 +203,17 @@ class TestFormatValidationError:
         expected_error_msg = "Input Error! Please check your inputs and try again.\n"
         assert _format_validation_error(error_detail) == expected_error_msg
 
+    # All fields missing in error location
+    def test_all_fields_missing_in_error_location(self):
+        error_detail = {
+            "detail": [{
+                "type": "some error type",
+                "loc": ["body", "PipelineInput", "some_field"],  # all input fields missing 
+                "msg": "some error message",
+                "input": "some invalid input"
+            }]
+        }
+        expected_error_msg = "Input Error! Please check your inputs and try again.\n"
+        assert _format_validation_error(error_detail) == expected_error_msg
+        
 # --- Function .predict_loan_default() ---
