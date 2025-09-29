@@ -274,8 +274,8 @@ class TestPredictLoanDefault:
         }
         mock_post_request.return_value = mock_response
 
-        # Call .predict_loan_default()
-        prediction, probabilities = predict_loan_default(
+        # Call .predict_loan_default() with raw Gradio inputs
+        predict_loan_default(
             age=30, 
             married="Single", 
             income=300000, 
@@ -288,6 +288,7 @@ class TestPredictLoanDefault:
             experience=3, 
             current_job_yrs=3
         )
+        # Expected post request JSON body sent to backend
         expected_post_body = {
             "age": 30,
             "married": "single",  # snake_case
@@ -306,6 +307,7 @@ class TestPredictLoanDefault:
         mock_post_request.assert_called_once()
         # Get positional and keyword arguments used in the call
         args, kwargs = mock_post_request.call_args
-        # Ensure requests.post() was called with the expected json body
+        # Extract the JSON body from the keyword call arguments
         post_body = kwargs["json"]
+        # Ensure requests.post() was called with the expected json body
         assert post_body == expected_post_body
