@@ -1,6 +1,7 @@
 # Standard library imports
 import warnings
 import logging
+from unittest.mock import patch, MagicMock
 
 # Third-party library imports
 import pytest
@@ -209,7 +210,7 @@ class TestFormatValidationError:
         expected_error_msg = "Input Error! Please check your inputs and try again.\n"
         # Ensure error message is as expected
         assert _format_validation_error(error_detail) == expected_error_msg
-        # Ensure no error was logged
+        # Ensure no logged messages
         assert caplog.text == ""
 
     # All fields missing in error location
@@ -226,7 +227,7 @@ class TestFormatValidationError:
         expected_error_msg = "Input Error! Please check your inputs and try again.\n"
         # Ensure error message is as expected
         assert _format_validation_error(error_detail) == expected_error_msg
-        # Ensure no error was logged
+        # Ensure no logged messages
         assert caplog.text == ""
 
     # Unexpected Pydantic error format
@@ -253,3 +254,58 @@ class TestFormatValidationError:
 
 
 # --- Function .predict_loan_default() ---
+class TestPredictLoanDefault:
+    # Input preprocessing happy path
+    @pytest.mark.unit
+    @patch("frontend.app.requests.post")
+    def test_input_preprocessing_happy_path(self, mock_post_request):
+        # Simulate the post request 
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "results": [{
+                "prediction": "No Default",  
+                "probabilities": {
+                    "Default": 0.2, 
+                    "No Default": 0.8
+                }
+            }],
+            "n_predictions": 1
+        }
+        mock_post_request.return_value = mock_response
+
+        # Call .predict_loan_default()
+        prediction, probabilities = predict_loan_default(
+            age=30, 
+            married="Single", 
+            income=300000, 
+            car_ownership="No", 
+            house_ownership="Neither Rented Nor Owned", 
+            current_house_yrs=11, 
+            city="Sikar", 
+            state="Rajasthan", 
+            profession="Artist", 
+            experience=3, 
+            current_job_yrs=3
+        )
+        expected_post_body = {
+            "age": 30,
+            "married": "single",  # snake_case
+            "income": 300000,
+            "car_ownership": "no",  # snake_case
+            "house_ownership": "norent_noown",  # snake_case + special formatting
+            "current_house_yrs": 11,
+            "city": "sikar",  # snake_case
+            "state": "rajasthan",  # snake_case
+            "profession": "artist",  # snake_case
+            "experience": 3,
+            "current_job_yrs": 3
+        }
+
+        # Ensure requests.post() was called once
+        mock_post_request.assert_called_once()
+        # Get positional and keyword arguments used in the call
+        args, kwargs = mock_post_request.call_args
+        # Ensure requests.post() was called with the expected json body
+        post_body = kwargs["json"]
+        assert post_body == expected_post_body
