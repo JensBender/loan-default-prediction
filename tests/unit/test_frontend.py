@@ -144,7 +144,7 @@ class TestFormatHouseOwnership:
 
 # --- Function ._format_validation_error() ---
 class TestFormatValidationError:
-    # Happy path
+    # Single field happy path
     @pytest.mark.unit
     @pytest.mark.parametrize("field, partial_error_msg", [
         ("age", "Age: Enter a number between 21 and 79."),
@@ -159,7 +159,7 @@ class TestFormatValidationError:
         ("experience", "Experience: Enter a number between 0 and 20."),
         ("current_job_yrs", "Current Job Years: Enter a number between 0 and 14."),
     ])
-    def test_happy_path(self, field, partial_error_msg):
+    def test_single_field_happy_path(self, field, partial_error_msg):
         error_detail = {
             "detail": [{
                 "type": "some error type",
@@ -169,6 +169,32 @@ class TestFormatValidationError:
             }]
         }
         expected_error_msg = f"Input Error! Please check your inputs and try again.\n{partial_error_msg}\n"
+        assert _format_validation_error(error_detail) == expected_error_msg
+
+    # Multiple fields happy path
+    @pytest.mark.unit
+    def test_multiple_fields_happy_path(self):
+        error_detail = {
+            "detail": [
+                {
+                    "type": "some error type",
+                    "loc": ["body", "PipelineInput", "age"],
+                    "msg": "some error message",
+                    "input": "some invalid input"
+                },
+                {
+                    "type": "some error type",
+                    "loc": ["body", "PipelineInput", "married"],
+                    "msg": "some error message",
+                    "input": "some invalid input"
+                }
+            ]
+        }
+        expected_error_msg = (
+            "Input Error! Please check your inputs and try again.\n"
+            "Age: Enter a number between 21 and 79.\n"
+            "Married/Single: Select 'Married' or 'Single'\n"
+        )
         assert _format_validation_error(error_detail) == expected_error_msg
 
 # --- Function .predict_loan_default() ---
