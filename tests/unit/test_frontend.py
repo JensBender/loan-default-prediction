@@ -198,12 +198,14 @@ class TestFormatValidationError:
         assert _format_validation_error(error_detail) == expected_error_msg
     
     # Empty error detail list
+    @pytest.mark.unit
     def test_empty_error_detail_list(self):
         error_detail = {"detail": []}
         expected_error_msg = "Input Error! Please check your inputs and try again.\n"
         assert _format_validation_error(error_detail) == expected_error_msg
 
     # All fields missing in error location
+    @pytest.mark.unit
     def test_all_fields_missing_in_error_location(self):
         error_detail = {
             "detail": [{
@@ -215,5 +217,18 @@ class TestFormatValidationError:
         }
         expected_error_msg = "Input Error! Please check your inputs and try again.\n"
         assert _format_validation_error(error_detail) == expected_error_msg
-        
+
+    # Unexpected Pydantic error format
+    @pytest.mark.unit
+    @pytest.mark.parametrize("unexpected_error_format", [
+        None,  
+        {},  # "detail" key missing
+        {"detail": "a string"},  # "detail" value not a list
+        {"detail": ["a string"]},  # "detail" list element not a dictionary
+        {"detail": [{}]}  # no "loc" key
+    ])
+    def test_unexpected_error_format(self, unexpected_error_format):
+        expected_error_msg = "Input Error! Please check your inputs and try again.\n"
+        assert _format_validation_error(unexpected_error_format) == expected_error_msg
+
 # --- Function .predict_loan_default() ---
