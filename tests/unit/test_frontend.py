@@ -5,6 +5,7 @@ from unittest.mock import patch, MagicMock
 
 # Third-party library imports
 import pytest
+import requests
 
 # Suppress deprecation warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)  
@@ -288,7 +289,7 @@ class TestPredictLoanDefault:
             "current_job_yrs": 3
         }
         # Simulate the post request 
-        mock_response = MagicMock()
+        mock_response = MagicMock(spec=requests.Response)
         mock_response.status_code = 200
         mock_response.json.return_value = {
             "results": [{
