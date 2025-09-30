@@ -429,13 +429,15 @@ class TestPredictLoanDefault:
         probabilities == expected_probabilities
 
     # Response parsing error 
-    # KeyError for "results", "prediction" or "probabilities"
-    # IndexError for results[0] 
-    # TypeError for prediction_response["results"] = Not a list (or iterable) or results list element not a dictionary
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_response", [
         None,
-        {}  # "results" key missing
+        {},  # "results" key is missing
+        {"results": None},  # results value is not a list
+        {"results": [None]},  # results list element is not a dictionary
+        {"results": [{}]},  # results list element is missing the "prediction" and "probabilities" key
+        {"results": [{"prediction": "No Default"}]},  # results list element is missing the "probabilities" key
+        {"results": [{"probabilities": "No Default"}]},  # results list element is missing the "prediction" key
     ])
     @patch("frontend.app.requests.post")
     def test_response_parsing_error(self, mock_post_request, invalid_response, caplog):
