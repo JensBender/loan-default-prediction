@@ -431,9 +431,10 @@ class TestPredictLoanDefault:
     # Response parsing error 
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_response", [
-        None,
+        None,  # response is not a dictionary
         {},  # "results" key is missing
         {"results": None},  # results value is not a list
+        {"results": []},  # empty results list
         {"results": [None]},  # results list element is not a dictionary
         {"results": [{}]},  # results list element is missing the "prediction" and "probabilities" key
         {"results": [{"prediction": "No Default"}]},  # results list element is missing the "probabilities" key
