@@ -431,14 +431,39 @@ class TestPredictLoanDefault:
     # Response parsing error 
     @pytest.mark.unit
     @pytest.mark.parametrize("invalid_response", [
-        None,  # response is not a dictionary
-        {},  # "results" key is missing
-        {"results": None},  # results value is not a list
-        {"results": []},  # empty results list
-        {"results": [None]},  # results list element is not a dictionary
-        {"results": [{}]},  # results list element is missing the "prediction" and "probabilities" key
-        {"results": [{"prediction": "No Default"}]},  # results list element is missing the "probabilities" key
-        {"results": [{"probabilities": "No Default"}]},  # results list element is missing the "prediction" key
+        # response is not a dictionary
+        None,
+        # "results" key is missing  
+        {},  
+        # results value is not a list
+        {"results": None},  
+        # empty results list
+        {"results": []},  
+        # results list element is not a dictionary
+        {"results": [None]},  
+        # results list element is missing the "prediction" and "probabilities" key
+        {"results": [{}]},  
+        # results list element is missing the "probabilities" key
+        {"results": [{"prediction": "No Default"}]},  
+        # results list element is missing the "prediction" key
+        {"results": [{"probabilities": {"Default": 0.2, "No Default": 0.8}}]},  
+        # prediction value is not a string
+        {  
+            "results": [{
+                "prediction": None,  # not a str
+                "probabilities": {
+                    "Default": 0.2, 
+                    "No Default": 0.8
+                }
+            }]
+        },  
+        # probabilities value is not a dictionary
+        {  
+            "results": [{
+                "prediction": "No Default", 
+                "probabilities": None  # not a dict
+            }]
+        },  
     ])
     @patch("frontend.app.requests.post")
     def test_response_parsing_error(self, mock_post_request, invalid_response, caplog):
