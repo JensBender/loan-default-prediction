@@ -156,13 +156,19 @@ def predict_loan_default(
 
             # Data validation for Gradio rendering
             if not isinstance(prediction, str):
-                raise TypeError(f"'prediction' used in gr.Textbox expects str, got {type(prediction).__name__}")
+                raise TypeError(f"'prediction' used in gr.Textbox expects str, got {type(prediction).__name__}.")
             if not isinstance(probabilities, dict):
-                raise TypeError(f"'probabilities' used in gr.Label expects dict, got {type(probabilities).__name__}")
-            
+                raise TypeError(f"'probabilities' used in gr.Label expects dict, got {type(probabilities).__name__}.")
+            if not probabilities:
+                raise ValueError("'probabilities' dict cannot be empty.")
+            if not all(isinstance(key, str) for key in probabilities.keys()):
+                raise TypeError("'probabilities' dict keys must be strings.")
+            if not all(isinstance(value, (int, float)) and 0 <= value <= 1 for value in probabilities.values()):
+                raise TypeError("'probabilities' dict values must be numbers between 0 and 1.")
+
             return prediction, probabilities
         # Handle response parsing errors
-        except (KeyError, IndexError, TypeError):
+        except (KeyError, IndexError, TypeError, ValueError):
             logger.error("Failed to parse prediction response from backend.", exc_info=True)
             return "Prediction Response Error", "The prediction service returned an invalid prediction format."
 
