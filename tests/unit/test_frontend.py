@@ -433,12 +433,16 @@ class TestPredictLoanDefault:
     # IndexError for results[0] 
     # TypeError for prediction_response["results"] = Not a list (or iterable) or results list element not a dictionary
     @pytest.mark.unit
+    @pytest.mark.parametrize("invalid_response", [
+        None,
+        {}  # "results" key missing
+    ])
     @patch("frontend.app.requests.post")
-    def test_response_parsing_error(self, mock_post_request, caplog):
+    def test_response_parsing_error(self, mock_post_request, invalid_response, caplog):
         # Simulate the post request 
         mock_response = MagicMock(spec=requests.Response)
         mock_response.status_code = 200
-        mock_response.json.return_value = {}  # "results" key missing
+        mock_response.json.return_value = invalid_response
         mock_post_request.return_value = mock_response
 
         # Call .predict_loan_default() and capture error logs
