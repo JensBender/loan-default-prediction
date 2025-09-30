@@ -447,7 +447,7 @@ class TestPredictLoanDefault:
         {"results": [{"prediction": "No Default"}]},  
         # results list element is missing the "prediction" key
         {"results": [{"probabilities": {"Default": 0.2, "No Default": 0.8}}]},  
-        # prediction value is not a string
+        # "prediction" value is not a string
         {  
             "results": [{
                 "prediction": None,  # not a str
@@ -457,11 +457,28 @@ class TestPredictLoanDefault:
                 }
             }]
         },  
-        # probabilities value is not a dictionary
+        # "probabilities" value is not a dictionary
         {  
             "results": [{
                 "prediction": "No Default", 
                 "probabilities": None  # not a dict
+            }]
+        },  
+        # "probabilities" dictionary is empty
+        {  
+            "results": [{
+                "prediction": "No Default", 
+                "probabilities": {}
+            }]
+        },  
+        # "probabilities" dictionary key is not a string
+        {  
+            "results": [{
+                "prediction": "No Default", 
+                "probabilities": {
+                    "Default": 0.2, 
+                    999: 0.8  # key not a str
+                }
             }]
         },  
     ])
