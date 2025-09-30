@@ -258,36 +258,103 @@ class TestFormatValidationError:
 class TestPredictLoanDefault:
     # Input preprocessing happy path
     @pytest.mark.unit
+    @pytest.mark.parametrize("raw_inputs, expected_json", [
+        # Test case 1
+        (
+            # Raw inputs from Gradio UI
+            {
+                "age": 30, 
+                "married": "Single", 
+                "income": 300000, 
+                "car_ownership": "No", 
+                "house_ownership": "Neither Rented Nor Owned", 
+                "current_house_yrs": 11, 
+                "city": "Sikar", 
+                "state": "Rajasthan", 
+                "profession": "Artist", 
+                "experience": 3, 
+                "current_job_yrs": 3
+            },
+            # Expected JSON body of post request 
+            {
+                "age": 30,
+                "married": "single",  # snake_case
+                "income": 300000,
+                "car_ownership": "no",  # snake_case
+                "house_ownership": "norent_noown",  # snake_case + special formatting
+                "current_house_yrs": 11,
+                "city": "sikar",  # snake_case
+                "state": "rajasthan",  # snake_case
+                "profession": "artist",  # snake_case
+                "experience": 3,
+                "current_job_yrs": 3
+            }
+        ),
+        # Test case 2
+        (
+            # Raw inputs from Gradio UI
+            {
+                "age": 45, 
+                "married": "Married", 
+                "income": 500000, 
+                "car_ownership": "Yes", 
+                "house_ownership": "Rented", 
+                "current_house_yrs": 12, 
+                "city": "Bhalswa Jahangir Pur", 
+                "state": "Jammu And Kashmir", 
+                "profession": "Air Traffic Controller", 
+                "experience": 15, 
+                "current_job_yrs": 5
+            },
+            # Expected JSON body of post request 
+            {
+                "age": 45,
+                "married": "married",  # snake_case
+                "income": 500000,
+                "car_ownership": "yes",  # snake_case
+                "house_ownership": "rented",  # snake_case + special formatting
+                "current_house_yrs": 12,
+                "city": "bhalswa_jahangir_pur",  # snake_case
+                "state": "jammu_and_kashmir",  # snake_case
+                "profession": "air_traffic_controller",  # snake_case
+                "experience": 15,
+                "current_job_yrs": 5
+            }
+        ),
+        # Test case 3
+        (
+            # Raw inputs from Gradio UI
+            {
+                "age": 60, 
+                "married": "Single", 
+                "income": 100000, 
+                "car_ownership": "No", 
+                "house_ownership": "Owned", 
+                "current_house_yrs": 4, 
+                "city": "Mira Bhayandar", 
+                "state": "Uttar Pradesh", 
+                "profession": "Software Developer", 
+                "experience": 20, 
+                "current_job_yrs": 10
+            },
+            # Expected JSON body of post request 
+            {
+                "age": 60,
+                "married": "single",  # snake_case
+                "income": 100000,
+                "car_ownership": "no",  # snake_case
+                "house_ownership": "owned",  # snake_case + special formatting
+                "current_house_yrs": 4,
+                "city": "mira_bhayandar",  # snake_case
+                "state": "uttar_pradesh",  # snake_case
+                "profession": "software_developer",  # snake_case
+                "experience": 20,
+                "current_job_yrs": 10
+            }
+        )
+    ])
     @patch("frontend.app.requests.post")
-    def test_input_preprocessing_happy_path(self, mock_post_request):
-        # Raw inputs from Gradio UI
-        raw_inputs = {
-            "age": 30, 
-            "married": "Single", 
-            "income": 300000, 
-            "car_ownership": "No", 
-            "house_ownership": "Neither Rented Nor Owned", 
-            "current_house_yrs": 11, 
-            "city": "Sikar", 
-            "state": "Rajasthan", 
-            "profession": "Artist", 
-            "experience": 3, 
-            "current_job_yrs": 3
-        }
-        # Expected JSON body of post request 
-        expected_json = {
-            "age": 30,
-            "married": "single",  # snake_case
-            "income": 300000,
-            "car_ownership": "no",  # snake_case
-            "house_ownership": "norent_noown",  # snake_case + special formatting
-            "current_house_yrs": 11,
-            "city": "sikar",  # snake_case
-            "state": "rajasthan",  # snake_case
-            "profession": "artist",  # snake_case
-            "experience": 3,
-            "current_job_yrs": 3
-        }
+    def test_input_preprocessing_happy_path(self, mock_post_request, raw_inputs, expected_json):
         # Simulate the post request 
         mock_response = MagicMock(spec=requests.Response)
         mock_response.status_code = 200
