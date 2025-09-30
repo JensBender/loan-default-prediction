@@ -381,3 +381,56 @@ class TestPredictLoanDefault:
         json = kwargs["json"]
         # Ensure requests.post() was called with the expected json body
         assert json == expected_json
+
+    # Response parsing happy path
+    @pytest.mark.unit
+    @patch("frontend.app.requests.post")
+    def test_response_parsing_happy_path(self, mock_post_request):
+        # Simulate the post request 
+        mock_response = MagicMock(spec=requests.Response)
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "results": [{
+                "prediction": "No Default",  
+                "probabilities": {
+                    "Default": 0.2, 
+                    "No Default": 0.8
+                }
+            }],
+            "n_predictions": 1
+        }
+        mock_post_request.return_value = mock_response
+        # Expected prediction result
+        expected_prediction = "No Default"
+        expected_probabilities = {
+            "Default": 0.2, 
+            "No Default": 0.8
+        }
+
+        # Call .predict_loan_default()
+        prediction, probabilities = predict_loan_default(
+            age=30,
+            married="Single",
+            income=300000,
+            car_ownership="No",
+            house_ownership="Neither Rented Nor Owned",
+            current_house_yrs=11,
+            city="Sikar",
+            state="Rajasthan",
+            profession="Artist",
+            experience=3,
+            current_job_yrs=3
+        )
+
+        # Ensure requests.post() was called once
+        mock_post_request.assert_called_once()
+        # Ensure prediction and probabilities are as expected
+        prediction == expected_prediction
+        probabilities == expected_probabilities
+
+    # Response parsing KeyError and IndexError
+    # Handle HTTP 422 pydantic validation errors
+    # Handle other HTTP errors
+    # Handle ConnectionError
+    # Handle Timeout
+    # Handle RequestException
