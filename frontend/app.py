@@ -127,14 +127,15 @@ def predict_loan_default(
         # Format "house_ownership" label as expected by API backend 
         inputs["house_ownership"] = format_house_ownership(inputs["house_ownership"])
         
-        # --- Predict loan default ---       
-        # Get prediction via post request to FastAPI backend
+        # --- Post request ---       
+        # Predict loan default via post request to FastAPI backend
         response = requests.post(
             BACKEND_URL, 
             json=inputs, 
             timeout=(3, 60)  # 3s connect timeout, 60s read timeout (receive first byte of response)
         ) 
 
+        # --- Error handling ---
         # Handle HTTP errors
         if response.status_code == 422:
             error_detail = response.json()
@@ -145,6 +146,7 @@ def predict_loan_default(
         # Raise error for other bad status codes (4xx or 5xx)
         response.raise_for_status()
 
+        # --- Response parsing ---
         # Get prediction and probabilities for Gradio output
         prediction_response = response.json()
         prediction_result = prediction_response["results"][0]
