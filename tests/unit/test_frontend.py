@@ -428,7 +428,11 @@ class TestPredictLoanDefault:
         prediction == expected_prediction
         probabilities == expected_probabilities
 
-    # Response parsing KeyError and IndexError
+    # Response parsing error 
+    # KeyError for "results", "prediction" or "probabilities"
+    # IndexError for results[0] 
+    # TypeError for prediction_response["results"] = Not a list (or iterable) or results list element not a dictionary
+
     # Handle HTTP 422 pydantic validation errors
     # Handle other HTTP errors
     # Handle ConnectionError
