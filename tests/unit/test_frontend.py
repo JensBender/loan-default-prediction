@@ -481,6 +481,26 @@ class TestPredictLoanDefault:
                 }
             }]
         },  
+        # "probabilities" dictionary value is not a number
+        {  
+            "results": [{
+                "prediction": "No Default", 
+                "probabilities": {
+                    "Default": 0.2, 
+                    "No Default": "not a number"  # value not a number
+                }
+            }]
+        },  
+        # "probabilities" dictionary value is not a number between 0 and 1
+        {  
+            "results": [{
+                "prediction": "No Default", 
+                "probabilities": {
+                    "Default": 0.2, 
+                    "No Default": 1.1  # not between 0 and 1
+                }
+            }]
+        },  
     ])
     @patch("frontend.app.requests.post")
     def test_response_parsing_error(self, mock_post_request, invalid_response, caplog):
