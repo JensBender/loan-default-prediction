@@ -153,6 +153,13 @@ def predict_loan_default(
             prediction_result = prediction_response["results"][0]
             prediction = prediction_result["prediction"]
             probabilities = prediction_result["probabilities"]
+
+            # Data validation for Gradio rendering
+            if not isinstance(prediction, str):
+                raise TypeError(f"'prediction' used in gr.Textbox expects str, got {type(prediction).__name__}")
+            if not isinstance(probabilities, dict):
+                raise TypeError(f"'probabilities' used in gr.Label expects dict, got {type(probabilities).__name__}")
+            
             return prediction, probabilities
         # Handle response parsing errors
         except (KeyError, IndexError, TypeError):
