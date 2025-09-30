@@ -432,6 +432,37 @@ class TestPredictLoanDefault:
     # KeyError for "results", "prediction" or "probabilities"
     # IndexError for results[0] 
     # TypeError for prediction_response["results"] = Not a list (or iterable) or results list element not a dictionary
+    @pytest.mark.unit
+    @patch("frontend.app.requests.post")
+    def test_respone_parsing_error(self, mock_post_request, caplog):
+        # Simulate the post request 
+        mock_response = MagicMock(spec=requests.Response)
+        mock_response.status_code = 200
+        mock_response.json.return_value = {}  # "detail" key missing
+        mock_post_request.return_value = mock_response
+
+        # Call .predict_loan_default()
+        prediction, probabilities = predict_loan_default(
+            age=30,
+            married="Single",
+            income=300000,
+            car_ownership="No",
+            house_ownership="Neither Rented Nor Owned",
+            current_house_yrs=11,
+            city="Sikar",
+            state="Rajasthan",
+            profession="Artist",
+            experience=3,
+            current_job_yrs=3
+        )
+
+        # Ensure requests.post() was called once
+        mock_post_request.assert_called_once()
+        # Ensure expected error message for Gradio frontend
+        assert prediction == "Prediction Response Error"
+        assert probabilities == "The prediction service returned an invalid prediction format."
+        # Ensure expected error was logged
+        assert "Failed to parse prediction response from backend." in caplog.text
 
     # Handle HTTP 422 pydantic validation errors
     # Handle other HTTP errors
