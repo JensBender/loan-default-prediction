@@ -536,7 +536,89 @@ class TestPredictLoanDefault:
         assert caplog.records[0].levelname == "ERROR"
         assert "Failed to parse prediction response from backend." in caplog.records[0].message
 
-    # Handle HTTP 422 pydantic validation errors
+    # HTTP 422 pydantic validation error
+    # Test cases: Empty dict, missing required field, invalid data type, missing value in required field, invalid string Enum, out-of-range value
+    @pytest.mark.unit
+    @patch("frontend.app.requests.post")
+    def test_http_422_pydantic_validation_error(self, mock_post_request, caplog):
+        # Invalid input: Missing value in required field
+        invalid_input = {
+            "income": 0,
+            "age": None,
+            "experience": 20,
+            "married": "Single",
+            "house_ownership": "Rented",
+            "car_ownership": "Yes",
+            "profession": "Air Traffic Controller",
+            "city": "Adoni",
+            "state": "Andhra Pradesh",
+            "current_job_yrs": 14,
+            "current_house_yrs": 10
+        }
+        # Simulate error detail 
+        mock_error_detail = {"detail": [
+            {
+                "type": "int_type",
+                "loc": [
+                    "body",
+                    "PipelineInput",
+                    "age",
+                    "constrained-int"
+                ],
+                "msg": "Input should be a valid integer",
+                "input": None
+            },
+            {
+                "type": "float_type",
+                "loc": [
+                    "body",
+                    "PipelineInput",
+                    "age",
+                    "constrained-float"
+                ],
+                "msg": "Input should be a valid number",
+                "input": None
+            },
+            {
+                "type": "list_type",
+                "loc": [
+                    "body",
+                    "list[PipelineInput]"
+                ],
+                "msg": "Input should be a valid list",
+                "input": {
+                    "income": 0,
+                    "age": None,
+                    "experience": 20,
+                    "married": "single",
+                    "house_ownership": "rented",
+                    "car_ownership": "yes",
+                    "profession": "air_traffic_controller",
+                    "city": "adoni",
+                    "state": "andhra_pradesh",
+                    "current_job_yrs": 14,
+                    "current_house_yrs": 10
+                }
+            }
+        ]}
+        # Simulate the post request 
+        mock_response = MagicMock(spec=requests.Response)
+        mock_response.status_code = 422
+        mock_response.json.return_value = mock_error_detail
+        mock_post_request.return_value = mock_response
+
+        # Call .predict_loan_default()
+        prediction, probabilities = predict_loan_default(**invalid_input)
+
+        # Ensure expected error messages for Gradio frontend
+        assert prediction == "Input Error! Please check your inputs and try again.\nAge: Enter a number between 21 and 79.\n"
+        assert probabilities == ""
+        # Ensure exactly one error was logged with correct level and message
+        assert len(caplog.records) == 1
+        assert caplog.records[0].levelname == "WARNING"
+        assert "Received 422 validation error from backend" in caplog.records[0].message
+
+
     # Handle other HTTP errors
     # Handle ConnectionError
     # Handle Timeout
