@@ -539,12 +539,16 @@ class TestPredictLoanDefault:
     # HTTP 422 pydantic validation error
     # Test cases: invalid data type, invalid string Enum, out-of-range value
     @pytest.mark.unit
+    @pytest.mark.parametrize("field, invalid_value, partial_error_msg", [
+        # Test case 1: Out-of-range numeric field
+        ("age", 5, "Age: Enter a number between 21 and 79.")
+    ])
     @patch("frontend.app.requests.post")
-    def test_http_422_pydantic_validation_error(self, mock_post_request, caplog):
+    def test_http_422_pydantic_validation_error(self, mock_post_request, field, invalid_value, partial_error_msg, caplog):
         # Invalid input: Out-of-range age
         invalid_input = {
             "income": 0,
-            "age": 5,  # out-of-range
+            "age": 21,  
             "experience": 20,
             "married": "Single",
             "house_ownership": "Rented",
@@ -555,11 +559,12 @@ class TestPredictLoanDefault:
             "current_job_yrs": 14,
             "current_house_yrs": 10
         }
+        invalid_input[field] = invalid_value
         # Simulate error detail 
         mock_error_detail = {
             "detail": [{
                 "type": "some error type",
-                "loc": ["body", "PipelineInput", "age"],  
+                "loc": ["body", "PipelineInput", field],  
                 "msg": "some error message",
                 "input": "some invalid input"
             }]
@@ -574,7 +579,7 @@ class TestPredictLoanDefault:
         prediction, probabilities = predict_loan_default(**invalid_input)
 
         # Ensure expected error messages for Gradio frontend
-        assert prediction == "Input Error! Please check your inputs and try again.\nAge: Enter a number between 21 and 79.\n"
+        assert prediction == f"Input Error! Please check your inputs and try again.\n{partial_error_msg}\n"
         assert probabilities == ""
         # Ensure exactly one error was logged with correct level and message
         assert len(caplog.records) == 1
