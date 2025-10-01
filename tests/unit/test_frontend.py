@@ -537,14 +537,14 @@ class TestPredictLoanDefault:
         assert "Failed to parse prediction response from backend." in caplog.records[0].message
 
     # HTTP 422 pydantic validation error
-    # Test cases: Empty dict, missing required field, invalid data type, missing value in required field, invalid string Enum, out-of-range value
+    # Test cases: invalid data type, invalid string Enum, out-of-range value
     @pytest.mark.unit
     @patch("frontend.app.requests.post")
     def test_http_422_pydantic_validation_error(self, mock_post_request, caplog):
-        # Invalid input: Missing value in required field
+        # Invalid input: Out-of-range age
         invalid_input = {
             "income": 0,
-            "age": None,
+            "age": 5,  # out-of-range
             "experience": 20,
             "married": "Single",
             "house_ownership": "Rented",
@@ -558,37 +558,26 @@ class TestPredictLoanDefault:
         # Simulate error detail 
         mock_error_detail = {"detail": [
             {
-                "type": "int_type",
-                "loc": [
-                    "body",
-                    "PipelineInput",
-                    "age",
-                    "constrained-int"
-                ],
-                "msg": "Input should be a valid integer",
-                "input": None
+                "type": "greater_than_equal",
+                "loc": ["body", "PipelineInput", "age", "constrained-int"],
+                "msg": "Input should be greater than or equal to 21",
+                "input": 5,
+                "ctx": {"ge": 21}
             },
             {
-                "type": "float_type",
-                "loc": [
-                    "body",
-                    "PipelineInput",
-                    "age",
-                    "constrained-float"
-                ],
-                "msg": "Input should be a valid number",
-                "input": None
+                "type": "greater_than_equal",
+                "loc": ["body", "PipelineInput", "age", "constrained-float"],
+                "msg": "Input should be greater than or equal to 21",
+                "input": 5,
+                "ctx": {"ge": 21}
             },
             {
                 "type": "list_type",
-                "loc": [
-                    "body",
-                    "list[PipelineInput]"
-                ],
+                "loc": ["body", "list[PipelineInput]"],
                 "msg": "Input should be a valid list",
                 "input": {
                     "income": 0,
-                    "age": None,
+                    "age": 5,
                     "experience": 20,
                     "married": "single",
                     "house_ownership": "rented",
