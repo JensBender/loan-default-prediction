@@ -621,10 +621,43 @@ class TestPredictLoanDefault:
         assert probabilities == "There was a problem communicating with the prediction service. Please try again later."
         # Ensure exactly one error was logged with correct level and message
         assert len(caplog.records) == 1
-        assert caplog.records[0].levelname == "ERROR"  # logger.exception is error level
+        assert caplog.records[0].levelname == "ERROR"  
         assert caplog.records[0].message == "HTTP error while trying to communicate with backend."
 
     # HTTP 404 not found error
     # Handle ConnectionError
     # Handle Timeout
     # Handle RequestException
+
+    # MemoryError raises general Exception 
+    @pytest.mark.unit
+    @patch("frontend.app.requests.post")
+    def test_memory_error_raises_general_exception(self, mock_post_request, caplog):
+        # Simulate the post request
+        mock_response = MagicMock(spec=requests.Response)
+        mock_response.raise_for_status.side_effect = MemoryError("Unable to allocate memory for prediction")
+        mock_post_request.return_value = mock_response
+
+        # Call .predict_loan_default()
+        with caplog.at_level(logging.ERROR):
+            prediction, probabilities = predict_loan_default(
+                age=30,
+                married="Single",
+                income=300000,
+                car_ownership="No",
+                house_ownership="Neither Rented Nor Owned",
+                current_house_yrs=11,
+                city="Sikar",
+                state="Rajasthan",
+                profession="Artist",
+                experience=3,
+                current_job_yrs=3
+            )
+        
+        # Ensure general Exception message is returned to Gradio frontend
+        assert prediction == "Error"
+        assert probabilities == "An unexpected error has occurred. Please verify your inputs or try again later."
+        # Ensure exactly one error was logged with correct level and message
+        assert len(caplog.records) == 1
+        assert caplog.records[0].levelname == "ERROR"  # logger.exception is error level
+        assert caplog.records[0].message == "Unexpected error in the frontend."
