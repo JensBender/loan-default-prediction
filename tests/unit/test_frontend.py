@@ -659,6 +659,37 @@ class TestPredictLoanDefault:
         assert caplog.records[0].levelname == "ERROR"
         assert "Connection to backend failed." in caplog.records[0].message
 
+    # Timeout
+    @pytest.mark.unit
+    @patch("frontend.app.requests.post")
+    def test_timeout(self, mock_post_request, caplog):
+        # Simulate a timeout 
+        mock_post_request.side_effect = requests.exceptions.Timeout("Request timed out")
+
+        # Call .predict_loan_default()
+        with caplog.at_level(logging.ERROR):
+            prediction, probabilities = predict_loan_default(
+                age=30, 
+                married="Single", 
+                income=300000, 
+                car_ownership="No",
+                house_ownership="Neither Rented Nor Owned", 
+                current_house_yrs=11,
+                city="Sikar", 
+                state="Rajasthan", 
+                profession="Artist",
+                experience=3, 
+                current_job_yrs=3
+            )
+
+        # Ensure Timeout message is returned to Gradio frontend
+        assert prediction == "Timeout Error"
+        assert probabilities == "The request to the prediction service timed out. The service may be busy or slow. Please try again later."
+        # Ensure exactly one error was logged with correct level and message
+        assert len(caplog.records) == 1
+        assert caplog.records[0].levelname == "ERROR"
+        assert "Request to backend timed out." in caplog.records[0].message
+
     # MemoryError raises general Exception 
     @pytest.mark.unit
     @patch("frontend.app.requests.post")
