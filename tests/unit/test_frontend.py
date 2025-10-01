@@ -590,14 +590,18 @@ class TestPredictLoanDefault:
         assert caplog.records[0].levelname == "WARNING"
         assert "Received 422 validation error from backend" in caplog.records[0].message
 
-    # HTTP 500 internal server error raises RequestException
+    # HTTP error status codes raise RequestException
     @pytest.mark.unit
+    @pytest.mark.parametrize("status_code, http_error_msg", [
+        (404, "404 Not Found"),  # client error
+        (500, "500 Server Error"),  # server error
+    ])
     @patch("frontend.app.requests.post")
-    def test_http_500_error_raises_request_exception(self, mock_post_request, caplog):
+    def test_http_error_status_codes_raise_request_exception(self, mock_post_request, status_code, http_error_msg, caplog):
         # Simulate the post request
         mock_response = MagicMock(spec=requests.Response)
-        mock_response.status_code = 500
-        mock_response.raise_for_status.side_effect = requests.HTTPError("500 Server Error")
+        mock_response.status_code = status_code
+        mock_response.raise_for_status.side_effect = requests.HTTPError(http_error_msg)
         mock_post_request.return_value = mock_response
 
         # Call .predict_loan_default()
@@ -622,40 +626,6 @@ class TestPredictLoanDefault:
         # Ensure exactly one error was logged with correct level and message
         assert len(caplog.records) == 1
         assert caplog.records[0].levelname == "ERROR"  
-        assert caplog.records[0].message == "HTTP error while trying to communicate with backend."
-
-    # HTTP 404 not found error raises RequestException
-    @pytest.mark.unit
-    @patch("frontend.app.requests.post")
-    def test_http_404_error_raises_request_exception(self, mock_post_request, caplog):
-        # Simulate the post request
-        mock_response = MagicMock(spec=requests.Response)
-        mock_response.status_code = 404
-        mock_response.raise_for_status.side_effect = requests.HTTPError("404 Not Found")
-        mock_post_request.return_value = mock_response
-        
-        # Call .predict_loan_default()
-        with caplog.at_level(logging.ERROR):
-            prediction, probabilities = predict_loan_default(
-                age=30,
-                married="Single",
-                income=300000,
-                car_ownership="No",
-                house_ownership="Neither Rented Nor Owned",
-                current_house_yrs=11,
-                city="Sikar",
-                state="Rajasthan",
-                profession="Artist",
-                experience=3,
-                current_job_yrs=3
-            )
-
-        # Ensure RequestException message is returned to Gradio frontend
-        assert prediction == "Communication Error"
-        assert probabilities == "There was a problem communicating with the prediction service. Please try again later." 
-        # Ensure exactly one error is logged with correct level and message
-        assert len(caplog.records) == 1
-        assert caplog.records[0].levelname == "ERROR"
         assert caplog.records[0].message == "HTTP error while trying to communicate with backend."
 
     # Handle ConnectionError
