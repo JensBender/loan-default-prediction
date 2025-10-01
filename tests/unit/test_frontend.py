@@ -540,8 +540,12 @@ class TestPredictLoanDefault:
     # Test cases: invalid data type, invalid string Enum, out-of-range value
     @pytest.mark.unit
     @pytest.mark.parametrize("field, invalid_value, partial_error_msg", [
-        # Test case 1: Out-of-range numeric field
-        ("age", 5, "Age: Enter a number between 21 and 79.")
+        # Test case 1: Out-of-range value in numeric field
+        ("age", 5, "Age: Enter a number between 21 and 79."),
+        # Test case 2: Invalid Enum in string field
+        ("married", "invalid value", "Married/Single: Select 'Married' or 'Single'"),
+        # Test case 3: Wrong type (e.g. string instead of number)
+        ("income", "300000", "Income: Enter a number that is 0 or greater.")
     ])
     @patch("frontend.app.requests.post")
     def test_http_422_pydantic_validation_error(self, mock_post_request, field, invalid_value, partial_error_msg, caplog):
