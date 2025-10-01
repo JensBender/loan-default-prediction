@@ -590,8 +590,41 @@ class TestPredictLoanDefault:
         assert caplog.records[0].levelname == "WARNING"
         assert "Received 422 validation error from backend" in caplog.records[0].message
 
+    # HTTP 500 internal server error
+    @pytest.mark.unit
+    @patch("frontend.app.requests.post")
+    def test_http_500_error(self, mock_post_request, caplog):
+        # Simulate the post request
+        mock_response = MagicMock(spec=requests.Response)
+        mock_response.status_code = 500
+        mock_response.raise_for_status.side_effect = requests.HTTPError("500 Server Error")
+        mock_post_request.return_value = mock_response
 
-    # Handle other HTTP errors
+        # Call .predict_loan_default()
+        with caplog.at_level(logging.ERROR):
+            prediction, probabilities = predict_loan_default(
+                age=30,
+                married="Single",
+                income=300000,
+                car_ownership="No",
+                house_ownership="Neither Rented Nor Owned",
+                current_house_yrs=11,
+                city="Sikar",
+                state="Rajasthan",
+                profession="Artist",
+                experience=3,
+                current_job_yrs=3
+            )
+
+        # Ensure RequestException message is returned to Gradio frontend
+        assert prediction == "Communication Error"
+        assert probabilities == "There was a problem communicating with the prediction service. Please try again later."
+        # Ensure exactly one error was logged with correct level and message
+        assert len(caplog.records) == 1
+        assert caplog.records[0].levelname == "ERROR"  # logger.exception is error level
+        assert caplog.records[0].message == "HTTP error while trying to communicate with backend."
+
+    # HTTP 404 not found error
     # Handle ConnectionError
     # Handle Timeout
     # Handle RequestException
