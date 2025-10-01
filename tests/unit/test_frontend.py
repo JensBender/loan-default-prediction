@@ -556,40 +556,14 @@ class TestPredictLoanDefault:
             "current_house_yrs": 10
         }
         # Simulate error detail 
-        mock_error_detail = {"detail": [
-            {
-                "type": "greater_than_equal",
-                "loc": ["body", "PipelineInput", "age", "constrained-int"],
-                "msg": "Input should be greater than or equal to 21",
-                "input": 5,
-                "ctx": {"ge": 21}
-            },
-            {
-                "type": "greater_than_equal",
-                "loc": ["body", "PipelineInput", "age", "constrained-float"],
-                "msg": "Input should be greater than or equal to 21",
-                "input": 5,
-                "ctx": {"ge": 21}
-            },
-            {
-                "type": "list_type",
-                "loc": ["body", "list[PipelineInput]"],
-                "msg": "Input should be a valid list",
-                "input": {
-                    "income": 0,
-                    "age": 5,
-                    "experience": 20,
-                    "married": "single",
-                    "house_ownership": "rented",
-                    "car_ownership": "yes",
-                    "profession": "air_traffic_controller",
-                    "city": "adoni",
-                    "state": "andhra_pradesh",
-                    "current_job_yrs": 14,
-                    "current_house_yrs": 10
-                }
-            }
-        ]}
+        mock_error_detail = {
+            "detail": [{
+                "type": "some error type",
+                "loc": ["body", "PipelineInput", "age"],  
+                "msg": "some error message",
+                "input": "some invalid input"
+            }]
+        }
         # Simulate the post request 
         mock_response = MagicMock(spec=requests.Response)
         mock_response.status_code = 422
