@@ -593,7 +593,7 @@ class TestPredictLoanDefault:
     # HTTP 500 internal server error
     @pytest.mark.unit
     @patch("frontend.app.requests.post")
-    def test_http_500_error(self, mock_post_request, caplog):
+    def test_http_500_error_raises_request_exception(self, mock_post_request, caplog):
         # Simulate the post request
         mock_response = MagicMock(spec=requests.Response)
         mock_response.status_code = 500
