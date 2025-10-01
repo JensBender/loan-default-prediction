@@ -628,9 +628,36 @@ class TestPredictLoanDefault:
         assert caplog.records[0].levelname == "ERROR"  
         assert caplog.records[0].message == "HTTP error while trying to communicate with backend."
 
-    # Handle ConnectionError
-    # Handle Timeout
-    # Handle RequestException
+    # ConnectionError
+    @pytest.mark.unit
+    @patch("frontend.app.requests.post")
+    def test_connection_error(self, mock_post_request, caplog):
+        # Simulate a connection error
+        mock_post_request.side_effect = requests.exceptions.ConnectionError("Connection failed")
+
+        # Call .predict_loan_default()
+        with caplog.at_level(logging.ERROR):
+            prediction, probabilities = predict_loan_default(
+                age=30, 
+                married="Single", 
+                income=300000, 
+                car_ownership="No",
+                house_ownership="Neither Rented Nor Owned", 
+                current_house_yrs=11,
+                city="Sikar", 
+                state="Rajasthan", 
+                profession="Artist",
+                experience=3, 
+                current_job_yrs=3
+            )
+
+        # Ensure ConnectionError message is returned to Gradio frontend
+        assert prediction == "Connection Error"
+        assert probabilities == "Could not connect to the prediction service. Please ensure the backend is running and try again."
+        # Ensure exactly one error was logged with correct level and message
+        assert len(caplog.records) == 1
+        assert caplog.records[0].levelname == "ERROR"
+        assert "Connection to backend failed." in caplog.records[0].message
 
     # MemoryError raises general Exception 
     @pytest.mark.unit
