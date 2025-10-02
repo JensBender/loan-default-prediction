@@ -18,9 +18,9 @@ from backend.app import app
 # Create FastAPI test client to be used in tests
 client = TestClient(app)        
 
-# Function to redirect post requests to the test client
-def redirect_post_request_to_testclient(url, json, timeout):
-    # Use JSON that .predict_loan_default() creates, ignore "url" and "timeout"
+# Function to redirect post requests to the test client (use with mock_post_request.side_effect)
+def redirect_post_request_to_testclient(url, json, timeout):  # parameters must mirror mocked post request in .predict_loan_default()
+    # Use the JSON that .predict_loan_default() creates, ignore "url" and "timeout"
     return client.post("/predict", json=json)
 
 
