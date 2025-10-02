@@ -259,4 +259,4 @@ with gr.Blocks(css=custom_css) as app_ui:
 
 # --- Launch Web App UI ---
 if __name__ == "__main__":
-    app_ui.launch()
+    app_ui.launch(server_name="0.0.0.0", server_port=7860)
