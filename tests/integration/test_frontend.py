@@ -63,3 +63,35 @@ class TestPredictLoanDefault:
         assert isinstance(probabilities["No Default"], float)
         # Ensure probabilities sum to approximately 1
         assert (probabilities["Default"] + probabilities["No Default"]) == pytest.approx(1.0)  # default relative tolerance of 1e-6 (0.0001%) and absolute tolerance of 1e-12
+
+    # HTTP 422 Pydantic validation error
+    @pytest.mark.integration
+    @patch("frontend.app.requests.post")
+    def test_http_422_pydantic_validation_error(self, mock_post_request, caplog):
+        # Invalid inputs from Gradio UI
+        invalid_inputs = {
+            "age": 30, 
+            "married": "Sometimes",  # invalid value 
+            "income": 300000, 
+            "car_ownership": "No", 
+            "house_ownership": "Neither Rented Nor Owned", 
+            "current_house_yrs": 11, 
+            "city": "Sikar", 
+            "state": "Rajasthan", 
+            "profession": "Artist", 
+            "experience": 3, 
+            "current_job_yrs": 3
+        }
+        # Mock the post request to redirect it to the FastAPI test client
+        mock_post_request.side_effect = redirect_post_request_to_testclient
+
+        # Call .predict_loan_default()
+        prediction, probabilities = predict_loan_default(**invalid_inputs)
+
+        # Ensure expected error messages for Gradio frontend
+        assert prediction == "Input Error! Please check your inputs and try again.\nMarried/Single: Select 'Married' or 'Single'\n"
+        assert probabilities == ""
+        # Ensure exactly one error was logged with correct level and message
+        assert len(caplog.records) == 1
+        assert caplog.records[0].levelname == "WARNING"
+        assert "Received 422 validation error from backend" in caplog.records[0].message
