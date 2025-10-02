@@ -14,6 +14,16 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 from frontend.app import predict_loan_default
 from backend.app import app
 
+# --- Test Setup ---
+# Create FastAPI test client to be used in tests
+client = TestClient(app)        
+
+# Function to redirect post requests to the test client
+def redirect_post_request_to_testclient(url, json, timeout):
+    # Use JSON that .predict_loan_default() creates, ignore "url" and "timeout"
+    return client.post("/predict", json=json)
+
+
 # --- Function .predict_loan_default() ---
 class TestPredictLoanDefault:
     # Happy path
@@ -35,9 +45,6 @@ class TestPredictLoanDefault:
             "current_job_yrs": 3
         }
         # Mock the post request to redirect it to the FastAPI test client
-        client = TestClient(app)        
-        def redirect_post_request_to_testclient(url, json, timeout):
-            return client.post("/predict", json=json)
         mock_post_request.side_effect = redirect_post_request_to_testclient
 
         # Call .predict_loan_default()
