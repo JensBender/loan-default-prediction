@@ -66,12 +66,20 @@ class TestPredictLoanDefault:
 
     # HTTP 422 Pydantic validation error
     @pytest.mark.integration
+    @pytest.mark.parametrize("field, invalid_value, partial_error_msg", [
+        # Test case 1: Out-of-range value in numeric field
+        ("age", 5, "Age: Enter a number between 21 and 79."),
+        # Test case 2: Invalid Enum in string field
+        ("married", "invalid value", "Married/Single: Select 'Married' or 'Single'"),
+        # Test case 3: Wrong type (e.g. string instead of number)
+        ("income", "300000", "Income: Enter a number that is 0 or greater.")
+    ])
     @patch("frontend.app.requests.post")
-    def test_http_422_pydantic_validation_error(self, mock_post_request, caplog):
+    def test_http_422_pydantic_validation_error(self, mock_post_request, field, invalid_value, partial_error_msg, caplog):
         # Invalid inputs from Gradio UI
         invalid_inputs = {
             "age": 30, 
-            "married": "Sometimes",  # invalid value 
+            "married": "Single",  
             "income": 300000, 
             "car_ownership": "No", 
             "house_ownership": "Neither Rented Nor Owned", 
@@ -82,6 +90,7 @@ class TestPredictLoanDefault:
             "experience": 3, 
             "current_job_yrs": 3
         }
+        invalid_inputs[field] = invalid_value
         # Mock the post request to redirect it to the FastAPI test client
         mock_post_request.side_effect = redirect_post_request_to_testclient
 
@@ -89,7 +98,7 @@ class TestPredictLoanDefault:
         prediction, probabilities = predict_loan_default(**invalid_inputs)
 
         # Ensure expected error messages for Gradio frontend
-        assert prediction == "Input Error! Please check your inputs and try again.\nMarried/Single: Select 'Married' or 'Single'\n"
+        assert prediction == f"Input Error! Please check your inputs and try again.\n{partial_error_msg}\n"
         assert probabilities == ""
         # Ensure exactly one error was logged with correct level and message
         assert len(caplog.records) == 1
