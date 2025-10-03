@@ -1,7 +1,7 @@
 from pathlib import Path
 
 # Helper function to get path to root directory 
-def get_root_directory(anchor_files: str | list[str] = [".git", "Readme.md"]) -> Path:
+def get_root_directory(anchor_files: str | list[str] = [".git", "Readme.md", "requirements.txt"]) -> Path:
     # Standardize inputs to list[str]
     if isinstance(anchor_files, str):
         anchor_files = [anchor_files]
