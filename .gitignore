@@ -1,24 +1,26 @@
-data/training_data.csv
-data/test_data.csv
-data/sample_prediction_dataset.csv 
-data/training_data_preprocessed.csv
-data/validation_data_preprocessed.csv
-data/test_data_preprocessed.csv
+# Project-specific files
+data/
+models/
 images/header-image-alternative.webp
 images/accuracy_comparison_baseline.png
 images/f1_c1_comparison_baseline.png
 images/precision_c1_comparison_baseline.png
 images/recall_c1_comparison_baseline.png
 images/feature_target_correlations.png
-models/
-models/baseline_models.pkl
-models/tuned_models.pkl
-models/*random_search*.pkl
 frontend/old_gradio_app.py
 tests/unit/old_test_frontend.py
-*venv*/
-.ipynb_checkpoints/
-.vscode/
-**/__pycache__/
 test_loan_default_prediction.ipynb
 GEMINI.md 
+
+# Virtual environment
+*venv*/
+
+# IDE artifacts
+.vscode/
+**/.ipynb_checkpoints/
+
+# Python artifacts
+**/__pycache__/
+
+# Test artifacts
+**/.pytest_cache/
