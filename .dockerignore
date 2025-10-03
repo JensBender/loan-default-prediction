@@ -1,22 +1,37 @@
+# Project-specific files
 data/
-images/
-tests/
 models/
 !models/loan_default_rf_pipeline.joblib
+images/
 frontend/old_gradio_app.py
-*venv*/
-**/*.ipynb
-**/.ipynb_checkpoints/
-**/__pycache__/
-**/.pytest_cache/
-pytest.ini 
-requirements-test.txt
-requirements-notebook.txt
-.vscode/
 README.md
 GEMINI.md
 LICENSE
+
+# Virtual environment
+*venv*/
+
+# Test-related files
+tests/
+**/.pytest_cache/
+pytest.ini 
+requirements-test.txt
+
+# Python artifacts
+**/__pycache__/
+
+# IDE-related files
+.vscode/
+
+# Notebook-related files
+**/*.ipynb
+**/.ipynb_checkpoints/
+requirements-notebook.txt
+
+# Git-related files
 .git
 .gitignore
+
+# Docker-related files
 Dockerfile
 .dockerignore
