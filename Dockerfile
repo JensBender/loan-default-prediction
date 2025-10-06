@@ -1,4 +1,4 @@
-# Use an official Python runtime as a parent image
+# Use Python 3.10 slim image based on Linux Debian Bookworm distribution (suitable for ML workloads)
 FROM python:3.10-slim-bookworm
 
 # Set the working directory in the container
