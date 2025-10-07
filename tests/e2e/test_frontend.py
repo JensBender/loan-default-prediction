@@ -26,12 +26,14 @@ def test_user_submits_loan_prediction_form():
         married_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Married/Single']")))
         # Enter income
         income_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Income']")))
+        income_field.send_keys(300000)
         # Enter car_ownership
         car_ownership_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Car Ownership']")))
         # Enter house_ownership
         house_ownership_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='House Ownership']")))
         # Enter current_house_yrs
         current_house_yrs_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Current House Years']")))
+        current_house_yrs_field.send_keys(11)
         # Enter city
         city_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='City']")))
         # Enter state
@@ -40,8 +42,10 @@ def test_user_submits_loan_prediction_form():
         profession_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Profession']")))
         # Enter experience
         experience_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Experience']")))
+        experience_field.send_keys(3)
         # Enter current_job_yrs
         current_job_yrs_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Current Job Years']")))
+        current_job_yrs_field.send_keys(3)
 
     finally:
         time.sleep(3)  # remove after dev/test phase
