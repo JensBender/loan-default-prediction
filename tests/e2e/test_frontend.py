@@ -23,7 +23,11 @@ def test_user_submits_loan_prediction_form():
         age_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Age']")))
         age_field.send_keys(30)
         # Enter married
-        married_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Married/Single']")))
+        married_dropdown = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Married/Single']")))
+        married_dropdown.click()
+        married_dropdown_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//div[contains(@class, 'options')]//div[text()='Single']")))
+        assert married_dropdown_option.text == "Single"
+        married_dropdown_option.click()
         # Enter income
         income_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Income']")))
         income_field.send_keys(300000)
