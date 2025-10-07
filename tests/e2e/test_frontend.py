@@ -25,7 +25,7 @@ def test_user_submits_loan_prediction_form():
         # Enter married
         married_dropdown = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Married/Single']")))
         married_dropdown.click()
-        married_dropdown_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//div[contains(@class, 'options')]//div[text()='Single']")))
+        married_dropdown_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".options div:has-text('Single')")))
         assert married_dropdown_option.text == "Single"
         married_dropdown_option.click()
         # Enter income
