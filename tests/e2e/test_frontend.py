@@ -81,7 +81,11 @@ def test_user_submits_loan_prediction_form():
         assert profession_field_option.text == "Artist"
         profession_field_option.click()
 
+        # Predict button
+        predict_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//div[@id='predict-button-wrapper']/button")))
+        predict_button.click()
+
     finally:
-        time.sleep(3)  # remove after dev/test phase
+        time.sleep(10)  # remove after dev/test phase
         # Close Chrome browser window
         driver.quit()
