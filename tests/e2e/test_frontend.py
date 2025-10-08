@@ -68,8 +68,16 @@ def test_user_submits_loan_prediction_form():
         city_field_option.click()
         # Enter state
         state_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='State']")))
+        state_field.click()
+        state_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Rajasthan']")))
+        assert state_field_option.text == "Rajasthan"
+        state_field_option.click()
         # Enter profession
         profession_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Profession']")))
+        profession_field.click()
+        profession_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Artist']")))
+        assert profession_field_option.text == "Artist"
+        profession_field_option.click()
 
     finally:
         time.sleep(3)  # remove after dev/test phase
