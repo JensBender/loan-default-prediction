@@ -9,7 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC 
 
 
-# End-to-end test that simulates a user filling out the form and receiving a prediction in the frontend UI 
+# End-to-end happy path test that simulates a user submitting the form and receiving a prediction in the frontend UI 
 @pytest.mark.e2e
 def test_user_submits_loan_default_prediction_form():
     # Create a Chrome webdriver
@@ -111,3 +111,15 @@ def test_user_submits_loan_default_prediction_form():
         time.sleep(10)  # remove after dev/test phase
         # Close Chrome browser window
         driver.quit()
+
+
+# End-to-end test that simulates a user submitting out-of-range values and receiving an error message in the frontend UI 
+@pytest.mark.e2e
+def test_user_submits_out_of_range_values():
+    pass
+
+
+# End-to-end test that simulates a user submitting a form with missing required fields and receiving an error message in the frontend UI 
+@pytest.mark.e2e
+def test_user_submits_form_with_empty_required_fields():
+    pass
