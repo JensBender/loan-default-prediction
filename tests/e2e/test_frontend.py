@@ -33,13 +33,25 @@ def test_user_submits_loan_prediction_form():
         income_field.send_keys(300000)
         # Enter car_ownership
         car_ownership_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Car Ownership']")))
+        car_ownership_field.click()
+        car_ownership_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='No']")))
+        assert car_ownership_field_option.text == "No"
+        car_ownership_field_option.click()
         # Enter house_ownership
         house_ownership_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='House Ownership']")))
+        house_ownership_field.click()
+        house_ownership_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Neither Rented Nor Owned']")))
+        assert house_ownership_field_option.text == "Neither Rented Nor Owned"
+        house_ownership_field_option.click()
         # Enter current_house_yrs
         current_house_yrs_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Current House Years']")))
         current_house_yrs_field.send_keys(11)
         # Enter city
         city_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='City']")))
+        city_field.click()
+        city_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Sikar']")))
+        assert city_field_option.text == "Sikar"
+        city_field_option.click()
         # Enter state
         state_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='State']")))
         # Enter profession
