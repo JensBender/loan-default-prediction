@@ -93,7 +93,7 @@ def test_user_submits_loan_default_prediction_form():
         default_probability = int(default_probability.text.replace("%", ""))
         no_default_probability = int(no_default_probability.text.replace("%", ""))
         # Find prediction text element
-        prediction = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@id='prediction-text']//textarea")))
+        prediction = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//textarea[@placeholder='Prediction Result']")))
 
         print(default_probability)
         print(no_default_probability)
@@ -104,7 +104,9 @@ def test_user_submits_loan_default_prediction_form():
         # Ensure probabilities are numbers between 0 and 100
         assert 0 <= default_probability <=100
         assert 0 <= no_default_probability <= 100
-        # Ensure probabilities sum to 100
+        # Ensure probabilities sum to approximately 100
+        sum = default_probability + no_default_probability
+        assert 99 <= sum <= 101  # allow for rounding edge cases
          
     finally:
         time.sleep(10)  # remove after dev/test phase
