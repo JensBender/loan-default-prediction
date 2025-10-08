@@ -19,18 +19,32 @@ def test_user_submits_loan_prediction_form():
         # Get request to frontend Gradio UI running locally (make sure to run the app first)
         driver.get("http://localhost:7860")
 
+        # --- Gradio Number inputs ---
         # Enter age
         age_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Age']")))
         age_field.send_keys(30)
+        # Enter income
+        income_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Income']")))
+        income_field.send_keys(300000)
+
+        # --- Gradio Slider inputs ---
+        # Enter current_house_yrs
+        current_house_yrs_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Current House Years']")))
+        current_house_yrs_field.send_keys(11)
+        # Enter experience
+        experience_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Experience']")))
+        experience_field.send_keys(3)
+        # Enter current_job_yrs
+        current_job_yrs_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Current Job Years']")))
+        current_job_yrs_field.send_keys(3)
+
+        # --- Gradio Dropdown inputs ---
         # Enter married
         married_dropdown = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Married/Single']")))
         married_dropdown.click()
         married_dropdown_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Single']")))
         assert married_dropdown_option.text == "Single"
         married_dropdown_option.click()
-        # Enter income
-        income_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Income']")))
-        income_field.send_keys(300000)
         # Enter car_ownership
         car_ownership_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Car Ownership']")))
         car_ownership_field.click()
@@ -43,9 +57,6 @@ def test_user_submits_loan_prediction_form():
         house_ownership_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Neither Rented Nor Owned']")))
         assert house_ownership_field_option.text == "Neither Rented Nor Owned"
         house_ownership_field_option.click()
-        # Enter current_house_yrs
-        current_house_yrs_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Current House Years']")))
-        current_house_yrs_field.send_keys(11)
         # Enter city
         city_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='City']")))
         city_field.click()
@@ -56,12 +67,6 @@ def test_user_submits_loan_prediction_form():
         state_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='State']")))
         # Enter profession
         profession_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Profession']")))
-        # Enter experience
-        experience_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Experience']")))
-        experience_field.send_keys(3)
-        # Enter current_job_yrs
-        current_job_yrs_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Current Job Years']")))
-        current_job_yrs_field.send_keys(3)
 
     finally:
         time.sleep(3)  # remove after dev/test phase
