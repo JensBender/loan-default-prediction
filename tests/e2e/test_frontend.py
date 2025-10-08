@@ -27,15 +27,18 @@ def test_user_submits_loan_prediction_form():
         income_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Income']")))
         income_field.send_keys(300000)
 
-        # --- Gradio Slider inputs ---
+        # --- Gradio Slider inputs (use number input not range slider) ---
         # Enter current_house_yrs
-        current_house_yrs_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Current House Years']")))
+        current_house_yrs_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='number input for Current House Years']")))
+        current_house_yrs_field.clear()
         current_house_yrs_field.send_keys(11)
         # Enter experience
-        experience_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Experience']")))
+        experience_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='number input for Experience']")))
+        experience_field.clear()
         experience_field.send_keys(3)
         # Enter current_job_yrs
-        current_job_yrs_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Current Job Years']")))
+        current_job_yrs_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='number input for Current Job Years']")))
+        current_job_yrs_field.clear()
         current_job_yrs_field.send_keys(3)
 
         # --- Gradio Dropdown inputs ---
