@@ -95,12 +95,8 @@ def test_user_submits_loan_default_prediction_form():
         # Find prediction text element
         prediction = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//textarea[@placeholder='Prediction Result']")))
 
-        print(default_probability)
-        print(no_default_probability)
-        print(prediction.text)
-
         # Ensure prediction is as expected
-        assert prediction.text in ["Default", "No Default"]
+        assert prediction.get_attribute("value") in ["Default", "No Default"]
         # Ensure probabilities are numbers between 0 and 100
         assert 0 <= default_probability <=100
         assert 0 <= no_default_probability <= 100
