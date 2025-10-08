@@ -81,22 +81,25 @@ def test_user_submits_loan_default_prediction_form():
         assert profession_field_option.text == "Artist"
         profession_field_option.click()
 
-        # Click predict button
+        # --- Predict button ---
         predict_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//div[@id='predict-button-wrapper']/button")))
         predict_button.click()
 
-        # Prediction result
+        # --- Prediction result ---
         # Find probability elements
         default_probability = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//dl[contains(@class, 'label')]//dt[text()='Default']/following-sibling::dd")))
         no_default_probability = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//dl[contains(@class, 'label')]//dt[text()='No Default']/following-sibling::dd")))
         # Extract numbers
         default_probability = int(default_probability.text.replace("%", ""))
         no_default_probability = int(no_default_probability.text.replace("%", ""))
-        # Find prediction text element
+        # Find prediction element
         prediction = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//textarea[@placeholder='Prediction Result']")))
-
+        # Extract prediction text 
+        prediction_text = prediction.get_attribute("value")
+        
+        # --- Assert ---
         # Ensure prediction is as expected
-        assert prediction.get_attribute("value") in ["Default", "No Default"]
+        assert prediction_text in ["Default", "No Default"]
         # Ensure probabilities are numbers between 0 and 100
         assert 0 <= default_probability <=100
         assert 0 <= no_default_probability <= 100
