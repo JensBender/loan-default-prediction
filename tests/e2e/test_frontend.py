@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 # End-to-end test that simulates a user filling out the form and receiving a prediction in the frontend UI 
 @pytest.mark.e2e
-def test_user_submits_loan_prediction_form():
+def test_user_submits_loan_default_prediction_form():
     # Create a Chrome webdriver
     driver = webdriver.Chrome()
 
@@ -81,9 +81,15 @@ def test_user_submits_loan_prediction_form():
         assert profession_field_option.text == "Artist"
         profession_field_option.click()
 
-        # Predict button
+        # Click predict button
         predict_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//div[@id='predict-button-wrapper']/button")))
         predict_button.click()
+
+        # Prediction result
+        # Capture probabilities and prediction 
+        default_probability = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//dl[contains(@class, 'label')]//dt[text()='Default']/following-sibling::dd")))
+        no_default_probability = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//dl[contains(@class, 'label')]//dt[text()='No Default']/following-sibling::dd")))
+        prediction = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@id='prediction-text']//textarea")))
 
     finally:
         time.sleep(10)  # remove after dev/test phase
