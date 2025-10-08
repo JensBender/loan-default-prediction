@@ -86,11 +86,20 @@ def test_user_submits_loan_default_prediction_form():
         predict_button.click()
 
         # Prediction result
-        # Capture probabilities and prediction 
+        # Find probability elements
         default_probability = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//dl[contains(@class, 'label')]//dt[text()='Default']/following-sibling::dd")))
         no_default_probability = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//dl[contains(@class, 'label')]//dt[text()='No Default']/following-sibling::dd")))
+        # Extract numbers
+        default_probability = int(default_probability.text.replace("%", ""))
+        no_default_probability = int(no_default_probability.text.replace("%", ""))
+        # Find prediction text element
         prediction = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@id='prediction-text']//textarea")))
 
+        # Ensure prediction is as expected
+        assert prediction.text in ["Default", "No Default"]
+        # Ensure probabilities are numbers between 0 and 100
+        # Ensure probabilities sum to 100
+         
     finally:
         time.sleep(10)  # remove after dev/test phase
         # Close Chrome browser window
