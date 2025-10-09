@@ -99,8 +99,29 @@ def test_user_submits_loan_default_prediction_form(driver: WebDriver) -> None:
 # End-to-end test that simulates a user submitting out-of-range values and receiving an error message in the frontend UI 
 @pytest.mark.e2e
 def test_user_submits_out_of_range_values(driver: WebDriver) -> None:
-    pass
+    # Get request to frontend Gradio UI  
+    # Make sure the Docker container is running locally and port 7860 is mapped
+    driver.get("http://localhost:7860")
 
+    # Make inputs in Gradio UI
+    make_number_input(driver, "Age", 5)  # out-of-range
+    make_dropdown_input(driver, "Married/Single", "Single")
+    make_number_input(driver, "Income", -500)  # out-of-range
+    make_dropdown_input(driver, "Car Ownership", "No")
+    make_dropdown_input(driver, "House Ownership", "Neither Rented Nor Owned")
+    make_slider_input(driver, "Current House Years", 11)
+    make_dropdown_input(driver, "City", "Sikar")
+    make_dropdown_input(driver, "State", "Rajasthan")
+    make_dropdown_input(driver, "Profession", "Artist")
+    make_slider_input(driver, "Experience", 3)
+    make_slider_input(driver, "Current Job Years", 3)
+
+    # Click predict button
+    predict_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "predict-button")))
+    predict_button.click()
+
+    # Ensure error message is as expected
+    time.sleep(5)  # remove after dev/test phase
 
 # End-to-end test that simulates a user submitting a form with missing required fields and receiving an error message in the frontend UI 
 @pytest.mark.e2e
