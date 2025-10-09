@@ -11,7 +11,6 @@ frontend/old_gradio_app.py
 tests/unit/old_test_frontend.py
 test_loan_default_prediction.ipynb
 GEMINI.md 
-run_e2e_tests.sh
 
 # Virtual environment
 *venv*/
