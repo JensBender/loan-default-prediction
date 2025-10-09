@@ -125,7 +125,17 @@ def test_user_submits_out_of_range_values(driver: WebDriver) -> None:
     probabilities_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//div[@id='pred-proba-label']//h2"))) 
     error_msg_in_probabilities = probabilities_element.text 
 
+    # Extract error message in prediction text
+    prediction_text_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@id='prediction-text']//textarea")))
+    error_msg_in_prediction = prediction_text_element.get_attribute("value")
+    
     # Ensure error message is as expected
+    expected_error_msg = (
+        "Input Error! Please check your inputs and try again.\n"
+        "Age: Enter a number between 21 and 79.\n"
+        "Income: Enter a number that is 0 or greater.\n"
+    )
+    assert error_msg_in_prediction == expected_error_msg
     assert error_msg_in_probabilities == ""
 
     time.sleep(5)  # remove after dev/test phase
