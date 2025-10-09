@@ -4,6 +4,7 @@ import time
 # Third-party library imports
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC 
@@ -12,8 +13,14 @@ from selenium.webdriver.support import expected_conditions as EC
 # End-to-end happy path test that simulates a user submitting the form and receiving a prediction in the frontend UI 
 @pytest.mark.e2e
 def test_user_submits_loan_default_prediction_form():
-    # Create a Chrome webdriver
-    driver = webdriver.Chrome()
+    # Customize Chrome webdriver with options
+    chrome_options = Options()
+    # Disable Chrome sandbox to prevent Chrome crashes due to restricted security setup 
+    chrome_options.add_argument("--no-sandbox")  
+    # Disable Chrome shared memory (uses temporary storage instead) to prevent crashes due to limited ressources in Docker containers
+    chrome_options.add_argument("--disable-dev-shm-usage")  
+    # Create a Chrome webdriver with custom options 
+    driver = webdriver.Chrome(options=chrome_options)
 
     try:
         # Get request to frontend Gradio UI running locally (make sure to run the app first)
