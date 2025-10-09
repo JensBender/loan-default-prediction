@@ -10,6 +10,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC 
 
 
+# --- Helper Functions ---
+# Make Gradio Number input
+def make_number_input(webdriver, number_input, value):
+    number_input_element = WebDriverWait(webdriver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"input[aria-label='{number_input}']")))
+    number_input_element.send_keys(value)
+
+# Make Gradio Slider input
+# Make Gradio Dropdown input
+
+
 # End-to-end happy path test that simulates a user submitting the form and receiving a prediction in the frontend UI 
 @pytest.mark.e2e
 def test_user_submits_loan_default_prediction_form():
@@ -19,6 +29,7 @@ def test_user_submits_loan_default_prediction_form():
     chrome_options.add_argument("--no-sandbox")  
     # Disable Chrome shared memory (uses temporary storage instead) to prevent crashes due to limited ressources in Docker containers
     chrome_options.add_argument("--disable-dev-shm-usage")  
+    # chrome_options.add_argument("--headless")  # run Chrome without opening a Browser window
     # Create a Chrome webdriver with custom options 
     driver = webdriver.Chrome(options=chrome_options)
 
@@ -29,11 +40,9 @@ def test_user_submits_loan_default_prediction_form():
 
         # --- Gradio Number inputs ---
         # Enter age
-        age_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Age']")))
-        age_field.send_keys(30)
+        make_number_input(driver, "Age", 30)
         # Enter income
-        income_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Income']")))
-        income_field.send_keys(300000)
+        make_number_input(driver, "Income", 300000)
 
         # --- Gradio Slider inputs ---
         # Sliders have both number input and range slider, use number input (identified via aria-label)
@@ -116,7 +125,7 @@ def test_user_submits_loan_default_prediction_form():
         assert 99 <= sum <= 101  # allow for rounding edge cases
          
     finally:
-        time.sleep(10)  # remove after dev/test phase
+        time.sleep(5)  # remove after dev/test phase
         # Close Chrome browser window
         driver.quit()
 
