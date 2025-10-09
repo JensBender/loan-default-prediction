@@ -24,6 +24,13 @@ def make_slider_input(webdriver, slider_input, value):
     slider_input_element.send_keys(value)
 
 # Make Gradio Dropdown input
+def make_dropdown_input(webdriver, dropdown_input, value):
+    # First click Dropdown to bring up the options, then click on an option 
+    dropdown_input_element = WebDriverWait(webdriver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"input[aria-label='{dropdown_input}']")))
+    dropdown_input_element.click()
+    dropdown_menu_option = WebDriverWait(webdriver, 10).until(EC.element_to_be_clickable((By.XPATH, f"//ul[contains(@class, 'options')]//li[text()='{value}']")))
+    assert dropdown_menu_option.text == f"{value}"
+    dropdown_menu_option.click()
 
 
 # End-to-end happy path test that simulates a user submitting the form and receiving a prediction in the frontend UI 
@@ -46,51 +53,18 @@ def test_user_submits_loan_default_prediction_form():
 
         # Make inputs in Gradio UI
         make_number_input(driver, "Age", 30)
+        make_dropdown_input(driver, "Married/Single", "Single")
         make_number_input(driver, "Income", 300000)
+        make_dropdown_input(driver, "Car Ownership", "No")
+        make_dropdown_input(driver, "House Ownership", "Neither Rented Nor Owned")
         make_slider_input(driver, "Current House Years", 11)
+        make_dropdown_input(driver, "City", "Sikar")
+        make_dropdown_input(driver, "State", "Rajasthan")
+        make_dropdown_input(driver, "Profession", "Artist")
         make_slider_input(driver, "Experience", 3)
         make_slider_input(driver, "Current Job Years", 3)
 
-        # --- Gradio Dropdown inputs ---
-        # First click Dropdown to bring up the options, then click on an option 
-        # Enter married
-        married_dropdown = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Married/Single']")))
-        married_dropdown.click()
-        married_dropdown_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Single']")))
-        assert married_dropdown_option.text == "Single"
-        married_dropdown_option.click()
-        # Enter car_ownership
-        car_ownership_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Car Ownership']")))
-        car_ownership_field.click()
-        car_ownership_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='No']")))
-        assert car_ownership_field_option.text == "No"
-        car_ownership_field_option.click()
-        # Enter house_ownership
-        house_ownership_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='House Ownership']")))
-        house_ownership_field.click()
-        house_ownership_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Neither Rented Nor Owned']")))
-        assert house_ownership_field_option.text == "Neither Rented Nor Owned"
-        house_ownership_field_option.click()
-        # Enter city
-        city_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='City']")))
-        city_field.click()
-        city_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Sikar']")))
-        assert city_field_option.text == "Sikar"
-        city_field_option.click()
-        # Enter state
-        state_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='State']")))
-        state_field.click()
-        state_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Rajasthan']")))
-        assert state_field_option.text == "Rajasthan"
-        state_field_option.click()
-        # Enter profession
-        profession_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Profession']")))
-        profession_field.click()
-        profession_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Artist']")))
-        assert profession_field_option.text == "Artist"
-        profession_field_option.click()
-
-        # --- Predict button ---
+        # Click predict button
         predict_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "predict-button")))
         predict_button.click()
 
