@@ -120,8 +120,16 @@ def test_user_submits_out_of_range_values(driver: WebDriver) -> None:
     predict_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "predict-button")))
     predict_button.click()
 
+    # Extract error message in predicted probabilities element (empty str)
+    # Note: Error path renders str in single h2 element whereas success path renders dict in multiple dl/dd elements
+    probabilities_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//div[@id='pred-proba-label']//h2"))) 
+    error_msg_in_probabilities = probabilities_element.text 
+
     # Ensure error message is as expected
+    assert error_msg_in_probabilities == ""
+
     time.sleep(5)  # remove after dev/test phase
+
 
 # End-to-end test that simulates a user submitting a form with missing required fields and receiving an error message in the frontend UI 
 @pytest.mark.e2e
