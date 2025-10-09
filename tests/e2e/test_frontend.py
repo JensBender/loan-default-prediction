@@ -29,10 +29,10 @@ def test_user_submits_loan_default_prediction_form():
 
         # --- Gradio Number inputs ---
         # Enter age
-        age_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "age-input")))
+        age_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Age']")))
         age_field.send_keys(30)
         # Enter income
-        income_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "income-input")))
+        income_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Income']")))
         income_field.send_keys(300000)
 
         # --- Gradio Slider inputs ---
@@ -53,37 +53,37 @@ def test_user_submits_loan_default_prediction_form():
         # --- Gradio Dropdown inputs ---
         # First click Dropdown to bring up the options, then click on an option 
         # Enter married
-        married_dropdown = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "married-input")))
+        married_dropdown = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Married/Single']")))
         married_dropdown.click()
         married_dropdown_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Single']")))
         assert married_dropdown_option.text == "Single"
         married_dropdown_option.click()
         # Enter car_ownership
-        car_ownership_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "car-ownership-input")))
+        car_ownership_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Car Ownership']")))
         car_ownership_field.click()
         car_ownership_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='No']")))
         assert car_ownership_field_option.text == "No"
         car_ownership_field_option.click()
         # Enter house_ownership
-        house_ownership_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "house-ownership-input")))
+        house_ownership_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='House Ownership']")))
         house_ownership_field.click()
         house_ownership_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Neither Rented Nor Owned']")))
         assert house_ownership_field_option.text == "Neither Rented Nor Owned"
         house_ownership_field_option.click()
         # Enter city
-        city_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "city-input")))
+        city_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='City']")))
         city_field.click()
         city_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Sikar']")))
         assert city_field_option.text == "Sikar"
         city_field_option.click()
         # Enter state
-        state_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "state-input")))
+        state_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='State']")))
         state_field.click()
         state_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Rajasthan']")))
         assert state_field_option.text == "Rajasthan"
         state_field_option.click()
         # Enter profession
-        profession_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "profession-input")))
+        profession_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='Profession']")))
         profession_field.click()
         profession_field_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[contains(@class, 'options')]//li[text()='Artist']")))
         assert profession_field_option.text == "Artist"
@@ -101,7 +101,7 @@ def test_user_submits_loan_default_prediction_form():
         default_probability = int(default_probability.text.replace("%", ""))
         no_default_probability = int(no_default_probability.text.replace("%", ""))
         # Find prediction text element
-        prediction = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "prediction-text")))
+        prediction = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@id='prediction-text']//textarea")))
         # Extract prediction text 
         prediction_text = prediction.get_attribute("value")
         
