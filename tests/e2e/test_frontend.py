@@ -34,62 +34,66 @@ def make_dropdown_input(webdriver: WebDriver, dropdown_input: str, value: str) -
     dropdown_menu_option.click()
 
 
-# End-to-end happy path test that simulates a user submitting the form and receiving a prediction in the frontend UI 
-@pytest.mark.e2e
-def test_user_submits_loan_default_prediction_form():
-    # Customize Chrome webdriver with options
+# --- Fixtures ---
+# Create a Chrome webdriver with custom options
+@pytest.fixture
+def driver() -> WebDriver:
+    # Customize options for Chrome webdriver
     chrome_options = Options()
     # Disable Chrome sandbox to prevent Chrome crashes due to restricted security setup 
     chrome_options.add_argument("--no-sandbox")  
     # Disable Chrome shared memory (uses temporary storage instead) to prevent crashes due to limited ressources in Docker containers
     chrome_options.add_argument("--disable-dev-shm-usage")  
-    # chrome_options.add_argument("--headless")  # run Chrome without opening a Browser window
+    # Run Chrome without opening a browser window
+    # chrome_options.add_argument("--headless")  
     # Create a Chrome webdriver with custom options 
-    driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Chrome(options=chrome_options)    
+    yield driver
+    # Close Chrome browser window
+    driver.quit()
 
-    try:
-        # Get request to frontend Gradio UI  
-        # Make sure the Docker container is running locally and port 7860 is mapped
-        driver.get("http://localhost:7860")
 
-        # Make inputs in Gradio UI
-        make_number_input(driver, "Age", 30)
-        make_dropdown_input(driver, "Married/Single", "Single")
-        make_number_input(driver, "Income", 300000)
-        make_dropdown_input(driver, "Car Ownership", "No")
-        make_dropdown_input(driver, "House Ownership", "Neither Rented Nor Owned")
-        make_slider_input(driver, "Current House Years", 11)
-        make_dropdown_input(driver, "City", "Sikar")
-        make_dropdown_input(driver, "State", "Rajasthan")
-        make_dropdown_input(driver, "Profession", "Artist")
-        make_slider_input(driver, "Experience", 3)
-        make_slider_input(driver, "Current Job Years", 3)
+# End-to-end happy path test that simulates a user submitting the form and receiving a prediction in the frontend UI 
+@pytest.mark.e2e
+def test_user_submits_loan_default_prediction_form(driver: WebDriver):
+    # Get request to frontend Gradio UI  
+    # Make sure the Docker container is running locally and port 7860 is mapped
+    driver.get("http://localhost:7860")
 
-        # Click predict button
-        predict_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "predict-button")))
-        predict_button.click()
+    # Make inputs in Gradio UI
+    make_number_input(driver, "Age", 30)
+    make_dropdown_input(driver, "Married/Single", "Single")
+    make_number_input(driver, "Income", 300000)
+    make_dropdown_input(driver, "Car Ownership", "No")
+    make_dropdown_input(driver, "House Ownership", "Neither Rented Nor Owned")
+    make_slider_input(driver, "Current House Years", 11)
+    make_dropdown_input(driver, "City", "Sikar")
+    make_dropdown_input(driver, "State", "Rajasthan")
+    make_dropdown_input(driver, "Profession", "Artist")
+    make_slider_input(driver, "Experience", 3)
+    make_slider_input(driver, "Current Job Years", 3)
 
-        # Extract predicted probabilities
-        default_probability_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//dl[contains(@class, 'label')]//dt[text()='Default']/following-sibling::dd")))
-        no_default_probability_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//dl[contains(@class, 'label')]//dt[text()='No Default']/following-sibling::dd")))
-        default_probability = int(default_probability_element.text.replace("%", ""))
-        no_default_probability = int(no_default_probability_element.text.replace("%", ""))
-        # Extract prediction text 
-        prediction_text_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@id='prediction-text']//textarea")))
-        prediction_text = prediction_text_element.get_attribute("value")
-        
-        # Ensure prediction text is as expected
-        assert prediction_text in ["Default", "No Default"]
-        # Ensure probabilities are numbers between 0 and 100
-        assert 0 <= default_probability <=100
-        assert 0 <= no_default_probability <= 100
-        # Ensure probabilities sum to approximately 100
-        sum = default_probability + no_default_probability
-        assert 99 <= sum <= 101  # allow for rounding edge cases
-         
-    finally:
-        # Close Chrome browser window
-        driver.quit()
+    # Click predict button
+    predict_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "predict-button")))
+    predict_button.click()
+
+    # Extract predicted probabilities
+    default_probability_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//dl[contains(@class, 'label')]//dt[text()='Default']/following-sibling::dd")))
+    no_default_probability_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//dl[contains(@class, 'label')]//dt[text()='No Default']/following-sibling::dd")))
+    default_probability = int(default_probability_element.text.replace("%", ""))
+    no_default_probability = int(no_default_probability_element.text.replace("%", ""))
+    # Extract prediction text 
+    prediction_text_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@id='prediction-text']//textarea")))
+    prediction_text = prediction_text_element.get_attribute("value")
+    
+    # Ensure prediction text is as expected
+    assert prediction_text in ["Default", "No Default"]
+    # Ensure probabilities are numbers between 0 and 100
+    assert 0 <= default_probability <=100
+    assert 0 <= no_default_probability <= 100
+    # Ensure probabilities sum to approximately 100
+    sum = default_probability + no_default_probability
+    assert 99 <= sum <= 101  # allow for rounding edge cases
 
 
 # End-to-end test that simulates a user submitting out-of-range values and receiving an error message in the frontend UI 
