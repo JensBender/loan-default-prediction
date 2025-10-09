@@ -17,6 +17,12 @@ def make_number_input(webdriver, number_input, value):
     number_input_element.send_keys(value)
 
 # Make Gradio Slider input
+def make_slider_input(webdriver, slider_input, value):
+    # Sliders have both number input and range slider, use number input (identified via aria-label)
+    slider_input_element = WebDriverWait(webdriver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"input[aria-label='number input for {slider_input}']")))
+    slider_input_element.clear()
+    slider_input_element.send_keys(value)
+
 # Make Gradio Dropdown input
 
 
@@ -38,26 +44,12 @@ def test_user_submits_loan_default_prediction_form():
         # Make sure the Docker container is running locally and port 7860 is mapped
         driver.get("http://localhost:7860")
 
-        # --- Gradio Number inputs ---
-        # Enter age
+        # Make inputs in Gradio UI
         make_number_input(driver, "Age", 30)
-        # Enter income
         make_number_input(driver, "Income", 300000)
-
-        # --- Gradio Slider inputs ---
-        # Sliders have both number input and range slider, use number input (identified via aria-label)
-        # Enter current_house_yrs
-        current_house_yrs_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='number input for Current House Years']")))
-        current_house_yrs_field.clear()
-        current_house_yrs_field.send_keys(11)
-        # Enter experience
-        experience_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='number input for Experience']")))
-        experience_field.clear()
-        experience_field.send_keys(3)
-        # Enter current_job_yrs
-        current_job_yrs_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[aria-label='number input for Current Job Years']")))
-        current_job_yrs_field.clear()
-        current_job_yrs_field.send_keys(3)
+        make_slider_input(driver, "Current House Years", 11)
+        make_slider_input(driver, "Experience", 3)
+        make_slider_input(driver, "Current Job Years", 3)
 
         # --- Gradio Dropdown inputs ---
         # First click Dropdown to bring up the options, then click on an option 
