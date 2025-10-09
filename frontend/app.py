@@ -216,25 +216,25 @@ with gr.Blocks(css=custom_css) as app_ui:
     # Inputs
     with gr.Group():
         with gr.Row():
-            age = gr.Number(label="Age", value="")
-            married = gr.Dropdown(label="Married/Single", choices=MARRIED_DISPLAY_LABELS, value=None)
-            income = gr.Number(label="Income", value="")
+            age = gr.Number(label="Age", value="", elem_id="age-input")
+            married = gr.Dropdown(label="Married/Single", choices=MARRIED_DISPLAY_LABELS, value=None, elem_id="married-input")
+            income = gr.Number(label="Income", value="", elem_id="income-input")
         with gr.Row():
-            car_ownership = gr.Dropdown(label="Car Ownership", choices=CAR_OWNERSHIP_DISPLAY_LABELS, value=None)
-            house_ownership = gr.Dropdown(label="House Ownership", choices=HOUSE_OWNERSHIP_DISPLAY_LABELS, value=None)
-            current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1)
+            car_ownership = gr.Dropdown(label="Car Ownership", choices=CAR_OWNERSHIP_DISPLAY_LABELS, value=None, elem_id="car-ownership-input")
+            house_ownership = gr.Dropdown(label="House Ownership", choices=HOUSE_OWNERSHIP_DISPLAY_LABELS, value=None, elem_id="house-ownership-input")
+            current_house_yrs = gr.Slider(label="Current House Years", minimum=10, maximum=14, step=1, elem_id="current-house-yrs-input")
         with gr.Row():
-            city = gr.Dropdown(label="City", choices=CITY_DISPLAY_LABELS, value=None)
-            state = gr.Dropdown(label="State", choices=STATE_DISPLAY_LABELS, value=None)
-            profession = gr.Dropdown(label="Profession", choices=PROFESSION_DISPLAY_LABELS, value=None)
+            city = gr.Dropdown(label="City", choices=CITY_DISPLAY_LABELS, value=None, elem_id="city-input")
+            state = gr.Dropdown(label="State", choices=STATE_DISPLAY_LABELS, value=None, elem_id="state-input")
+            profession = gr.Dropdown(label="Profession", choices=PROFESSION_DISPLAY_LABELS, value=None, elem_id="profession-input")
         with gr.Row():
-            experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1)
-            current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1)
+            experience = gr.Slider(label="Experience", minimum=0, maximum=20, step=1, elem_id="experience-input")
+            current_job_yrs = gr.Slider(label="Current Job Years", minimum=0, maximum=14, step=1, elem_id="current-house-yrs-input")
             gr.Markdown("")  # empty space for layout
 
     # Predict button 
     with gr.Column(elem_id="predict-button-wrapper"):
-        predict = gr.Button("Predict")
+        predict = gr.Button("Predict", elem_id="predict-button")
     
     # Outputs
     with gr.Column(elem_classes="narrow-centered-column"):
