@@ -8,23 +8,24 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC 
+from selenium.webdriver.remote.webdriver import WebDriver
 
 
 # --- Helper Functions ---
 # Make Gradio Number input
-def make_number_input(webdriver, number_input, value):
+def make_number_input(webdriver: WebDriver, number_input: str, value: int) -> None:
     number_input_element = WebDriverWait(webdriver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"input[aria-label='{number_input}']")))
     number_input_element.send_keys(value)
 
 # Make Gradio Slider input
-def make_slider_input(webdriver, slider_input, value):
+def make_slider_input(webdriver: WebDriver, slider_input: str, value: int) -> None:
     # Sliders have both number input and range slider, use number input (identified via aria-label)
     slider_input_element = WebDriverWait(webdriver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"input[aria-label='number input for {slider_input}']")))
     slider_input_element.clear()
     slider_input_element.send_keys(value)
 
 # Make Gradio Dropdown input
-def make_dropdown_input(webdriver, dropdown_input, value):
+def make_dropdown_input(webdriver: WebDriver, dropdown_input: str, value: str) -> None:
     # First click Dropdown to bring up the options, then click on an option 
     dropdown_input_element = WebDriverWait(webdriver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"input[aria-label='{dropdown_input}']")))
     dropdown_input_element.click()
