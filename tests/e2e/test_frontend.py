@@ -55,7 +55,7 @@ def driver() -> WebDriver:
 
 # End-to-end happy path test that simulates a user submitting the form and receiving a prediction in the frontend UI 
 @pytest.mark.e2e
-def test_user_submits_loan_default_prediction_form(driver: WebDriver):
+def test_user_submits_loan_default_prediction_form(driver: WebDriver) -> None:
     # Get request to frontend Gradio UI  
     # Make sure the Docker container is running locally and port 7860 is mapped
     driver.get("http://localhost:7860")
@@ -98,11 +98,11 @@ def test_user_submits_loan_default_prediction_form(driver: WebDriver):
 
 # End-to-end test that simulates a user submitting out-of-range values and receiving an error message in the frontend UI 
 @pytest.mark.e2e
-def test_user_submits_out_of_range_values():
+def test_user_submits_out_of_range_values(driver: WebDriver) -> None:
     pass
 
 
 # End-to-end test that simulates a user submitting a form with missing required fields and receiving an error message in the frontend UI 
 @pytest.mark.e2e
-def test_user_submits_form_with_empty_required_fields():
+def test_user_submits_form_with_empty_required_fields(driver: WebDriver) -> None:
     pass
