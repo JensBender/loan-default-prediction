@@ -227,5 +227,33 @@ def test_error_message_for_out_of_range_values(driver: WebDriver) -> None:
 
 # End-to-end test that simulates a user submitting the form without providing any inputs and receiving an error message 
 @pytest.mark.e2e
-def test_error_message_for_no_user_inputs():
-    pass
+def test_error_message_for_no_user_inputs(driver: WebDriver) -> None:
+    # Get request to frontend Gradio UI  
+    # Make sure the Docker container is running locally and port 7860 is mapped
+    driver.get("http://localhost:7860")
+
+    # No user inputs, just click predict button
+    predict_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "predict-button")))
+    predict_button.click()
+
+    # Extract error message in predicted probabilities element (should be an empty str)
+    # Note: Error path renders str in single h2 element whereas success path renders dict in multiple dl/dd elements
+    probabilities_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//div[@id='pred-proba-label']//h2"))) 
+    error_msg_in_probabilities = probabilities_element.text 
+
+    # Extract error message in prediction text
+    error_msg_in_prediction = extract_prediction_text(driver)
+
+    # Ensure error message is as expected
+    expected_error_msg = (
+        "Input Error! Please check your inputs and try again.\n"
+        "Age: Enter a number between 21 and 79.\n"
+        "Income: Enter a number that is 0 or greater.\n"
+        "City: Select a city from the list.\n"
+        "State: Select a state from the list.\n"
+        "Profession: Select a profession from the list.\n"
+        # Current House Years, Experience and Current Job Years are also required fields, but 
+        # the Gradio Slider inputs provide default values that can't be changed to empty fields
+    )
+    assert error_msg_in_prediction == expected_error_msg
+    assert error_msg_in_probabilities == ""
