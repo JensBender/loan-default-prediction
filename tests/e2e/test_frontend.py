@@ -142,7 +142,7 @@ def test_happy_path_with_missing_optional_fields(driver: WebDriver) -> None:
 
 # End-to-end test that simulates a user submitting the form with missing required fields and receiving an error message in the frontend UI 
 @pytest.mark.e2e
-def test_user_submits_form_with_empty_required_fields(driver: WebDriver) -> None:
+def test_error_message_for_empty_required_fields(driver: WebDriver) -> None:
     # Get request to frontend Gradio UI  
     # Make sure the Docker container is running locally and port 7860 is mapped
     driver.get("http://localhost:7860")
@@ -185,7 +185,7 @@ def test_user_submits_form_with_empty_required_fields(driver: WebDriver) -> None
 
 # End-to-end test that simulates a user submitting out-of-range values and receiving an error message in the frontend UI 
 @pytest.mark.e2e
-def test_user_submits_out_of_range_values(driver: WebDriver) -> None:
+def test_error_message_for_out_of_range_values(driver: WebDriver) -> None:
     # Get request to frontend Gradio UI  
     # Make sure the Docker container is running locally and port 7860 is mapped
     driver.get("http://localhost:7860")
@@ -223,3 +223,9 @@ def test_user_submits_out_of_range_values(driver: WebDriver) -> None:
     )
     assert error_msg_in_prediction == expected_error_msg
     assert error_msg_in_probabilities == ""
+
+
+# End-to-end test that simulates a user submitting the form without providing any inputs and receiving an error message 
+@pytest.mark.e2e
+def test_error_message_for_no_user_inputs():
+    pass
