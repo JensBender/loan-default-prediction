@@ -78,8 +78,8 @@ def test_user_submits_loan_default_prediction_form(driver: WebDriver) -> None:
     predict_button.click()
 
     # Extract predicted probabilities
-    default_probability_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//dl[contains(@class, 'label')]//dt[text()='Default']/following-sibling::dd")))
-    no_default_probability_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//dl[contains(@class, 'label')]//dt[text()='No Default']/following-sibling::dd")))
+    default_probability_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//div[@id='pred-proba-label']//dt[text()='Default']/following-sibling::dd")))
+    no_default_probability_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//div[@id='pred-proba-label']//dt[text()='No Default']/following-sibling::dd")))
     default_probability = int(default_probability_element.text.replace("%", ""))
     no_default_probability = int(no_default_probability_element.text.replace("%", ""))
     # Extract prediction text 
@@ -103,7 +103,7 @@ def test_user_submits_out_of_range_values(driver: WebDriver) -> None:
     # Make sure the Docker container is running locally and port 7860 is mapped
     driver.get("http://localhost:7860")
 
-    # Make inputs in Gradio UI
+    # Set inputs in Gradio UI
     set_number_input(driver, "Age", 5)  # out-of-range
     set_dropdown_input(driver, "Married/Single", "Single")
     set_number_input(driver, "Income", -500)  # out-of-range
@@ -120,7 +120,7 @@ def test_user_submits_out_of_range_values(driver: WebDriver) -> None:
     predict_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "predict-button")))
     predict_button.click()
 
-    # Extract error message in predicted probabilities element (empty str)
+    # Extract error message in predicted probabilities element (should be an empty str)
     # Note: Error path renders str in single h2 element whereas success path renders dict in multiple dl/dd elements
     probabilities_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//div[@id='pred-proba-label']//h2"))) 
     error_msg_in_probabilities = probabilities_element.text 
@@ -138,10 +138,8 @@ def test_user_submits_out_of_range_values(driver: WebDriver) -> None:
     assert error_msg_in_prediction == expected_error_msg
     assert error_msg_in_probabilities == ""
 
-    time.sleep(5)  # remove after dev/test phase
-
 
 # End-to-end test that simulates a user submitting a form with missing required fields and receiving an error message in the frontend UI 
 @pytest.mark.e2e
 def test_user_submits_form_with_empty_required_fields(driver: WebDriver) -> None:
-    pass
+    time.sleep(5)  # remove after dev/test phase
