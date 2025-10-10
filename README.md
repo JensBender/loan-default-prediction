@@ -77,9 +77,11 @@ The final selected model, a Random Forest classifier with optimized threshold, a
 - [![Seaborn][Seaborn-badge]][Seaborn-url]
 - [![scikit-learn][scikit-learn-badge]][scikit-learn-url]
 - [![FastAPI][FastAPI-badge]][FastAPI-url]
-- [![Gradio][Gradio-badge]][Gradio-url]
 - [![Pydantic][Pydantic-badge]][Pydantic-url]
+- [![Gradio][Gradio-badge]][Gradio-url]
+- [![Docker][Docker-badge]][Docker-url]
 - [![pytest][pytest-badge]][pytest-url]
+- [![Selenium][Selenium-badge]][Selenium-url]
 - [![Hugging Face][HuggingFace-badge]][HuggingFace-url]
 - [![Visual Studio Code][VisualStudioCode-badge]][VisualStudioCode-url]
 - [![Jupyter Notebook][JupyterNotebook-badge]][JupyterNotebook-url]
@@ -403,8 +405,12 @@ Training Data
 [Pydantic-url]: https://docs.pydantic.dev/
 [Gradio-badge]: https://img.shields.io/badge/Gradio-fc7404?style=for-the-badge&logo=gradio&logoColor=white
 [Gradio-url]: https://gradio.app
+[Docker-badge]: https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white
+[Docker-url]: https://www.docker.com/
 [pytest-badge]: https://img.shields.io/badge/pytest-00A9E5?style=for-the-badge&logo=pytest&logoColor=white
 [pytest-url]: https://docs.pytest.org/
+[Selenium-badge]: https://img.shields.io/badge/selenium-%43B02A.svg?style=for-the-badge&logo=selenium&logoColor=white
+[Selenium-url]: https://www.selenium.dev/
 [HuggingFace-badge]: https://img.shields.io/badge/Hugging%20Face-ffcc00?style=for-the-badge&logo=huggingface&logoColor=black
 [HuggingFace-url]: https://huggingface.co/
 [VisualStudioCode-badge]: https://img.shields.io/badge/Visual%20Studio%20Code-0078D4?style=for-the-badge&logo=visualstudiocode&logoColor=white
