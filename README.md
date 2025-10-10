@@ -304,6 +304,14 @@ The Loan Default Prediction system is deployed as a web application built with F
 - Data validation: Input data is validated using Pydantic models to ensure it matches the required schema.  
 - Prediction endpoint: The `/predict` endpoint accepts loan application data in JSON format, processes it through the scikit-learn pipeline, and returns the prediction ("default" or "no default") and probability scores.
 
+**Gradio Frontend**   
+- Users can enter applicant information through a simple form, providing a clean, user-friendly interface.  
+- Submissions are sent to the FastAPI backend, which returns predictions that are rendered in the UI.
+
+**Docker**    
+- The application is containerized with Docker for reliable and portable deployment. 
+- The provided `Dockerfile` defines the Python environment, installs dependencies, and launches the Gradio frontend and FastAPI backend with a shell script.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
