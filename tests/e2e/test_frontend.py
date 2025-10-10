@@ -12,25 +12,25 @@ from selenium.webdriver.remote.webdriver import WebDriver
 
 
 # --- Helper Functions ---
-# Make Gradio Number input
-def make_number_input(webdriver: WebDriver, number_input: str, value: int) -> None:
+# Enter a number in a Gradio Number input
+def set_number_input(webdriver: WebDriver, number_input: str, value: int) -> None:
     number_input_element = WebDriverWait(webdriver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"input[aria-label='{number_input}']")))
     number_input_element.send_keys(value)
 
-# Make Gradio Slider input
-def make_slider_input(webdriver: WebDriver, slider_input: str, value: int) -> None:
-    # Sliders have both number input and range slider, use number input (identified via aria-label)
+# Enter a number in a Gradio Slider input
+def set_slider_input(webdriver: WebDriver, slider_input: str, value: int) -> None:
+    # Sliders have 2 input fields, a number input and a range slider, use the number input (identified via aria-label)
     slider_input_element = WebDriverWait(webdriver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"input[aria-label='number input for {slider_input}']")))
     slider_input_element.clear()
     slider_input_element.send_keys(value)
 
-# Make Gradio Dropdown input
-def make_dropdown_input(webdriver: WebDriver, dropdown_input: str, value: str) -> None:
+# Select an option from a Gradio Dropdown input
+def set_dropdown_input(webdriver: WebDriver, dropdown_input: str, value: str) -> None:
     # First click Dropdown to bring up the options, then click on an option 
     dropdown_input_element = WebDriverWait(webdriver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"input[aria-label='{dropdown_input}']")))
     dropdown_input_element.click()
     dropdown_menu_option = WebDriverWait(webdriver, 10).until(EC.element_to_be_clickable((By.XPATH, f"//ul[contains(@class, 'options')]//li[text()='{value}']")))
-    assert dropdown_menu_option.text == f"{value}"
+    assert dropdown_menu_option.text == value
     dropdown_menu_option.click()
 
 
@@ -38,7 +38,7 @@ def make_dropdown_input(webdriver: WebDriver, dropdown_input: str, value: str) -
 # Create a Chrome webdriver with custom options
 @pytest.fixture
 def driver() -> WebDriver:
-    # Customize options for Chrome webdriver
+    # Customize options for a Chrome webdriver
     chrome_options = Options()
     # Disable Chrome sandbox to prevent Chrome crashes due to restricted security setup 
     chrome_options.add_argument("--no-sandbox")  
@@ -49,7 +49,7 @@ def driver() -> WebDriver:
     # Create a Chrome webdriver with custom options 
     driver = webdriver.Chrome(options=chrome_options)    
     yield driver
-    # Close Chrome browser window
+    # Close Chrome webdriver to free up memory and other system resources
     driver.quit()
 
 
@@ -60,18 +60,18 @@ def test_user_submits_loan_default_prediction_form(driver: WebDriver) -> None:
     # Make sure the Docker container is running locally and port 7860 is mapped
     driver.get("http://localhost:7860")
 
-    # Make inputs in Gradio UI
-    make_number_input(driver, "Age", 30)
-    make_dropdown_input(driver, "Married/Single", "Single")
-    make_number_input(driver, "Income", 300000)
-    make_dropdown_input(driver, "Car Ownership", "No")
-    make_dropdown_input(driver, "House Ownership", "Neither Rented Nor Owned")
-    make_slider_input(driver, "Current House Years", 11)
-    make_dropdown_input(driver, "City", "Sikar")
-    make_dropdown_input(driver, "State", "Rajasthan")
-    make_dropdown_input(driver, "Profession", "Artist")
-    make_slider_input(driver, "Experience", 3)
-    make_slider_input(driver, "Current Job Years", 3)
+    # Set inputs in Gradio UI
+    set_number_input(driver, "Age", 30)
+    set_dropdown_input(driver, "Married/Single", "Single")
+    set_number_input(driver, "Income", 300000)
+    set_dropdown_input(driver, "Car Ownership", "No")
+    set_dropdown_input(driver, "House Ownership", "Neither Rented Nor Owned")
+    set_slider_input(driver, "Current House Years", 11)
+    set_dropdown_input(driver, "City", "Sikar")
+    set_dropdown_input(driver, "State", "Rajasthan")
+    set_dropdown_input(driver, "Profession", "Artist")
+    set_slider_input(driver, "Experience", 3)
+    set_slider_input(driver, "Current Job Years", 3)
 
     # Click predict button
     predict_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "predict-button")))
@@ -104,17 +104,17 @@ def test_user_submits_out_of_range_values(driver: WebDriver) -> None:
     driver.get("http://localhost:7860")
 
     # Make inputs in Gradio UI
-    make_number_input(driver, "Age", 5)  # out-of-range
-    make_dropdown_input(driver, "Married/Single", "Single")
-    make_number_input(driver, "Income", -500)  # out-of-range
-    make_dropdown_input(driver, "Car Ownership", "No")
-    make_dropdown_input(driver, "House Ownership", "Neither Rented Nor Owned")
-    make_slider_input(driver, "Current House Years", 11)
-    make_dropdown_input(driver, "City", "Sikar")
-    make_dropdown_input(driver, "State", "Rajasthan")
-    make_dropdown_input(driver, "Profession", "Artist")
-    make_slider_input(driver, "Experience", 3)
-    make_slider_input(driver, "Current Job Years", 3)
+    set_number_input(driver, "Age", 5)  # out-of-range
+    set_dropdown_input(driver, "Married/Single", "Single")
+    set_number_input(driver, "Income", -500)  # out-of-range
+    set_dropdown_input(driver, "Car Ownership", "No")
+    set_dropdown_input(driver, "House Ownership", "Neither Rented Nor Owned")
+    set_slider_input(driver, "Current House Years", 11)
+    set_dropdown_input(driver, "City", "Sikar")
+    set_dropdown_input(driver, "State", "Rajasthan")
+    set_dropdown_input(driver, "Profession", "Artist")
+    set_slider_input(driver, "Experience", 3)
+    set_slider_input(driver, "Current Job Years", 3)
 
     # Click predict button
     predict_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "predict-button")))
