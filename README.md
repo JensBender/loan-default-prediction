@@ -39,6 +39,9 @@ Developed a machine learning model for loan default prediction to enhance risk m
     </ul>
   </li>
   <li>
+    <a href="#-deployment">Deployment</a>
+  </li>
+  <li>
     <a href="#️-license">License</a>
   </li>
   <li>
@@ -202,6 +205,7 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+<!-- Modeling -->
 ## 🏗️ Modeling
 Trained, evaluated, and optimized multiple models using `sklearn` and `xgboost`.
 
@@ -287,6 +291,18 @@ The table below illustrates model performance on test data by highlighting best 
 | Worst   | 7,644,982 | 24  | 12.2%              | 1          | No             | Yes               | 98%        | ❌ Yes        |
 | Typical | 4,570,845 | 47  | 15.5%              | 3          | Yes            | Yes               | 94%        | ✅ No         |
 | Typical | 8,391,288 | 24  | 11.7%              | 4          | No             | No                | 94%        | ✅ No         |
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- DEPLOYMENT -->
+## 🚀 Deployment
+The Loan Default Prediction system is deployed as a web application built with FastAPI, Gradio, and Docker. The full machine learning pipeline is built with scikit-learn, includes all data preprocessing steps and the final Random Forest model, and is saved to a `.joblib` file.
+
+**FastAPI Backend**  
+- API: The loan default prediction pipeline is served via a RESTful API that handles single and batch requests.
+- Data validation: Input data is validated using Pydantic models to ensure it matches the required schema.  
+- Prediction endpoint: The `/predict` endpoint accepts loan application data in JSON format, processes it through the scikit-learn pipeline, and returns the prediction ("default" or "no default") and probability scores.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
