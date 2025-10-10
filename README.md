@@ -301,7 +301,7 @@ The Loan Default Prediction system is deployed as a web application built with F
 
 **FastAPI Backend**  
 - API: The loan default prediction pipeline is served via a RESTful API that handles single and batch requests.
-- Data validation: Input data is validated using Pydantic models to ensure it matches the required schema.  
+- Data validation: Input data is validated using Pydantic models with required and optional fields, type constraints, enums for categorical fields, value range constraints for numerical fields, and custom validation logic. 
 - Prediction endpoint: The `/predict` endpoint accepts loan application data in JSON format, processes it through the scikit-learn pipeline, and returns the prediction ("default" or "no default") and probability scores.
 
 **Gradio Frontend**   
