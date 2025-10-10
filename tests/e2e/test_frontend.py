@@ -33,6 +33,12 @@ def set_dropdown_input(webdriver: WebDriver, dropdown_input: str, value: str) ->
     assert dropdown_menu_option.text == value
     dropdown_menu_option.click()
 
+# Extract prediction text from Gradio Textbox output rendered in a <textarea>
+def extract_prediction_text(webdriver: WebDriver) -> str:
+    prediction_text_element = WebDriverWait(webdriver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@id='prediction-text']//textarea")))
+    prediction_text = prediction_text_element.get_attribute("value")
+    return prediction_text
+
 
 # --- Fixtures ---
 # Create a Chrome webdriver with custom options
@@ -83,8 +89,7 @@ def test_user_submits_loan_default_prediction_form(driver: WebDriver) -> None:
     default_probability = int(default_probability_element.text.replace("%", ""))
     no_default_probability = int(no_default_probability_element.text.replace("%", ""))
     # Extract prediction text 
-    prediction_text_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@id='prediction-text']//textarea")))
-    prediction_text = prediction_text_element.get_attribute("value")
+    prediction_text = extract_prediction_text(driver)
     
     # Ensure prediction text is as expected
     assert prediction_text in ["Default", "No Default"]
@@ -126,8 +131,7 @@ def test_user_submits_out_of_range_values(driver: WebDriver) -> None:
     error_msg_in_probabilities = probabilities_element.text 
 
     # Extract error message in prediction text
-    prediction_text_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@id='prediction-text']//textarea")))
-    error_msg_in_prediction = prediction_text_element.get_attribute("value")
+    error_msg_in_prediction = extract_prediction_text(driver)
     
     # Ensure error message is as expected
     expected_error_msg = (
