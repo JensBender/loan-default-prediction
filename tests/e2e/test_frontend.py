@@ -132,7 +132,7 @@ def test_user_submits_out_of_range_values(driver: WebDriver) -> None:
 
     # Extract error message in prediction text
     error_msg_in_prediction = extract_prediction_text(driver)
-    
+
     # Ensure error message is as expected
     expected_error_msg = (
         "Input Error! Please check your inputs and try again.\n"
@@ -146,4 +146,43 @@ def test_user_submits_out_of_range_values(driver: WebDriver) -> None:
 # End-to-end test that simulates a user submitting a form with missing required fields and receiving an error message in the frontend UI 
 @pytest.mark.e2e
 def test_user_submits_form_with_empty_required_fields(driver: WebDriver) -> None:
+    # Get request to frontend Gradio UI  
+    # Make sure the Docker container is running locally and port 7860 is mapped
+    driver.get("http://localhost:7860")
+
+    # Set inputs in Gradio UI
+    set_number_input(driver, "Age", 30)
+    set_dropdown_input(driver, "Married/Single", "Single")
+    set_number_input(driver, "Income", 300000)
+    set_dropdown_input(driver, "Car Ownership", "No")
+    set_dropdown_input(driver, "House Ownership", "Neither Rented Nor Owned")
+    set_slider_input(driver, "Current House Years", 11)
+    # City input (required) is missing
+    # State input (required) is missing
+    # Profession input (required) is missing
+    set_slider_input(driver, "Experience", 3)
+    set_slider_input(driver, "Current Job Years", 3)
+
+    # Click predict button
+    predict_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "predict-button")))
+    predict_button.click()
+
+    # Extract error message in predicted probabilities element (should be an empty str)
+    # Note: Error path renders str in single h2 element whereas success path renders dict in multiple dl/dd elements
+    probabilities_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//div[@id='pred-proba-label']//h2"))) 
+    error_msg_in_probabilities = probabilities_element.text 
+
+    # Extract error message in prediction text
+    error_msg_in_prediction = extract_prediction_text(driver)
+    
+    # Ensure error message is as expected
+    expected_error_msg = (
+        "Input Error! Please check your inputs and try again.\n"
+        "City: Select a city from the list.\n"
+        "State: Select a state from the list.\n"
+        "Profession: Select a profession from the list.\n"
+    )
+    assert error_msg_in_prediction == expected_error_msg
+    assert error_msg_in_probabilities == ""
+
     time.sleep(5)  # remove after dev/test phase
