@@ -42,6 +42,9 @@ Developed a machine learning model for loan default prediction to enhance risk m
     <a href="#-deployment">Deployment</a>
   </li>
   <li>
+    <a href="#-testing">Testing</a>
+  </li>
+  <li>
     <a href="#️-license">License</a>
   </li>
   <li>
@@ -311,6 +314,13 @@ Built a machine learning (ML) pipeline including the final Random Forest model a
 - Containerized the application with `Docker` for reliable and portable deployment. 
 - Served both the `FastAPI` backend and `Gradio` frontend together from a single `Docker` container.
 - The provided `Dockerfile` defines the Python environment, installs dependencies, and launches backend and frontend with the `start.sh` shell script.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- TESTING -->
+## 🕵 Testing
+Used `pytest` for unit and integration testing, and additionally `Selenium` for end-to-end (e2e) testing. Tests cover custom transformers, Pydantic schemas, the entire ML pipeline, partial pipelines (combining multiple transformers), the FastAPI backend, the backend-pipeline integration, the Gradio frontend, the frontend-backend integration, and the full e2e user journey. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
