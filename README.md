@@ -300,7 +300,7 @@ The table below illustrates model performance on test data by highlighting best 
 Built a machine learning (ML) pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn` and saved it to file with `joblib`. Deployed the loan default prediction pipeline as a web application using `FastAPI`, `Gradio`, and `Docker`. 
 
 **FastAPI Backend**  
-- Served the ML pipeline via a RESTful API handling single and batch requests.
+- Served the ML pipeline via a RESTful API using `FastAPI` that handles single and batch requests.
 - Implemented data validation using `Pydantic` models with required and optional fields, type constraints, enums for categorical fields, value range constraints for numerical fields, and custom validation logic. 
 - The `/predict` endpoint accepts loan application data in JSON format, processes it through the ML pipeline, and returns the prediction ("default" or "no default") along with probability scores.
 
@@ -310,7 +310,8 @@ Built a machine learning (ML) pipeline including the final Random Forest model a
 
 **Docker**    
 - Containerized the application with `Docker` for reliable and portable deployment. 
-- The provided `Dockerfile` defines the Python environment, installs dependencies, and launches the Gradio frontend and FastAPI backend with the `start.sh` shell script.
+- Served both the `FastAPI` backend and `Gradio` frontend together from a single `Docker` container.
+- The provided `Dockerfile` defines the Python environment, installs dependencies, and launches backend and frontend with the `start.sh` shell script.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
