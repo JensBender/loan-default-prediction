@@ -68,9 +68,8 @@ Developed a machine learning model for loan default prediction to enhance risk m
 Leveraged machine learning to predict loan defaults by analyzing customer application data, thereby enabling financial institutions to minimize risks and make data-driven lending decisions. This project involved:
 - **Data Preprocessing**: Engineered new features (e.g., job stability, city tier, state default rate), handled duplicates, data types, missing values, and outliers, scaled numerical features, and encoded categorical features.
 - **Exploratory Data Analysis**: Analyzed descriptive statistics and visualized distributions, correlations and relationships.
-- **Modeling**: Trained and evaluated eight baseline models (e.g., Logistic Regression, Random Forest, XGBoost), tuned hyperparameters and optimized decision thresholds.
-
-The final selected model, a Random Forest classifier with optimized threshold, achieved an AUC-PR of 0.62 (primary metric), with a class-1 recall of 0.80 and class-1 precision of 0.54 (secondary metrics). Visualized feature importances, showed model prediction examples, and saved the final model as a .pkl file.
+- **Modeling**: Trained and evaluated eight baseline models (e.g., Logistic Regression, Random Forest, XGBoost), tuned hyperparameters and optimized decision thresholds. Selected a threshold-optimized Random Forest classifier with an AUC-PR of 0.62 (primary metric), class-1 recall of 0.80, and class-1 precision of 0.54 (secondary metrics). Visualized feature importances and showed model prediction examples.
+- **Deployment**: Served the full machine learning pipeline, including data preprocessing and the final model, as a web app using FastAPI backend and Gradio frontend, running in a single Docker container.
 
 
 ### 🛠️ Built With
