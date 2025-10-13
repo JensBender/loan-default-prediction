@@ -5,7 +5,7 @@
 <img src="images/header-image.webp">
 
 <!-- SHORT SUMMARY  -->
-Developed a machine learning model for loan default prediction to enhance risk management for financial institutions. Engineered, scaled, and encoded features. Trained, tuned and evaluated eight models. The final Random Forest with optimized threshold achieved an AUC-PR of 0.62, with a class-1 recall of 0.80 and precision of 0.54.
+Developed a machine learning model for loan default prediction to enhance risk management for financial institutions. Engineered, scaled, and encoded features. Trained, tuned and evaluated eight models. Deployed the threshold-optimized Random Forest model (AUC-PR: 0.62, class-1 recall: 0.80) as a Dockerized web app with FastAPI backend and Gradio frontend.
 
 ---
 
