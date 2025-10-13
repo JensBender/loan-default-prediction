@@ -297,7 +297,7 @@ The table below illustrates model performance on test data by highlighting best 
 
 <!-- DEPLOYMENT -->
 ## 🚀 Deployment
-The Loan Default Prediction system is deployed as a web application built with `FastAPI`, `Gradio`, and `Docker`. The full machine learning pipeline is built with `scikit-learn`, includes all data preprocessing steps and the final Random Forest model, and is saved to a `.joblib` file.
+Built a machine learning pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn` and saved it to file with `joblib`. Deployed the loan default prediction pipeline as a web application using `FastAPI`, `Gradio`, and `Docker`. 
 
 **FastAPI Backend**  
 - API: The loan default prediction pipeline is served via a RESTful API that handles single and batch requests.
