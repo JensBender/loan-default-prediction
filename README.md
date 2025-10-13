@@ -73,6 +73,7 @@ Leveraged machine learning to predict loan defaults by analyzing customer applic
 - **Exploratory Data Analysis**: Analyzed descriptive statistics and visualized distributions, correlations and relationships.
 - **Modeling**: Trained and evaluated eight baseline models (e.g., Logistic Regression, Random Forest, XGBoost), tuned hyperparameters and optimized decision thresholds. Selected a threshold-optimized Random Forest classifier with an AUC-PR of 0.62 (primary metric), class-1 recall of 0.80, and class-1 precision of 0.54 (secondary metrics). Visualized feature importances and showed model prediction examples.
 - **Deployment**: Served the full machine learning pipeline, including data preprocessing and the final model, as a web app using FastAPI backend and Gradio frontend, running in a single Docker container.
+- **Testing**: Conducted thorough unit, integration, and end-to-end testing to validate everything from individual components to complete user journeys.
 
 
 ### 🛠️ Built With
