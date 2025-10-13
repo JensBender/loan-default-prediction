@@ -320,7 +320,25 @@ Built a machine learning (ML) pipeline including the final Random Forest model a
 
 <!-- TESTING -->
 ## 🕵 Testing
-Used `pytest` for unit and integration testing, and additionally `Selenium` for end-to-end (e2e) testing. Tests cover custom transformers, Pydantic schemas, the entire ML pipeline, partial pipelines (combining multiple transformers), the FastAPI backend, the backend-pipeline integration, the Gradio frontend, the frontend-backend integration, and the full e2e user journey. 
+Used `pytest` for unit and integration testing, and additionally `Selenium` for end-to-end testing. Tests cover custom transformers, Pydantic schemas, the entire ML pipeline, partial pipelines (combining multiple transformers), the FastAPI backend, the backend-pipeline integration, the Gradio frontend, the frontend-backend integration, and the full end-to-end user journey. 
+
+**Unit Tests**  
+Unit tests focus on isolating and verifying the smallest pieces of the application. They are located in the `tests/unit/` directory and cover:
+- Custom Transformers: Each custom scikit-learn transformer has dedicated tests to ensure it behaves as expected. This includes testing for correct data transformation, handling of edge cases, and proper error raising. A base test class (`BaseTransformerTests`) is used to test for scikit-learn compatibility.
+- Backend & Frontend Helpers: Utility functions used in the FastAPI backend and Gradio frontend are tested in isolation.
+- Pydantic Schemas: The data validation models (`schemas.py`) for the API are tested to ensure they correctly validate input data, handle optional fields, and raise appropriate errors for invalid data.
+
+**Integration Tests**  
+Integration tests verify that different parts of the application work together correctly. They are located in the `tests/integration/` directory and cover:
+- ML Pipelines: The data preprocessing and full model pipelines are tested to ensure that the sequence of transformers and the final model work together as a cohesive unit. This includes testing the complete data flow from raw input to model prediction. A base test class (`BasePipelineTests`) is used to test for scikit-learn compatibility.
+- FastAPI Backend: The `/predict` endpoint of the FastAPI application is tested to ensure it correctly handles single and batch predictions, validates incoming data, and returns responses in the expected format. It also tests for error handling and model behavior for different feature inputs.
+- Frontend-Backend Communication: The interaction between the Gradio frontend and the FastAPI backend is tested to ensure that the frontend sends requests and receives and parses responses correctly.
+
+**End-to-End (E2E) Tests**  
+End-to-end tests simulate real user scenarios from start to finish. They are located in the `tests/e2e/` directory and use `Selenium` to automate a web browser and interact with the Gradio frontend. These tests cover:
+- User Interface Interaction: Simulates a user filling out the loan application form and submitting it.
+- Happy Paths: Tests the complete workflow with valid inputs (with and without optional fields) to ensure a prediction is successfully returned and displayed.
+- Error Handling: Tests scenarios where the user provides invalid input (e.g., out-of-range values, missing required fields) to ensure that the correct error messages are displayed in the UI.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
