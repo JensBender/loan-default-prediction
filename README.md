@@ -320,7 +320,14 @@ Built a machine learning (ML) pipeline including the final Random Forest model a
 
 <!-- TESTING -->
 ## 🕵 Testing
+Used `pytest` to thoroughly test custom scikit-learn transformers (`src/custom_transformers.py`), Pydantic data validation schemas (`backend/schemas.py`), the entire ML pipeline and partial pipelines (`src/pipeline.py`), the FastAPI backend (`backend/app.py`), the Gradio frontend (`frontend/app.py`), the backend-pipeline integration, the frontend-backend integration, and the full end-to-end user journey.
+- **Unit tests** (`tests/unit/`): Tested custom transformers, Pydantic data validation schemas, helper functions and individual code components of backend and frontend in isolation.
+- **Integration tests** (`tests/integration/`): Tested ML pipelines, the FastAPI `/predict` endpoint, and frontend-backend communication as a system.
+- **End-to-End tests** (`tests/e2e/`): Simulated user behavior in the Gradio UI using `Selenium` for browser automation.
+
+## 🕵 Testing
 Used `pytest` for unit and integration testing, and additionally `Selenium` for end-to-end testing. Tests cover custom transformers, Pydantic schemas, the entire ML pipeline, partial pipelines (combining multiple transformers), the FastAPI backend, the backend-pipeline integration, the Gradio frontend, the frontend-backend integration, and the full end-to-end user journey. 
+
 
 **Unit Tests**  
 Unit tests focus on isolating and verifying the smallest pieces of the application. They are located in the `tests/unit/` directory and cover:
