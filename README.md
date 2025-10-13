@@ -320,18 +320,18 @@ Built a machine learning (ML) pipeline including the final Random Forest model a
 
 <!-- TESTING -->
 ## 🕵 Testing
-Utilized `pytest` for unit, integration, and end-to-end tests.
-- **Unit Tests** (`tests/unit/`): Verified individual components in isolation.
-    - Custom transformers: Ensured correct data transformation, scikit-learn compatibility, and error handling.
-    - Pydantic schemas: Validated data models used in FastAPI backend, including type constraints, optional fields, and error responses.
-    - Helper functions: Tested utility functions used in FastAPI backend and Gradio frontend.
-- **Integration Tests** (`tests/integration/`): Ensured different parts of the application work together correctly.
-    - ML Pipelines: Tested the full data preprocessing and model pipeline and partial pipelines.
-    - FastAPI backend: Verified the `/predict` endpoint, including data validation, batch processing, and error handling.
-    - Frontend-backend: Tested the communication between the Gradio UI and the FastAPI backend.
-- **End-to-End (E2E) Tests** (`tests/e2e/`): Simulated the full user journey in a browser using `Selenium`.
-    - UI Interaction: Automated filling and submitting of the loan application form.
-    - Happy and error paths: Tested the workflow with both valid and invalid inputs to ensure correct predictions and error messages are displayed.
+Utilized `pytest` for unit, integration, and end-to-end testing.
+- **Unit Tests** (`tests/unit/`):  Verified individual components in isolation. 
+  - Custom transformers (`src/custom_transformers.py`): Ensured correct data transformation, scikit-learn compatibility, and error handling.
+  - Pydantic schemas (`backend/schemas.py`): Validated API data models for type constraints, optional fields, and error responses.
+  - Helper functions (`backend/app.py`, `frontend/app.py`): Tested utility functions for backend and frontend logic.
+- **Integration Tests** (`tests/integration/`): Ensured different parts of the application work together.  
+  - ML Pipelines (`src/pipeline.py`): Tested full and partial machine learning pipelines.
+  - FastAPI backend: Verified `/predict` endpoint behavior (validation, batch processing, error handling).
+  - Frontend-backend: Tested communication between frontend UI and backend API.
+- **End-to-End Tests** (`tests/e2e/`): Simulated user journeys in a browser with `Selenium`.  
+  - UI interaction: Automated filling and submitting of the loan application form.
+  - Happy/error paths: Covered both valid and invalid inputs to ensure correct predictions and error messages in the UI.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
