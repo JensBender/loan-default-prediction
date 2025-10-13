@@ -297,19 +297,19 @@ The table below illustrates model performance on test data by highlighting best 
 
 <!-- DEPLOYMENT -->
 ## 🚀 Deployment
-Built a machine learning pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn` and saved it to file with `joblib`. Deployed the loan default prediction pipeline as a web application using `FastAPI`, `Gradio`, and `Docker`. 
+Built a machine learning (ML) pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn` and saved it to file with `joblib`. Deployed the loan default prediction pipeline as a web application using `FastAPI`, `Gradio`, and `Docker`. 
 
 **FastAPI Backend**  
-- API: The loan default prediction pipeline is served via a RESTful API that handles single and batch requests.
-- Data validation: Input data is validated using `Pydantic` models with required and optional fields, type constraints, enums for categorical fields, value range constraints for numerical fields, and custom validation logic. 
-- Prediction endpoint: The `/predict` endpoint accepts loan application data in JSON format, processes it through the `scikit-learn` pipeline, and returns the prediction ("default" or "no default") and probability scores.
+- Served the ML pipeline via a RESTful API handling single and batch requests.
+- Implemented data validation using `Pydantic` models with required and optional fields, type constraints, enums for categorical fields, value range constraints for numerical fields, and custom validation logic. 
+- The `/predict` endpoint accepts loan application data in JSON format, processes it through the ML pipeline, and returns the prediction ("default" or "no default") along with probability scores.
 
 **Gradio Frontend**   
-- Users can enter applicant information through a simple form, providing a clean, user-friendly interface.  
-- Submissions are sent to the FastAPI backend, which returns predictions that are rendered in the UI.
+- Built a user-friendly interface with `Gradio` so users can enter applicant information through a simple form.  
+- Sends submissions to the FastAPI backend, which returns predictions that are rendered in the UI.
 
 **Docker**    
-- The application is containerized with `Docker` for reliable and portable deployment. 
+- Containerized the application with `Docker` for reliable and portable deployment. 
 - The provided `Dockerfile` defines the Python environment, installs dependencies, and launches the Gradio frontend and FastAPI backend with the `start.sh` shell script.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
