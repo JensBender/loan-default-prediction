@@ -320,10 +320,10 @@ Built a machine learning (ML) pipeline including the final Random Forest model a
 
 <!-- TESTING -->
 ## 🕵 Testing
-Used `pytest` to thoroughly test custom scikit-learn transformers (`src/custom_transformers.py`), Pydantic data validation schemas (`backend/schemas.py`), the entire ML pipeline and partial pipelines (`src/pipeline.py`), the FastAPI backend (`backend/app.py`), the Gradio frontend (`frontend/app.py`), the backend-pipeline integration, the frontend-backend integration, and the full end-to-end user journey.
-- **Unit tests** (`tests/unit/`): Tested custom transformers, Pydantic data validation schemas, helper functions and individual code components of backend and frontend in isolation.
-- **Integration tests** (`tests/integration/`): Tested ML pipelines, the FastAPI `/predict` endpoint, and frontend-backend communication as a system.
-- **End-to-End tests** (`tests/e2e/`): Simulated user behavior in the Gradio UI using `Selenium` for browser automation.
+Used `pytest` to thoroughly test custom transformers, Pydantic data validation schemas, the entire ML pipeline and partial pipelines, the FastAPI backend, the Gradio frontend, the backend-pipeline integration, the frontend-backend integration, and the full end-to-end user journey.
+- **Unit tests** (`tests/unit/`): Tested individual components in isolation such as the custom scikit-learn transformers (`src/custom_transformers.py`), Pydantic data validation schemas (`backend/schemas.py`), and helper functions for the FastAPI backend (`backend/app.py`) and Gradio frontend (`frontend/app.py`).
+- **Integration tests** (`tests/integration/`): Tested the entire ML pipeline and partial pipelines (`src/pipeline.py`), the backend-pipeline integration, and frontend-backend communication.
+- **End-to-End tests** (`tests/e2e/`): Tested the full end-to-end user journey using browser automation with `Selenium`.
 
 ## 🕵 Testing
 Used `pytest` for unit and integration testing, and additionally `Selenium` for end-to-end testing. Tests cover custom transformers, Pydantic schemas, the entire ML pipeline, partial pipelines (combining multiple transformers), the FastAPI backend, the backend-pipeline integration, the Gradio frontend, the frontend-backend integration, and the full end-to-end user journey. 
