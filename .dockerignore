@@ -1,7 +1,6 @@
 # Project-specific files
 data/
 models/
-!models/loan_default_rf_pipeline.joblib
 images/
 frontend/old_gradio_app.py
 README.md
