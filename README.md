@@ -324,15 +324,14 @@ Developed comprehensive unit, integration, and end-to-end tests using `pytest`.
 - **Unit Tests** (`tests/unit/`): Validate individual components in isolation.
   - Custom Transformers: Tested each transformer in `src/custom_transformers.py` to ensure correct data transformation, scikit-learn compatibility, and proper error handling for invalid inputs.
   - Pydantic Schemas: Validated the data models in `backend/schemas.py` to confirm that type constraints, enums, value ranges, and custom validators for API requests and responses work as expected.
-  - Helper Functions: Verified that internal functions in `backend/app.py` (e.g., load pipeline) and `frontend/app.py` (e.g., format input) perform their intended tasks.
+  - Helper Functions: Verified that the internal functions in `backend/app.py` (e.g., load pipeline) and `frontend/app.py` (e.g., format input) perform their intended tasks.
 - **Integration Tests** (`tests/integration/`): Verify that different components of the application work together.
-  - ML Pipeline Segments: The interactions between transformers within pipeline segments (e.g., feature engineering, missing value handling) defined in `src/pipeline.py` are tested.
-  - Full ML Pipeline: The complete data preprocessing and model pipeline is tested to ensure it correctly processes raw data and makes predictions.
-  - FastAPI Backend: The `/predict` endpoint is tested to verify its behavior with single and batch predictions, including input validation, error handling (e.g., HTTP 422, 500), and expected model responses to different feature inputs.
-  - Frontend-Backend Communication: The communication between the Gradio frontend logic (`frontend/app.py`) and the FastAPI backend is tested by mocking HTTP requests to ensure that data is sent and received correctly.
-- **End-to-End (E2E) Tests** (`tests/e2e/`): Simulate real user journeys in the browser with `Selenium`.
-  - UI Automation: `Selenium` is used to automate browser interactions with the Gradio frontend, including filling out the loan application form and submitting it.
-  - User Scenarios: Both "happy path" scenarios with valid inputs and error scenarios with invalid or missing inputs are tested to ensure the UI displays the correct predictions or error messages.
+  - ML Pipeline: Tested the interactions between custom transformers within pipeline segments (e.g., feature engineering, missing value handling) and the complete data preprocessing and model pipeline defined in `src/pipeline.py`.
+  - FastAPI Backend: Verified the `/predict` endpoint behavior with single and batch predictions, including input validation, error handling (e.g., HTTP 422, 500), and expected responses for various inputs.
+  - Frontend-Backend Integration: Tested the communication between the Gradio frontend and the FastAPI backend to ensure data is sent and received correctly.
+- **End-to-End (E2E) Tests** (`tests/e2e/`): Simulate real user journeys.
+  - Utilized `Selenium` to automate browser interactions with the Gradio UI, including filling out the loan application form and submitting it.
+  - Tested both "happy path" scenarios with valid inputs and error scenarios with invalid or missing inputs to ensure the UI displays the correct predictions or error messages.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
