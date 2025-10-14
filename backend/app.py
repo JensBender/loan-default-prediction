@@ -89,10 +89,16 @@ def load_pipeline_from_huggingface(repo_id: str, filename: str) -> Pipeline:
 
 
 # --- ML Pipeline ---
-# Load loan default prediction pipeline (including data preprocessing and Random Forest Classifier model) from local machine
-root_dir = get_root_directory()  # get path to root directory
-pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"  # get path to pipeline file
-pipeline = load_pipeline_from_local(pipeline_path)
+# Load loan default prediction pipeline (including data preprocessing and Random Forest Classifier model) from Hugging Face Hub
+pipeline = load_pipeline_from_huggingface(
+    repo_id="JensBender/loan-default-prediction-pipeline", 
+    filename="loan_default_rf_pipeline.joblib"
+)
+
+# Load pipeline from local machine
+# root_dir = get_root_directory()  # get path to root directory
+# pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"  # get path to pipeline file
+# pipeline = load_pipeline_from_local(pipeline_path)
 
 # --- API ---
 # Create FastAPI app
