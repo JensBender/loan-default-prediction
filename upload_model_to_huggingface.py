@@ -9,7 +9,7 @@ hf_hub_repo = "JensBender/loan-default-prediction-pipeline"
 # Designated name of model pipeline in the Hugging Face Hub repository
 pipeline_in_repo = "loan_default_rf_pipeline.joblib"
 
-print(f"Uploading {pipeline_path} to {hf_hub_repo}...")
+print(f"Uploading '{pipeline_path}' to the Hugging Face Hub repo '{hf_hub_repo}'...")
 
 api.upload_file(
     path_or_fileobj=pipeline_path,
