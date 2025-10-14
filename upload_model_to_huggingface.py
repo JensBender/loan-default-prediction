@@ -6,16 +6,17 @@ api = HfApi()
 pipeline_path = "models/loan_default_rf_pipeline.joblib"
 # Name of Hugging Face Hub repository (make sure to create repo first)
 hf_hub_repo = "JensBender/loan-default-prediction-pipeline"
-# Designated name of model pipeline in the Hugging Face Hub repository
-pipeline_in_repo = "loan_default_rf_pipeline.joblib"
+# Filename of model pipeline in the Hugging Face Hub repository
+filename = "loan_default_rf_pipeline.joblib"
 
-print(f"Uploading '{pipeline_path}' to the Hugging Face Hub repo '{hf_hub_repo}'...")
+# Upload pipeline
+print("Uploading pipeline to Hugging Face Hub...")
 
 api.upload_file(
     path_or_fileobj=pipeline_path,
     repo_id=hf_hub_repo,
-    path_in_repo=pipeline_in_repo,
+    path_in_repo=filename,
     repo_type="model"
 )
 
-print("Upload complete!")
+print(f"Successfully uploaded pipeline '{filename}' to Hugging Face Hub repository '{hf_hub_repo}'.")
