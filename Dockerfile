@@ -12,7 +12,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY ./src ./src
 COPY ./backend ./backend
 COPY ./frontend ./frontend
-COPY ./models ./models
 COPY ./start.sh .
 
 # Make the start script executable
