@@ -77,12 +77,16 @@ def load_pipeline_from_local(path: str | Path) -> Pipeline:
     return pipeline
 
 
-# Function to load a pipeline from a Hugging Face Hub repository
+# Function to download and load a pipeline from a Hugging Face Hub repository
 def load_pipeline_from_huggingface(repo_id: str, filename: str) -> Pipeline:
     try:
-        logger.info("Downloading and loading pipeline from Hugging Face Hub...")
-        pipeline = hf_hub_download(repo_id=repo_id, filename=filename)
-        logger.info("Pipeline loaded successfully from Hugging Face Hub.")
+        logger.info("Downloading pipeline from Hugging Face Hub...")
+        # hf_hub_download returns the path to the downloaded file
+        pipeline_path = hf_hub_download(repo_id=repo_id, filename=filename)
+        logger.info(f"Successfully downloaded pipeline '{filename}' from Hugging Face Hub repository '{repo_id}'.")
+        # Load the pipeline from the downloaded file
+        pipeline = load_pipeline_from_local(pipeline_path)
+        logger.info(f"Successfully loaded pipeline from '{pipeline_path}' in Docker container.")
         return pipeline
     except Exception as e:
         raise RuntimeError(f"Error when loading pipeline '{filename}' from Hugging Face Hub repo '{repo_id}'") from e 
