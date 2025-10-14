@@ -68,13 +68,12 @@ Developed a machine learning model for loan default prediction to enhance risk m
 
 <!-- SUMMARY -->
 ## 🎯 Summary
-Leveraged machine learning to predict loan defaults by analyzing customer application data, thereby enabling financial institutions to minimize risks and make data-driven lending decisions. This project involved:
+Developed a machine learning solution to predict loan defaults using customer application data, empowering financial institutions to make data-driven lending decisions and minimize risk. This project involved:
 - **Data Preprocessing**: Engineered new features (e.g., job stability, city tier, state default rate), handled duplicates, data types, missing values, and outliers, scaled numerical features, and encoded categorical features.
 - **Exploratory Data Analysis**: Analyzed descriptive statistics and visualized distributions, correlations and relationships.
-- **Modeling**: Trained and evaluated eight baseline models (e.g., Logistic Regression, Random Forest, XGBoost), tuned hyperparameters and optimized decision thresholds. Selected a threshold-optimized Random Forest classifier with an AUC-PR of 0.62 (primary metric), class-1 recall of 0.80, and class-1 precision of 0.54 (secondary metrics). Visualized feature importances and showed model prediction examples.
-- **Deployment**: Served the full machine learning pipeline, including data preprocessing and the final model, as a web app using FastAPI backend and Gradio frontend, running in a single Docker container.
-- **Testing**: Conducted thorough unit, integration, and end-to-end testing to validate everything from individual components to complete user journeys.
-
+- **Modeling**: Trained and evaluated eight baseline models (e.g., Logistic Regression, Random Forest, XGBoost) and tuned hyperparameters. The final model, a Random Forest classifier with optimized decision threshold, achieved an AUC-PR of 0.62, class-1 recall of 0.80, and class-1 precision of 0.54. Visualized feature importances and showed model prediction examples.
+- **Deployment**: Served the full machine learning pipeline (data preprocessing and final model) as a web app using FastAPI backend and Gradio frontend within a single Docker container.
+- **Testing**: Implemented comprehensive unit, integration, and end-to-end tests to validate individual components, their interactions, and entire user journeys.
 
 ### 🛠️ Built With
 - [![Python][Python-badge]][Python-url]
