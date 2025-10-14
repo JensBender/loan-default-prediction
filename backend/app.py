@@ -39,14 +39,9 @@ from src.utils import get_root_directory
 # Setup a named logger "backend.app" to distinguish logs from frontend
 logger = logging.getLogger(__name__)
 
-# --- ML Pipeline ---
-# Get path to the pipeline .joblib file
-root_dir = get_root_directory()
-pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"
-
-
-# Function to load a pre-trained scikit-learn pipeline
-def load_pipeline(path: str | Path) -> Pipeline:
+# --- Helper Functions ---
+# Function to load a pre-trained scikit-learn pipeline from local machine
+def load_pipeline_from_local(path: str | Path) -> Pipeline:
     # Input type validation
     if not isinstance(path, (str, Path)):
         raise TypeError(f"Error when loading pipeline: 'path' must be a string or Path object, got {type(path).__name__}")
@@ -81,8 +76,11 @@ def load_pipeline(path: str | Path) -> Pipeline:
     return pipeline
 
 
-# Load loan default prediction pipeline (including data preprocessing and Random Forest Classifier model)
-pipeline = load_pipeline(pipeline_path)
+# --- ML Pipeline ---
+# Load loan default prediction pipeline (including data preprocessing and Random Forest Classifier model) from local machine
+root_dir = get_root_directory()  # get path to root directory
+pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"  # get path to pipeline file
+pipeline = load_pipeline_from_local(pipeline_path)
 
 # --- API ---
 # Create FastAPI app
