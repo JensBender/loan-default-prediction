@@ -10,6 +10,7 @@ from sklearn.pipeline import Pipeline
 import pandas as pd
 import numpy as np
 import joblib
+from huggingface_hub import hf_hub_download
 
 # Local imports
 from backend.schemas import (
@@ -74,6 +75,17 @@ def load_pipeline_from_local(path: str | Path) -> Pipeline:
         raise TypeError("Error when loading pipeline: Loaded pipeline does not have a .predict_proba() method")
 
     return pipeline
+
+
+# Function to load a pipeline from a Hugging Face Hub repository
+def load_pipeline_from_huggingface(repo_id: str, filename: str) -> Pipeline:
+    try:
+        logger.info("Downloading and loading pipeline from Hugging Face Hub...")
+        pipeline = hf_hub_download(repo_id=repo_id, filename=filename)
+        logger.info("Pipeline loaded successfully from Hugging Face Hub.")
+        return pipeline
+    except Exception as e:
+        raise RuntimeError(f"Error when loading pipeline '{filename}' from Hugging Face Hub repo '{repo_id}'") from e 
 
 
 # --- ML Pipeline ---
