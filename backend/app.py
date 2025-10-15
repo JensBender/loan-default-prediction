@@ -37,7 +37,11 @@ from src.custom_transformers import (
 from src.utils import get_root_directory
 
 # --- Logger ---
-# Setup a named logger "backend.app" to distinguish logs from frontend
+# Setup a structured logger for the backend
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
 logger = logging.getLogger(__name__)
 
 # --- Helper Functions ---
