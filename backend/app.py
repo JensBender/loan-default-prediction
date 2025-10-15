@@ -41,7 +41,7 @@ from src.utils import get_root_directory
 logger = logging.getLogger(__name__)
 
 # --- Helper Functions ---
-# Function to load a pre-trained scikit-learn pipeline from local machine
+# Function to load a scikit-learn pipeline from the local machine
 def load_pipeline_from_local(path: str | Path) -> Pipeline:
     # Input type validation
     if not isinstance(path, (str, Path)):
@@ -77,16 +77,16 @@ def load_pipeline_from_local(path: str | Path) -> Pipeline:
     return pipeline
 
 
-# Function to download and load a pipeline from a Hugging Face Hub repository
+# Function to download and load a scikit-learn pipeline from a Hugging Face Hub repository
 def load_pipeline_from_huggingface(repo_id: str, filename: str) -> Pipeline:
     try:
         logger.info("Downloading pipeline from Hugging Face Hub...")
-        # hf_hub_download returns the path to the downloaded file
+        # .hf_hub_download() downloads the pipeline file and returns its local path (inside the Docker container)
         pipeline_path = hf_hub_download(repo_id=repo_id, filename=filename)
-        logger.info(f"Successfully downloaded pipeline '{filename}' from Hugging Face Hub repository '{repo_id}'.")
+        logger.info(f"Successfully downloaded pipeline '{filename}' from the Hugging Face Hub repository '{repo_id}' to '{pipeline_path}'.")
         # Load the pipeline from the downloaded file
         pipeline = load_pipeline_from_local(pipeline_path)
-        logger.info(f"Successfully loaded pipeline from '{pipeline_path}' in Docker container.")
+        logger.info(f"Successfully loaded pipeline from '{pipeline_path}' inside the Docker container.")
         return pipeline
     except Exception as e:
         raise RuntimeError(f"Error when loading pipeline '{filename}' from Hugging Face Hub repo '{repo_id}'") from e 
@@ -99,7 +99,7 @@ pipeline = load_pipeline_from_huggingface(
     filename="loan_default_rf_pipeline.joblib"
 )
 
-# Load pipeline from local machine
+# Load pipeline from local machine (use for local setup without Hugging Face Hub)
 # root_dir = get_root_directory()  # get path to root directory
 # pipeline_path = root_dir / "models" / "loan_default_rf_pipeline.joblib"  # get path to pipeline file
 # pipeline = load_pipeline_from_local(pipeline_path)
