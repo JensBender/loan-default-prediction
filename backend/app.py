@@ -79,17 +79,21 @@ def load_pipeline_from_local(path: str | Path) -> Pipeline:
 
 # Function to download and load a scikit-learn pipeline from a Hugging Face Hub repository
 def load_pipeline_from_huggingface(repo_id: str, filename: str) -> Pipeline:
+    # Download pipeline file
     try:
         logger.info("Downloading pipeline from Hugging Face Hub...")
-        # .hf_hub_download() downloads the pipeline file and returns its local path (inside the Docker container)
+        # .hf_hub_download() downloads the pipeline file and returns its local file path (inside the Docker container)
         pipeline_path = hf_hub_download(repo_id=repo_id, filename=filename)
         logger.info(f"Successfully downloaded pipeline '{filename}' from the Hugging Face Hub repository '{repo_id}' to '{pipeline_path}'.")
-        # Load the pipeline from the downloaded file
+    except Exception as download_exc:
+        raise RuntimeError(f"Error downloading pipeline '{filename}' from the Hugging Face Hub repository '{repo_id}': {download_exc}") from download_exc 
+    # Load pipeline from file
+    try:
         pipeline = load_pipeline_from_local(pipeline_path)
         logger.info(f"Successfully loaded pipeline from '{pipeline_path}' inside the Docker container.")
         return pipeline
-    except Exception as e:
-        raise RuntimeError(f"Error when loading pipeline '{filename}' from Hugging Face Hub repo '{repo_id}'") from e 
+    except Exception as load_exc:
+        raise RuntimeError(f"Error loading pipeline from '{pipeline_path}' inside the Docker container: {load_exc}") from load_exc 
 
 
 # --- ML Pipeline ---
