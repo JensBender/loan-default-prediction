@@ -20,7 +20,11 @@ from src.global_constants import (
 )
 
 # --- Logger ---
-# Setup a named logger "frontend.app" to distinguish logs from backend
+# Setup a structured logger for the frontend
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
 logger = logging.getLogger(__name__)
 
 # --- Constants ---
