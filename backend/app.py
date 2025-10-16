@@ -3,6 +3,7 @@
 import logging
 import json
 import uuid
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Any
@@ -146,8 +147,10 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             pipeline_input_dict_ls = [pipeline_input.model_dump()]
         pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_dict_ls)
             
-        # Use pipeline to predict probabilities 
+        # Use pipeline to predict probabilities (and measure prediction latency)
+        start_time = time.perf_counter()  # use .perf_counter() for latency measurement and .time() for timestamps
         predicted_probabilities: np.ndarray = pipeline.predict_proba(pipeline_input_df)
+        pipeline_prediction_latency_ms = round((start_time - time.perf_counter()) * 1000)  # rounded to milliseconds
 
         # Apply optimized threshold to convert probabilities to binary predictions
         optimized_threshold: float = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
@@ -178,14 +181,15 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
                 "prediction_id": str(uuid.uuid4()),
                 "timestamp": datetime.now(timezone.utc).isoformat(),
                 "pipeline_version": pipeline_version,
-                "client_ip": client_ip,
-                "user_agent": user_agent,
                 "inputs": pipeline_input_dict_ls[i],
                 "prediction": prediction_enum.value,
                 "probabilities": {
                     "default": float(pred_proba[1]),
                     "no_default": float(pred_proba[0])
-                }
+                },
+                "batch_latency_ms": pipeline_prediction_latency_ms,
+                "client_ip": client_ip,
+                "user_agent": user_agent,
             }
             monitoring_logger.info(json.dumps(prediction_monitoring_record))  # converts record to JSON string for log
 
