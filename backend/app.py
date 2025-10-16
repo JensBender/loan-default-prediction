@@ -181,18 +181,18 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             # Log the prediction record for model monitoring
             prediction_monitoring_record = {
                 "batch_id": batch_id,
-                "batch_size": batch_size,
                 "prediction_id": str(uuid.uuid4()),
                 "timestamp": datetime.now(timezone.utc).isoformat(),
-                "pipeline_version": pipeline_version,
                 "inputs": pipeline_input_dict_ls[i],
                 "prediction": prediction_enum.value,
                 "probabilities": {
                     "default": float(pred_proba[1]),
                     "no_default": float(pred_proba[0])
                 },
+                "batch_size": batch_size,
                 "batch_latency_ms": pipeline_prediction_latency_ms,
                 "avg_prediction_latency_ms": pipeline_prediction_latency_ms / batch_size if batch_size > 0 else pipeline_prediction_latency_ms,
+                "pipeline_version": pipeline_version,
                 "client_ip": client_ip,
                 "user_agent": user_agent,
             }
