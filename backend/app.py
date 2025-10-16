@@ -150,7 +150,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
         # Use pipeline to predict probabilities (and measure prediction latency)
         start_time = time.perf_counter()  # use .perf_counter() for latency measurement and .time() for timestamps
         predicted_probabilities: np.ndarray = pipeline.predict_proba(pipeline_input_df)
-        pipeline_prediction_latency_ms = round((start_time - time.perf_counter()) * 1000)  # rounded to milliseconds
+        pipeline_prediction_latency_ms = round((time.perf_counter() - start_time) * 1000)  # rounded to milliseconds
 
         # Apply optimized threshold to convert probabilities to binary predictions
         optimized_threshold: float = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
@@ -192,6 +192,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
                     "no_default": float(pred_proba[0])
                 },
                 "batch_latency_ms": pipeline_prediction_latency_ms,
+                "avg_prediction_latency_ms": pipeline_prediction_latency_ms / batch_size if batch_size > 0 else pipeline_prediction_latency_ms,
                 "client_ip": client_ip,
                 "user_agent": user_agent,
             }
