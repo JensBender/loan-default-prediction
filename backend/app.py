@@ -1,6 +1,9 @@
 # --- Imports ---
 # Standard library imports
 import logging
+import json
+import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Any
 
@@ -162,7 +165,21 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
                 )
             )
             results.append(prediction_result)
-       
+
+        # Log prediction ID, timestamp, pipeline version, pipeline input, prediction response, prediction latency, client IP address, and User-Agent for model monitoring
+        # Create a unique prediction ID
+        prediction_id = str(uuid.uuid4())
+        # Get timestamp
+        timestamp = datetime.now(timezone.utc).isoformat()
+        # Get pipeline_version (hardcoded for now)
+        pipeline_version = "1.0"
+        # Get prediction latency in milliseconds (hardcoded for now)
+        prediction_latency_ms = 100
+        # Get client IP address from request headers 
+        client_ip = request.headers.get("x-forwared-for", request.client.host)
+        # Get User-Agent from request headers dictionary (default to "unknown") 
+        user_agent = request.headers.get("user-agent", "unknown")
+
         return PredictionResponse(results=results)
 
     except Exception as e:
