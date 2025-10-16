@@ -160,6 +160,8 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
         pipeline_version = "1.0"  # Hardcoded for now
         client_ip = request.headers.get("x-forwarded-for", request.client.host) # Use X-Forwarded-For from proxy, with fallback
         user_agent = request.headers.get("user-agent", "unknown")
+        batch_id = str(uuid.uuid4())
+        batch_size = len(pipeline_input_dict_ls)
 
         # --- Create prediction response --- 
         results: List[PredictionResult] = []
@@ -178,6 +180,8 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
 
             # Log the prediction record for model monitoring
             prediction_monitoring_record = {
+                "batch_id": batch_id,
+                "batch_size": batch_size,
                 "prediction_id": str(uuid.uuid4()),
                 "timestamp": datetime.now(timezone.utc).isoformat(),
                 "pipeline_version": pipeline_version,
