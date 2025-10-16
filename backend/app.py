@@ -153,32 +153,41 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
         optimized_threshold: float = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
         predictions: np.ndarray = (predicted_probabilities[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
 
-        # Create prediction response 
+        # Get metadata for logging
+        pipeline_version = "1.0"  # Hardcoded for now
+        client_ip = request.headers.get("x-forwarded-for", request.client.host) # Use X-Forwarded-For from proxy, with fallback
+        user_agent = request.headers.get("user-agent", "unknown")
+
+        # --- Create prediction response --- 
         results: List[PredictionResult] = []
-        for pred, pred_proba in zip(predictions, predicted_probabilities):  
-            prediction_enum = PredictionEnum.DEFAULT if pred else PredictionEnum.NO_DEFAULT 
+        # Iterate over each prediction
+        for i, (pred, pred_proba) in enumerate(zip(predictions, predicted_probabilities)):
+            # Create prediction result
+            prediction_enum = PredictionEnum.DEFAULT if pred else PredictionEnum.NO_DEFAULT       
             prediction_result = PredictionResult(
-                prediction=prediction_enum, 
+                prediction=prediction_enum,
                 probabilities=PredictedProbabilities(
-                    default=pred_proba[1], 
-                    no_default=pred_proba[0]
+                    default=float(pred_proba[1]),
+                    no_default=float(pred_proba[0])
                 )
             )
             results.append(prediction_result)
 
-        # Log prediction ID, timestamp, pipeline version, pipeline input, prediction response, prediction latency, client IP address, and User-Agent for model monitoring
-        # Create a unique prediction ID
-        prediction_id = str(uuid.uuid4())
-        # Get timestamp
-        timestamp = datetime.now(timezone.utc).isoformat()
-        # Get pipeline_version (hardcoded for now)
-        pipeline_version = "1.0"
-        # Get prediction latency in milliseconds (hardcoded for now)
-        prediction_latency_ms = 100
-        # Get client IP address from request headers 
-        client_ip = request.headers.get("x-forwared-for", request.client.host)
-        # Get User-Agent from request headers dictionary (default to "unknown") 
-        user_agent = request.headers.get("user-agent", "unknown")
+            # Log the prediction record for model monitoring
+            prediction_monitoring_record = {
+                "prediction_id": str(uuid.uuid4()),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "pipeline_version": pipeline_version,
+                "client_ip": client_ip,
+                "user_agent": user_agent,
+                "inputs": pipeline_input_dict_ls[i],
+                "prediction": prediction_enum.value,
+                "probabilities": {
+                    "default": float(pred_proba[1]),
+                    "no_default": float(pred_proba[0])
+                }
+            }
+            monitoring_logger.info(json.dumps(prediction_monitoring_record))  # converts record to JSON string for log
 
         return PredictionResponse(results=results)
 
