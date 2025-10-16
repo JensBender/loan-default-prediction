@@ -87,7 +87,7 @@ def load_pipeline_from_huggingface(repo_id: str, filename: str) -> Pipeline:
         # .hf_hub_download() downloads the pipeline file and returns its local file path (inside the Docker container)
         # if the pipeline file was already downloaded, it checks for new version on Hugging Face Hub
         # if new version, it will download and use it, else it will use the cached pipeline that is already stored inside the Docker container 
-        logging.info(
+        logger.info(
             f"Connecting to Hugging Face Hub to check for the latest pipeline file '{filename}' in repo '{repo_id}'. "
             "If already cached and up to date, will use local copy."
         )
