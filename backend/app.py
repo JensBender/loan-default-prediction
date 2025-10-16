@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import List, Dict, Any
 
 # Third-party library imports
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from sklearn.pipeline import Pipeline
 import pandas as pd
 import numpy as np
@@ -36,13 +36,26 @@ from src.custom_transformers import (
 )
 from src.utils import get_root_directory
 
-# --- Logger ---
-# Setup a structured logger for the backend
+# --- Logging ---
+# Setup a logger for the backend 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
+
+# Setup a dedicated logger for monitoring prediction records
+monitoring_logger = logging.getLogger("monitoring")
+monitoring_logger.setLevel(logging.INFO)
+monitoring_logger.propagate = False  # prevents logs from propagating to the backend logger so they don't show up in the console
+log_dir = Path("logs")
+log_dir.mkdir(exist_ok=True)
+file_handler = logging.FileHandler(log_dir / "prediction_logs.jsonl")  # use JSON lines format, where each line is a JSON object
+formatter = logging.Formatter("%(message)s")  # just output the message which will be pre-formatted JSON
+file_handler.setFormatter(formatter)
+if not monitoring_logger.handlers:  # add the handler to the logger if it doesn't have one already
+    monitoring_logger.addHandler(file_handler)
+
 
 # --- Helper Functions ---
 # Function to load a scikit-learn pipeline from the local machine
@@ -118,7 +131,7 @@ app = FastAPI()
 
 # Prediction endpoint 
 @app.post("/predict", response_model=PredictionResponse)
-def predict(pipeline_input: PipelineInput | List[PipelineInput]) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> List[PipelineInput]
+def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Request) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> List[PipelineInput]
     try:
         # Standardize input
         pipeline_input_dict_ls: List[Dict[str, Any]]
@@ -149,7 +162,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput]) -> PredictionRe
                 )
             )
             results.append(prediction_result)
-
+       
         return PredictionResponse(results=results)
 
     except Exception as e:
