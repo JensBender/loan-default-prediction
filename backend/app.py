@@ -1,12 +1,12 @@
 # --- Imports ---
 # Standard library imports
+from pathlib import Path
+from typing import List, Dict, Any
 import logging
 import json
 import uuid
 import time
 from datetime import datetime, timezone
-from pathlib import Path
-from typing import List, Dict, Any
 
 # Third-party library imports
 from fastapi import FastAPI, HTTPException, Request
@@ -156,12 +156,13 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
         optimized_threshold: float = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
         predictions: np.ndarray = (predicted_probabilities[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
 
-        # Get metadata for logging
-        pipeline_version = "1.0"  # Hardcoded for now
-        client_ip = request.headers.get("x-forwarded-for", request.client.host) # Use X-Forwarded-For from proxy, with fallback
-        user_agent = request.headers.get("user-agent", "unknown")
+        # Create batch-level metadata for logging
         batch_id = str(uuid.uuid4())
         batch_size = len(pipeline_input_dict_ls)
+        avg_prediction_latency_ms = round(pipeline_prediction_latency_ms / batch_size) if batch_size > 0 else None
+        pipeline_version = "1.0"  # hardcoded for now
+        client_ip = request.headers.get("x-forwarded-for", request.client.host) 
+        user_agent = request.headers.get("user-agent", "unknown")
 
         # --- Create prediction response --- 
         results: List[PredictionResult] = []
@@ -178,7 +179,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             )
             results.append(prediction_result)
 
-            # Log the prediction record for model monitoring
+            # Log single prediction record for model monitoring (including batch metadata)
             prediction_monitoring_record = {
                 "batch_id": batch_id,
                 "prediction_id": str(uuid.uuid4()),
@@ -191,7 +192,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
                 },
                 "batch_size": batch_size,
                 "batch_latency_ms": pipeline_prediction_latency_ms,
-                "avg_prediction_latency_ms": pipeline_prediction_latency_ms / batch_size if batch_size > 0 else pipeline_prediction_latency_ms,
+                "avg_prediction_latency_ms": avg_prediction_latency_ms,
                 "pipeline_version": pipeline_version,
                 "client_ip": client_ip,
                 "user_agent": user_agent,
