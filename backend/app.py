@@ -99,7 +99,7 @@ def load_pipeline_from_local(path: str | Path) -> Pipeline:
 
 
 # Function to download and load a scikit-learn pipeline from a Hugging Face Hub repository
-def load_pipeline_from_huggingface(repo_id: str, filename: str) -> Pipeline:
+def load_pipeline_from_huggingface(repo_id: str, filename: str) -> tuple[Pipeline, str]:
     try:
         # .hf_hub_download() downloads the pipeline file and returns its local file path (inside the Docker container)
         # if the pipeline file was already downloaded, it checks for new version on Hugging Face Hub
@@ -110,7 +110,7 @@ def load_pipeline_from_huggingface(repo_id: str, filename: str) -> Pipeline:
         )
         pipeline_path = hf_hub_download(repo_id=repo_id, filename=filename)
 
-        # Extract commit hash from the pipeline path (as the pipeline version for logging)
+        # Extract commit hash from the pipeline path (for logging)
         try:
             pipeline_path = Path(pipeline_path).resolve() 
             path_parts = pipeline_path.parts
@@ -119,10 +119,13 @@ def load_pipeline_from_huggingface(repo_id: str, filename: str) -> Pipeline:
         except Exception:
             commit_hash = "unknown"
 
+        # Get pipeline version for logging (includes Hugging Face Hub username, repository name, and commit hash) 
+        pipeline_version = f"{repo_id}@{commit_hash}"
+
         # Load pipeline from file inside the Docker container
         pipeline = load_pipeline_from_local(pipeline_path)
 
-        return pipeline, commit_hash
+        return pipeline, pipeline_version
 
     except Exception as e:
         raise RuntimeError(f"Error loading pipeline '{filename}' from Hugging Face Hub repository '{repo_id}': {e}") from e 
@@ -130,7 +133,7 @@ def load_pipeline_from_huggingface(repo_id: str, filename: str) -> Pipeline:
 
 # --- ML Pipeline ---
 # Load loan default prediction pipeline (including data preprocessing and Random Forest Classifier model) from Hugging Face Hub
-pipeline, commit_hash = load_pipeline_from_huggingface(
+pipeline, pipeline_version = load_pipeline_from_huggingface(
     repo_id="JensBender/loan-default-prediction-pipeline", 
     filename="loan_default_rf_pipeline.joblib"
 )
@@ -175,7 +178,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             "batch_timestamp": datetime.now(timezone.utc).isoformat(),
             "batch_latency_ms": pipeline_prediction_latency_ms,
             "avg_prediction_latency_ms": round(pipeline_prediction_latency_ms / len(pipeline_input_dict_ls)) if len(pipeline_input_dict_ls) > 0 else None,
-            "pipeline_version": commit_hash,
+            "pipeline_version": pipeline_version,
             "client_ip": request.headers.get("x-forwarded-for", request.client.host),
             "user_agent": request.headers.get("user-agent", "unknown")
         }
