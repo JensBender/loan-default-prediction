@@ -147,7 +147,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             pipeline_input_dict_ls = [pipeline_input.model_dump()]
         pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_dict_ls)
             
-        # Use pipeline to predict probabilities (and measure prediction latency)
+        # Use pipeline to batch predict probabilities (and measure latency)
         start_time = time.perf_counter()  # use .perf_counter() for latency measurement and .time() for timestamps
         predicted_probabilities: np.ndarray = pipeline.predict_proba(pipeline_input_df)
         pipeline_prediction_latency_ms = round((time.perf_counter() - start_time) * 1000)  # rounded to milliseconds
@@ -157,12 +157,16 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
         predictions: np.ndarray = (predicted_probabilities[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
 
         # Create batch-level metadata for logging
-        batch_id = str(uuid.uuid4())
-        batch_size = len(pipeline_input_dict_ls)
-        avg_prediction_latency_ms = round(pipeline_prediction_latency_ms / batch_size) if batch_size > 0 else None
-        pipeline_version = "1.0"  # hardcoded for now
-        client_ip = request.headers.get("x-forwarded-for", request.client.host) 
-        user_agent = request.headers.get("user-agent", "unknown")
+        batch_metadata = {
+            "batch_id": str(uuid.uuid4()),
+            "batch_size": len(pipeline_input_dict_ls),
+            "batch_timestamp": datetime.now(timezone.utc).isoformat(),
+            "batch_latency_ms": pipeline_prediction_latency_ms,
+            "avg_prediction_latency_ms": round(pipeline_prediction_latency_ms / len(pipeline_input_dict_ls)) if len(pipeline_input_dict_ls) > 0 else None,
+            "pipeline_version": "1.0",  # hardcoded for now
+            "client_ip": request.headers.get("x-forwarded-for", request.client.host),
+            "user_agent": request.headers.get("user-agent", "unknown")
+        }
 
         # --- Create prediction response --- 
         results: List[PredictionResult] = []
@@ -181,21 +185,14 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
 
             # Log single prediction record for model monitoring (including batch metadata)
             prediction_monitoring_record = {
-                "batch_id": batch_id,
+                **batch_metadata,
                 "prediction_id": str(uuid.uuid4()),
-                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "inputs": pipeline_input_dict_ls[i],
                 "prediction": prediction_enum.value,
                 "probabilities": {
                     "default": float(pred_proba[1]),
                     "no_default": float(pred_proba[0])
                 },
-                "batch_size": batch_size,
-                "batch_latency_ms": pipeline_prediction_latency_ms,
-                "avg_prediction_latency_ms": avg_prediction_latency_ms,
-                "pipeline_version": pipeline_version,
-                "client_ip": client_ip,
-                "user_agent": user_agent,
             }
             monitoring_logger.info(json.dumps(prediction_monitoring_record))  # converts record to JSON string for log
 
