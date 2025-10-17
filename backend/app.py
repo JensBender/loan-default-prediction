@@ -109,16 +109,23 @@ def load_pipeline_from_huggingface(repo_id: str, filename: str) -> Pipeline:
             "If already cached and up to date, will use local copy."
         )
         pipeline_path = hf_hub_download(repo_id=repo_id, filename=filename)
+
+        # Extract commit hash from the pipeline path (as the pipeline version for logging)
+        pipeline_path = Path(pipeline_path) 
+        path_parts = pipeline_path.parts
+        snapshots_part_idx = path_parts.index("snapshots")
+        commit_hash = path_parts[snapshots_part_idx + 1]  # commit hash located after "snapshots"
+
         # Load pipeline from file inside the Docker container
         pipeline = load_pipeline_from_local(pipeline_path)
-        return pipeline
+        return pipeline, commit_hash
     except Exception as e:
         raise RuntimeError(f"Error loading pipeline '{filename}' from Hugging Face Hub repository '{repo_id}': {e}") from e 
 
 
 # --- ML Pipeline ---
 # Load loan default prediction pipeline (including data preprocessing and Random Forest Classifier model) from Hugging Face Hub
-pipeline = load_pipeline_from_huggingface(
+pipeline, commit_hash = load_pipeline_from_huggingface(
     repo_id="JensBender/loan-default-prediction-pipeline", 
     filename="loan_default_rf_pipeline.joblib"
 )
@@ -163,7 +170,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             "batch_timestamp": datetime.now(timezone.utc).isoformat(),
             "batch_latency_ms": pipeline_prediction_latency_ms,
             "avg_prediction_latency_ms": round(pipeline_prediction_latency_ms / len(pipeline_input_dict_ls)) if len(pipeline_input_dict_ls) > 0 else None,
-            "pipeline_version": "1.0",  # hardcoded for now
+            "pipeline_version": commit_hash,
             "client_ip": request.headers.get("x-forwarded-for", request.client.host),
             "user_agent": request.headers.get("user-agent", "unknown")
         }
