@@ -129,33 +129,20 @@ def load_pipeline_from_local(path: str | Path) -> Pipeline:
 
 
 # Function to download and load a scikit-learn pipeline from a Hugging Face Hub repository
-def load_pipeline_from_huggingface(repo_id: str, filename: str) -> tuple[Pipeline, str]:
+def load_pipeline_from_huggingface(repo_id: str, filename: str, revision: str) -> Pipeline:
     try:
         # .hf_hub_download() downloads the pipeline file and returns its local file path (inside the Docker container)
-        # if the pipeline file was already downloaded, it checks for new version on Hugging Face Hub
-        # if new version, it will download and use it, else it will use the cached pipeline that is already stored inside the Docker container 
+        # if the pipeline file was already downloaded, it will use the cached pipeline that is already stored inside the Docker container 
         logger.info(
-            f"Connecting to Hugging Face Hub to check for the latest pipeline file '{filename}' in repo '{repo_id}'. "
-            "If already cached and up to date, will use local copy."
+            f"Connecting to Hugging Face Hub to download pipeline file '{filename}' with tag '{revision}' in repo '{repo_id}'. "
+            "If already cached, will use local copy."
         )
-        pipeline_path = hf_hub_download(repo_id=repo_id, filename=filename)
-
-        # Extract commit hash from the pipeline path (for logging)
-        try:
-            pipeline_path = Path(pipeline_path).resolve() 
-            path_parts = pipeline_path.parts
-            snapshots_part_idx = path_parts.index("snapshots")
-            commit_hash = path_parts[snapshots_part_idx + 1]  # commit hash located after "snapshots"
-        except Exception:
-            commit_hash = "unknown"
-
-        # Get pipeline version for logging (includes Hugging Face Hub username, repository name, and commit hash) 
-        pipeline_version = f"{repo_id}@{commit_hash}"
+        pipeline_path = hf_hub_download(repo_id=repo_id, filename=filename, revision=revision)
 
         # Load pipeline from file inside the Docker container
         pipeline = load_pipeline_from_local(pipeline_path)
 
-        return pipeline, pipeline_version
+        return pipeline
 
     except Exception as e:
         raise RuntimeError(f"Error loading pipeline '{filename}' from Hugging Face Hub repository '{repo_id}': {e}") from e 
@@ -163,9 +150,11 @@ def load_pipeline_from_huggingface(repo_id: str, filename: str) -> tuple[Pipelin
 
 # --- ML Pipeline ---
 # Load loan default prediction pipeline (including data preprocessing and Random Forest Classifier model) from Hugging Face Hub
-pipeline, pipeline_version = load_pipeline_from_huggingface(
+pipeline_version_tag = "v1.0"
+pipeline = load_pipeline_from_huggingface(
     repo_id="JensBender/loan-default-prediction-pipeline", 
-    filename="loan_default_rf_pipeline.joblib"
+    filename="loan_default_rf_pipeline.joblib",
+    revision=pipeline_version_tag  
 )
 
 # Load pipeline from local machine (use for local setup without Hugging Face Hub)
@@ -208,7 +197,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             "batch_timestamp": datetime.now(timezone.utc).isoformat(),
             "batch_latency_ms": pipeline_prediction_latency_ms,
             "avg_prediction_latency_ms": round(pipeline_prediction_latency_ms / len(pipeline_input_dict_ls)) if len(pipeline_input_dict_ls) > 0 else None,
-            "pipeline_version": pipeline_version,
+            "pipeline_version": pipeline_version_tag,
             "client_ip": request.headers.get("x-forwarded-for", request.client.host),
             "user_agent": request.headers.get("user-agent", "unknown")
         }
