@@ -3,6 +3,7 @@
 from pathlib import Path
 from typing import List, Dict, Any
 import logging
+import logging.config
 import json
 import uuid
 import time
@@ -41,24 +42,53 @@ from src.custom_transformers import (
 from src.utils import get_root_directory
 
 # --- Logging ---
-# Setup a logger for the backend 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-)
-logger = logging.getLogger(__name__)
-
-# Setup a dedicated logger for monitoring prediction records
-monitoring_logger = logging.getLogger("monitoring")
-monitoring_logger.setLevel(logging.INFO)
-monitoring_logger.propagate = False  # prevents logs from propagating to the backend logger so they don't show up in the console
+# Create logs directory if it doesn't exist
 log_dir = Path("logs")
 log_dir.mkdir(exist_ok=True)
-file_handler = logging.FileHandler(log_dir / "prediction_logs.jsonl")  # use JSON lines format, where each line is a JSON object
-formatter = logging.Formatter("%(message)s")  # just output the message which will be pre-formatted JSON
-file_handler.setFormatter(formatter)
-if not monitoring_logger.handlers:  # add the handler to the logger if it doesn't have one already
-    monitoring_logger.addHandler(file_handler)
+
+# Define logging configuration
+LOGGING_CONFIG = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "default": {
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        },
+        "monitoring": {
+            "format": "%(message)s",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "default",
+            "stream": "ext://sys.stdout",
+        },
+        "monitoring_file": {
+            "class": "logging.FileHandler",
+            "formatter": "monitoring",
+            "filename": str(log_dir / "prediction_logs.jsonl"),
+        },
+    },
+    "loggers": {
+        "": {  # Root logger for general logs
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+        "monitoring": {
+            "handlers": ["monitoring_file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}
+
+# Apply logging configuration
+logging.config.dictConfig(LOGGING_CONFIG)
+
+# Get loggers
+logger = logging.getLogger(__name__)
+monitoring_logger = logging.getLogger("monitoring")
 
 
 # --- Helper Functions ---
