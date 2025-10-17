@@ -111,14 +111,19 @@ def load_pipeline_from_huggingface(repo_id: str, filename: str) -> Pipeline:
         pipeline_path = hf_hub_download(repo_id=repo_id, filename=filename)
 
         # Extract commit hash from the pipeline path (as the pipeline version for logging)
-        pipeline_path = Path(pipeline_path) 
-        path_parts = pipeline_path.parts
-        snapshots_part_idx = path_parts.index("snapshots")
-        commit_hash = path_parts[snapshots_part_idx + 1]  # commit hash located after "snapshots"
+        try:
+            pipeline_path = Path(pipeline_path).resolve() 
+            path_parts = pipeline_path.parts
+            snapshots_part_idx = path_parts.index("snapshots")
+            commit_hash = path_parts[snapshots_part_idx + 1]  # commit hash located after "snapshots"
+        except Exception:
+            commit_hash = "unknown"
 
         # Load pipeline from file inside the Docker container
         pipeline = load_pipeline_from_local(pipeline_path)
+
         return pipeline, commit_hash
+
     except Exception as e:
         raise RuntimeError(f"Error loading pipeline '{filename}' from Hugging Face Hub repository '{repo_id}': {e}") from e 
 
