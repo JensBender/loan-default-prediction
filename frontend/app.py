@@ -110,6 +110,10 @@ def predict_loan_default(
     gr_request: gr.Request 
 ) -> tuple[str, dict[str, float]] | tuple[str, str]:
     try:
+        # Get the end-user's IP address, prioritizing the x-forwarded-for header with fallback
+        x_forwarded_for = gr_request.headers.get("x-forwarded-for")
+        client_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else gr_request.client.host
+
         # --- Input preprocessing ---
         # Create inputs dictionary 
         inputs = {
@@ -124,7 +128,7 @@ def predict_loan_default(
             "state": state,
             "current_job_yrs": current_job_yrs,
             "current_house_yrs": current_house_yrs,
-            "client_ip": gr_request.client.host,
+            "client_ip": client_ip,
             "user_agent": gr_request.headers.get("user-agent", "unknown")
         }
 
