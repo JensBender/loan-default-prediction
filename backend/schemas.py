@@ -63,6 +63,8 @@ class PipelineInput(BaseModel):
     state: StateEnum 
     current_job_yrs: CurrentJobYrs
     current_house_yrs: CurrentHouseYrs
+    client_ip: str | None = None
+    user_agent: str | None = None
 
     @field_validator("income", "age", "experience", "current_job_yrs", "current_house_yrs")
     def convert_float_to_int(cls, value: float | int) -> int:
