@@ -65,17 +65,19 @@ LOGGING_CONFIG = {
             "stream": "ext://sys.stdout",
         },
         "monitoring_file": {
-            "class": "logging.FileHandler",
+            "class": "logging.handlers.RotatingFileHandler",
             "formatter": "monitoring",
-            "filename": str(log_dir / "prediction_logs.jsonl"),
+            "filename": str(log_dir / "prediction_logs.jsonl"),  # JSON Lines format: one JSON object per line
+            "maxBytes": 10485760,  # 10 MB
+            "backupCount": 3,  # will create prediction_logs.jsonl.1, .2, and .3 for max 4 log files (40 MB), then overwrite
         },
     },
     "loggers": {
-        "": {  # Root logger for general logs
+        "": {  # root logger for general logs
             "handlers": ["console"],
             "level": "INFO",
         },
-        "monitoring": {
+        "monitoring": {  # prediction records logger for model monitoring 
             "handlers": ["monitoring_file"],
             "level": "INFO",
             "propagate": False,
