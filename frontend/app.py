@@ -106,7 +106,8 @@ def predict_loan_default(
     state: str, 
     profession: str, 
     experience: int | float, 
-    current_job_yrs: int | float 
+    current_job_yrs: int | float,
+    gr_request: gr.Request 
 ) -> tuple[str, dict[str, float]] | tuple[str, str]:
     try:
         # --- Input preprocessing ---
@@ -122,7 +123,9 @@ def predict_loan_default(
             "city": city,
             "state": state,
             "current_job_yrs": current_job_yrs,
-            "current_house_yrs": current_house_yrs
+            "current_house_yrs": current_house_yrs,
+            "client_ip": gr_request.client.host,
+            "user_agent": gr_request.headers.get("user-agent", "unknown")
         }
 
         # Format string values in snake_case
