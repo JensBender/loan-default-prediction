@@ -181,19 +181,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             pipeline_input_dict_ls = [input.model_dump() for input in pipeline_input]
         else:  # isinstance(pipeline_input, PipelineInput)
             pipeline_input_dict_ls = [pipeline_input.model_dump()]
-        # Create a DataFrame from the input data.
         pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_dict_ls)
-
-        # Get metadata for logging
-        # Prioritize client info passed from the frontend, fall back to backend request headers for direct API calls
-        first_input = pipeline_input_dict_ls[0] if pipeline_input_dict_ls else {}
-        client_ip = first_input.get("client_ip") or request.headers.get("x-forwarded-for", request.client.host)
-        user_agent = first_input.get("user_agent") or request.headers.get("user-agent", "unknown")
-            
-        # Remove metadata columns before prediction 
-        cols_to_remove = [col for col in ["client_ip", "user_agent"] if col in pipeline_input_df.columns]
-        if cols_to_remove:
-            pipeline_input_df = pipeline_input_df.drop(columns=cols_to_remove)
 
         # Use pipeline to batch predict probabilities (and measure latency)
         start_time = time.perf_counter()  # use .perf_counter() for latency measurement and .time() for timestamps
@@ -212,8 +200,6 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             "batch_latency_ms": pipeline_prediction_latency_ms,
             "avg_prediction_latency_ms": round(pipeline_prediction_latency_ms / len(pipeline_input_dict_ls)) if len(pipeline_input_dict_ls) > 0 else None,
             "pipeline_version": pipeline_version_tag,
-            "client_ip": client_ip,
-            "user_agent": user_agent
         }
 
         # --- Create prediction response --- 
@@ -231,9 +217,19 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             )
             results.append(prediction_result)
 
+            # Get client IP and user-agent from frontend inputs dict or from backend request header for direct API calls
+            client_ip = pipeline_input_dict_ls[i].pop("client_ip", None)
+            if client_ip is None:
+                client_ip = request.headers.get("x-forwarded-for", request.client.host)
+            user_agent = pipeline_input_dict_ls[i].pop("user_agent", None)
+            if user_agent is None:
+                user_agent = request.headers.get("user-agent", "unknown")
+
             # Log single prediction record for model monitoring (including batch metadata)
             prediction_monitoring_record = {
                 **batch_metadata,
+                "client_ip": client_ip,
+                "user_agent": user_agent,
                 "prediction_id": str(uuid.uuid4()),
                 "inputs": pipeline_input_dict_ls[i],
                 "prediction": prediction_enum.value,
