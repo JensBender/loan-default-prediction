@@ -1,5 +1,6 @@
 # --- Imports ---
 # Standard library imports
+from http import client
 from pathlib import Path
 from typing import List, Dict, Any
 import logging
@@ -17,6 +18,7 @@ import numpy as np
 import joblib
 from huggingface_hub import hf_hub_download
 import geoip2.database
+from geoip2.errors import AddressNotFoundError
 
 # Local imports
 from backend.schemas import (
@@ -195,13 +197,21 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
 
         # Get metadata for logging
         # From frontend, fall back to backend request header for direct API calls
+        user_agent = pipeline_input_dict_ls[0].pop("user_agent", None)
+        if user_agent is None:
+            user_agent = request.headers.get("user-agent", "unknown")
         client_ip = pipeline_input_dict_ls[0].pop("client_ip", None)
         if client_ip is None:
             x_forwarded_for = request.headers.get("x-forwarded-for")
             client_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.client.host
-        user_agent = pipeline_input_dict_ls[0].pop("user_agent", None)
-        if user_agent is None:
-            user_agent = request.headers.get("user-agent", "unknown")
+        client_country = "unknown"
+        if geoip_reader and client_ip:
+            try:
+                response = geoip_reader.country(client_ip)
+                client_country = response.country.name
+            except AddressNotFoundError:  # this occurs for private/reserved IPs (e.g., 127.0.0.1), which is expected during local testing 
+                logger.debug(f"IP address {client_ip} not found in GeoLite2 country database. Likely a private or local address.")
+                client_country = "local/private"
 
         # Create DataFrame
         pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_dict_ls)
@@ -243,7 +253,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             # Log single prediction record for model monitoring (including batch metadata)
             prediction_monitoring_record = {
                 **batch_metadata,
-                "client_ip": client_ip,
+                "client_country": client_country,
                 "user_agent": user_agent,
                 "prediction_id": str(uuid.uuid4()),
                 "inputs": pipeline_input_dict_ls[i],
