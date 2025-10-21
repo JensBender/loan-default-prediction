@@ -183,10 +183,11 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             pipeline_input_dict_ls = [pipeline_input.model_dump()]
 
         # Get metadata for logging
-        # Get metadata from frontend inputs dict, fall back to backend request header for direct API calls
+        # From frontend, fall back to backend request header for direct API calls
         client_ip = pipeline_input_dict_ls[0].pop("client_ip", None)
         if client_ip is None:
-            client_ip = request.headers.get("x-forwarded-for", request.client.host)
+            x_forwarded_for = request.headers.get("x-forwarded-for")
+            client_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.client.host
         user_agent = pipeline_input_dict_ls[0].pop("user_agent", None)
         if user_agent is None:
             user_agent = request.headers.get("user-agent", "unknown")
