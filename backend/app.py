@@ -16,6 +16,7 @@ import pandas as pd
 import numpy as np
 import joblib
 from huggingface_hub import hf_hub_download
+import geoip2.database
 
 # Local imports
 from backend.schemas import (
@@ -149,6 +150,16 @@ def load_pipeline_from_huggingface(repo_id: str, filename: str, revision: str) -
     except Exception as e:
         raise RuntimeError(f"Error loading pipeline '{filename}' from Hugging Face Hub repository '{repo_id}': {e}") from e 
 
+
+# --- Geolocation Database ---
+# Load the GeoLite2 country database to log client country for model monitoring (download database from https://www.maxmind.com to the "geoip_db/" directory)
+GEO_DB_PATH = Path("geoip_db/GeoLite2-Country.mmdb")
+try:
+    geoip_reader = geoip2.database.Reader(GEO_DB_PATH)
+    logger.info(f"Successfully loaded GeoLite2 country database from '{GEO_DB_PATH}'")
+except FileNotFoundError:
+    logger.error(f"GeoLite2 country database not found at '{GEO_DB_PATH}'. Client country will not be logged. Download the database from https://www.maxmind.com.")
+    geoip_reader = None
 
 # --- ML Pipeline ---
 # Load loan default prediction pipeline (including data preprocessing and Random Forest Classifier model) from Hugging Face Hub
