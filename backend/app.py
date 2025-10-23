@@ -65,7 +65,7 @@ LOGGING_CONFIG = {
         "console": {
             "class": "logging.StreamHandler",
             "formatter": "default",
-            "stream": "ext://sys.stdout",
+            "stream": "ext://sys.stdout",  # write to Python standard output stream, which goes to Docker container's standard output, which goes to Hugging Face host server, which goes to Hugging Face Space Logs tab
         },
         "monitoring_file": {
             "class": "logging.handlers.RotatingFileHandler",
@@ -202,8 +202,8 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             user_agent = request.headers.get("user-agent", "unknown")
         client_ip = pipeline_input_dict_ls[0].pop("client_ip", None)
         if client_ip is None:
-            x_forwarded_for = request.headers.get("x-forwarded-for")
-            client_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.client.host
+            x_forwarded_for = request.headers.get("x-forwarded-for")  # single str with one or more comma-separated IP addresses
+            client_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.client.host  # first IP address is always the client IP
         client_country = "unknown"
         if geoip_reader and client_ip:
             try:
