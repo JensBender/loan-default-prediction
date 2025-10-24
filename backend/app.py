@@ -107,6 +107,37 @@ except FileNotFoundError:
 
 
 # --- Helper Functions ---
+# Function to get batch-level metadata for logging
+def get_batch_metadata(
+    pipeline_input: PipelineInput | List[PipelineInput], 
+    request: Request, 
+    geoip_reader: geoip2.database.Reader | None
+) -> tuple[str, str]:
+    # Use first input of batch
+    if isinstance(pipeline_input, List[PipelineInput]):  
+        pipeline_input = pipeline_input[0]
+ 
+    # Get user agent and IP from frontend, fall back to backend request header for direct API calls
+    user_agent = pipeline_input.pop("user_agent", None)
+    if user_agent is None:
+        user_agent = request.headers.get("user-agent", "unknown")
+    client_ip = pipeline_input.pop("client_ip", None)  
+    if client_ip is None:
+        x_forwarded_for = request.headers.get("x-forwarded-for")  # single str with one or more comma-separated IP addresses
+        client_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.client.host  # first IP address is always the client IP
+    
+    # Get client country from IP address
+    client_country = "unknown"
+    if geoip_reader and client_ip:
+        try:
+            response = geoip_reader.country(client_ip)
+            client_country = response.country.name
+        except AddressNotFoundError:  # this occurs for unknown or private or reserved IPs (e.g., 127.0.0.1)
+            logger.debug("IP address not found in GeoLite2 country database. Likely a private or local address.")
+    
+    return user_agent, client_country
+
+
 # Function to load a scikit-learn pipeline from the local machine
 def load_pipeline_from_local(path: str | Path) -> Pipeline:
     # Input type validation
@@ -186,6 +217,9 @@ app = FastAPI()
 @app.post("/predict", response_model=PredictionResponse)
 def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Request) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> List[PipelineInput]
     try:
+        # Get batch metadata for logging
+        user_agent, client_country = get_batch_metadata(pipeline_input, request, geoip_reader)
+
         # Standardize input
         pipeline_input_dict_ls: List[Dict[str, Any]]
         if isinstance(pipeline_input, list):
@@ -194,24 +228,6 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             pipeline_input_dict_ls = [input.model_dump() for input in pipeline_input]
         else:  # isinstance(pipeline_input, PipelineInput)
             pipeline_input_dict_ls = [pipeline_input.model_dump()]
-
-        # Get metadata for logging
-        # From frontend, fall back to backend request header for direct API calls
-        user_agent = pipeline_input_dict_ls[0].pop("user_agent", None)
-        if user_agent is None:
-            user_agent = request.headers.get("user-agent", "unknown")
-        client_ip = pipeline_input_dict_ls[0].pop("client_ip", None)
-        if client_ip is None:
-            x_forwarded_for = request.headers.get("x-forwarded-for")  # single str with one or more comma-separated IP addresses
-            client_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.client.host  # first IP address is always the client IP
-        client_country = "unknown"
-        if geoip_reader and client_ip:
-            try:
-                response = geoip_reader.country(client_ip)
-                client_country = response.country.name
-            except AddressNotFoundError:  # this occurs for unknown or private or reserved IPs (e.g., 127.0.0.1)
-                logger.debug("IP address not found in GeoLite2 country database. Likely a private or local address.")
-        # Create DataFrame
         pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_dict_ls)
 
         # Use pipeline to batch predict probabilities (and measure latency)
@@ -267,50 +283,4 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
 
     except Exception as e:
         logger.error("Error during predict: %s", e, exc_info=True)
-
-        # Log failed prediction for model monitoring
-        try:
-            # Get client info reliably from the request object
-            user_agent = request.headers.get("user-agent", "unknown")
-            x_forwarded_for = request.headers.get("x-forwarded-for")
-            client_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.client.host
-            client_country = "unknown"
-            if geoip_reader and client_ip:
-                try:
-                    response = geoip_reader.country(client_ip)
-                    client_country = response.country.name
-                except AddressNotFoundError:
-                    logger.debug("IP address for failed request not found in GeoLite2 country database.")
-
-            # Serialize the original input data that caused the failure
-            inputs_data = None
-            try:
-                if isinstance(pipeline_input, list):
-                    inputs_data = [input.model_dump() for input in pipeline_input] if pipeline_input else []
-                else: # PipelineInput
-                    inputs_data = pipeline_input.model_dump()
-            except Exception as serialization_error:
-                logger.error(f"Error serializing input for failed prediction logging: {serialization_error}")
-                inputs_data = {"error": "Could not serialize input data."}
-
-            # Create a single, detailed log record for the failed request/batch
-            failed_prediction_record = {
-                "status": "failed",
-                "failure_id": str(uuid.uuid4()),
-                "timestamp": datetime.now(timezone.utc).isoformat(),
-                "pipeline_version": pipeline_version_tag,
-                "client_country": client_country,
-                "user_agent": user_agent,
-                "error": {
-                    "type": type(e).__name__,
-                    "message": str(e)
-                },
-                "inputs": inputs_data
-            }
-            monitoring_logger.info(json.dumps(failed_prediction_record))
-            
-        except Exception as logging_error:
-            # If logging itself fails, log a critical error to the console
-            logger.error(f"CRITICAL: Failed to log the failed prediction event: {logging_error}", exc_info=True)
-
         raise HTTPException(status_code=500, detail="Internal server error during loan default prediction")
