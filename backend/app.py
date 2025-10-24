@@ -95,6 +95,16 @@ logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 monitoring_logger = logging.getLogger("monitoring")
 
+# --- Geolocation Database ---
+# Load the GeoLite2 country database to log client country for model monitoring (download database from https://www.maxmind.com to the "geoip_db/" directory)
+GEO_DB_PATH = Path("geoip_db/GeoLite2-Country.mmdb")
+try:
+    geoip_reader = geoip2.database.Reader(GEO_DB_PATH)
+    logger.info(f"Successfully loaded GeoLite2 country database from '{GEO_DB_PATH}'")
+except FileNotFoundError:
+    logger.error(f"GeoLite2 country database not found at '{GEO_DB_PATH}'. Client country will not be logged. Download the database from https://www.maxmind.com.")
+    geoip_reader = None
+
 
 # --- Helper Functions ---
 # Function to load a scikit-learn pipeline from the local machine
@@ -152,16 +162,6 @@ def load_pipeline_from_huggingface(repo_id: str, filename: str, revision: str) -
     except Exception as e:
         raise RuntimeError(f"Error loading pipeline '{filename}' from Hugging Face Hub repository '{repo_id}': {e}") from e 
 
-
-# --- Geolocation Database ---
-# Load the GeoLite2 country database to log client country for model monitoring (download database from https://www.maxmind.com to the "geoip_db/" directory)
-GEO_DB_PATH = Path("geoip_db/GeoLite2-Country.mmdb")
-try:
-    geoip_reader = geoip2.database.Reader(GEO_DB_PATH)
-    logger.info(f"Successfully loaded GeoLite2 country database from '{GEO_DB_PATH}'")
-except FileNotFoundError:
-    logger.error(f"GeoLite2 country database not found at '{GEO_DB_PATH}'. Client country will not be logged. Download the database from https://www.maxmind.com.")
-    geoip_reader = None
 
 # --- ML Pipeline ---
 # Load loan default prediction pipeline (including data preprocessing and Random Forest Classifier model) from Hugging Face Hub
@@ -267,4 +267,50 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
 
     except Exception as e:
         logger.error("Error during predict: %s", e, exc_info=True)
+
+        # Log failed prediction for model monitoring
+        try:
+            # Get client info reliably from the request object
+            user_agent = request.headers.get("user-agent", "unknown")
+            x_forwarded_for = request.headers.get("x-forwarded-for")
+            client_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.client.host
+            client_country = "unknown"
+            if geoip_reader and client_ip:
+                try:
+                    response = geoip_reader.country(client_ip)
+                    client_country = response.country.name
+                except AddressNotFoundError:
+                    logger.debug("IP address for failed request not found in GeoLite2 country database.")
+
+            # Serialize the original input data that caused the failure
+            inputs_data = None
+            try:
+                if isinstance(pipeline_input, list):
+                    inputs_data = [input.model_dump() for input in pipeline_input] if pipeline_input else []
+                else: # PipelineInput
+                    inputs_data = pipeline_input.model_dump()
+            except Exception as serialization_error:
+                logger.error(f"Error serializing input for failed prediction logging: {serialization_error}")
+                inputs_data = {"error": "Could not serialize input data."}
+
+            # Create a single, detailed log record for the failed request/batch
+            failed_prediction_record = {
+                "status": "failed",
+                "failure_id": str(uuid.uuid4()),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "pipeline_version": pipeline_version_tag,
+                "client_country": client_country,
+                "user_agent": user_agent,
+                "error": {
+                    "type": type(e).__name__,
+                    "message": str(e)
+                },
+                "inputs": inputs_data
+            }
+            monitoring_logger.info(json.dumps(failed_prediction_record))
+            
+        except Exception as logging_error:
+            # If logging itself fails, log a critical error to the console
+            logger.error(f"CRITICAL: Failed to log the failed prediction event: {logging_error}", exc_info=True)
+
         raise HTTPException(status_code=500, detail="Internal server error during loan default prediction")
