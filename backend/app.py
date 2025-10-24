@@ -95,33 +95,19 @@ logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 monitoring_logger = logging.getLogger("monitoring")
 
-# --- Geolocation Database ---
-# Load the GeoLite2 country database to log client country for model monitoring (download database from https://www.maxmind.com to the "geoip_db/" directory)
-GEO_DB_PATH = Path("geoip_db/GeoLite2-Country.mmdb")
-try:
-    geoip_reader = geoip2.database.Reader(GEO_DB_PATH)
-    logger.info(f"Successfully loaded GeoLite2 country database from '{GEO_DB_PATH}'")
-except FileNotFoundError:
-    logger.error(f"GeoLite2 country database not found at '{GEO_DB_PATH}'. Client country will not be logged. Download the database from https://www.maxmind.com.")
-    geoip_reader = None
-
 
 # --- Helper Functions ---
 # Function to get batch-level metadata for logging
 def get_batch_metadata(
-    pipeline_input: PipelineInput | List[PipelineInput], 
+    pipeline_input_dict_ls: list[dict[str, Any]], 
     request: Request, 
     geoip_reader: geoip2.database.Reader | None
-) -> tuple[str, str]:
-    # Use first input of batch
-    if isinstance(pipeline_input, List[PipelineInput]):  
-        pipeline_input = pipeline_input[0]
- 
+) -> dict[str, Any]:    
     # Get user agent and IP from frontend, fall back to backend request header for direct API calls
-    user_agent = pipeline_input.pop("user_agent", None)
+    user_agent = pipeline_input_dict_ls[0].get("user_agent", None)  # use first input in list
     if user_agent is None:
         user_agent = request.headers.get("user-agent", "unknown")
-    client_ip = pipeline_input.pop("client_ip", None)  
+    client_ip = pipeline_input_dict_ls[0].get("client_ip", None)  
     if client_ip is None:
         x_forwarded_for = request.headers.get("x-forwarded-for")  # single str with one or more comma-separated IP addresses
         client_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.client.host  # first IP address is always the client IP
@@ -134,8 +120,18 @@ def get_batch_metadata(
             client_country = response.country.name
         except AddressNotFoundError:  # this occurs for unknown or private or reserved IPs (e.g., 127.0.0.1)
             logger.debug("IP address not found in GeoLite2 country database. Likely a private or local address.")
-    
-    return user_agent, client_country
+
+    # Create dictionary with batch-level metadata
+    metadata = {
+        "batch_id": str(uuid.uuid4()),
+        "batch_size": len(pipeline_input_dict_ls),
+        "batch_timestamp": datetime.now(timezone.utc).isoformat(),
+        "pipeline_version": pipeline_version_tag,
+        "client_country": client_country,
+        "user_agent": user_agent,
+    } 
+
+    return metadata
 
 
 # Function to load a scikit-learn pipeline from the local machine
@@ -194,6 +190,16 @@ def load_pipeline_from_huggingface(repo_id: str, filename: str, revision: str) -
         raise RuntimeError(f"Error loading pipeline '{filename}' from Hugging Face Hub repository '{repo_id}': {e}") from e 
 
 
+# --- Geolocation Database ---
+# Load the GeoLite2 country database to log client country for model monitoring (download database from https://www.maxmind.com to the "geoip_db/" directory)
+GEO_DB_PATH = Path("geoip_db/GeoLite2-Country.mmdb")
+try:
+    geoip_reader = geoip2.database.Reader(GEO_DB_PATH)
+    logger.info(f"Successfully loaded GeoLite2 country database from '{GEO_DB_PATH}'")
+except FileNotFoundError:
+    logger.error(f"GeoLite2 country database not found at '{GEO_DB_PATH}'. Client country will not be logged. Download the database from https://www.maxmind.com.")
+    geoip_reader = None
+
 # --- ML Pipeline ---
 # Load loan default prediction pipeline (including data preprocessing and Random Forest Classifier model) from Hugging Face Hub
 pipeline_version_tag = "v1.0"
@@ -217,9 +223,6 @@ app = FastAPI()
 @app.post("/predict", response_model=PredictionResponse)
 def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Request) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> List[PipelineInput]
     try:
-        # Get batch metadata for logging
-        user_agent, client_country = get_batch_metadata(pipeline_input, request, geoip_reader)
-
         # Standardize input
         pipeline_input_dict_ls: List[Dict[str, Any]]
         if isinstance(pipeline_input, list):
@@ -228,6 +231,11 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             pipeline_input_dict_ls = [input.model_dump() for input in pipeline_input]
         else:  # isinstance(pipeline_input, PipelineInput)
             pipeline_input_dict_ls = [pipeline_input.model_dump()]
+        
+        # Get batch metadata for logging
+        batch_metadata = get_batch_metadata(pipeline_input_dict_ls, request, geoip_reader)
+
+        # Create DataFrame
         pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_dict_ls)
 
         # Use pipeline to batch predict probabilities (and measure latency)
@@ -239,14 +247,11 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
         optimized_threshold: float = 0.29  # see threshold optimization in training script "loan_default_prediction.ipynb"
         predictions: np.ndarray = (predicted_probabilities[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
 
-        # Create batch-level metadata for logging
+        # Add latency to batch metadata for logging
         batch_metadata = {
-            "batch_id": str(uuid.uuid4()),
-            "batch_size": len(pipeline_input_dict_ls),
-            "batch_timestamp": datetime.now(timezone.utc).isoformat(),
+            **batch_metadata,
             "batch_latency_ms": pipeline_prediction_latency_ms,
             "avg_prediction_latency_ms": round(pipeline_prediction_latency_ms / len(pipeline_input_dict_ls)) if len(pipeline_input_dict_ls) > 0 else None,
-            "pipeline_version": pipeline_version_tag,
         }
 
         # --- Create prediction response --- 
@@ -267,8 +272,6 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             # Log single prediction record for model monitoring (including batch metadata)
             prediction_monitoring_record = {
                 **batch_metadata,
-                "client_country": client_country,
-                "user_agent": user_agent,
                 "prediction_id": str(uuid.uuid4()),
                 "inputs": pipeline_input_dict_ls[i],
                 "prediction": prediction_enum.value,
