@@ -12,6 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY ./src ./src
 COPY ./backend ./backend
 COPY ./frontend ./frontend
+COPY ./geoip_db ./geoip_db 
 COPY ./start.sh .
 
 # Make the start script executable
