@@ -237,8 +237,8 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
 
         # Remove "client_ip" and "user_agent" from pipeline input
         pipeline_input_cleaned = [
-            {key: value for key, value in dict.items() if key not in {"client_ip", "user_agent"}} 
-            for dict in pipeline_input_dict_ls
+            {k: v for k, v in d.items() if k not in {"client_ip", "user_agent"}} 
+            for d in pipeline_input_dict_ls
         ]
 
         # Create DataFrame
