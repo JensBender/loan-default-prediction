@@ -235,8 +235,14 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
         # Get batch metadata for logging
         batch_metadata = get_batch_metadata(pipeline_input_dict_ls, request, geoip_reader)
 
+        # Remove "client_ip" and "user_agent" from pipeline input
+        pipeline_input_cleaned = [
+            {key: value for key, value in dict.items() if key not in {"client_ip", "user_agent"}} 
+            for dict in pipeline_input_dict_ls
+        ]
+
         # Create DataFrame
-        pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_dict_ls)
+        pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_cleaned)
 
         # Use pipeline to batch predict probabilities (and measure latency)
         start_time = time.perf_counter()  # use .perf_counter() for latency measurement and .time() for timestamps
