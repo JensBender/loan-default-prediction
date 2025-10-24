@@ -209,10 +209,8 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
             try:
                 response = geoip_reader.country(client_ip)
                 client_country = response.country.name
-            except AddressNotFoundError:  # this occurs for private/reserved IPs (e.g., 127.0.0.1), which is expected during local testing 
-                logger.debug(f"IP address {client_ip} not found in GeoLite2 country database. Likely a private or local address.")
-                client_country = "local/private"
-
+            except AddressNotFoundError:  # this occurs for unknown or private or reserved IPs (e.g., 127.0.0.1)
+                logger.debug("IP address not found in GeoLite2 country database. Likely a private or local address.")
         # Create DataFrame
         pipeline_input_df: pd.DataFrame = pd.DataFrame(pipeline_input_dict_ls)
 
