@@ -6,6 +6,8 @@ frontend/old_gradio_app.py
 README.md
 GEMINI.md
 LICENSE
+geoip_db/COPYRIGHT.txt 
+geoip_db/LICENSE.txt
 
 # Virtual environment
 *venv*/
