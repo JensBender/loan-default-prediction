@@ -316,7 +316,7 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
                     "probabilities": None,
                     "error_message": str(e)
                 }
-                monitoring_logger.info(json.dumps(prediction_monitoring_record))
+                monitoring_logger.error(json.dumps(prediction_monitoring_record))
         else:
             prediction_monitoring_record = {
                 "batch_id": str(uuid.uuid4()),
@@ -331,6 +331,6 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
                 "probabilities": None,
                 "error_message": str(e)
             }
-            monitoring_logger.info(json.dumps(prediction_monitoring_record))
+            monitoring_logger.error(json.dumps(prediction_monitoring_record))
 
         raise HTTPException(status_code=500, detail="Internal server error during loan default prediction")
