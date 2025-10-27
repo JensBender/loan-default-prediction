@@ -2,7 +2,7 @@
 # Standard library imports
 from http import client
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
 import logging
 import logging.config
 import json
@@ -221,10 +221,10 @@ app = FastAPI()
 
 # Prediction endpoint 
 @app.post("/predict", response_model=PredictionResponse)
-def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Request) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> List[PipelineInput]
+def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Request) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> list[PipelineInput]
     try:
         # Standardize input
-        pipeline_input_dict_ls: List[Dict[str, Any]]
+        pipeline_input_dict_ls: list[dict[str, Any]]
         if isinstance(pipeline_input, list):
             if pipeline_input == []:  # handle empty batch input
                 return PredictionResponse(results=[])
@@ -260,7 +260,7 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
         })
 
         # --- Create prediction response --- 
-        results: List[PredictionResult] = []
+        results: list[PredictionResult] = []
         # Iterate over each prediction
         for i, (pred, pred_proba) in enumerate(zip(predictions, predicted_probabilities)):
             # Create prediction result
