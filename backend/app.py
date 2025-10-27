@@ -2,6 +2,7 @@
 # Standard library imports
 from http import client
 from pathlib import Path
+from sys import exc_info
 from typing import Any
 import logging
 import logging.config
@@ -222,10 +223,10 @@ app = FastAPI()
 # Prediction endpoint 
 @app.post("/predict", response_model=PredictionResponse)
 def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Request) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> list[PipelineInput]
-    batch_metadata = None  # for prediction error logging 
+    batch_metadata = None   
+    pipeline_input_dict_ls = None
     try:
         # Standardize input
-        pipeline_input_dict_ls: list[dict[str, Any]]
         if isinstance(pipeline_input, list):
             if pipeline_input == []:  # handle empty batch input
                 return PredictionResponse(results=[])
@@ -295,11 +296,41 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
         logger.error("Error during predict: %s", e, exc_info=True)
 
         # Log prediction error record to file for model monitoring (including batch metadata)
-        if batch_metadata is None:  # code broke before .get_batch_metadata()
-            batch_metadata = {} 
-        prediction_monitoring_record = {
-            **batch_metadata,
-        }
-        monitoring_logger.info(json.dumps(prediction_monitoring_record))
+        if pipeline_input_dict_ls:  
+            if batch_metadata is None:  # error before .get_batch_metadata()
+                batch_metadata = {
+                    "batch_id": str(uuid.uuid4()),
+                    "batch_size": len(pipeline_input_dict_ls),
+                    "batch_timestamp": datetime.now(timezone.utc).isoformat(),
+                    "pipeline_version": PIPELINE_VERSION_TAG,
+                    "client_country": None,
+                    "user_agent": None
+                } 
+            # Iterate over each input in batch
+            for input in pipeline_input_dict_ls:
+                prediction_monitoring_record = {
+                    **batch_metadata,
+                    "prediction_id": str(uuid.uuid4()),
+                    "inputs": input,
+                    "prediction": None,
+                    "probabilities": None,
+                    "error_message": str(e)
+                }
+                monitoring_logger.info(json.dumps(prediction_monitoring_record))
+        else:
+            prediction_monitoring_record = {
+                "batch_id": str(uuid.uuid4()),
+                "batch_size": None,
+                "batch_timestamp": datetime.now(timezone.utc).isoformat(),
+                "pipeline_version": PIPELINE_VERSION_TAG,
+                "client_country": None,
+                "user_agent": None,
+                "prediction_id": str(uuid.uuid4()),
+                "inputs": None,
+                "prediction": None,
+                "probabilities": None,
+                "error_message": str(e)
+            }
+            monitoring_logger.info(json.dumps(prediction_monitoring_record))
 
         raise HTTPException(status_code=500, detail="Internal server error during loan default prediction")
