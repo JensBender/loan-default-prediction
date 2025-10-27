@@ -254,11 +254,10 @@ def predict(pipeline_input: PipelineInput | List[PipelineInput], request: Reques
         predictions: np.ndarray = (predicted_probabilities[:, 1] >= optimized_threshold)  # bool 1d-array based on class 1 "Default"
 
         # Add latency to batch metadata for logging
-        batch_metadata = {
-            **batch_metadata,
+        batch_metadata.update({
             "batch_latency_ms": pipeline_prediction_latency_ms,
-            "avg_prediction_latency_ms": round(pipeline_prediction_latency_ms / len(pipeline_input_dict_ls)) if len(pipeline_input_dict_ls) > 0 else None,
-        }
+            "avg_prediction_latency_ms": round(pipeline_prediction_latency_ms / len(pipeline_input_dict_ls)),
+        })
 
         # --- Create prediction response --- 
         results: List[PredictionResult] = []
