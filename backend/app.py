@@ -1,8 +1,6 @@
 # --- Imports ---
 # Standard library imports
-from http import client
 from pathlib import Path
-from sys import exc_info
 from typing import Any
 import logging
 import logging.config
