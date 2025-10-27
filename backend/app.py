@@ -278,7 +278,7 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
             prediction_monitoring_record = {
                 **batch_metadata,
                 "prediction_id": str(uuid.uuid4()),
-                "inputs": pipeline_input_dict_ls[i],
+                "inputs": pipeline_input_cleaned[i],
                 "prediction": prediction_enum.value,
                 "probabilities": {
                     "default": float(pred_proba[1]),
