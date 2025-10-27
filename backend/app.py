@@ -222,6 +222,7 @@ app = FastAPI()
 # Prediction endpoint 
 @app.post("/predict", response_model=PredictionResponse)
 def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Request) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> list[PipelineInput]
+    batch_metadata = None  # for prediction error logging 
     try:
         # Standardize input
         pipeline_input_dict_ls: list[dict[str, Any]]
@@ -290,5 +291,15 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
         return PredictionResponse(results=results)
 
     except Exception as e:
+        # Log error to console
         logger.error("Error during predict: %s", e, exc_info=True)
+
+        # Log prediction error record to file for model monitoring (including batch metadata)
+        if batch_metadata is None:  # code broke before .get_batch_metadata()
+            batch_metadata = {} 
+        prediction_monitoring_record = {
+            **batch_metadata,
+        }
+        monitoring_logger.info(json.dumps(prediction_monitoring_record))
+
         raise HTTPException(status_code=500, detail="Internal server error during loan default prediction")
