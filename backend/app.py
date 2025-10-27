@@ -103,14 +103,14 @@ def get_batch_metadata(
     request: Request, 
     geoip_reader: geoip2.database.Reader | None
 ) -> dict[str, Any]:    
-    # Get user agent and IP from frontend, fall back to backend request header for direct API calls
-    user_agent = pipeline_input_dict_ls[0].get("user_agent", None)  # use first input in list
-    if user_agent is None:
-        user_agent = request.headers.get("user-agent", "unknown")
+    # Get user agent and IP from frontend
+    user_agent = pipeline_input_dict_ls[0].get("user_agent", None)  # use first input in list of inputs
+    if user_agent is None:  # fall back for direct API request to backend
+        user_agent = request.headers.get("user-agent", "unknown")  # get from request headers of FastAPI backend
     client_ip = pipeline_input_dict_ls[0].get("client_ip", None)  
     if client_ip is None:
         x_forwarded_for = request.headers.get("x-forwarded-for")  # single str with one or more comma-separated IP addresses
-        client_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.client.host  # first IP address is always the client IP
+        client_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.client.host  # first IP is client IP address
     
     # Get client country from IP address
     client_country = "unknown"
@@ -126,7 +126,7 @@ def get_batch_metadata(
         "batch_id": str(uuid.uuid4()),
         "batch_size": len(pipeline_input_dict_ls),
         "batch_timestamp": datetime.now(timezone.utc).isoformat(),
-        "pipeline_version": pipeline_version_tag,
+        "pipeline_version": PIPELINE_VERSION_TAG,
         "client_country": client_country,
         "user_agent": user_agent,
     } 
@@ -202,11 +202,11 @@ except FileNotFoundError:
 
 # --- ML Pipeline ---
 # Load loan default prediction pipeline (including data preprocessing and Random Forest Classifier model) from Hugging Face Hub
-pipeline_version_tag = "v1.0"
+PIPELINE_VERSION_TAG = "v1.0"
 pipeline = load_pipeline_from_huggingface(
     repo_id="JensBender/loan-default-prediction-pipeline", 
     filename="loan_default_rf_pipeline.joblib",
-    revision=pipeline_version_tag  
+    revision=PIPELINE_VERSION_TAG  
 )
 
 # Load pipeline from local machine (use for local setup without Hugging Face Hub)
