@@ -299,7 +299,7 @@ The table below illustrates model performance on test data by highlighting best 
 
 <!-- DEPLOYMENT -->
 ## 🚀 Deployment
-To make the model easily accessible for end users, the loan default prediction pipeline was deployed as a web application. Built a machine learning (ML) pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn`. Deployed it as a web app using `FastAPI`, `Gradio`, and `Docker`, hosted on Hugging Face. 
+To make the model easily accessible for end users, it was deployed as a web application. Built a machine learning (ML) pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn`. Deployed the pipeline as a web app using `FastAPI`, `Gradio`, and `Docker`, hosted on Hugging Face. 
 
 **FastAPI Backend**  
 - Served the ML pipeline via a RESTful API built with `FastAPI`, supporting both single and batch requests.  
