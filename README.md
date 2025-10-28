@@ -299,7 +299,7 @@ The table below illustrates model performance on test data by highlighting best 
 
 <!-- DEPLOYMENT -->
 ## 🚀 Deployment
-Built a machine learning (ML) pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn`. Deployed the loan default prediction pipeline as a web application using `FastAPI`, `Gradio`, and `Docker`, hosted on Hugging Face. 
+To make the model easily accessible for end users, the loan default prediction pipeline was deployed as a web application. Built a machine learning (ML) pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn`. Deployed it as a web app using `FastAPI`, `Gradio`, and `Docker`, hosted on Hugging Face. 
 
 **FastAPI Backend**  
 - Served the ML pipeline via a RESTful API built with `FastAPI`, supporting both single and batch requests.  
@@ -311,11 +311,11 @@ Built a machine learning (ML) pipeline including the final Random Forest model a
 - Sends submissions to the FastAPI backend, which returns predictions rendered directly in the UI.
 
 **Docker**  
-- Containerized the application with both the `FastAPI` backend and `Gradio` frontend together from a single `Docker` container for reliable and portable deployment.  
+- Containerized the application combining the `FastAPI` backend and `Gradio` frontend in a single `Docker` container for reliable and portable deployment.  
 - The provided `Dockerfile` defines the Python environment, installs dependencies, and launches both backend and frontend with the `start.sh` shell script.
 
 **Hosting on Hugging Face**
-- The ML pipeline was serialized with `joblib` and stored on Hugging Face Hub: [JensBender/loan-default-prediction-pipeline]((https://huggingface.co/JensBender/loan-default-prediction-pipeline)).   
+- The ML pipeline is serialized with `joblib` and stored on Hugging Face Hub: [JensBender/loan-default-prediction-pipeline](https://huggingface.co/JensBender/loan-default-prediction-pipeline).   
 - The Dockerized app is deployed on Hugging Face Spaces to offer a live, interactive demo: [JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
