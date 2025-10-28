@@ -315,8 +315,9 @@ To make the model easily accessible for end users, the loan default prediction p
 - The provided `Dockerfile` defines the Python environment, installs dependencies, and launches both backend and frontend with the `start.sh` shell script.
 
 **Hosting on Hugging Face**
-- The ML pipeline is serialized with `joblib` and stored on Hugging Face Hub: [JensBender/loan-default-prediction-pipeline](https://huggingface.co/JensBender/loan-default-prediction-pipeline).   
-- The Dockerized app is deployed on Hugging Face Spaces to offer a live, interactive demo: [JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app).
+- Serialized the ML pipeline with `joblib`, stored it on Hugging Face Hub and hosted the Dockerized app on Hugging Face Spaces to offer a live, interactive demo.
+- Pipeline on Hugging Face Hub: [JensBender/loan-default-prediction-pipeline](https://huggingface.co/JensBender/loan-default-prediction-pipeline)
+- App on Hugging Face Spaces: [JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
