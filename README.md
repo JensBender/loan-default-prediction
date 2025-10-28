@@ -299,7 +299,7 @@ The table below illustrates model performance on test data by highlighting best 
 
 <!-- DEPLOYMENT -->
 ## 🚀 Deployment
-Built a machine learning (ML) pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn`. The ML pipeline was serialized with `joblib` and hosted on [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline). Deployed the loan default prediction pipeline as a web application using `FastAPI`, `Gradio`, and `Docker`. Hosted the app on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app). 
+Built a machine learning (ML) pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn`. Deployed the loan default prediction pipeline as a web application using `FastAPI`, `Gradio`, and `Docker`, hosted on Hugging Face. 
 
 **FastAPI Backend**  
 - Served the ML pipeline via a RESTful API using `FastAPI` that handles single and batch requests.
@@ -314,6 +314,10 @@ Built a machine learning (ML) pipeline including the final Random Forest model a
 - Containerized the application with `Docker` for reliable and portable deployment. 
 - Served both the `FastAPI` backend and `Gradio` frontend together from a single `Docker` container.
 - The provided `Dockerfile` defines the Python environment, installs dependencies, and launches backend and frontend with the `start.sh` shell script.
+
+**Hosting on Hugging Face**
+- Hosted the ML pipeline, serialized with `joblib`, on Hugging Face Hub: [JensBender/loan-default-prediction-pipeline]((https://huggingface.co/JensBender/loan-default-prediction-pipeline)).   
+- Hosted the Dockerized app on Hugging Face Spaces to offer a live, interactive demo: [JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
