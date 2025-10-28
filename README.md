@@ -299,7 +299,7 @@ The table below illustrates model performance on test data by highlighting best 
 
 <!-- DEPLOYMENT -->
 ## 🚀 Deployment
-Built a machine learning (ML) pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn` and saved it to file with `joblib`. Deployed the loan default prediction pipeline as a web application using `FastAPI`, `Gradio`, and `Docker`. 
+Built a machine learning (ML) pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn`. The ML pipeline was serialized with `joblib` and hosted on [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline). Deployed the loan default prediction pipeline as a web application using `FastAPI`, `Gradio`, and `Docker`. Hosted the app on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app). 
 
 **FastAPI Backend**  
 - Served the ML pipeline via a RESTful API using `FastAPI` that handles single and batch requests.
