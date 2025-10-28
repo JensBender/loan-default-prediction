@@ -302,22 +302,21 @@ The table below illustrates model performance on test data by highlighting best 
 Built a machine learning (ML) pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn`. Deployed the loan default prediction pipeline as a web application using `FastAPI`, `Gradio`, and `Docker`, hosted on Hugging Face. 
 
 **FastAPI Backend**  
-- Served the ML pipeline via a RESTful API using `FastAPI` that handles single and batch requests.
-- Implemented data validation using `Pydantic` models with required and optional fields, type constraints, enums for categorical fields, value range constraints for numerical fields, and custom validation logic. 
-- The `/predict` endpoint accepts loan application data in JSON format, processes it through the ML pipeline, and returns the prediction ("default" or "no default") along with probability scores.
+- Served the ML pipeline via a RESTful API built with `FastAPI`, supporting both single and batch requests.  
+- Implemented data validation using `Pydantic` models, including required and optional fields, type constraints, enums for categorical fields, value range constraints for numerical fields, and custom validation logic. 
+- The `/predict` endpoint accepts loan application data in JSON format, processes it through the ML pipeline, and returns predictions ("default" or "no default") along with probability scores.
 
 **Gradio Frontend**   
 - Built a user-friendly interface with `Gradio` so users can enter applicant information through a simple form.  
-- Sends submissions to the FastAPI backend, which returns predictions that are rendered in the UI.
+- Sends submissions to the FastAPI backend, which returns predictions rendered directly in the UI.
 
-**Docker**    
-- Containerized the application with `Docker` for reliable and portable deployment. 
-- Served both the `FastAPI` backend and `Gradio` frontend together from a single `Docker` container.
-- The provided `Dockerfile` defines the Python environment, installs dependencies, and launches backend and frontend with the `start.sh` shell script.
+**Docker**  
+- Containerized the application with both the `FastAPI` backend and `Gradio` frontend together from a single `Docker` container for reliable and portable deployment.  
+- The provided `Dockerfile` defines the Python environment, installs dependencies, and launches both backend and frontend with the `start.sh` shell script.
 
 **Hosting on Hugging Face**
-- Hosted the ML pipeline, serialized with `joblib`, on Hugging Face Hub: [JensBender/loan-default-prediction-pipeline]((https://huggingface.co/JensBender/loan-default-prediction-pipeline)).   
-- Hosted the Dockerized app on Hugging Face Spaces to offer a live, interactive demo: [JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app).
+- The ML pipeline was serialized with `joblib` and stored on Hugging Face Hub: [JensBender/loan-default-prediction-pipeline]((https://huggingface.co/JensBender/loan-default-prediction-pipeline)).   
+- The Dockerized app is deployed on Hugging Face Spaces to offer a live, interactive demo: [JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
