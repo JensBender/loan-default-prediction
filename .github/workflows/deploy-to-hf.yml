@@ -21,15 +21,16 @@ jobs:
       # Step 2 — Push the code to your Hugging Face Space
       - name: Push to Hugging Face Space
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}   # personal access token stored in GitHub Secrets
-          HF_USERNAME: your-hf-username       # 👈 replace with your HF username
-          SPACE_NAME: your-space-name         # 👈 replace with your Space name
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}   # access token (write access) stored in GitHub repo secrets
+          HF_USER: JensBender
+          HF_SPACE: loan-default-prediction-app
         run: |
+          # configure git to tell Hugging Face the push came from Github Actions and prevent “who are you?” errors  
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # add Hugging Face Space as a remote (https://huggingface.co/spaces/USERNAME/SPACE)
-          git remote add hf https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$SPACE_NAME
+          # add Hugging Face Space as a remote repository
+          git remote add hf https://$HF_USER:$HF_TOKEN@huggingface.co/spaces/$HF_USER/$HF_SPACE
 
-          # push main branch to the Space's main branch
+          # push Github repo main branch to the main branch of the Hugging Face Space repo
           git push --force hf main
