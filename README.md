@@ -107,6 +107,7 @@ Predicting loan defaults is a challenging task due to the multitude of influenci
   - Success criteria: Minimum class-1 recall of 0.75 and class-1 precision of 0.50 on the test data.
 - Identify key factors influencing loan default risk through feature importance analysis.
 - Deploy the model and preprocessing pipeline as a Dockerized app with FastAPI backend and Gradio frontend.
+- Implement robust testing (unit, integration, and end-to-end) for the machine learning pipeline, backend, and frontend.
 
 **Value Proposition**  
 This project enables financial institutions to reduce loan default rates and make better and faster lending decisions by leveraging machine learning for automated and improved risk assessment. 
