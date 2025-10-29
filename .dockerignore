@@ -8,6 +8,7 @@ GEMINI.md
 LICENSE
 geoip_db/COPYRIGHT.txt 
 geoip_db/LICENSE.txt
+.github/workflows/deploy-to-hf.yml
 
 # Virtual environment
 *venv*/
