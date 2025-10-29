@@ -11,26 +11,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1 — Check out your repository’s code
+      # Step 1: Use GitHub's checkout action to clone the repo into the runner (temporary Ubuntu VM)
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          lfs: true          # include large files tracked with Git LFS
-          fetch-depth: 0     # full history (safer for git pushes)
+          fetch-depth: 0     # full git history
 
-      # Step 2 — Push the code to your Hugging Face Space
+      # Step 2: Push the code to your Hugging Face Space
       - name: Push to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}   # access token (write access) stored in GitHub repo secrets
           HF_USER: JensBender
           HF_SPACE: loan-default-prediction-app
         run: |
-          # configure git to tell Hugging Face the push came from Github Actions and prevent “who are you?” errors  
+          # configure git to tell Hugging Face the push came from GitHub Actions and prevent “who are you?” errors  
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           # add Hugging Face Space as a remote repository
           git remote add hf https://$HF_USER:$HF_TOKEN@huggingface.co/spaces/$HF_USER/$HF_SPACE
 
-          # push Github repo main branch to the main branch of the Hugging Face Space repo
+          # push main branch of GitHub repo to main branch of Hugging Face Space repo
+          # use force push to create exact mirror on HF Space, overwriting any changes made directly on HF
           git push --force hf main
