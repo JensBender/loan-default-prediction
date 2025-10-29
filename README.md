@@ -72,7 +72,7 @@ Developed a machine learning solution to predict loan defaults using customer ap
 - **Data Preprocessing**: Engineered new features (e.g., job stability, city tier, state default rate), handled duplicates, data types, missing values, and outliers, scaled numerical features, and encoded categorical features.
 - **Exploratory Data Analysis**: Analyzed descriptive statistics and visualized distributions, correlations and relationships.
 - **Modeling**: Trained and evaluated eight baseline models (e.g., Logistic Regression, Random Forest, XGBoost) and tuned hyperparameters. The final model, a Random Forest classifier with optimized decision threshold, achieved an AUC-PR of 0.62, class-1 recall of 0.80, and class-1 precision of 0.54. Visualized feature importances and showed model prediction examples.
-- **Deployment**: Served the full machine learning pipeline (data preprocessing and final model) as a web app using FastAPI backend and Gradio frontend within a single Docker container.
+- **Deployment**: Served the full machine learning pipeline (preprocessing and model) as a web app using FastAPI backend and Gradio frontend within a single Docker container on Hugging Face.
 - **Testing**: Implemented comprehensive unit, integration, and end-to-end tests to validate individual components, their interactions, and entire user journeys.
 
 ### 🛠️ Built With
