@@ -1,0 +1,35 @@
+name: Deploy to Hugging Face Space
+
+on:
+  push:
+    branches:
+      - main          # run this workflow on every git push to main branch
+  workflow_dispatch:  # allow manual trigger from GitHub Actions UI
+
+jobs:
+  sync-to-huggingface:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1 — Check out your repository’s code
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true          # include large files tracked with Git LFS
+          fetch-depth: 0     # full history (safer for git pushes)
+
+      # Step 2 — Push the code to your Hugging Face Space
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}   # personal access token stored in GitHub Secrets
+          HF_USERNAME: your-hf-username       # 👈 replace with your HF username
+          SPACE_NAME: your-space-name         # 👈 replace with your Space name
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # add Hugging Face Space as a remote (https://huggingface.co/spaces/USERNAME/SPACE)
+          git remote add hf https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$SPACE_NAME
+
+          # push main branch to the Space's main branch
+          git push --force hf main
