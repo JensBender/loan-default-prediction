@@ -3,24 +3,24 @@ name: Deploy to Hugging Face Space
 on:
   push:
     branches:
-      - main          # run this workflow on every git push to main branch
+      - main  # run this workflow on every git push to the main branch
   workflow_dispatch:  # allow manual trigger from GitHub Actions UI
 
 jobs:
   sync-to-huggingface:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # runner: ephemeral (temporary) Ubuntu VM 
 
     steps:
-      # Step 1: Use GitHub's checkout action to clone the repo into the runner (temporary Ubuntu VM)
+      # Step 1: Clone the repository into the runner uing GitHub's checkout action  
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0     # full git history
+          fetch-depth: 0  # 0 for full git history, 1 for lastest commit only
 
-      # Step 2: Push the code to your Hugging Face Space
+      # Step 2: Push the code to the Hugging Face Space repository
       - name: Push to Hugging Face Space
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}   # access token (write access) stored in GitHub repo secrets
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}   # access token (write access) created on HF and stored in GitHub repo secrets
           HF_USER: JensBender
           HF_SPACE: loan-default-prediction-app
         run: |
