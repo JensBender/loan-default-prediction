@@ -317,9 +317,12 @@ Deployed a user-friendly web application to make the model easily accessible. Us
 - The provided `Dockerfile` defines the Python environment, installs dependencies, and launches both backend and frontend with the `start.sh` shell script.
 
 **Hosting on Hugging Face**
-- Serialized the ML pipeline with `joblib`, stored it on Hugging Face Hub and hosted the Dockerized app on Hugging Face Spaces to offer a live, interactive demo.
-- Pipeline on Hugging Face Hub: [JensBender/loan-default-prediction-pipeline](https://huggingface.co/JensBender/loan-default-prediction-pipeline)
-- App on Hugging Face Spaces: [JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app)
+- Serialized the ML pipeline using `joblib` and uploaded it to Hugging Face Hub for versioning and reuse.
+- Hosted the Dockerized app on Hugging Face Spaces to offer a live, interactive demo for end users.
+- Utilized GitHub Actions for continuous deployment by syncing the GitHub repository with the Hugging Face Spaces repository.
+
+Pipeline: [JensBender/loan-default-prediction-pipeline](https://huggingface.co/JensBender/loan-default-prediction-pipeline)  
+App: [JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
