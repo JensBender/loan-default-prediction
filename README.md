@@ -1,3 +1,14 @@
+---
+title: Loan Default Prediction App
+emoji: 💰
+colorFrom: indigo
+colorTo: emerald
+sdk: docker
+app_port: 7860
+app_port_secondary: 8000
+pinned: false
+---
+
 <!-- anchor tag for back-to-top links -->
 <a name="readme-top"></a>
 
