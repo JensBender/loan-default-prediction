@@ -17,8 +17,12 @@ jobs:
         with:
           fetch-depth: 0  # 0 for full git history, 1 for lastest commit only
           lfs: true  # enable Git LFS (for binary files like .png)
-
-      # Step 2: Push the code to the Hugging Face Space repository
+      
+      # Step 2: Ensure all LFS files (.png) are downloaded
+      - name: Pull LFS files
+        run: git lfs pull   
+      
+      # Step 3: Push the code to the Hugging Face Space repository
       - name: Push to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}   # access token (write access) created on HF and stored in GitHub repo secrets
