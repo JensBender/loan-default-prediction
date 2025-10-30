@@ -2,7 +2,7 @@
 title: Loan Default Prediction App
 emoji: 💰
 colorFrom: indigo
-colorTo: emerald
+colorTo: green
 sdk: docker
 app_port: 7860
 app_port_secondary: 8000
