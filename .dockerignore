@@ -33,6 +33,7 @@ requirements-notebook.txt
 # Git-related files
 .git
 .gitignore
+.gitattributes
 
 # Docker-related files
 Dockerfile
