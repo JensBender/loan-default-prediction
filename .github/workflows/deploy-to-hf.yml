@@ -33,5 +33,5 @@ jobs:
           git remote add hf https://$HF_USER:$HF_TOKEN@huggingface.co/spaces/$HF_USER/$HF_SPACE
 
           # push main branch of GitHub repo to main branch of Hugging Face Space repo
-          # use force push to create exact mirror on HF Space, overwriting any changes made directly on HF
-          git push --force hf main
+          git lfs push hf main  # first upload the LFS files (.png files)
+          git push --force hf main  # use force push to create exact mirror on HF Space, overwriting any changes made directly on HF
