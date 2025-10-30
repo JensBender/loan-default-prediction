@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # 0 for full git history, 1 for lastest commit only
+          lfs: true  # enable Git LFS (for binary files like .png)
 
       # Step 2: Push the code to the Hugging Face Space repository
       - name: Push to Hugging Face Space
