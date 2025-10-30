@@ -301,7 +301,7 @@ The table below illustrates model performance on test data by highlighting best 
 
 <!-- DEPLOYMENT -->
 ## 🚀 Deployment
-To make the model easily accessible for end users, it was deployed as a web application. Built a machine learning (ML) pipeline including the final Random Forest model and all data preprocessing steps using `scikit-learn`. Deployed the pipeline as a web app using `FastAPI`, `Gradio`, and `Docker`, hosted on Hugging Face. 
+Deployed a user-friendly web application to make the model easily accessible. Used `scikit-learn` to built the end-to-end ML pipeline, including all data preprocessing steps and the final Random Forest model. The ML pipeline was then wrapped into a web app using `FastAPI` backend and `Gradio` frontend, containerized with `Docker`, and hosted on Hugging Face.
 
 **FastAPI Backend**  
 - Served the ML pipeline via a RESTful API built with `FastAPI`, supporting both single and batch requests.  
