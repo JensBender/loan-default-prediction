@@ -1,4 +1,3 @@
-<!--
 ---
 title: Loan Default Prediction
 subtitle: Submit customer application data to predict loan default
@@ -10,7 +9,6 @@ app_port: 7860
 app_port_secondary: 8000
 pinned: false
 ---
--->
 
 <!-- anchor tag for back-to-top links -->
 <a name="readme-top"></a>
