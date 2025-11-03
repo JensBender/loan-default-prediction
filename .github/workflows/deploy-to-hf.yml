@@ -18,7 +18,17 @@ jobs:
           fetch-depth: 0  # 0 for full git history, 1 for lastest commit only
           lfs: false        
 
-      # Step 2: Create directory with only files needed for Hugging Face Space deployment
+      # Step 2: Install Python  
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      # Step 3: Install Hugging Face Hub package   
+      - name: Install huggingface_hub
+        run: pip install --upgrade huggingface_hub
+
+      # Step 4: Create directory with only files needed for the Hugging Face Space deployment
       - name: Create deployment directory
         run: |
           mkdir deploy
@@ -32,12 +42,15 @@ jobs:
           cp -r geoip_db/* deploy/geoip_db/
           cp README-hf-space.md deploy/README.md  # rename to README.md for Hugging Face Space 
 
-      # Step 3: Push the code to the Hugging Face Space repository
+      # Step 5: Push the code to the Hugging Face Space repository
       - name: Push to Hugging Face Space
-        uses: huggingface/hub-action@v1
-        with:
-          repo-token: ${{ secrets.HF_TOKEN }}  # access token (write access) created on HF and stored in GitHub repo secrets
-          repo-type: space
-          repo-id: JensBender/loan-default-prediction-app
-          path: deploy
-          force: true  # overwrite any changes made directly on HF Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}  # access token (write access) created on HF and stored in GitHub repo secrets
+        run: |
+          huggingface-cli upload \
+            --repo-id JensBender/loan-default-prediction-app \
+            --repo-type space \
+            ./deploy \
+            --token $HF_TOKEN \
+            --commit-message "Deploy from GitHub Actions" \
+            --force  # overwrite any changes made directly on HF Space 
