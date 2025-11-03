@@ -16,16 +16,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # 0 for full git history, 1 for lastest commit only
-          lfs: true  # enable Git LFS (for binary files like .png)
-      
-      # Step 2: Set up Git LFS (for .png files)
-      - name: Set up LFS
-        run: |
-          git lfs install
-          git lfs fetch --all
-          git lfs checkout   
+          lfs: false        
 
-      # Step 3: Create directory with only files needed for Hugging Face Space deployment
+      # Step 2: Create directory with only files needed for Hugging Face Space deployment
       - name: Create deployment directory
         run: |
           mkdir deploy
@@ -39,22 +32,12 @@ jobs:
           cp -r geoip_db/* deploy/geoip_db/
           cp README-hf-space.md deploy/README.md  # rename to README.md for Hugging Face Space 
 
-      # Step 4: Push the code to the Hugging Face Space repository
+      # Step 3: Push the code to the Hugging Face Space repository
       - name: Push to Hugging Face Space
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}   # access token (write access) created on HF and stored in GitHub repo secrets
-          HF_USER: JensBender
-          HF_SPACE: loan-default-prediction-app
+        uses: huggingface/hub-action@v1
         with:
+          repo-token: ${{ secrets.HF_TOKEN }}  # access token (write access) created on HF and stored in GitHub repo secrets
+          repo-type: space
+          repo-id: JensBender/loan-default-prediction-app
           path: deploy
-        run: |
-          # configure git to tell Hugging Face the push came from GitHub Actions and prevent “who are you?” errors  
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # add Hugging Face Space as a remote repository
-          git remote add hf https://$HF_USER:$HF_TOKEN@huggingface.co/spaces/$HF_USER/$HF_SPACE
-
-          # push main branch of GitHub repo to main branch of Hugging Face Space repo
-          git lfs push --all hf main  # push LFS objects first to avoid missing-object errors
-          git push --force hf main  # use force push to create exact mirror on HF Space, overwriting any changes made directly on HF
+          force: true  # overwrite any changes made directly on HF Space
