@@ -18,17 +18,7 @@ jobs:
           fetch-depth: 0  # 0 for full git history, 1 for lastest commit only
           lfs: false        
 
-      # Step 2: Install Python  
-      - name: Install Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-      # Step 3: Install Hugging Face Hub package   
-      - name: Install huggingface_hub
-        run: pip install --upgrade huggingface_hub
-
-      # Step 4: Create directory with only files needed for the Hugging Face Space deployment
+     # Step 2: Create directory with only files needed for the Hugging Face Space deployment
       - name: Create deployment directory
         run: |
           mkdir deploy
@@ -40,17 +30,28 @@ jobs:
           cp -r backend/* deploy/backend/
           cp -r src/* deploy/src/
           cp -r geoip_db/* deploy/geoip_db/
-          cp README-hf-space.md deploy/README.md  # rename to README.md for Hugging Face Space 
+          cp README-hf-space.md deploy/README.md  # rename for Hugging Face Space 
 
-      # Step 5: Push the code to the Hugging Face Space repository
-      - name: Push to Hugging Face Space
+      # Step 3: Push the code to the Hugging Face Space repository
+      - name: Push to Hugging Face Space 
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}  # access token (write access) created on HF and stored in GitHub repo secrets
+          HF_USER: JensBender
+          HF_SPACE: loan-default-prediction-app
         run: |
-          python -m huggingface_hub.cli.upload \
-            --repo-id JensBender/loan-default-prediction-app \
-            --repo-type space \
-            ./deploy \
-            --token $HF_TOKEN \
-            --commit-message "Deploy from GitHub Actions" \
-            --force  # overwrite any changes made directly on HF Space 
+          # Make deployment directory a Git repo
+          cd deploy
+          git init
+          git config user.name "github-actions[bot]"  # configure Git to tell HF that push comes from GitHub Actions and prevent “who are you?” errors
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Add Hugging Face Space as a remote repository
+          git remote add origin https://$HF_USER:$HF_TOKEN@huggingface.co/spaces/$HF_USER/$HF_SPACE
+
+          # Commit changes
+          git add .
+          git commit -m "Deploy from GitHub Actions"
+          git branch -M main
+
+          # Force push to make the HF Space exactly match deploy directory
+          git push --force origin main
