@@ -1,9 +1,19 @@
 name: Deploy to Hugging Face Space
 
 on:
+  # Trigger this workflow whenever a git push to the main branch affects app-related files (listed in paths)
   push:
     branches:
-      - main  # run this workflow on every git push to the main branch
+      - main  
+    paths:
+      - "frontend/**"
+      - "backend/**"
+      - "src/**"
+      - "geoip_db/**"
+      - "Dockerfile"
+      - "requirements.txt"
+      - "start.sh"
+      - "README-hf-space.md"
   workflow_dispatch:  # allow manual trigger from GitHub Actions UI
 
 jobs:
