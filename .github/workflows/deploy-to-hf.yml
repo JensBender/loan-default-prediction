@@ -25,7 +25,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 0 for full git history, 1 for lastest commit only
+          fetch-depth: 1  # 0 for full git history, 1 for lastest commit only
           lfs: false        
 
      # Step 2: Create directory with only files needed for the Hugging Face Space deployment
