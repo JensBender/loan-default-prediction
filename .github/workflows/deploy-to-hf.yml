@@ -47,7 +47,7 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}  # access token (write access) created on HF and stored in GitHub repo secrets
         run: |
-          huggingface-cli upload \
+          python -m huggingface_hub.cli.upload \
             --repo-id JensBender/loan-default-prediction-app \
             --repo-type space \
             ./deploy \
