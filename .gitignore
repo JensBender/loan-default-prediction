@@ -13,6 +13,9 @@ test_loan_default_prediction.ipynb
 GEMINI.md 
 geoip_db/GeoLite2-Country.mmdb
 
+# Environment variables
+.env
+
 # Virtual environment
 *venv*/
 

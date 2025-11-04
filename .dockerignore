@@ -13,6 +13,9 @@ geoip_db/LICENSE.txt
 upload_model_to_huggingface.py
 .github/workflows/deploy-to-hf.yml
 
+# Environment variables
+.env
+
 # Virtual environment
 *venv*/
 
