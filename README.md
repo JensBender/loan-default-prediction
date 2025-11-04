@@ -356,7 +356,7 @@ This project is licensed under the [MIT License](LICENSE).
 ## 👏 Credits
 This project was made possible with the help of the following resources:
 - **Header image**: Generated using the FLUX.1 [dev] image generator via [Hugging Face](https://huggingface.co/spaces/black-forest-labs/FLUX.1-dev) by [Black Forest Labs](https://blackforestlabs.ai/).
-- **Geolocation logging in web app**: The FastAPI backend uses the GeoLite2 Country database by [MaxMind](https://www.maxmind.com) to log country-level geolocation for model monitoring. To run the web app, download the database and place the `GeoLite2-Country.mmdb` file in the `geoip_db/` directory so it’s available to the `geoip2` Python library.
+- **Geolocation logging in web app**: The FastAPI backend uses the GeoLite2 Country database by [MaxMind](https://www.maxmind.com) to log country-level geolocation for model monitoring.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
