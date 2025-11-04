@@ -45,5 +45,11 @@ End-to-end `scikit-learn` pipeline containing preprocessing and a Random Forest 
 - Further bias, fairness, and explainability analysis is recommended before deployment.
 
 ## Deployment
-- The model is serialized via `joblib` and deployed as a web app with FastAPI backend and Gradio frontend, hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app).
-- Pipeline repository: [loan-default-prediction-pipeline](https://huggingface.co/JensBender/loan-default-prediction-pipeline)
+The model is serialized via `joblib` and deployed as a Dockerized web app with FastAPI backend and Gradio frontend, hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app).
+
+## Links
+| Repository | Link |
+|----------|------|
+| Code | [github.com/JensBender/loan-default-prediction](https://github.com/JensBender/loan-default-prediction) |
+| Pipeline | [huggingface.co/JensBender/loan-default-prediction-pipeline](https://huggingface.co/JensBender/loan-default-prediction-pipeline) |
+| App | [huggingface.co/JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) |
