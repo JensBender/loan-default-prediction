@@ -8,7 +8,8 @@ mkdir -p /app/geoip_db
 if [ ! -f /app/geoip_db/GeoLite2-Country.mmdb ]; then
   echo "Downloading GeoLite2-Country.mmdb..."
   
-  # Download the database using your MaxMind license key (set as Hugging Face secret)
+  # Download the database using your MaxMind license key 
+  # Create an account at https://www.maxmind.com/, create a license key and add it as a secret in your Hugging Face Space
   curl -L -o /app/geoip_db/GeoLite2-Country.tar.gz \
     "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${MAXMIND_LICENSE_KEY}&suffix=tar.gz"
 
