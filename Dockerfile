@@ -4,6 +4,9 @@ FROM python:3.10-slim-bookworm
 # Set the working directory in the container
 WORKDIR /app
 
+# Install curl & tar (to download GeoLite2)
+RUN apt-get update && apt-get install -y --no-install-recommends curl tar && rm -rf /var/lib/apt/lists/*
+
 # Copy the requirements file and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
