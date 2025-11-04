@@ -1,19 +1,19 @@
-## Loan Default Prediction Pipeline
-
-**Model Details**  
+## 🏦 Loan Default Prediction Pipeline
 Author: Jens Bender  
 License: Apache 2.0  
-Model: Random Forest Classifier  
+Model Type: Random Forest Classifier  
 Version: 1.0  
 Language: Python  
 Framework: scikit-learn  
 Task: Binary classification  
-Input: Customer loan application data (tabular)  
-Output: Predicted probability of loan default
+Input: Tabular data (customer loan application)  
+Output: Probability of loan default
 
 **Intended Use**  
-Predict the probability of loan default for applicants to help financial institutions manage credit risk.  
-Not intended for use in production without additional model validation and fairness assessment. Predictions should not be used as the sole basis for loan approval. Further bias, fairness, and explainability analysis is recommended before deployment.
+Predict the probability of loan default for applicants to help financial institutions manage credit risk. Not intended for use in production without additional model validation and fairness assessment.  
+
+**Ethical Considerations & Limitations**  
+Predictions should not be used as the sole basis for loan approval. Further bias, fairness, and explainability analysis is recommended before deployment.
 
 **Training Data**  
 Dataset: [Loan Prediction Based on Customer Behavior (Kaggle)](https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior)  
@@ -22,6 +22,7 @@ Dataset: [Loan Prediction Based on Customer Behavior (Kaggle)](https://www.kaggl
 - Features include demographic, financial, and location-based attributes
 
 **Model Evaluation**  
+Performance on test set (10% split).  
 | Metric | Value |
 |---------|--------|
 | AUC-PR | 0.62 |
