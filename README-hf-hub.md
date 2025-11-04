@@ -2,23 +2,24 @@
 
 **Model Details**  
 Author: Jens Bender  
+License: Apache 2.0  
+Model: Random Forest Classifier  
 Version: 1.0  
 Language: Python  
 Framework: scikit-learn  
-License: Apache 2.0  
-Task: Binary classification (default vs. not default on loan)  
-Input: Customer loan application data (tabular data)  
+Task: Binary classification  
+Input: Customer loan application data (tabular)  
 Output: Predicted probability of loan default
 
 **Intended Use**  
 Predict the probability of loan default for applicants to help financial institutions manage credit risk.  
-Not intended for use in production without additional model validation and fairness assessment.
+Not intended for use in production without additional model validation and fairness assessment. Predictions should not be used as the sole basis for loan approval. Further bias, fairness, and explainability analysis is recommended before deployment.
 
 **Training Data**  
 Dataset: [Loan Prediction Based on Customer Behavior (Kaggle)](https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior)  
 - 252,000 samples, 11 features  
 - 12.3% default rate  
-- Features include demographic, financial, and location-based attributes.
+- Features include demographic, financial, and location-based attributes
 
 **Model Evaluation**  
 | Metric | Value |
@@ -30,9 +31,7 @@ Dataset: [Loan Prediction Based on Customer Behavior (Kaggle)](https://www.kaggl
 | Accuracy | 0.89 |
 
 **Model Architecture**  
-End-to-end `scikit-learn` pipeline containing preprocessing and a Random Forest classifier model with optimized decision threshold of 0.29.
-
-**Hyperparameters**  
+Hyperparameters of Random Forest Classifier:  
 - `n_estimators=225`  
 - `max_depth=26`  
 - `min_samples_split=2`  
@@ -40,13 +39,12 @@ End-to-end `scikit-learn` pipeline containing preprocessing and a Random Forest 
 - `max_features=0.13`  
 - `class_weight='balanced'`
 
-**Ethical Considerations and Limitations**
-- Predictions should not be used as the sole basis for loan approval.  
-- Further bias, fairness, and explainability analysis is recommended before deployment.
+End-to-end `scikit-learn` pipeline containing preprocessing and a Random Forest classifier model. The optimized decision threshold (0.29) is applied in post-processing during deployment, not within the pipeline itself.
 
 **Deployment**  
 The model pipeline is serialized via `joblib` and deployed as a Dockerized web app with FastAPI backend and Gradio frontend, hosted on Hugging Face Spaces.
 
+**Links**
 | Repository | Link |
 |----------|------|
 | Code | [github.com/JensBender/loan-default-prediction](https://github.com/JensBender/loan-default-prediction) |
