@@ -20,6 +20,7 @@ metrics:
   - f1
   - accuracy
 model_type: RandomForestClassifier
+thumbnail: "https://raw.githubusercontent.com/JensBender/loan-default-prediction/main/images/header-image.webp"
 ---
 
 ## 🏦 Loan Default Prediction Pipeline
