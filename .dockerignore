@@ -8,8 +8,6 @@ README-hf-space.md
 GEMINI.md
 LICENSE
 frontend/old_gradio_app.py
-geoip_db/COPYRIGHT.txt 
-geoip_db/LICENSE.txt
 upload_model_to_huggingface.py
 .github/workflows/deploy-to-hf.yml
 
