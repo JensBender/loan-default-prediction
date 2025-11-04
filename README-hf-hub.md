@@ -1,3 +1,27 @@
+---
+language:
+  - en
+license: apache-2.0
+library_name: scikit-learn
+tags:
+  - finance
+  - credit-risk
+  - loan-default
+  - random-forest
+  - tabular-data
+  - joblib
+pipeline_tag: tabular-classification
+datasets:
+  - "https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior"
+metrics:
+  - auc_pr
+  - recall
+  - precision
+  - f1
+  - accuracy
+model_type: RandomForestClassifier
+---
+
 ## 🏦 Loan Default Prediction Pipeline
 Author: Jens Bender  
 License: Apache 2.0  
