@@ -175,7 +175,7 @@ def load_pipeline_from_huggingface(repo_id: str, filename: str, revision: str) -
         # .hf_hub_download() downloads the pipeline file and returns its local file path (inside the Docker container)
         # if the pipeline file was already downloaded, it will use the cached pipeline that is already stored inside the Docker container 
         logger.info(
-            f"Connecting to Hugging Face Hub to download pipeline file '{filename}' with tag '{revision}' in repo '{repo_id}'. "
+            f"Downloading pipeline '{filename}' with tag '{revision}' from Hugging Face Hub repo '{repo_id}'. "
             "If already cached, will use local copy."
         )
         pipeline_path = hf_hub_download(repo_id=repo_id, filename=filename, revision=revision)
