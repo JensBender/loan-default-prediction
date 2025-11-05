@@ -88,8 +88,10 @@ Random Forest Classifier:
 
 ---
 
-**Model Evaluation**  
-Performance on test set (10% split).  
+## Evaluation
+### Testing Data and Metrics
+Evaluated model performance on a hold-out test set (10% split).
+
 | Metric | Value |
 |---------|--------|
 | AUC-PR | 0.62 |
@@ -98,6 +100,8 @@ Performance on test set (10% split).
 | F1-score (class 1) | 0.64 |
 | Accuracy | 0.89 |
 
-**Deployment**  
+---
+
+## Deployment  
 - End-to-end `scikit-learn` pipeline containing preprocessing and a Random Forest classifier model. The optimized decision threshold (0.29) is applied in post-processing during deployment, not within the pipeline itself.
 - The model pipeline is serialized via `joblib` and deployed as a Dockerized web app with FastAPI backend and Gradio frontend, hosted on Hugging Face Spaces.
