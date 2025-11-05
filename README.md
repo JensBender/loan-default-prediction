@@ -347,11 +347,12 @@ Developed comprehensive unit, integration, and end-to-end tests using `pytest`.
 
 <!-- LICENSE -->
 ## ©️ License
-| Repository | Hosted on | License |
+Summary of license terms for all project components:
+| Component | Hosted on | License |
 | :--- | :------ | :------ |
-| Code | [GitHub](https://github.com/JensBender/loan-default-prediction) | [MIT](LICENSE) |
-| App | [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) | MIT |
-| Pipeline | [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) | [Apache-2.0](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE) |
+| Source Code | [GitHub](https://github.com/JensBender/loan-default-prediction) | [MIT](LICENSE) |
+| Web App | [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) | MIT |
+| Model Pipeline | [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) | [Apache-2.0](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE) |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
