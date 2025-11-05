@@ -109,7 +109,7 @@ Evaluated model performance on a hold-out test set (10% split).
 ---
 
 ## License  
-The model pipeline uses the Apache 2.0 License. The accompanying code on [GitHub](https://github.com/JensBender/loan-default-prediction) and web app on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) use the MIT License. Both licenses are permissive and compatible.
+The model weights and pipeline are licensed under Apache-2.0. The accompanying source code on [GitHub](https://github.com/JensBender/loan-default-prediction) and the web app on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) are MIT-licensed. 
 
 ---
 
