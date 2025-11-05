@@ -2,8 +2,10 @@ from huggingface_hub import HfApi
 
 # Constants
 LOCAL_PIPELINE_PATH = "models/loan_default_rf_pipeline.joblib"  
+LOCAL_README_PATH = "README-hf-hub.md"
 HF_HUB_REPO = "JensBender/loan-default-prediction-pipeline"  # make sure to create Hugging Face Hub repository first
-FILENAME = "loan_default_rf_pipeline.joblib"
+HF_PIPELINE_PATH = "loan_default_rf_pipeline.joblib"
+HF_README_PATH = "README.md"
 TAG = "v1.0"  # version tag
 UPLOAD_PIPELINE = False
 UPLOAD_README = True
@@ -13,11 +15,11 @@ api = HfApi()
 
 # --- Upload Pipeline ---
 if UPLOAD_PIPELINE:
-    print(f"Uploading pipeline '{FILENAME}' to Hugging Face Hub repository '{HF_HUB_REPO}'...")
+    print(f"Uploading '{HF_PIPELINE_PATH}' to Hugging Face Hub repository '{HF_HUB_REPO}'...")
     api.upload_file(
         path_or_fileobj=LOCAL_PIPELINE_PATH,
         repo_id=HF_HUB_REPO,
-        path_in_repo=FILENAME,
+        path_in_repo=HF_PIPELINE_PATH,
         repo_type="model"
     )
     print("Successfully uploaded pipeline to Hugging Face Hub.")
@@ -34,7 +36,11 @@ if UPLOAD_PIPELINE:
 
 # --- Upload README ---
 if UPLOAD_README:
-    print(f"Uploading README to Hugging Face Hub repository '{HF_HUB_REPO}'...")
+    print(f"Uploading '{LOCAL_README_PATH}' to Hugging Face Hub repository '{HF_HUB_REPO}' as '{HF_README_PATH}'...")
+    api.upload_file(
+        path_or_fileobj=LOCAL_README_PATH,
+        repo_id=HF_HUB_REPO,
+        path_in_repo=HF_README_PATH,
+        repo_type="model"
+    )
     print("Successfully uploaded README to Hugging Face Hub.")
-
-
