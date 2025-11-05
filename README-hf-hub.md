@@ -11,8 +11,6 @@ tags:
   - tabular-data
   - joblib
 pipeline_tag: tabular-classification
-datasets:
-  - "https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior"
 metrics:
   - auc_pr
   - recall
