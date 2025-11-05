@@ -54,8 +54,15 @@ Output: Probability of loan default
 
 ---
 
-**Ethical Considerations & Limitations**  
-Predictions should not be used as the sole basis for loan approval. Further bias, fairness, and explainability analysis is recommended before deployment.
+## Bias, Risks, and Limitations
+- The model reflects patterns in historical data, which may contain sociodemographic or geographic biases.
+- Such biases could lead to unfair treatment of certain applicant groups.
+
+### Recommendations
+- Use the model as a supportive tool, not as the sole basis for loan approval. 
+- Perform bias, fairness, and explainability analysis before production deployment.  
+
+---
 
 **Training Data**  
 Dataset: [Loan Prediction Based on Customer Behavior (Kaggle)](https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior)  
