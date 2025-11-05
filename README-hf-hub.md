@@ -3,25 +3,26 @@ language:
   - en
 license: apache-2.0
 library_name: scikit-learn
+model_type: RandomForestClassifier
+pipeline_tag: tabular-classification
 tags:
   - finance
   - credit-risk
   - loan-default
-  - random-forest
   - tabular-data
+  - random-forest
   - joblib
-pipeline_tag: tabular-classification
 metrics:
   - auc_pr
   - recall
   - precision
   - f1
-  - accuracy
-model_type: RandomForestClassifier
 thumbnail: "https://raw.githubusercontent.com/JensBender/loan-default-prediction/main/images/header-image.webp"
 ---
 
-## 🏦 Loan Default Prediction Pipeline
+# 🏦 Loan Default Prediction Pipeline
+## Model Details
+### Model Description
 Author: Jens Bender  
 License: Apache 2.0  
 Model Type: Random Forest Classifier  
@@ -32,8 +33,26 @@ Task: Binary classification
 Input: Tabular data (customer loan application)  
 Output: Probability of loan default
 
-**Intended Use**  
-Predict the probability of loan default for applicants to help financial institutions manage credit risk. Not intended for use in production without additional model validation and fairness assessment.  
+### Model Sources
+| Repository | Link |
+|----------|------|
+| Code | [github.com/JensBender/loan-default-prediction](https://github.com/JensBender/loan-default-prediction) |
+| Pipeline | [huggingface.co/JensBender/loan-default-prediction-pipeline](https://huggingface.co/JensBender/loan-default-prediction-pipeline) |
+| App | [huggingface.co/JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) |
+
+---
+
+## Uses
+### Direct Use
+- Predict the probability of loan default for applicants to help financial institutions manage credit risk.
+- Support loan application officers with model-driven insights.
+
+### Out-of-Scope Use
+- Not intended for fully automated lending decisions.
+- Not suitable for populations or markets not represented in the training data.
+- Not intended for use in production without additional model validation and fairness assessment.
+
+---
 
 **Ethical Considerations & Limitations**  
 Predictions should not be used as the sole basis for loan approval. Further bias, fairness, and explainability analysis is recommended before deployment.
@@ -67,10 +86,3 @@ End-to-end `scikit-learn` pipeline containing preprocessing and a Random Forest 
 
 **Deployment**  
 The model pipeline is serialized via `joblib` and deployed as a Dockerized web app with FastAPI backend and Gradio frontend, hosted on Hugging Face Spaces.
-
-**Links**
-| Repository | Link |
-|----------|------|
-| Code | [github.com/JensBender/loan-default-prediction](https://github.com/JensBender/loan-default-prediction) |
-| Pipeline | [huggingface.co/JensBender/loan-default-prediction-pipeline](https://huggingface.co/JensBender/loan-default-prediction-pipeline) |
-| App | [huggingface.co/JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) |
