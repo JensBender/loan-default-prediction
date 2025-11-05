@@ -105,3 +105,19 @@ Evaluated model performance on a hold-out test set (10% split).
 ## Deployment  
 - End-to-end `scikit-learn` pipeline containing preprocessing and a Random Forest classifier model. The optimized decision threshold (0.29) is applied in post-processing during deployment, not within the pipeline itself.
 - The model pipeline is serialized via `joblib` and deployed as a Dockerized web app with FastAPI backend and Gradio frontend, hosted on Hugging Face Spaces.
+
+---
+
+## Citation
+BibTeX:
+```bibtex
+@misc{bender_loan_default_prediction_2025,
+  author       = {Jens Bender},
+  title        = {Loan Default Prediction Pipeline},
+  year         = {2025},
+  version      = {1.0},
+  publisher    = {Hugging Face Hub},
+  howpublished = {\url{https://huggingface.co/JensBender/loan-default-prediction-pipeline}},
+  note         = {Machine Learning Model Repository},
+  license      = {Apache-2.0}
+}
