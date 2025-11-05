@@ -21,9 +21,9 @@ if UPLOAD_PIPELINE:
         repo_id=HF_HUB_REPO,
         path_in_repo=HF_PIPELINE_PATH,
         repo_type="model",
-        commit_message=f"Update '{HF_PIPELINE_PATH}' with version tag '{TAG}' on Hugging Face Hub"
+        commit_message=f"Update '{HF_PIPELINE_PATH}' on Hugging Face Hub"
     )
-    print("Successfully uploaded pipeline to Hugging Face Hub.")
+    print("Successfully uploaded pipeline.")
 
     # Add the version tag to the latest commit
     print(f"Creating tag '{TAG}'...")
@@ -37,7 +37,7 @@ if UPLOAD_PIPELINE:
 
 # --- Upload Model Card ---
 if UPLOAD_MODEL_CARD:
-    print(f"Uploading model card '{LOCAL_MODEL_CARD_PATH}' to Hugging Face Hub repository '{HF_HUB_REPO}' as '{HF_MODEL_CARD_PATH}'...")
+    print(f"Uploading model card '{LOCAL_MODEL_CARD_PATH}' renamed as '{HF_MODEL_CARD_PATH}' to Hugging Face Hub repository '{HF_HUB_REPO}'...")
     api.upload_file(
         path_or_fileobj=LOCAL_MODEL_CARD_PATH,
         repo_id=HF_HUB_REPO,
@@ -45,4 +45,4 @@ if UPLOAD_MODEL_CARD:
         repo_type="model",
         commit_message="Update model card 'README.md' on Hugging Face Hub"
     )
-    print("Successfully uploaded model card to Hugging Face Hub.")
+    print("Successfully uploaded model card.")
