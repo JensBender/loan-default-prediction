@@ -64,11 +64,29 @@ Output: Probability of loan default
 
 ---
 
-**Training Data**  
-Dataset: [Loan Prediction Based on Customer Behavior (Kaggle)](https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior)  
-- 252,000 samples, 11 features  
-- 12.3% default rate  
-- Features include demographic, financial, and location-based attributes
+## Training Details
+### Training Data
+Dataset: [Loan Prediction Based on Customer Behavior (Kaggle)](https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior)
+- Samples: 252,000  
+- Default rate: 12.3%  
+- Features: 11  
+- Feature types: Demographic, financial, and behavioral variables
+
+### Training Procedure
+#### Preprocessing
+- Handled duplicates, data types, missing values, and outliers.
+- Engineered new features: Job stability, city tier, and state default rate.
+- Scaled numerical features and encoded categorical features. 
+#### Training Hyperparameters
+Random Forest Classifier:  
+- `n_estimators=225`  
+- `max_depth=26`  
+- `min_samples_split=2`  
+- `min_samples_leaf=1`  
+- `max_features=0.13`  
+- `class_weight='balanced'`  
+
+---
 
 **Model Evaluation**  
 Performance on test set (10% split).  
@@ -80,16 +98,6 @@ Performance on test set (10% split).
 | F1-score (class 1) | 0.64 |
 | Accuracy | 0.89 |
 
-**Model Architecture**  
-Hyperparameters of Random Forest Classifier:  
-- `n_estimators=225`  
-- `max_depth=26`  
-- `min_samples_split=2`  
-- `min_samples_leaf=1`  
-- `max_features=0.13`  
-- `class_weight='balanced'`
-
-End-to-end `scikit-learn` pipeline containing preprocessing and a Random Forest classifier model. The optimized decision threshold (0.29) is applied in post-processing during deployment, not within the pipeline itself.
-
 **Deployment**  
-The model pipeline is serialized via `joblib` and deployed as a Dockerized web app with FastAPI backend and Gradio frontend, hosted on Hugging Face Spaces.
+- End-to-end `scikit-learn` pipeline containing preprocessing and a Random Forest classifier model. The optimized decision threshold (0.29) is applied in post-processing during deployment, not within the pipeline itself.
+- The model pipeline is serialized via `joblib` and deployed as a Dockerized web app with FastAPI backend and Gradio frontend, hosted on Hugging Face Spaces.
