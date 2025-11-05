@@ -347,7 +347,7 @@ Developed comprehensive unit, integration, and end-to-end tests using `pytest`.
 
 <!-- LICENSE -->
 ## ©️ License
-This project is licensed under the [MIT License](LICENSE).
+The source code of this project and the web app hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) are licensed under the [MIT License](LICENSE). The model pipeline published on [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) is licensed under [Apache-2.0](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE). 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
