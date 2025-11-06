@@ -22,11 +22,11 @@ metrics:
  <img src="images/header-image.webp" alt="Header Image"> 
 
 # 🏦 Loan Default Prediction Pipeline
-This model repository contains a `scikit-learn` pipeline for predicting loan defaults. The pipeline includes all data preprocessing steps and a trained Random Forest Classifier model trained on a dataset of 252,000 loan applications. The model predicts the probability of loan applicants defaulting on their loan based on data from their application forms. It is designed to assist financial institutions in making more informed, data-driven lending decisions and managing credit risk. 
+This model repository contains a `scikit-learn` pipeline for predicting loan defaults. The pipeline includes all data preprocessing steps and a Random Forest Classifier model trained on a dataset of 252,000 loan applications. The model predicts the probability of loan applicants defaulting on their loan based on information from loan application forms. It is designed to assist financial institutions in making more informed, data-driven lending decisions and managing credit risk. 
 
 ## Model Details
 ### Model Description
-The model pipeline takes raw loan application data as a `pandas DataFrame` input and performs all necessary preprocessing steps such as feature engineering, scaling, and encoding. The pipeline then uses a Random Forest model to predict the probability of loan default as a `numpy array` output. 
+The model pipeline takes raw loan application data as a `pandas DataFrame` input and performs all necessary preprocessing steps such as feature engineering, scaling, and encoding. The pipeline then uses a Random Forest Classifier model to predict the probability of loan default as a `NumPy array` output. 
 
 | Model Pipeline | Version | Framework | Task | Input | Output | Author | License |
 |---------------|---------|-----------|------|-------|--------|--------|---------|
