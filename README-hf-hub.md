@@ -138,18 +138,9 @@ The final Random Forest Classifier model was trained with the following hyperpar
 ---
 
 ## Evaluation
-The model was evaluated on a hold-out test set (10% of the data). The primary metric was AUC-PR, suitable for the imbalanced nature of the dataset. The decision threshold was optimized on a validation set to maximize the F1-score while meeting minimum recall (≥0.75) and precision (≥0.50) criteria.
+The model was evaluated on a hold-out test set (10% of the data). The primary metric was AUC-PR (0.59), suitable for the imbalanced nature of the dataset. The decision threshold was optimized on a validation set to maximize the F1-score while meeting minimum recall (≥0.75) and precision (≥0.50) criteria.
 
-### Test Set Performance
-| Metric              | Value  |
-|---------------------|--------|
-| AUC-PR              | 0.59   |
-| Recall (Class 1)    | 0.79   |
-| Precision (Class 1) | 0.51   |
-| F1-Score (Class 1)  | 0.62   |
-| Accuracy            | 0.88   |
-
-### Classification Report (Test Set)
+**Classification Report (Test)**
 |                        | Precision | Recall | F1-Score | Samples |
 |------------------------|-----------|--------|----------|---------|
 | Class 0: Non-Defaulter | 0.97      | 0.90   | 0.93     | 22122   |
@@ -158,11 +149,10 @@ The model was evaluated on a hold-out test set (10% of the data). The primary me
 | **Macro Avg**          | **0.74**  | **0.84**| **0.78** | **25200**   |
 | **Weighted Avg**       | **0.91**  | **0.88**| **0.89** | **25200**   |
 
-### Confusion Matrix (Test Set)
-![Confusion Matrix](images/rf_confusion_matrix_test.png)
+<img src="images/rf_confusion_matrix_test.png" alt="Final Random Forest: Confusion Matrix (Test)" width="500">
 
-### Feature Importance
-The most influential features in the model's predictions are income, age, and the engineered `state_default_rate`.  
+**Feature Importance**  
+The most influential features in the model's predictions are income, age, and the engineered state default rate.  
 ![Feature Importance](images/rf_feature_importance_final.png)
 
 ---
