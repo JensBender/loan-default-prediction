@@ -1,19 +1,21 @@
 from huggingface_hub import HfApi
 
-# Constants
-HF_HUB_REPO = "JensBender/loan-default-prediction-pipeline"  # make sure to create Hugging Face Hub repository first
-LOCAL_PIPELINE_PATH = "models/loan_default_rf_pipeline.joblib"  
-HF_PIPELINE_PATH = "loan_default_rf_pipeline.joblib"
-TAG = "v1.0"  # version tag
-LOCAL_MODEL_CARD_PATH = "README-hf-hub.md"
-HF_MODEL_CARD_PATH = "README.md"
-
+# --- Constants --- 
 # Select what to upload
 UPLOAD_PIPELINE = False
 UPLOAD_MODEL_CARD = True
 UPLOAD_IMAGES = True
+# Hugging Face Hub repository (make sure to create it first)
+HF_HUB_REPO = "JensBender/loan-default-prediction-pipeline"  
+# Pipeline
+LOCAL_PIPELINE_PATH = "models/loan_default_rf_pipeline.joblib"  
+HF_PIPELINE_PATH = "loan_default_rf_pipeline.joblib"
+TAG = "v1.0"  # version tag
+# Model card
+LOCAL_MODEL_CARD_PATH = "README-hf-hub.md"
+HF_MODEL_CARD_PATH = "README.md"
 
-# Initialize Hugging Face API client 
+# --- Hugging Face API client --- 
 api = HfApi()
 
 # --- Upload Pipeline ---
