@@ -17,11 +17,11 @@ metrics:
   - recall
   - precision
   - f1
-thumbnail: "https://raw.githubusercontent.com/JensBender/loan-default-prediction/main/images/header-image.webp"
 ---
 
-# 🏦 Loan Default Prediction Pipeline
+ <img src="images/header-image.webp" alt="Header Image"> 
 
+# 🏦 Loan Default Prediction Pipeline
 This model repository contains a `scikit-learn` pipeline for predicting loan defaults. The pipeline includes preprocessing steps and a trained Random Forest model.
 
 ## Model Details
@@ -150,11 +150,11 @@ The model was evaluated on a hold-out test set (10% of the data). The primary me
 | **Weighted Avg**       | **0.91**  | **0.88**| **0.89** | **25200**   |
 
 ### Confusion Matrix (Test Set)
-![Confusion Matrix](https://raw.githubusercontent.com/JensBender/loan-default-prediction/main/images/rf_confusion_matrix_test.png)
+![Confusion Matrix](images/rf_confusion_matrix_test.png)
 
 ### Feature Importance
-The most influential features in the model's predictions are income, age, and the engineered `state_default_rate`.
-![Feature Importance](https://raw.githubusercontent.com/JensBender/loan-default-prediction/main/images/rf_feature_importance_final.png)
+The most influential features in the model's predictions are income, age, and the engineered `state_default_rate`.  
+![Feature Importance](images/rf_feature_importance_final.png)
 
 ---
 
