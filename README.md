@@ -75,6 +75,9 @@ Developed a machine learning solution to predict loan defaults using customer ap
 - **Deployment**: Served the full machine learning pipeline (preprocessing and model) as a web app using FastAPI backend and Gradio frontend within a single Docker container on Hugging Face.
 - **Testing**: Implemented comprehensive unit, integration, and end-to-end tests to validate individual components, their interactions, and entire user journeys.
 
+Model Pipeline: [huggingface.co/JensBender/loan-default-prediction-pipeline](https://huggingface.co/JensBender/loan-default-prediction-pipeline)   
+Web App: [huggingface.co/JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app)
+
 ### 🛠️ Built With
 - [![Python][Python-badge]][Python-url]
 - [![Pandas][Pandas-badge]][Pandas-url]
@@ -317,12 +320,9 @@ Deployed a user-friendly web application to make the model easily accessible. Us
 - The provided `Dockerfile` defines the Python environment, installs dependencies, and launches both backend and frontend with the `start.sh` shell script.
 
 **Hosting on Hugging Face**
-- Serialized the ML pipeline using `joblib` and uploaded it to Hugging Face Hub for versioning and reuse.
-- Hosted the Dockerized app on Hugging Face Spaces to offer a live, interactive demo for end users.
+- Serialized the ML pipeline using `joblib` and uploaded it to [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) for versioning and reuse.
+- Hosted the Dockerized app on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) to offer a live, interactive demo for end users.
 - Utilized GitHub Actions for continuous deployment by syncing the GitHub repository with the Hugging Face Spaces repository.
-
-Pipeline: [JensBender/loan-default-prediction-pipeline](https://huggingface.co/JensBender/loan-default-prediction-pipeline)  
-App: [JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
