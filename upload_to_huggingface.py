@@ -3,6 +3,7 @@ from huggingface_hub import HfApi
 # Constants
 UPLOAD_PIPELINE = False
 UPLOAD_MODEL_CARD = True
+UPLOAD_IMAGES = True
 HF_HUB_REPO = "JensBender/loan-default-prediction-pipeline"  # make sure to create Hugging Face Hub repository first
 LOCAL_PIPELINE_PATH = "models/loan_default_rf_pipeline.joblib"  
 HF_PIPELINE_PATH = "loan_default_rf_pipeline.joblib"
@@ -46,3 +47,17 @@ if UPLOAD_MODEL_CARD:
         commit_message="Update model card 'README.md' on Hugging Face Hub"
     )
     print("Successfully uploaded model card.")
+
+# --- Upload Folder ---
+if UPLOAD_IMAGES:
+    print(f"Uploading images to Hugging Face Hub repository '{HF_HUB_REPO}'...")
+    images_to_upload = ["header-image.webp", "rf_confusion_matrix_test.png", "rf_feature_importance_final.png"]
+    api.upload_folder(
+        folder_path="images",
+        repo_id=HF_HUB_REPO,
+        path_in_repo="images",
+        allow_patterns=images_to_upload,  # only upload a subset of images
+        repo_type="model", 
+        commit_message="Upload images"
+    )
+    print("Successfully uploaded images.")
