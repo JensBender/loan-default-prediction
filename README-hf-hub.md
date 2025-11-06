@@ -39,12 +39,17 @@ The model pipeline takes raw loan application data as a `pandas DataFrame` input
 | Model Pipeline | [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) |
 | Web App | [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) |
 
-### How to Use
-The pipeline is serialized as a `joblib` file. You can load and use it for inference as shown below:
+### How to Get Started with the Model
+#### Using the Web App
+The model pipeline is deployed as a Dockerized web application with a FastAPI backend and a Gradio frontend, hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app). You can interact with the model directly through the web interface without any installation or coding required.
+
+#### Downloading and Using the Pipeline
+The model pipeline is serialized as a `joblib` file. You can load and use the pipeline for inference as shown below. The optimized decision threshold of 0.29 is not part of the pipeline itself and has to be applied in post-processing.
 
 ```python
 import joblib
 import pandas as pd
+from huggingface_hub import hf_hub_download
 
 # Load the pipeline from the Hub
 pipeline = joblib.load(hf_hub_download("JensBender/loan-default-prediction-pipeline", "pipeline.joblib"))
@@ -160,13 +165,6 @@ The model was evaluated on a hold-out test set (10% of the data). The primary me
 ### Feature Importance
 The most influential features in the model's predictions are income, age, and the engineered `state_default_rate`.  
 ![Feature Importance](images/rf_feature_importance_final.png)
-
----
-
-## Deployment
-The end-to-end `scikit-learn` pipeline, which includes all preprocessing steps and the final Random Forest model, is serialized using `joblib`. The optimized decision threshold of **0.29** is not part of the pipeline itself and should be applied in post-processing.
-
-The pipeline is served via a Dockerized web application with a FastAPI backend and a Gradio frontend, which is hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app).
 
 ---
 
