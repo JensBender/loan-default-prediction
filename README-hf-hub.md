@@ -22,7 +22,7 @@ metrics:
  <img src="images/header-image.webp" alt="Header Image"> 
 
 # 🏦 Loan Default Prediction Pipeline
-This model repository contains a `scikit-learn` pipeline for predicting loan defaults. The pipeline includes all data preprocessing steps and a Random Forest Classifier model trained on a dataset of 252,000 loan applications. The model predicts the probability of loan applicants defaulting on their loan based on information from loan application forms. It is designed to assist financial institutions in making more informed, data-driven lending decisions and managing credit risk. 
+This model repository contains a `scikit-learn` pipeline for predicting loan defaults. The pipeline includes all data preprocessing steps and a Random Forest Classifier model trained on a dataset of 252,000 loan applications. The pipeline predicts the probability of loan applicants defaulting on their loan based on application data. It is designed to assist financial institutions in making more informed, data-driven lending decisions and managing credit risk. 
 
 ## Model Details
 ### Model Description
@@ -44,7 +44,7 @@ The model pipeline takes raw loan application data as a `pandas DataFrame` input
 The model pipeline is deployed as a web application on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app). You can interact with the model directly through the web interface without any installation or coding required.
 
 #### Downloading and Using the Pipeline
-The model pipeline is serialized as a `joblib` file. You can download and use the pipeline using `huggingface_hub` for inference as shown below. The optimized decision threshold of 0.29 is not part of the pipeline itself and has to be applied in post-processing.
+The model pipeline is serialized as a `joblib` file. You can download and use the pipeline for inference using `huggingface_hub` as shown below. The optimized decision threshold of 0.29 is not part of the pipeline itself and has to be applied in post-processing.
 
 ```python
 from huggingface_hub import hf_hub_download
@@ -86,12 +86,12 @@ print(f"Prediction: {prediction}")
 
 ## Uses
 ### Direct Use
-The model is intended to be used as a tool to support credit risk assessment. It can be integrated into decision-making workflows to provide a quantitative measure of default risk for a loan applicant.
+The model is intended to be used as a tool to support credit risk assessment. It can be integrated into decision-making workflows to provide a quantitative measure of default risk for a loan applicants.
 
 ### Out-of-Scope Use
 This model is **not** intended for:
 - Fully automated lending decisions without human oversight. The model's predictions should not be the sole factor in any financial decision.
-- Evaluating applicants from demographics, geographies, or economic environments not represented in the training data.
+- Evaluating applicants from demographic, geographic, or socioeconomic groups not represented in the training data.
 - Use in a production environment without rigorous, ongoing validation and fairness audits. 
 
 ---
@@ -101,7 +101,7 @@ The model was trained on historical data, which may carry inherent biases relate
 
 ### Recommendations
 - **Human in the Loop:** Always use this model as part of a broader decision-making framework that includes human oversight.
-- **Fairness and Bias Audits:** Before deploying this model in a live environment, conduct thorough fairness and bias analyses to ensure it performs equally across different demographic groups.
+- **Fairness and Bias Audits:** Before deploying this model in a production environment, conduct thorough fairness and bias analyses to ensure it performs equally across different demographic groups.
 - **Model Monitoring:** Continuously monitor the model's performance and predictions to detect and mitigate any performance degradation or emerging biases.
 
 ---
