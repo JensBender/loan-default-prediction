@@ -104,18 +104,23 @@ The model was trained on historical data, which may carry inherent biases relate
 
 ## Training Details
 ### Training Data
-The model was trained on the ["Loan Prediction Based on Customer Behavior"](https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior) dataset from Kaggle.
-- **Dataset size:** 252,000 records
-- **Target variable:** `risk_flag` (12.3% defaults)
-- **Features:** 11 features related to applicant demographics, finances, and location.
+The model was trained on the "Loan Prediction Based on Customer Behavior" dataset by Subham Jain, available on [Kaggle](https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior). The dataset contains information provided by customers of a financial institution during the loan application process. 
+
+Dataset Statistics:
+- Dataset size: 252,000 records 
+- Target variable: Risk flag (12.3% defaults)
+- Features: 11 
+  - Demographic: Age, married, profession
+  - Financial: Income, house ownership, car ownership
+  - Location: City, state
+  - Behavioral: Experience, current job years, current house years
 
 ### Training Procedure
 #### Preprocessing
-The raw data was processed using a `scikit-learn` pipeline with the following steps:
-- **Feature Engineering:** Created `job_stability`, `city_tier`, and `state_default_rate` features.
-- **Data Cleaning:** Standardized column names and handled data types.
-- **Scaling:** Applied `StandardScaler` to numerical features.
-- **Encoding:** Applied `OneHotEncoder` to nominal categorical features and `OrdinalEncoder` to ordinal features.
+The preprocessing of the raw data includes the following steps:
+- Handling duplicates, data types, missing values, and outliers.
+- Engineering new features: Job stability, city tier, and state default rate.
+- Applying `StandardScaler` to numerical features, `OneHotEncoder` to nominal features, and `OrdinalEncoder` to ordinal features.
 
 #### Training Hyperparameters
 The final Random Forest Classifier model was trained with the following hyperparameters, identified through randomized search with 5-fold cross-validation:
