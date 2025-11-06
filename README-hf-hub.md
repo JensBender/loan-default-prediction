@@ -27,10 +27,10 @@ This model repository contains a `scikit-learn` pipeline for predicting loan def
 ## Model Details
 ### Model Description
 This model predicts the likelihood of loan applicants defaulting on their loan based on their application data. It is designed to assist financial institutions in making more informed, data-driven lending decisions and managing credit risk. The model is a Random Forest classifier trained on a dataset of 252,000 loan applications.
-- **Developed by:** Jens Bender
-- **Model type:** Random Forest Classifier
-- **Language(s):** Python
-- **License:** Apache-2.0
+
+| Model | Version | Framework | Task | Input | Output | Author | License |
+|------------|---------|-----------|------|-------|--------|--------|---------|
+| Random Forest Classifier | 1.0 | Python, scikit-learn | Binary classification | Tabular data | Predicted probabilities | Jens Bender | Apache 2.0 |
 
 ### Model Sources
 | Component | Link |
@@ -118,13 +118,13 @@ The raw data was processed using a `scikit-learn` pipeline with the following st
 - **Encoding:** Applied `OneHotEncoder` to nominal categorical features and `OrdinalEncoder` to ordinal features.
 
 #### Training Hyperparameters
-The final Random Forest model was trained with the following hyperparameters, identified through randomized search with 5-fold cross-validation:
-- `n_estimators`: 225
-- `max_depth`: 26
-- `min_samples_split`: 2
-- `min_samples_leaf`: 1
-- `max_features`: 0.13
-- `class_weight`: "balanced"
+The final Random Forest Classifier model was trained with the following hyperparameters, identified through randomized search with 5-fold cross-validation:
+- `n_estimators=225`  
+- `max_depth=26`  
+- `min_samples_split=2`  
+- `min_samples_leaf=1`  
+- `max_features=0.13`  
+- `class_weight='balanced'` 
 
 ---
 
