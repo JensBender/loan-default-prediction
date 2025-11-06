@@ -21,101 +21,157 @@ thumbnail: "https://raw.githubusercontent.com/JensBender/loan-default-prediction
 ---
 
 # 🏦 Loan Default Prediction Pipeline
+
+This model repository contains a `scikit-learn` pipeline for predicting loan defaults. The pipeline includes preprocessing steps and a trained Random Forest model.
+
 ## Model Details
 ### Model Description
-Author: Jens Bender  
-License: Apache 2.0  
-Model Type: Random Forest Classifier  
-Version: 1.0  
-Language: Python  
-Framework: scikit-learn  
-Task: Binary classification  
-Input: Tabular data (customer loan application)  
-Output: Probability of loan default
+This model predicts the likelihood of loan applicants defaulting on their loan based on their application data. It is designed to assist financial institutions in making more informed, data-driven lending decisions and managing credit risk. The model is a Random Forest classifier trained on a dataset of 252,000 loan applications.
+- **Developed by:** Jens Bender
+- **Model type:** Random Forest Classifier
+- **Language(s):** Python
+- **License:** Apache-2.0
 
 ### Model Sources
 | Component | Link |
-| :--- | :------ |
+|----------|------|
 | Source Code | [GitHub](https://github.com/JensBender/loan-default-prediction) |
-| Web App | [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) |
 | Model Pipeline | [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) |
+| Web App | [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) |
+
+### How to Use
+The pipeline is serialized as a `joblib` file. You can load and use it for inference as shown below:
+
+```python
+import joblib
+import pandas as pd
+
+# Load the pipeline from the Hub
+pipeline = joblib.load(hf_hub_download("JensBender/loan-default-prediction-pipeline", "pipeline.joblib"))
+
+# Create a sample DataFrame with new data
+# Note: The column names and data types must match the training data
+new_data = pd.DataFrame({
+    'income': [5000000],
+    'age': [35],
+    'experience': [10],
+    'married': ['single'],
+    'house_ownership': ['rented'],
+    'car_ownership': ['no'],
+    'profession': ['Software_Developer'],
+    'city': ['Bangalore'],
+    'state': ['Karnataka'],
+    'current_job_years': [5],
+    'current_house_years': [12]
+})
+
+# Get predicted probabilities
+# Note: Returns np.ndarray with probabilities for both classes (0: no default, 1: default)
+probabilities = pipeline.predict_proba(new_data)
+default_probability = probabilities[0][1]
+
+print(f"Probability of default: {default_probability:.2f}")
+
+# Apply a custom threshold to make a classification decision
+threshold = 0.29
+prediction = "default" if default_probability >= threshold else "no default"
+print(f"Prediction with threshold {threshold}: {prediction}")
+```
 
 ---
 
 ## Uses
 ### Direct Use
-- Predict the probability of loan default for applicants to help financial institutions manage credit risk.
-- Support loan application officers with model-driven insights.
+The model is intended to be used as a tool to support credit risk assessment. It can be integrated into decision-making workflows to provide a quantitative measure of default risk for a loan applicant.
 
 ### Out-of-Scope Use
-- Not intended for fully automated lending decisions.
-- Not suitable for populations or markets not represented in the training data.
-- Not intended for use in production without additional model validation and fairness assessment.
+This model is **not** intended for:
+- Fully automated lending decisions without human oversight. The model's predictions should not be the sole factor in any financial decision.
+- Evaluating applicants from demographics, geographies, or economic environments not represented in the training data.
+- Use in a production environment without rigorous, ongoing validation and fairness audits. 
 
 ---
 
 ## Bias, Risks, and Limitations
-- The model reflects patterns in historical data, which may contain sociodemographic or geographic biases.
-- Such biases could lead to unfair treatment of certain applicant groups.
+The model was trained on historical data, which may carry inherent biases related to socioeconomic status, geography, or other demographic factors. Consequently, the model may produce predictions that unfairly disadvantage certain groups of applicants.
 
 ### Recommendations
-- Use the model as a supportive tool, not as the sole basis for loan approval. 
-- Perform bias, fairness, and explainability analysis before production deployment.  
+- **Human in the Loop:** Always use this model as part of a broader decision-making framework that includes human oversight.
+- **Fairness and Bias Audits:** Before deploying this model in a live environment, conduct thorough fairness and bias analyses to ensure it performs equally across different demographic groups.
+- **Model Monitoring:** Continuously monitor the model's performance and predictions to detect and mitigate any performance degradation or emerging biases.
 
 ---
 
 ## Training Details
 ### Training Data
-Dataset: [Loan Prediction Based on Customer Behavior (Kaggle)](https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior)
-- Samples: 252,000  
-- Default rate: 12.3%  
-- Features: 11  
-- Feature types: Demographic, financial, and behavioral variables
+The model was trained on the ["Loan Prediction Based on Customer Behavior"](https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior) dataset from Kaggle.
+- **Dataset size:** 252,000 records
+- **Target variable:** `risk_flag` (12.3% defaults)
+- **Features:** 11 features related to applicant demographics, finances, and location.
 
 ### Training Procedure
 #### Preprocessing
-- Handled duplicates, data types, missing values, and outliers.
-- Engineered new features: Job stability, city tier, and state default rate.
-- Scaled numerical features and encoded categorical features. 
+The raw data was processed using a `scikit-learn` pipeline with the following steps:
+- **Feature Engineering:** Created `job_stability`, `city_tier`, and `state_default_rate` features.
+- **Data Cleaning:** Standardized column names and handled data types.
+- **Scaling:** Applied `StandardScaler` to numerical features.
+- **Encoding:** Applied `OneHotEncoder` to nominal categorical features and `OrdinalEncoder` to ordinal features.
+
 #### Training Hyperparameters
-Random Forest Classifier:  
-- `n_estimators=225`  
-- `max_depth=26`  
-- `min_samples_split=2`  
-- `min_samples_leaf=1`  
-- `max_features=0.13`  
-- `class_weight='balanced'`  
+The final Random Forest model was trained with the following hyperparameters, identified through randomized search with 5-fold cross-validation:
+- `n_estimators`: 225
+- `max_depth`: 26
+- `min_samples_split`: 2
+- `min_samples_leaf`: 1
+- `max_features`: 0.13
+- `class_weight`: "balanced"
 
 ---
 
 ## Evaluation
-### Testing Data and Metrics
-Evaluated model performance on a hold-out test set (10% split).
+The model was evaluated on a hold-out test set (10% of the data). The primary metric was AUC-PR, suitable for the imbalanced nature of the dataset. The decision threshold was optimized on a validation set to maximize the F1-score while meeting minimum recall (≥0.75) and precision (≥0.50) criteria.
 
-| Metric | Value |
-|---------|--------|
-| AUC-PR | 0.62 |
-| Recall (class 1) | 0.80 |
-| Precision (class 1) | 0.54 |
-| F1-score (class 1) | 0.64 |
-| Accuracy | 0.89 |
+### Test Set Performance
+| Metric              | Value  |
+|---------------------|--------|
+| AUC-PR              | 0.59   |
+| Recall (Class 1)    | 0.79   |
+| Precision (Class 1) | 0.51   |
+| F1-Score (Class 1)  | 0.62   |
+| Accuracy            | 0.88   |
+
+### Classification Report (Test Set)
+|                        | Precision | Recall | F1-Score | Samples |
+|------------------------|-----------|--------|----------|---------|
+| Class 0: Non-Defaulter | 0.97      | 0.90   | 0.93     | 22122   |
+| Class 1: Defaulter     | 0.51      | 0.79   | 0.62     | 3078    |
+| **Accuracy**           |           |        | **0.88** | **25200**   |
+| **Macro Avg**          | **0.74**  | **0.84**| **0.78** | **25200**   |
+| **Weighted Avg**       | **0.91**  | **0.88**| **0.89** | **25200**   |
+
+### Confusion Matrix (Test Set)
+![Confusion Matrix](https://raw.githubusercontent.com/JensBender/loan-default-prediction/main/images/rf_confusion_matrix_test.png)
+
+### Feature Importance
+The most influential features in the model's predictions are income, age, and the engineered `state_default_rate`.
+![Feature Importance](https://raw.githubusercontent.com/JensBender/loan-default-prediction/main/images/rf_feature_importance_final.png)
 
 ---
 
-## Deployment  
-- End-to-end `scikit-learn` pipeline containing preprocessing and a Random Forest classifier model. The optimized decision threshold (0.29) is applied in post-processing during deployment, not within the pipeline itself.
-- The model pipeline is serialized via `joblib` and deployed as a Dockerized web app with FastAPI backend and Gradio frontend, hosted on Hugging Face Spaces.
+## Deployment
+The end-to-end `scikit-learn` pipeline, which includes all preprocessing steps and the final Random Forest model, is serialized using `joblib`. The optimized decision threshold of **0.29** is not part of the pipeline itself and should be applied in post-processing.
+
+The pipeline is served via a Dockerized web application with a FastAPI backend and a Gradio frontend, which is hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app).
 
 ---
 
-## License  
-The model pipeline with the trained model weights is licensed under [Apache-2.0](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE).   
-The source code of this project, hosted on [GitHub](https://github.com/JensBender/loan-default-prediction), and the web app hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app), are licensed under the [MIT License](LICENSE). 
+## License
+The model pipeline is licensed under the [Apache-2.0 License](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE). The project's source code is available on [GitHub](https://github.com/JensBender/loan-default-prediction) under the [MIT License](https://github.com/JensBender/loan-default-prediction/blob/main/LICENSE). The web app is hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) under the MIT License.
 
 ---
 
 ## Citation
-BibTeX:
+If you use this model in your work, please cite it as follows:
 ```bibtex
 @misc{bender_loan_default_prediction_2025,
   author       = {Jens Bender},
@@ -127,3 +183,4 @@ BibTeX:
   note         = {Machine Learning Model Repository},
   license      = {Apache-2.0}
 }
+```
