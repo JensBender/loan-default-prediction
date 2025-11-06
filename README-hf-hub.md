@@ -168,7 +168,7 @@ The most influential features in the model's predictions are income, age, and th
 ---
 
 ## License
-The model pipeline is licensed under the [Apache-2.0 License](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE). The project's source code is available on [GitHub](https://github.com/JensBender/loan-default-prediction) under the [MIT License](https://github.com/JensBender/loan-default-prediction/blob/main/LICENSE). The web app is hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) under the MIT License.
+The model pipeline is licensed under [Apache-2.0](LICENSE). The source code of this project, hosted on [GitHub](https://github.com/JensBender/loan-default-prediction), and the web app hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app), are licensed under the MIT License. 
 
 ---
 
