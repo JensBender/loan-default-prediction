@@ -34,11 +34,11 @@ Input: Tabular data (customer loan application)
 Output: Probability of loan default
 
 ### Model Sources
-| Repository | Link |
-|----------|------|
-| Code | [github.com/JensBender/loan-default-prediction](https://github.com/JensBender/loan-default-prediction) |
-| Pipeline | [huggingface.co/JensBender/loan-default-prediction-pipeline](https://huggingface.co/JensBender/loan-default-prediction-pipeline) |
-| App | [huggingface.co/JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) |
+| Component | Link |
+| :--- | :------ |
+| Source Code | [GitHub](https://github.com/JensBender/loan-default-prediction) |
+| Web App | [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) |
+| Model Pipeline | [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) |
 
 ---
 
