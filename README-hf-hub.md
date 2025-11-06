@@ -41,46 +41,45 @@ The model pipeline takes raw loan application data as a `pandas DataFrame` input
 
 ### How to Get Started with the Model
 #### Using the Web App
-The model pipeline is deployed as a Dockerized web application with a FastAPI backend and a Gradio frontend, hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app). You can interact with the model directly through the web interface without any installation or coding required.
+The model pipeline is deployed as a web application on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app). You can interact with the model directly through the web interface without any installation or coding required.
 
 #### Downloading and Using the Pipeline
-The model pipeline is serialized as a `joblib` file. You can load and use the pipeline for inference as shown below. The optimized decision threshold of 0.29 is not part of the pipeline itself and has to be applied in post-processing.
+The model pipeline is serialized as a `joblib` file. You can download and use the pipeline using `huggingface_hub` for inference as shown below. The optimized decision threshold of 0.29 is not part of the pipeline itself and has to be applied in post-processing.
 
 ```python
+from huggingface_hub import hf_hub_download
 import joblib
 import pandas as pd
-from huggingface_hub import hf_hub_download
 
-# Load the pipeline from the Hub
-pipeline = joblib.load(hf_hub_download("JensBender/loan-default-prediction-pipeline", "pipeline.joblib"))
+# Download the pipeline from Hugging Face Hub and load it
+pipeline = joblib.load(hf_hub_download("JensBender/loan-default-prediction-pipeline", "loan_default_rf_pipeline.joblib"))
 
-# Create a sample DataFrame with new data
+# Create a sample DataFrame
 # Note: The column names and data types must match the training data
 new_data = pd.DataFrame({
-    'income': [5000000],
-    'age': [35],
-    'experience': [10],
-    'married': ['single'],
-    'house_ownership': ['rented'],
-    'car_ownership': ['no'],
-    'profession': ['Software_Developer'],
-    'city': ['Bangalore'],
-    'state': ['Karnataka'],
-    'current_job_years': [5],
-    'current_house_years': [12]
+    "income": [300000],
+    "age": [30],
+    "experience": [3],
+    "married": ["single"],
+    "house_ownership": ["rented"],
+    "car_ownership": ["no"],
+    "profession": ["Artist"],
+    "city": ["Sikar"],
+    "state": ["Rajasthan"],
+    "current_job_yrs": [3],
+    "current_house_yrs": [11],
 })
 
-# Get predicted probabilities
-# Note: Returns np.ndarray with probabilities for both classes (0: no default, 1: default)
-probabilities = pipeline.predict_proba(new_data)
-default_probability = probabilities[0][1]
-
+# Get predicted probabilities (np.ndarray) of both classes (0: no default, 1: default)
+probabilities = pipeline.predict_proba(new_data) 
+default_probability = probabilities[0, 1] 
 print(f"Probability of default: {default_probability:.2f}")
 
-# Apply a custom threshold to make a classification decision
+# Apply optimized threshold to make a classification decision
 threshold = 0.29
-prediction = "default" if default_probability >= threshold else "no default"
-print(f"Prediction with threshold {threshold}: {prediction}")
+prediction = "Default" if default_probability >= threshold else "No Default"
+print(f"Threshold: {threshold}")
+print(f"Prediction: {prediction}")
 ```
 
 ---
