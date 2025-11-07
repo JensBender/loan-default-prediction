@@ -25,4 +25,4 @@ This web application predicts loan default based on customer application data. I
 | **Source Code** | [GitHub](https://github.com/JensBender/loan-default-prediction) |
 
 ### License
-The source code for this web app is licensed under the [MIT License](https://github.com/JensBender/loan-default-prediction/blob/main/LICENSE). The model pipeline is licensed under [Apache-2.0](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE).
+The source code for this web app is licensed under the [MIT License](LICENSE). The model pipeline is licensed under [Apache-2.0](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE).
