@@ -52,7 +52,10 @@ import joblib
 import pandas as pd
 
 # Download the pipeline from Hugging Face Hub and load it into memory
-pipeline_path = hf_hub_download("JensBender/loan-default-prediction-pipeline", "loan_default_rf_pipeline.joblib")
+pipeline_path = hf_hub_download(
+  "JensBender/loan-default-prediction-pipeline",
+  "loan_default_rf_pipeline.joblib"
+)
 pipeline = joblib.load(pipeline_path)
 
 # Create a sample DataFrame
