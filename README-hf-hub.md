@@ -166,13 +166,11 @@ The model pipeline is licensed under [Apache-2.0](LICENSE). The source code of t
 If you use this model in your work, please cite it as follows:
 ```bibtex
 @misc{bender_loan_default_prediction_2025,
-  author       = {Jens Bender},
+  author       = {Bender, Jens},
   title        = {Loan Default Prediction Pipeline},
   year         = {2025},
-  version      = {1.0},
-  publisher    = {Hugging Face Hub},
-  howpublished = {\url{https://huggingface.co/JensBender/loan-default-prediction-pipeline}},
-  note         = {Machine Learning Model Repository},
-  license      = {Apache-2.0}
+  publisher    = {Hugging Face},
+  url          = {https://huggingface.co/JensBender/loan-default-prediction-pipeline},
+  note         = {Version 1.0. A scikit-learn Random Forest pipeline for predicting loan defaults. Trained on 252,000 loan applications. Source code available at \url{https://github.com/JensBender/loan-default-prediction}. Licensed under Apache-2.0.}
 }
 ```
