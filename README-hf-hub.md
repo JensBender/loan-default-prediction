@@ -148,7 +148,7 @@ The final Random Forest Classifier model was trained with the following hyperpar
 The model was evaluated on a hold-out test set comprising 10% of the dataset (25,200 samples), which was not used during training or hyperparameter tuning.
 
 #### Factors
-The model's performance was analyzed across the entire test set. The key factors influencing predictions are related to the applicant's financial stability (e.g., `income`), demographic background (e.g., `age`), and regional risk indicators (e.g., the engineered `state_default_rate` feature).
+The model's performance was evaluated across the entire dataset.
 
 #### Metrics
 The primary evaluation metric was the **Area Under the Precision-Recall Curve (AUC-PR)**, which is well-suited for imbalanced datasets where the focus is on the minority class (default). Secondary metrics included **Precision**, **Recall**, and **F1-Score** for the positive class (default). The decision threshold was optimized to maximize the F1-score while ensuring a minimum recall of 0.75 and a minimum precision of 0.50.
@@ -199,11 +199,6 @@ Python 3.10 with `scikit-learn` (1.6.0) and `pandas` (2.2.3). The pipeline is lo
 
 ---
 
-## Model Card Contact
-For questions or feedback about the model, please contact Jens Bender on [GitHub](https://github.com/JensBender) or [Hugging Face](https://huggingface.co/JensBender).
-
----
-
 ## License
 The model pipeline is licensed under [Apache-2.0](LICENSE). The source code of this project, hosted on [GitHub](https://github.com/JensBender/loan-default-prediction), and the source code of the web app hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app), are licensed under the MIT License. 
 
@@ -221,3 +216,8 @@ If you use this model in your work, please cite it as follows:
   note         = {Version 1.0. A scikit-learn Random Forest pipeline for predicting loan defaults. Trained on 252,000 loan applications. Source code available at \url{https://github.com/JensBender/loan-default-prediction}. Licensed under Apache-2.0.}
 }
 ```
+
+---
+
+## Model Card Contact
+For questions or feedback about the model, please contact Jens Bender on [GitHub](https://github.com/JensBender) or [Hugging Face](https://huggingface.co/JensBender).
