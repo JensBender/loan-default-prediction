@@ -23,12 +23,12 @@ tags:
 ---
 
 ## 🏦 Loan Default Prediction App
-This web application predicts loan default based on customer application data. It provides a user-friendly interface to interact with the underlying prediction model, which is powered by machine learning and was trained on over 250,000 loan applications.
+A web app that predicts loan default based on customer application data. Powered by machine learning, trained on over 250,000 loan applications, and with a user-friendly interface to help financial institutions make data-driven lending decisions.
 
 ### How to Use
-1.  **Enter  Information**: Fill in the form with the applicant's age, income, and other information.
-2.  **Click Predict**: Click the "Predict" button below the form.
-3.  **View Results**: The app will return a prediction ("Default" or "No Default") along with probability scores.
+1.  **Enter  Information**: Fill in the form with the applicant's details such as age and income.
+2.  **Click Predict**: The app will process your input and display the prediction ("Default" or "No Default") along with probabilities.
+3.  **Interpret Results**: Combine prediction with human judgment and additional information. Predictions should not be used as the sole factor for loan decisions. 
 
 ### Links
 | Component | Link |
