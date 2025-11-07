@@ -31,10 +31,11 @@ A web app that predicts loan default based on customer application data. Powered
 3.  **Interpret Results**: Combine prediction with human judgment and additional information. Predictions should not be used as the sole factor for loan decisions. 
 
 ### Links
-| Component | Link |
-|---|---|
-| **Model Pipeline** | [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) |
-| **Source Code** | [GitHub](https://github.com/JensBender/loan-default-prediction) |
+| Component | Description | Link |
+|------------|--------------|------|
+| **Model Pipeline** | Preprocessing and Random Forest Classifier | [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) |
+| **Source Code** | Training, evaluation, and deployment code | [GitHub](https://github.com/JensBender/loan-default-prediction) |
+| **Web App** | Deployed interactive demo | [Hugging Face Space](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) |
 
 ### License
-The source code for this web app is licensed under the [MIT License](LICENSE). The model pipeline is licensed under [Apache-2.0](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE).
+The source code for this web app on Hugging Face Spaces and the source code of the overall project on [GitHub](https://github.com/JensBender/loan-default-prediction) is licensed under the [MIT License](LICENSE). The model pipeline is licensed under [Apache-2.0](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE).
