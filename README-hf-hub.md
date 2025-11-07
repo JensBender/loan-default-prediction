@@ -87,12 +87,12 @@ print(f"Prediction: {prediction}")
 
 ## Uses
 ### Direct Use
-The model is intended to be used as a tool to support credit risk assessment. It can be integrated into decision-making workflows to provide a quantitative measure of default risk for a loan applicants.
+The model is intended to be used as a tool to support credit risk assessment. It can be integrated into decision-making workflows to provide a quantitative measure of default risk for loan applicants.
 
 ### Out-of-Scope Use
 This model is **not** intended for:
 - Fully automated lending decisions without human oversight. The model's predictions should not be the sole factor in any financial decision.
-- Evaluating applicants from demographic, geographic, or socioeconomic groups not represented in the training data.
+- Evaluating applicants from demographic, geographic, or socioeconomic backgrounds not represented in the training data.
 - Use in a production environment without rigorous, ongoing validation and fairness audits. 
 
 ---
@@ -139,16 +139,15 @@ The final Random Forest Classifier model was trained with the following hyperpar
 ---
 
 ## Evaluation
-The model was evaluated on a hold-out test set (10% of the data). The primary metric was AUC-PR (0.59), suitable for the imbalanced nature of the dataset. The decision threshold was optimized on a validation set to maximize the F1-score while meeting minimum recall (≥0.75) and precision (≥0.50) criteria.
+The model was evaluated on a hold-out test set (10% of the data). The primary evaluation metric was the Area Under the Precision-Recall Curve (AUC-PR), which is well-suited for imbalanced datasets, where the focus is on the minority class (default). The decision threshold was optimized for the F1-score while ensuring minimum recall (≥0.75) and precision (≥0.50) for the default class. The final Random Forest model achieved an AUC-PR of 0.59 on the test set. 
 
 **Classification Report (Test)**
 |                        | Precision | Recall | F1-Score | Samples |
 |------------------------|-----------|--------|----------|---------|
 | Class 0: Non-Defaulter | 0.97      | 0.90   | 0.93     | 22122   |
 | Class 1: Defaulter     | 0.51      | 0.79   | 0.62     | 3078    |
-| **Accuracy**           |           |        | **0.88** | **25200**   |
-| **Macro Avg**          | **0.74**  | **0.84**| **0.78** | **25200**   |
-| **Weighted Avg**       | **0.91**  | **0.88**| **0.89** | **25200**   |
+| Accuracy           |           |        | 0.88 | 25200   |
+| Weighted Avg       | 0.91      | 0.88   | 0.89 | 25200   |
 
 <img src="images/rf_confusion_matrix_test.png" alt="Final Random Forest: Confusion Matrix (Test)" width="500">
 
@@ -159,7 +158,7 @@ The most influential features in the model's predictions are income, age, and th
 ---
 
 ## License
-The model pipeline is licensed under [Apache-2.0](LICENSE). The source code of this project, hosted on [GitHub](https://github.com/JensBender/loan-default-prediction), and the web app hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app), are licensed under the MIT License. 
+The model pipeline is licensed under [Apache-2.0](LICENSE). The source code of this project, hosted on [GitHub](https://github.com/JensBender/loan-default-prediction), and the source code of the web app hosted on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app), are licensed under the MIT License. 
 
 ---
 
