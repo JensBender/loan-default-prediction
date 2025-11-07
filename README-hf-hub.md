@@ -98,7 +98,7 @@ This model is **not** intended for:
 ---
 
 ## Bias, Risks, and Limitations
-The model was trained on historical data, which may carry inherent biases related to socioeconomic status, geography, or other demographic factors. Consequently, the model may produce predictions that unfairly disadvantage certain groups of applicants.
+The model was trained on historical data that may carry biases related to socioeconomic status, geography, or other demographic factors, potentially leading to unfair predictions for certain groups. The model can be overconfident on misclassified edge cases, assigning high probabilities to incorrect predictions. Confidence scores should not be relied upon without additional scrutiny.
 
 ### Recommendations
 - **Human in the Loop:** Always use this model as part of a broader decision-making framework that includes human oversight.
@@ -123,9 +123,13 @@ Dataset Statistics:
 ### Training Procedure
 #### Preprocessing
 The preprocessing of the raw data includes the following steps:
-- Handling duplicates, data types, missing values, and outliers.
-- Engineering new features: Job stability, city tier, and state default rate.
-- Applying `StandardScaler` to numerical features, `OneHotEncoder` to nominal features, and `OrdinalEncoder` to ordinal features.
+- Handled duplicates, data types, missing values, and outliers and standardized column names.
+- Engineered new features:
+  - Job Stability: Derived from the applicant's profession.
+  - City Tier: Derived from the applicant's city.
+  - State Default Rate: Derived from the historical default rate of the applicant's state (target encoding).
+- Scaled numerical features using `StandardScaler`.
+- Encoded categorical features using `OneHotEncoder` (nominal) and `OrdinalEncoder` (ordinal).
 
 #### Training Hyperparameters
 The final Random Forest Classifier model was trained with the following hyperparameters, identified through randomized search with 5-fold cross-validation:
@@ -139,21 +143,65 @@ The final Random Forest Classifier model was trained with the following hyperpar
 ---
 
 ## Evaluation
-The model was evaluated on a hold-out test set (10% of the data). The primary evaluation metric was the Area Under the Precision-Recall Curve (AUC-PR), which is well-suited for imbalanced datasets, where the focus is on the minority class (default). The decision threshold was optimized for the F1-score while ensuring minimum recall (≥0.75) and precision (≥0.50) for the default class. The final Random Forest model achieved an AUC-PR of 0.59 on the test set. 
+### Testing Data, Factors & Metrics
+#### Testing Data
+The model was evaluated on a hold-out test set comprising 10% of the dataset (25,200 samples), which was not used during training or hyperparameter tuning.
 
-**Classification Report (Test)**
+#### Factors
+The model's performance was analyzed across the entire test set. The key factors influencing predictions are related to the applicant's financial stability (e.g., `income`), demographic background (e.g., `age`), and regional risk indicators (e.g., the engineered `state_default_rate` feature).
+
+#### Metrics
+The primary evaluation metric was the **Area Under the Precision-Recall Curve (AUC-PR)**, which is well-suited for imbalanced datasets where the focus is on the minority class (default). Secondary metrics included **Precision**, **Recall**, and **F1-Score** for the positive class (default). The decision threshold was optimized to maximize the F1-score while ensuring a minimum recall of 0.75 and a minimum precision of 0.50.
+
+### Results
+The final Random Forest model achieved an **AUC-PR of 0.59** on the test set.
+
+#### Performance on Train, Validation, and Test Sets
+The model's performance was consistent across the validation and test sets, indicating good generalization to unseen data.
+
+| Data             | AUC-PR | Recall (Class 1)   | Precision (Class 1) | F1-Score (Class 1) | Accuracy |
+|:-----------------|:-------|:-------------------|:--------------------|:-------------------|:---------|
+| Training (80%)   | 0.68   | 1.00               | 0.62                | 0.77               | 0.93     |
+| Validation (10%) | 0.62   | 0.80               | 0.54                | 0.64               | 0.89     |
+| Test (10%)       | 0.59   | 0.79               | 0.51                | 0.62               | 0.88     |
+
+#### Classification Report (Test)
 |                        | Precision | Recall | F1-Score | Samples |
-|------------------------|-----------|--------|----------|---------|
-| Class 0: Non-Defaulter | 0.97      | 0.90   | 0.93     | 22122   |
-| Class 1: Defaulter     | 0.51      | 0.79   | 0.62     | 3078    |
-| Accuracy           |           |        | 0.88 | 25200   |
-| Weighted Avg       | 0.91      | 0.88   | 0.89 | 25200   |
+|:-----------------------|:----------|:-------|:---------|:--------|
+| Class 0: Non-Defaulter | 0.97      | 0.90   | 0.93     | 22,122  |
+| Class 1: Defaulter     | 0.51      | 0.79   | 0.62     | 3,078   |
+| Accuracy               |           |        | 0.88     | 25,200  |
+| Macro Avg              | 0.74      | 0.84   | 0.78     | 25,200  |
+| Weighted Avg           | 0.91      | 0.88   | 0.89     | 25,200  |
 
 <img src="images/rf_confusion_matrix_test.png" alt="Final Random Forest: Confusion Matrix (Test)" width="500">
 
-**Feature Importance**  
-The most influential features in the model's predictions are income, age, and the engineered state default rate.  
+#### Feature Importance
+The most influential features in the model's predictions are income, age, and the engineered state default rate.
 ![Feature Importance](images/rf_feature_importance_final.png)
+
+---
+
+## Environmental Impact
+Carbon emissions were not measured for the training of this model.
+
+---
+
+## Technical Specifications
+### Model Architecture and Objective
+The model is a `scikit-learn` pipeline that includes both preprocessing and a `RandomForestClassifier`. The objective is binary classification to predict whether a loan applicant will default.
+
+### Compute Infrastructure
+#### Software
+The model was trained using Python 3 and the following key libraries:
+- `scikit-learn`
+- `pandas`
+- `numpy`
+
+---
+
+## Model Card Contact
+For questions or feedback about the model, please contact Jens Bender on [GitHub](https://github.com/JensBender) or [Hugging Face](https://huggingface.co/JensBender).
 
 ---
 
