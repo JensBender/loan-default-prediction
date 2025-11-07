@@ -32,20 +32,21 @@ A web app that predicts loan default based on customer application data. Powered
 
 ### How It Works
 1. **Gradio Frontend (UI Layer)**  
-   - Provides a simple web form for users to input applicant details.  
-   - Sends form data as JSON to the backend API.  
-   - Displays the model’s prediction along with probabilities in real time.
-
+    - Provides a simple web form for users to input applicant details.  
+    - Sends form data as JSON to the backend API.  
+    - Displays the model’s prediction along with probabilities in real time.
 2. **FastAPI Backend (API Layer)**  
    - Receives requests from the Gradio frontend and validates the data.  
-   - Loads the pre-trained loan default prediction pipeline from the [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline).  
+   - Loads the pre-trained loan default prediction pipeline from the [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline). The pipeline is automatically fetched at startup, ensuring the latest version is always used. 
    - Passes the input through the pipeline, captures the predicted probabilities, and applies the decision threshold.  
    - Returns a JSON response with prediction results.
-
 3. **ML Pipeline (Model Layer)**  
    - Implements a full `scikit-learn` pipeline with preprocessing and a Random Forest Classifier model.  
    - Handles feature engineering, scaling, and encoding.  
    - Outputs predicted probabilities for both classes (default / no default).
+4. **Deployment Environment**
+    - All components are packaged together in a single **Docker** container.  
+    - The app runs on Hugging Face Spaces using the **Docker SDK**.  
 
 ### Links
 | Component | Description | Link |
