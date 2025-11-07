@@ -192,11 +192,10 @@ Carbon emissions were not measured for the training of this model.
 The model is a `scikit-learn` pipeline that includes both preprocessing and a `RandomForestClassifier`. The objective is binary classification to predict whether a loan applicant will default.
 
 ### Compute Infrastructure
+#### Hardware
+Trained on a local machine: Intel Pentium Gold 7505 @ 2.00GHz (2 cores, 4 logical processors), Windows 10.
 #### Software
-The model was trained using Python 3 and the following key libraries:
-- `scikit-learn`
-- `pandas`
-- `numpy`
+Python 3.10 with `scikit-learn` (1.6.0) and `pandas` (2.2.3). The pipeline is loaded using `joblib` (1.4.2).
 
 ---
 
