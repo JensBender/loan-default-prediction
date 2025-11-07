@@ -30,6 +30,11 @@ A web app that predicts loan default based on customer application data. Powered
 2.  **Click Predict**: The app will process your input and display the prediction ("Default" or "No Default") along with probabilities.
 3.  **Interpret Results**: Combine prediction with human judgment and additional information. Predictions should not be used as the sole factor for loan decisions. 
 
+### How It Works
+- The app uses a **FastAPI backend** to serve the machine learning model pipeline.  
+- The **Gradio frontend** provides a user-friendly interface so users can enter applicant information through a simple form.  
+- Backend and frontend ship together in a single **Docker** container that Hugging Face Spaces runs end-to-end. 
+
 ### Links
 | Component | Description | Link |
 |------------|--------------|------|
