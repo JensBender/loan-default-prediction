@@ -8,6 +8,18 @@ sdk: docker
 app_port: 7860
 app_port_secondary: 8000
 pinned: false
+models:
+  - JensBender/loan-default-prediction-pipeline
+tags:
+  - finance
+  - credit-risk
+  - loan-default
+  - tabular-data
+  - scikit-learn
+  - random-forest
+  - gradio
+  - fastapi
+  - docker
 ---
 
 ## 🏦 Loan Default Prediction App
