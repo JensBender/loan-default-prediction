@@ -44,19 +44,20 @@ The pipeline takes raw loan application data as input (formatted as a `pandas Da
 The model pipeline is deployed as a web application on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app). You can interact with the model directly through the web interface without any installation or coding required.
 
 #### Downloading and Using the Pipeline
-The model pipeline is serialized as a `joblib` file. You can download and use the pipeline for inference using `huggingface_hub` as shown below. The optimized decision threshold of 0.29 is not part of the pipeline itself and has to be applied in post-processing.
+The pipeline is serialized as a `joblib` file. You can download and use it for inference with the `huggingface_hub` library as shown below. The optimized decision threshold of 0.29 is not part of the pipeline itself and has to be applied in post-processing.
 
 ```python
 from huggingface_hub import hf_hub_download
 import joblib
 import pandas as pd
 
-# Download the pipeline from Hugging Face Hub and load it
-pipeline = joblib.load(hf_hub_download("JensBender/loan-default-prediction-pipeline", "loan_default_rf_pipeline.joblib"))
+# Download the pipeline from Hugging Face Hub and load it into memory
+pipeline_path = hf_hub_download("JensBender/loan-default-prediction-pipeline", "loan_default_rf_pipeline.joblib")
+pipeline = joblib.load(pipeline_path)
 
 # Create a sample DataFrame
 # Note: The column names and data types must match the training data
-new_data = pd.DataFrame({
+applicant_data = pd.DataFrame({
     "income": [300000],
     "age": [30],
     "experience": [3],
@@ -70,9 +71,9 @@ new_data = pd.DataFrame({
     "current_house_yrs": [11],
 })
 
-# Get predicted probabilities (np.ndarray) of both classes (0: no default, 1: default)
-probabilities = pipeline.predict_proba(new_data) 
-default_probability = probabilities[0, 1] 
+# Get predicted probabilities of both classes (0: no default, 1: default)
+probabilities = pipeline.predict_proba(applicant_data) 
+default_probability = probabilities[0, 1]  # row 0, column 1 of np.ndarray
 print(f"Probability of default: {default_probability:.2f}")
 
 # Apply optimized threshold to make a classification decision
