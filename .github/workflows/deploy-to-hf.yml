@@ -38,6 +38,7 @@ jobs:
           cp -r backend/* deploy/backend/
           cp -r src/* deploy/src/
           cp README-hf-space.md deploy/README.md  # rename for Hugging Face Space 
+          cp LICENSE deploy/  
 
       # Step 3: Push the code to the Hugging Face Space repository
       - name: Push to Hugging Face Space 
