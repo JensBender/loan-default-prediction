@@ -22,15 +22,15 @@ metrics:
  <img src="images/header-image.webp" alt="Header Image"> 
 
 # 🏦 Loan Default Prediction Pipeline
-This model repository contains a `scikit-learn` pipeline for predicting loan defaults. The pipeline includes all data preprocessing steps and a Random Forest Classifier model trained on a dataset of 252,000 loan applications. The pipeline predicts the probability of loan applicants defaulting on their loan based on application data. It is designed to assist financial institutions in making more informed, data-driven lending decisions and managing credit risk. 
+This model repository contains a `scikit-learn` pipeline for predicting loan defaults from customer application data. The pipeline includes all data preprocessing steps and a Random Forest Classifier model trained on 252,000 loan applications. It is designed to assist financial institutions in making more informed, data-driven lending decisions and managing credit risk. 
 
 ## Model Details
 ### Model Description
-The model pipeline takes raw loan application data as a `pandas DataFrame` input and performs all necessary preprocessing steps such as feature engineering, scaling, and encoding. The pipeline then uses a Random Forest Classifier model to predict the probability of loan default as a `NumPy array` output. 
+The pipeline takes raw loan application data as input (formatted as a `pandas DataFrame`) and performs all necessary preprocessing steps such as feature engineering, scaling, and encoding. The pipeline then uses a Random Forest Classifier model to predict the probability of loan default (as a `NumPy array`). 
 
-| Model Pipeline | Version | Framework | Task | Input | Output | Author | License |
+| Pipeline | Version | Framework | Task | Input | Output | Author | License |
 |---------------|---------|-----------|------|-------|--------|--------|---------|
-| Random Forest with preprocessing | 1.0 | Python, scikit-learn | Binary classification | Tabular data | Predicted probabilities | Jens Bender | Apache 2.0 |
+| Random Forest model with preprocessing | 1.0 | Python, scikit-learn | Binary classification | Tabular data | Predicted probabilities | Jens Bender | Apache 2.0 |
 
 ### Model Sources
 | Component | Link |
