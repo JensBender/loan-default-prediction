@@ -51,9 +51,9 @@ A web app that predicts loan default based on customer application data. Powered
 ### Links
 | Component | Description | Link |
 |------------|--------------|------|
-| **Model Pipeline** | Preprocessing and Random Forest Classifier | [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) |
-| **Source Code** | Training, evaluation, and deployment code | [GitHub](https://github.com/JensBender/loan-default-prediction) |
-| **Web App** | Deployed interactive demo | [Hugging Face Space](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) |
+| **Source Code** | Complete project repository with training, evaluation, and deployment code | [GitHub](https://github.com/JensBender/loan-default-prediction) |
+| **Model Pipeline** | Pre-trained `scikit-learn` pipeline with Random Forest Classifier and preprocessing | [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) |
+| **Web App** | Live, interactive demo with Gradio frontend and FastAPI backend | [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) |
 
 ### License
 The source code for this web app on Hugging Face Spaces and the source code of the overall project on [GitHub](https://github.com/JensBender/loan-default-prediction) is licensed under the [MIT License](LICENSE). The model pipeline is licensed under [Apache-2.0](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE).
