@@ -19,8 +19,5 @@ if [ ! -f /app/geoip_db/GeoLite2-Country.mmdb ]; then
   echo "GeoLite2-Country.mmdb downloaded successfully."
 fi
 
-# Start the FastAPI backend with Uvicorn 
-uvicorn backend.app:app --host 0.0.0.0 --port 8000 &
-
-# Start the Gradio frontend 
-python -m frontend.app
+# Start the FastAPI backend app (which is mounted to the Gradio frontend app)
+python -m backend.app
