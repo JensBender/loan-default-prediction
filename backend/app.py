@@ -221,7 +221,7 @@ pipeline = load_pipeline_from_huggingface(
 app = FastAPI()
 
 # Mount Gradio frontend app onto FastAPI backend app (so they can run on a single uvicorn server)
-app = gr.mount_asgi_app(app, gradio_app, route="/")  # hand off requests to home route to Gradio app
+app = gr.mount_gradio_app(app, gradio_app, path="/")  # hand off requests to home route to Gradio app
 
 # Prediction endpoint 
 @app.post("/predict", response_model=PredictionResponse)
