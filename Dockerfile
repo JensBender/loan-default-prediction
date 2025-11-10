@@ -20,9 +20,8 @@ COPY ./start.sh .
 # Make the start script executable
 RUN chmod +x ./start.sh
 
-# Expose Gradio and FastAPI ports
+# Expose Gradio port
 EXPOSE 7860  
-EXPOSE 8000
 
 # Command to run the application
 CMD ["./start.sh"]
