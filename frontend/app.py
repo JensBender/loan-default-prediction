@@ -28,9 +28,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # --- Constants ---
-# Backend URL to FastAPI predict endpoint
-BACKEND_URL = "http://127.0.0.1:8000/predict"
-
 # Format categorical string labels (snake_case) for display in UI
 MARRIED_DISPLAY_LABELS = [label.title() for label in MARRIED_LABELS]
 CAR_OWNERSHIP_DISPLAY_LABELS = [label.title() for label in CAR_OWNERSHIP_LABELS]
@@ -138,10 +135,15 @@ def predict_loan_default(
         # Format "house_ownership" label as expected by API backend 
         inputs["house_ownership"] = format_house_ownership(inputs["house_ownership"])
         
-        # --- Post request ---       
-        # Predict loan default via post request to FastAPI backend
+        # --- Post request ---  
+        # Get URL of FastAPI backend (mounted to Gradio frontend)
+        host = gr_request.headers.get("host")  # get host dynamically so it works locally and on Hugging Face Spaces
+        protocol = "https" if "hf.space" in host else "http"  # use "https" for Hugging Face Spaces vs. "http" locally
+        backend_url = f"{protocol}://{host}/predict"
+
+        # Predict loan default via post request to FastAPI backend 
         response = requests.post(
-            BACKEND_URL, 
+            backend_url, 
             json=inputs, 
             timeout=(3, 60)  # 3s connect timeout, 60s read timeout (receive first byte of response)
         ) 
@@ -215,7 +217,7 @@ custom_css = """
 """
 
 # Create Gradio app UI using Blocks
-with gr.Blocks(css=custom_css) as app_ui:
+with gr.Blocks(css=custom_css) as gradio_app:
     # Title and description
     gr.Markdown(
         """
@@ -267,7 +269,4 @@ with gr.Blocks(css=custom_css) as app_ui:
         outputs=[prediction_text, pred_proba]
     )
 
-
-# --- Launch Web App UI ---
-if __name__ == "__main__":
-    app_ui.launch(server_name="0.0.0.0", server_port=7860)
+# No Gradio app launch here as it will be launced by (or mounted onto) the FastAPI backend app
