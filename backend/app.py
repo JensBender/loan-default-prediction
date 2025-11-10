@@ -219,13 +219,10 @@ pipeline = load_pipeline_from_huggingface(
 
 # --- API ---
 # Create FastAPI app
-app = FastAPI()
-
-# Mount Gradio frontend app onto FastAPI backend app (so they can run on a single uvicorn server)
-app = gr.mount_gradio_app(app, gradio_app, path="/")  # hand off requests to home route to Gradio app
+fastapi_app = FastAPI()
 
 # Prediction endpoint 
-@app.post("/predict", response_model=PredictionResponse)
+@fastapi_app.post("/predict", response_model=PredictionResponse)
 def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Request) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> list[PipelineInput]
     batch_metadata = None   
     pipeline_input_dict_ls = None
@@ -338,6 +335,9 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
             monitoring_logger.error(json.dumps(prediction_monitoring_record))
 
         raise HTTPException(status_code=500, detail="Internal server error during loan default prediction")
+
+# Mount Gradio frontend app onto FastAPI backend app (so they can run on a single uvicorn server)
+app = gr.mount_gradio_app(fastapi_app, gradio_app, path="/")  # hand off requests to home route to Gradio app
 
 # Launch Gradio app mounted onto FastAPI app on single uvicorn server
 if __name__ == "__main__":
