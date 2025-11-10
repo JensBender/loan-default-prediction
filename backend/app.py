@@ -8,6 +8,7 @@ import json
 import uuid
 import time
 from datetime import datetime, timezone
+import os
 
 # Third-party library imports
 from fastapi import FastAPI, HTTPException, Request
@@ -340,4 +341,5 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
 
 # Launch Gradio app mounted onto FastAPI app on single uvicorn server
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 7860))  # use whatever port the host assigns, otherwise default to 7860 (typical for Hugging Face)
+    uvicorn.run(app, host="0.0.0.0", port=port)
