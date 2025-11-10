@@ -136,12 +136,8 @@ def predict_loan_default(
         inputs["house_ownership"] = format_house_ownership(inputs["house_ownership"])
         
         # --- Post request ---  
-        # Get URL of FastAPI backend (mounted to Gradio frontend)
-        host = gr_request.headers.get("host")  # get host dynamically so it works locally and on Hugging Face Spaces
-        protocol = "https" if "hf.space" in host else "http"  # use "https" for Hugging Face Spaces vs. "http" locally
-        backend_url = f"{protocol}://{host}/predict"
-
         # Predict loan default via post request to FastAPI backend 
+        backend_url = "http://localhost:8000/predict"
         response = requests.post(
             backend_url, 
             json=inputs, 
