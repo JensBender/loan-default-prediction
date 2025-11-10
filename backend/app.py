@@ -12,6 +12,8 @@ from datetime import datetime, timezone
 # Third-party library imports
 from fastapi import FastAPI, HTTPException, Request
 from sklearn.pipeline import Pipeline
+import gradio as gr
+import uvicorn
 import pandas as pd
 import numpy as np
 import joblib
@@ -27,6 +29,7 @@ from backend.schemas import (
     PredictionResult,
     PredictionResponse    
 )
+from frontend.app import gradio_app
 from src.custom_transformers import (
     MissingValueChecker, 
     MissingValueStandardizer, 
@@ -217,6 +220,8 @@ pipeline = load_pipeline_from_huggingface(
 # Create FastAPI app
 app = FastAPI()
 
+# Mount Gradio frontend app onto FastAPI backend app (so they can run on a single uvicorn server)
+app = gr.mount_asgi_app(app, gradio_app, route="/")  # hand off requests to home route to Gradio app
 
 # Prediction endpoint 
 @app.post("/predict", response_model=PredictionResponse)
@@ -332,3 +337,7 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
             monitoring_logger.error(json.dumps(prediction_monitoring_record))
 
         raise HTTPException(status_code=500, detail="Internal server error during loan default prediction")
+
+# Launch Gradio app mounted onto FastAPI app on single uvicorn server
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
