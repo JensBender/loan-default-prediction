@@ -137,9 +137,8 @@ def predict_loan_default(
         
         # --- Post request ---  
         # Predict loan default via post request to FastAPI backend 
-        backend_url = "http://localhost:8000/predict"
         response = requests.post(
-            backend_url, 
+            "/predict", 
             json=inputs, 
             timeout=(3, 60)  # 3s connect timeout, 60s read timeout (receive first byte of response)
         ) 
