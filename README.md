@@ -348,11 +348,11 @@ Developed comprehensive unit, integration, and end-to-end tests using `pytest`.
 <!-- LICENSE -->
 ## ©️ License
 Summary of license terms for all project components:
-| Component | Hosted on | License |
-| :--- | :------ | :------ |
-| Source Code | [GitHub](https://github.com/JensBender/loan-default-prediction) | [MIT](LICENSE) |
-| Web App | [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) | MIT |
-| Model Pipeline | [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) | [Apache-2.0](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE) |
+| Component | Description | Hosted on | License |
+| :--- | :------ | :------ | :------ |
+| Source Code | Complete project repository with training, evaluation, and deployment code | [GitHub](https://github.com/JensBender/loan-default-prediction) | [MIT](LICENSE) |
+| Model Pipeline | Pre-trained `scikit-learn` pipeline with Random Forest Classifier and preprocessing | [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) | [Apache-2.0](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE) |
+| Web App | Live, interactive demo with Gradio frontend and FastAPI backend | [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) | [MIT](https://huggingface.co/spaces/JensBender/loan-default-prediction-app/resolve/main/LICENSE) |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
