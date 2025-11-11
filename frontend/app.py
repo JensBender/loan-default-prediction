@@ -136,9 +136,12 @@ def predict_loan_default(
         inputs["house_ownership"] = format_house_ownership(inputs["house_ownership"])
         
         # --- Post request ---  
+        # Dynamically retrieve URL of uvicorn server (inside Docker container) on which FastAPI app and mounted Gradio app are both running 
+        server_url = str(gr_request.base_url)  
+        predict_url = f"{server_url}predict"
         # Predict loan default via post request to FastAPI backend 
         response = requests.post(
-            "/predict", 
+            predict_url, 
             json=inputs, 
             timeout=(3, 60)  # 3s connect timeout, 60s read timeout (receive first byte of response)
         ) 
