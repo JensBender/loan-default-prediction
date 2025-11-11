@@ -337,8 +337,7 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
         raise HTTPException(status_code=500, detail="Internal server error during loan default prediction")
 
 # Mount Gradio frontend app onto FastAPI backend app (so they can run on a single uvicorn server)
-app = gr.routes.App.create_app(gradio_app)
-fastapi_app.mount("/", app)  # hand off requests to home route to Gradio app
+app = gr.mount_gradio_app(fastapi_app, gradio_app, path="/")  # hand off requests to home route to Gradio app
 
 # Launch Gradio app mounted onto FastAPI app on single uvicorn server
 if __name__ == "__main__":
