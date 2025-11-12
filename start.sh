@@ -19,5 +19,5 @@ if [ ! -f /app/geoip_db/GeoLite2-Country.mmdb ]; then
   echo "GeoLite2-Country.mmdb downloaded successfully."
 fi
 
-# Start the FastAPI backend app (which is mounted to the Gradio frontend app)
-python -m backend.app
+# Start the combined FastAPI and Gradio app on a uvicorn server (Hugging Face Spaces expects port 7860 even though default is 8000)
+uvicorn backend.app:app --host 0.0.0.0 --port 7860
