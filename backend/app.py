@@ -218,10 +218,10 @@ pipeline = load_pipeline_from_huggingface(
 
 # --- API ---
 # Create FastAPI app
-fastapi_app = FastAPI()
+app = FastAPI()
 
 # Prediction endpoint 
-@fastapi_app.post("/predict", response_model=PredictionResponse)
+@app.post("/api/predict", response_model=PredictionResponse)
 def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Request) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> list[PipelineInput]
     batch_metadata = None   
     pipeline_input_dict_ls = None
@@ -336,7 +336,5 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
         raise HTTPException(status_code=500, detail="Internal server error during loan default prediction")
 
 
-# Combine FastAPI app and Gradio app by mounting 
-api_app = FastAPI()  
-api_app.mount("/api", fastapi_app)  # backend under /api
-app = gr.mount_gradio_app(api_app, gradio_app, path="/")  # Gradio frontend on landing page
+# Mount Gradio frontend onto FastAPI backend
+app = gr.mount_gradio_app(app, gradio_app, path="/")
