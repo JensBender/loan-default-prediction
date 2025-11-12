@@ -343,4 +343,4 @@ fastapi_app.mount("/", app)  # hand off requests to home route to Gradio app
 # Launch Gradio app mounted onto FastAPI app on single uvicorn server
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 7860))  # use whatever port the host assigns, otherwise default to 7860 (typical for Hugging Face)
-    uvicorn.run(fastapi_app, host="0.0.0.0", port=port)
+    uvicorn.run(fastapi_app, host="0.0.0.0", port=port, workers=2)  # use 2 workers to prevent deadlock (Gradio UI request occupies one worker and its subsequent API call to backend requires another)
