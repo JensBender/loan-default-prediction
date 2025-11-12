@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 
 # Third-party library imports
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import RedirectResponse
 from sklearn.pipeline import Pipeline
 import gradio as gr
 import pandas as pd
@@ -335,5 +336,11 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
         raise HTTPException(status_code=500, detail="Internal server error during loan default prediction")
 
 
+# Home route: Redirect get request to FastAPI home route to Gradio UI
+@fastapi_app.get("/")
+def redirect_to_ui():
+    return RedirectResponse("/ui")
+
+
 # Mount the Gradio app onto the FastAPI app
-app = gr.mount_gradio_app(fastapi_app, gradio_app, path="/")
+app = gr.mount_gradio_app(fastapi_app, gradio_app, path="/ui")
