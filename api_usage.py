@@ -16,7 +16,7 @@ applicant_data = {
 }
 
 # API post request to the predict endpoint of the FastAPI backend on Hugging Face Spaces
-response = requests.post("https://jensbender-loan-default-prediction-app.hf.space/predict", json=applicant_data)
+response = requests.post("https://jensbender-loan-default-prediction-app.hf.space/api/predict", json=applicant_data)
 
 # Check if request was successful
 response.raise_for_status()
