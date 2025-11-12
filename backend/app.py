@@ -218,7 +218,13 @@ pipeline = load_pipeline_from_huggingface(
 
 # --- API ---
 # Create FastAPI app
-app = FastAPI()
+app = FastAPI(
+    title="Loan Default Prediction API",
+    docs_url="/api/docs",
+    redoc_url="/api/redoc",
+    openapi_url="/api/openapi.json"
+)
+
 
 # Prediction endpoint 
 @app.post("/api/predict", response_model=PredictionResponse)
@@ -337,10 +343,22 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
 
 
 # Mount Gradio frontend onto FastAPI backend
-app = gr.mount_gradio_app(app, gradio_app, path="/gradio")
+app = gr.mount_gradio_app(app, gradio_app, path="/gradio")  # at "/gradio" not "/" due to known Gradio bug (redirect loop)
 
-
-# Redirect root to Gradio UI 
+# Home route redirects to Gradio UI 
 @app.get("/")
 def root():
     return RedirectResponse(url="/gradio/")
+
+# Redirects for API documentation (to make it available on Hugging Face Space)
+@app.get("/docs")
+def docs_redirect():
+    return RedirectResponse(url="/api/docs")
+
+@app.get("/redoc")
+def redoc_redirect():
+    return RedirectResponse(url="/api/redoc")
+
+@app.get("/openapi.json")
+def openapi_redirect():
+    return RedirectResponse(url="/api/openapi.json")
