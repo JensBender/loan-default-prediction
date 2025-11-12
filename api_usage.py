@@ -21,11 +21,12 @@ response = requests.post("https://jensbender-loan-default-prediction-app.hf.spac
 # Check if request was successful
 response.raise_for_status()
 
-# Extract prediction and predicted probability of default
+# Extract prediction and probability of default
 prediction_response = response.json()
 prediction_result = prediction_response["results"][0]
 prediction = prediction_result["prediction"]
 default_probability = prediction_result["probabilities"]["Default"]
 
-print(f"Probability of default: {default_probability:.2f}")
+# Show results
+print(f"Probability of default: {default_probability * 100:.1f}% (threshold: 29.0%)")
 print(f"Prediction: {prediction}")
