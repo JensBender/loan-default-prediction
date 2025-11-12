@@ -74,15 +74,16 @@ applicant_data = pd.DataFrame({
     "current_house_yrs": [11],
 })
 
-# Get predicted probabilities of both classes (0: no default, 1: default)
-probabilities = pipeline.predict_proba(applicant_data) 
-default_probability = probabilities[0, 1]  # row 0, column 1 of np.ndarray
-print(f"Probability of default: {default_probability:.2f}")
+# Get predicted probabilities 
+probabilities = pipeline.predict_proba(applicant_data)  # np.ndarray containing both classes (0: no default, 1: default)
+default_probability = probabilities[0, 1]  # row 0, column 1 
 
 # Apply optimized threshold to make a classification decision
 threshold = 0.29
 prediction = "Default" if default_probability >= threshold else "No Default"
-print(f"Threshold: {threshold}")
+
+# Show results
+print(f"Probability of default: {default_probability * 100:.1f}% (threshold: 29.0%)")
 print(f"Prediction: {prediction}")
 ```
 
