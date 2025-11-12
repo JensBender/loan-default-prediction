@@ -2,6 +2,7 @@
 # Standard library imports
 import re
 import logging
+import os
 from typing import Any
 
 # Third-party library imports
@@ -136,10 +137,9 @@ def predict_loan_default(
         inputs["house_ownership"] = format_house_ownership(inputs["house_ownership"])
         
         # --- Post request ---  
-        # Dynamically retrieve URL of uvicorn server (inside Docker container) on which FastAPI app and mounted Gradio app are both running 
-        server_url = str(gr_request.base_url)  
-        predict_url = f"{server_url}predict"
         # Predict loan default via post request to FastAPI backend 
+        port = int(os.environ.get("PORT", 7860))  # use whatever port the host assigns, otherwise default to 7860 (typical for Hugging Face)
+        predict_url = f"http://localhost:{port}/predict"
         response = requests.post(
             predict_url, 
             json=inputs, 
