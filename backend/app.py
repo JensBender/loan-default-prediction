@@ -156,7 +156,7 @@ def load_pipeline_from_local(path: str | Path) -> Pipeline:
     try:
         logger.info(f"Loading pipeline from '{path_str}'...")
         pipeline = joblib.load(path_str)
-        logger.info("Pipeline loaded successfully.")
+        logger.info("Successfully loaded pipeline.")
     except Exception as e:
         raise RuntimeError(f"Error when loading pipeline from '{path_str}'") from e
     

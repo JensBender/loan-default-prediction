@@ -16,7 +16,7 @@ if [ ! -f /app/geoip_db/GeoLite2-Country.mmdb ]; then
   # Extract the .mmdb file and remove archive
   tar -xzf /app/geoip_db/GeoLite2-Country.tar.gz -C /app/geoip_db --strip-components=1
   rm /app/geoip_db/GeoLite2-Country.tar.gz
-  echo "GeoLite2-Country.mmdb downloaded successfully."
+  echo "Successfully downloaded GeoLite2-Country.mmdb."
 fi
 
 # Start the combined FastAPI and Gradio app on a uvicorn server (Hugging Face Spaces expects port 7860 even though default is 8000)
