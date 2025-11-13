@@ -35,7 +35,7 @@ The pipeline takes raw loan application data as input (formatted as a `pandas Da
 ### Model Sources
 | Component | Description | Link |
 |------------|--------------|------|
-| **Source Code** | Complete project repository with training, evaluation, and deployment code | [GitHub](https://github.com/JensBender/loan-default-prediction) |
+| **Source Code** | Full project repository with training, evaluation, and deployment scripts | [GitHub](https://github.com/JensBender/loan-default-prediction) |
 | **Model Pipeline** | Pre-trained `scikit-learn` pipeline with Random Forest Classifier and preprocessing | [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) |
 | **Web App** | Live, interactive demo with Gradio frontend and FastAPI backend | [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) |
 
