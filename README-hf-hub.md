@@ -43,6 +43,47 @@ The pipeline takes raw loan application data as input (formatted as a `pandas Da
 #### Using the Web App
 The model pipeline is deployed as a web application on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app). You can interact with the model directly through the web interface without any installation or coding required.
 
+#### Using the API
+The deployed model pipeline on Hugging Face Spaces can also be accessed via API. You can use it for inference with the `requests` library as shown below. 
+
+```python
+import requests 
+
+# Create example applicant data (JSON payload)
+applicant_data = {
+    "income": 300000,
+    "age": 30,
+    "experience": 3,
+    "married": "single",
+    "house_ownership": "rented",
+    "car_ownership": "no",
+    "profession": "artist",
+    "city": "sikar",
+    "state": "rajasthan",
+    "current_job_yrs": 3,
+    "current_house_yrs": 11,
+}
+
+# API request to FastAPI predict endpoint on Hugging Face Spaces
+response = requests.post(
+  "https://jensbender-loan-default-prediction-app.hf.space/api/predict",
+  json=applicant_data
+)
+
+# Check if request was successful
+response.raise_for_status()
+
+# Extract prediction and probability of default
+prediction_response = response.json()
+prediction_result = prediction_response["results"][0]
+prediction = prediction_result["prediction"]
+default_probability = prediction_result["probabilities"]["Default"]
+
+# Show results
+print(f"Probability of default: {default_probability * 100:.1f}% (threshold: 29.0%)")
+print(f"Prediction: {prediction}")
+```
+
 #### Downloading and Using the Pipeline
 The pipeline is serialized as a `joblib` file. You can download and use it for inference with the `huggingface_hub` library as shown below. The optimized decision threshold of 0.29 is not part of the pipeline itself and has to be applied in post-processing.
 
