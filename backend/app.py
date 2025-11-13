@@ -12,8 +12,6 @@ from datetime import datetime, timezone
 # Third-party library imports
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import RedirectResponse
-from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
-from fastapi.openapi.utils import get_openapi
 from sklearn.pipeline import Pipeline
 import gradio as gr
 import pandas as pd
