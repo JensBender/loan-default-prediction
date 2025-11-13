@@ -336,7 +336,12 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
         raise HTTPException(status_code=500, detail="Internal server error during loan default prediction")
 
 # Mount Gradio frontend onto FastAPI backend
-app = gr.mount_gradio_app(fastapi_app, gradio_app, path="/gradio")  # at "/gradio" not "/" due to known Gradio bug (redirect loop)  
+app = gr.mount_gradio_app(
+    fastapi_app, 
+    gradio_app, 
+    path="/gradio",  # at "/gradio" not "/" due to known Gradio bug (redirect loop)  
+    show_api=False  # disable Gradio's auto-generated API
+)  
 
 # Home route redirects to Gradio UI 
 @app.get("/")
