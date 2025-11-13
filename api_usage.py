@@ -15,8 +15,11 @@ applicant_data = {
     "current_house_yrs": 11,
 }
 
-# API post request to the predict endpoint of the FastAPI backend on Hugging Face Spaces
-response = requests.post("https://jensbender-loan-default-prediction-app.hf.space/api/predict", json=applicant_data)
+# API request to FastAPI predict endpoint on Hugging Face Spaces
+response = requests.post(
+  "https://jensbender-loan-default-prediction-app.hf.space/api/predict",
+  json=applicant_data
+)
 
 # Check if request was successful
 response.raise_for_status()
