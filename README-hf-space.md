@@ -26,9 +26,9 @@ tags:
 A web application that predicts loan default based on customer application data, helping financial institutions make informed, data-driven lending decisions. Built with `Gradio`, `FastAPI`, `Docker` and a `scikit-learn` Random Forest model trained on over 250,000 loan applications.
 
 ### How to Use
-1.  **Enter  Information**: Fill in the form with the applicant's details such as age and income.
-2.  **Click Predict**: The app will process your input and display the prediction ("Default" or "No Default") along with probabilities.
-3.  **Interpret Results**: Combine prediction with human judgment and additional information. Do not use predictions as the sole factor for loan decisions. 
+1.  **Fill in Form**: Enter applicant details such as age, income, and experience.
+2.  **Click Predict**: The app will process your input and return the prediction ("Default" or "No Default") along with probabilities.
+3.  **Interpret Responsibly**: Use the prediction as decision support, not as the sole basis for loan approval.  
 
 ### How It Works
 1. **Gradio Frontend (UI Layer)**  
