@@ -220,12 +220,7 @@ pipeline = load_pipeline_from_huggingface(
 
 # --- API ---
 # Create FastAPI app
-fastapi_app = FastAPI(
-    title="Loan Default Prediction API",
-    docs_url="/api/docs",
-    redoc_url="/api/redoc",
-    openapi_url="/api/openapi.json"
-)
+fastapi_app = FastAPI(title="Loan Default Prediction API")
 
 # Prediction endpoint 
 @fastapi_app.post("/api/predict", response_model=PredictionResponse)
@@ -349,41 +344,3 @@ app = gr.mount_gradio_app(fastapi_app, gradio_app, path="/gradio")  # at "/gradi
 @app.get("/")
 def root():
     return RedirectResponse(url="/gradio/")
-
-# OpenAPI schema
-@app.get("/api/openapi.json")
-def get_openapi_endpoint():
-    return get_openapi(
-        title="Loan Default Prediction API",
-        version="1.0",
-        routes=app.routes,
-    )
-
-# Swagger UI
-@app.get("/api/docs")
-def custom_swagger_ui_html():
-    return get_swagger_ui_html(
-        openapi_url="/api/openapi.json",
-        title="Loan Default Prediction API - Swagger UI"
-    )
-
-# ReDoc
-@app.get("/api/redoc")
-def custom_redoc_html():
-    return get_redoc_html(
-        openapi_url="/api/openapi.json",
-        title="Loan Default Prediction API - ReDoc"
-    )
-
-# Redirects for API documentation (to make it available on Hugging Face Space)
-@app.get("/docs")
-def docs_redirect():
-    return RedirectResponse(url="/api/docs")
-
-@app.get("/redoc")
-def redoc_redirect():
-    return RedirectResponse(url="/api/redoc")
-
-@app.get("/openapi.json")
-def openapi_redirect():
-    return RedirectResponse(url="/api/openapi.json")
