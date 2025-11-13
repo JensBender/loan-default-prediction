@@ -12,6 +12,8 @@ from datetime import datetime, timezone
 # Third-party library imports
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import RedirectResponse
+from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
+from fastapi.openapi.utils import get_openapi
 from sklearn.pipeline import Pipeline
 import gradio as gr
 import pandas as pd
@@ -356,6 +358,31 @@ app = gr.mount_gradio_app(
 @app.get("/")
 def root():
     return RedirectResponse(url="/gradio/")
+
+# OpenAPI schema
+@app.get("/api/openapi.json")
+def get_openapi_endpoint():
+    return get_openapi(
+        title="Loan Default Prediction API",
+        version="1.0",
+        routes=app.routes,
+    )
+
+# Swagger UI
+@app.get("/api/docs")
+def custom_swagger_ui_html():
+    return get_swagger_ui_html(
+        openapi_url="/api/openapi.json",
+        title="Loan Default Prediction API - Swagger UI"
+    )
+
+# ReDoc
+@app.get("/api/redoc")
+def custom_redoc_html():
+    return get_redoc_html(
+        openapi_url="/api/openapi.json",
+        title="Loan Default Prediction API - ReDoc"
+    )
 
 # Redirects for API documentation (to make it available on Hugging Face Space)
 @app.get("/docs")
