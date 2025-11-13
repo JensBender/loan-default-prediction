@@ -23,12 +23,12 @@ tags:
 ---
 
 ## 🏦 Loan Default Prediction App
-A web app that predicts loan default based on customer application data. Powered by machine learning, trained on over 250,000 loan applications, and with a user-friendly interface to help financial institutions make data-driven lending decisions.
+A web application that predicts loan default based on customer application data, helping financial institutions make informed, data-driven lending decisions. Built with `Gradio`, `FastAPI`, `Docker` and a `scikit-learn` Random Forest model trained on over 250,000 loan applications.
 
 ### How to Use
 1.  **Enter  Information**: Fill in the form with the applicant's details such as age and income.
 2.  **Click Predict**: The app will process your input and display the prediction ("Default" or "No Default") along with probabilities.
-3.  **Interpret Results**: Combine prediction with human judgment and additional information. Predictions should not be used as the sole factor for loan decisions. 
+3.  **Interpret Results**: Combine prediction with human judgment and additional information. Do not use predictions as the sole factor for loan decisions. 
 
 ### How It Works
 1. **Gradio Frontend (UI Layer)**  
@@ -43,7 +43,7 @@ A web app that predicts loan default based on customer application data. Powered
 3. **ML Pipeline (Model Layer)**  
    - Implements a full `scikit-learn` pipeline with preprocessing and a Random Forest Classifier model.  
    - Handles feature engineering, scaling, and encoding.  
-   - Outputs predicted probabilities for both classes (default / no default).
+   - Outputs predicted probabilities for both classes ("Default" and "No Default").
 4. **Deployment Environment**
     - All components are packaged together in a single **Docker** container.  
     - The app runs on Hugging Face Spaces using the **Docker SDK**.  
