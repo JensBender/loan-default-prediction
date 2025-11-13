@@ -31,22 +31,23 @@ A web application that predicts loan default based on customer application data,
 3.  **Interpret Responsibly**: Use the prediction as decision support, not as the sole basis for loan approval.  
 
 ### How It Works
+
 1. **Gradio Frontend (UI Layer)**  
-    - Provides a simple web form for users to input applicant details.  
+    - Provides a clean and simple form for data entry.  
     - Sends form data as JSON to the backend API.  
-    - Displays the model’s prediction along with probabilities in real time.
+    - Displays prediction results and probabilities in real time.
 2. **FastAPI Backend (API Layer)**  
-   - Receives requests from the Gradio frontend and validates the data.  
-   - Loads the pre-trained loan default prediction pipeline from the [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline). The pipeline is automatically fetched at startup, ensuring the latest version is always used. 
-   - Passes the input through the pipeline, captures the predicted probabilities, and applies the decision threshold.  
-   - Returns a JSON response with prediction results.
+    - Receives requests from the `Gradio` frontend or direct API calls.  
+    - Loads the pre-trained pipeline from the [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline).  
+    - Validates and passes data through the pipeline, and applies the decision threshold.  
+    - Returns JSON responses containing predictions and probabilities.
 3. **ML Pipeline (Model Layer)**  
    - Implements a full `scikit-learn` pipeline with preprocessing and a Random Forest Classifier model.  
-   - Handles feature engineering, scaling, and encoding.  
+   - Performs feature engineering, scaling, and encoding.  
    - Outputs predicted probabilities for both classes ("Default" and "No Default").
 4. **Deployment Environment**
-    - All components are packaged together in a single **Docker** container.  
-    - The app runs on Hugging Face Spaces using the **Docker SDK**.  
+    - Packaged as a single `Docker` container.  
+    - Runs seamlessly on Hugging Face Spaces using the Docker SDK.  
 
 ### Links
 | Component | Description | Link |
