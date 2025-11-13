@@ -218,7 +218,7 @@ pipeline = load_pipeline_from_huggingface(
 
 # --- API ---
 # Create FastAPI app
-app = FastAPI(
+fastapi_app = FastAPI(
     title="Loan Default Prediction API",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
@@ -226,7 +226,7 @@ app = FastAPI(
 )
 
 # Prediction endpoint 
-@app.post("/api/predict", response_model=PredictionResponse)
+@fastapi_app.post("/api/predict", response_model=PredictionResponse)
 def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Request) -> PredictionResponse:  # JSON object -> PipelineInput | JSON array -> list[PipelineInput]
     batch_metadata = None   
     pipeline_input_dict_ls = None
@@ -340,6 +340,23 @@ def predict(pipeline_input: PipelineInput | list[PipelineInput], request: Reques
 
         raise HTTPException(status_code=500, detail="Internal server error during loan default prediction")
 
+# Mount Gradio frontend onto FastAPI backend
+app = gr.mount_gradio_app(
+    fastapi_app, 
+    gradio_app, 
+    path="/gradio",  # at "/gradio" not "/" due to known Gradio bug (redirect loop)
+    app_kwargs={  # use app_kwargs to make the FastAPI documentation available in the mounted app 
+        "docs_url": "/api/docs",
+        "redoc_url": "/api/redoc", 
+        "openapi_url": "/api/openapi.json"
+    }
+)  
+
+# Home route redirects to Gradio UI 
+@app.get("/")
+def root():
+    return RedirectResponse(url="/gradio/")
+
 # Redirects for API documentation (to make it available on Hugging Face Space)
 @app.get("/docs")
 def docs_redirect():
@@ -352,11 +369,3 @@ def redoc_redirect():
 @app.get("/openapi.json")
 def openapi_redirect():
     return RedirectResponse(url="/api/openapi.json")
-
-# Mount Gradio frontend onto FastAPI backend
-app = gr.mount_gradio_app(app, gradio_app, path="/gradio")  # at "/gradio" not "/" due to known Gradio bug (redirect loop)
-
-# Home route redirects to Gradio UI 
-@app.get("/")
-def root():
-    return RedirectResponse(url="/gradio/")
