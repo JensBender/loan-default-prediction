@@ -44,7 +44,9 @@ The pipeline takes raw loan application data as input (formatted as a `pandas Da
 The model pipeline is deployed as a web application on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app). You can interact with the model directly through the web interface without any installation or coding required.
 
 #### Using the API
-The deployed model pipeline on Hugging Face Spaces can also be accessed via API. You can use it for inference with the `requests` library as shown below. 
+You can also send requests directly to the FastAPI backend of the Hugging Face Space. This programmatic access is useful for integrating the model into other applications or systems.
+
+Example API usage with Python's `requests` library:
 
 ```python
 import requests 
@@ -65,10 +67,8 @@ applicant_data = {
 }
 
 # API request to FastAPI predict endpoint on Hugging Face Spaces
-response = requests.post(
-  "https://jensbender-loan-default-prediction-app.hf.space/api/predict",
-  json=applicant_data
-)
+prediction_api_url = "https://jensbender-loan-default-prediction-app.hf.space/api/predict"
+response = requests.post(prediction_api_url, json=applicant_data)
 
 # Check if request was successful
 response.raise_for_status()
