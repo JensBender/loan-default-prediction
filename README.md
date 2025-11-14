@@ -113,12 +113,12 @@ Predicting loan defaults is a challenging task due to the multitude of influenci
 - Implement robust testing (unit, integration, and end-to-end) for the machine learning pipeline, backend, and frontend.
 
 **Value Proposition**  
-This project enables financial institutions to reduce loan default rates and make better and faster lending decisions by leveraging machine learning for automated and improved risk assessment. 
+This project provides a blueprint for how a financial institution can leverage machine learning to build a support tool for credit risk assessment, leading to better and faster lending decisions.
 
-**Business Goals**  
-- Reduce losses by 5M-10M INR within 12 months of model deployment by decreasing the loan default rate by 10%-20%.
-- Decrease loan processing time by 25%-40% by automating risk assessment, leading to less time spent on manual evaluations.
-- Ensure 100% compliance with regulatory requirements and fair lending practices.
+**Potential Impact**  
+- **Reduced Financial Loss:** Aims to decrease the loan default rate by 10%-20%, potentially saving 5M-10M INR within the first year.
+- **Increased Efficiency:** Automates risk assessment to cut loan processing time by 25%-40%.
+- **Enhanced Transparency:** Provides an interpretable model and identifies key risk drivers through feature importance analysis, supporting a more transparent decision-making process.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
