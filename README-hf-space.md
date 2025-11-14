@@ -25,8 +25,6 @@ tags:
 A web application that predicts loan default based on customer application data, helping financial institutions make data-driven lending decisions.  
 Built with `Gradio`, `FastAPI`, and a `scikit-learn` Random Forest model trained on over 250,000 loan applications.
 
----
-
 ### How to Use 
 1.  **Fill in Form**: Enter applicant details such as age, income, and experience.
 2.  **Click Predict**: The app will process your input and return a "Default" or "No Default" prediction along with probabilities.
@@ -72,8 +70,6 @@ print(f"Probability of default: {default_probability * 100:.1f}% (threshold: 29.
 print(f"Prediction: {prediction}")
 ```
 
----
-
 ### How It Works
 1. **Gradio Frontend (UI Layer)**  
     - Provides a clean and simple form for data entry.  
@@ -92,8 +88,6 @@ print(f"Prediction: {prediction}")
     - Packaged as a single `Docker` container.  
     - Runs seamlessly on Hugging Face Spaces using the Docker SDK.  
 
----
-
 ### Model Performance
 The Random Forest model achieved an **AUC-PR of 0.59** on the test set. The most influential features are income, age, and state default rate (derived via feature engineering).
 
@@ -106,16 +100,12 @@ The Random Forest model achieved an **AUC-PR of 0.59** on the test set. The most
 | Macro Avg              | 0.74      | 0.84   | 0.78     | 25,200  |
 | Weighted Avg           | 0.91      | 0.88   | 0.89     | 25,200  |
 
----
-
 ### Resources
 | Component | Description | Link |
 |------------|--------------|------|
 | **Source Code** | Full project repository with training, evaluation, and deployment scripts | [GitHub](https://github.com/JensBender/loan-default-prediction) |
 | **Model Pipeline** | Pre-trained `scikit-learn` pipeline with Random Forest Classifier and preprocessing | [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) |
 | **Web App** | Live, interactive demo with Gradio frontend and FastAPI backend | [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) |
-
----
 
 ### Responsible Use
 The model and by extension this web app and API are intended to be used as a tool to support credit risk assessment. They can be integrated into decision-making workflows to provide a quantitative measure of default risk for loan applicants.
@@ -133,12 +123,8 @@ The model was trained on historical data that may carry biases related to socioe
 - **Fairness and Bias Audits:** Before deploying this model in a production environment, conduct thorough fairness and bias analyses to ensure it performs equally across different demographic groups.
 - **Model Monitoring:** Continuously monitor the model's performance and predictions to detect and mitigate any performance degradation or emerging biases.
 
----
-
 ### License
 The source code for this web app on Hugging Face Spaces and the source code of the overall project on [GitHub](https://github.com/JensBender/loan-default-prediction) is licensed under the [MIT License](LICENSE). The model pipeline is licensed under [Apache-2.0](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE).
-
----
 
 ### Citation
 If you use this model or app in your work, please cite it as follows:
