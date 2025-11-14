@@ -360,6 +360,7 @@ Summary of license terms for all project components:
 <!-- CREDITS -->
 ## 👏 Credits
 This project was made possible with the help of the following resources:
+- **Dataset**: The model is trained on the "Loan Prediction Based on Customer Behavior" dataset by Subham Jain, available on [Kaggle](https://www.kaggle.com/datasets/subhamjain/loan-prediction-based-on-customer-behavior).
 - **Header image**: Generated using the FLUX.1 [dev] image generator via [Hugging Face](https://huggingface.co/spaces/black-forest-labs/FLUX.1-dev) by [Black Forest Labs](https://blackforestlabs.ai/).
 - **Geolocation logging in web app**: The FastAPI backend uses the GeoLite2 Country database by [MaxMind](https://www.maxmind.com) to log country-level geolocation for model monitoring.
 
