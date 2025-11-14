@@ -6,7 +6,6 @@ colorFrom: indigo
 colorTo: green
 sdk: docker
 app_port: 7860
-app_port_secondary: 8000
 pinned: false
 models:
   - JensBender/loan-default-prediction-pipeline
@@ -56,10 +55,8 @@ applicant_data = {
 }
 
 # API request to FastAPI predict endpoint on Hugging Face Spaces
-response = requests.post(
-  "https://jensbender-loan-default-prediction-app.hf.space/api/predict",
-  json=applicant_data
-)
+prediction_api_url = "https://jensbender-loan-default-prediction-app.hf.space/api/predict"
+response = requests.post(prediction_api_url, json=applicant_data)
 
 # Check if request was successful
 response.raise_for_status()
