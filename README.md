@@ -322,7 +322,7 @@ Deployed a user-friendly web application to make the model easily accessible. Us
 **Hosting on Hugging Face**
 - Serialized the ML pipeline using `joblib` and uploaded it to [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline) for versioning and reuse.
 - Hosted the Dockerized app on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app) to offer a live, interactive demo for end users.
-- Utilized GitHub Actions for continuous deployment by syncing the GitHub repository with the Hugging Face Spaces repository.
+- Utilized GitHub Actions for continuous deployment by syncing application-related files from the GitHub repository with the Hugging Face Spaces repository.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
