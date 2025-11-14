@@ -5,7 +5,7 @@
 <img src="images/header-image.webp">
 
 <!-- SHORT SUMMARY  -->
-Developed a machine learning pipeline for loan default prediction to enhance risk management for financial institutions. Engineered, scaled, and encoded features. Trained, tuned and evaluated eight models. Deployed a Random Forest with optimized threshold (AUC-PR: 0.59, class-1 recall: 0.79) as a Dockerized web app with FastAPI backend and Gradio frontend on Hugging Face.
+Developed a machine learning pipeline for loan default prediction to support credit risk assessment. Engineered, scaled, and encoded features. Trained, tuned, and evaluated eight models. Deployed a Random Forest Classifier with an optimized decision threshold (AUC-PR: 0.59, recall: 0.79 for defaulters) as a Dockerized web app with a FastAPI backend and Gradio frontend, hosted on Hugging Face Spaces.
 
 ---
 
@@ -71,7 +71,7 @@ Developed a machine learning pipeline for loan default prediction to enhance ris
 Developed a machine learning solution to predict loan defaults using customer application data, empowering financial institutions to make data-driven lending decisions and minimize risk. This project involved:
 - **Data Preprocessing**: Engineered new features (e.g., job stability, city tier, state default rate), handled duplicates, data types, missing values, and outliers, scaled numerical features, and encoded categorical features.
 - **Exploratory Data Analysis**: Analyzed descriptive statistics and visualized distributions, correlations and relationships.
-- **Modeling**: Trained and evaluated eight baseline models (e.g., Logistic Regression, Random Forest, XGBoost) and tuned hyperparameters. The final model, a Random Forest classifier with optimized decision threshold, achieved an AUC-PR of 0.59, class-1 recall of 0.79, and class-1 precision of 0.51 on the hold-out test set. Visualized feature importances and showed model prediction examples.
+- **Modeling**: Trained and evaluated eight baseline models (e.g., Logistic Regression, Random Forest, XGBoost) and tuned hyperparameters. The final model, a Random Forest Classifier with optimized decision threshold, achieved an AUC-PR of 0.59, class-1 recall of 0.79, and class-1 precision of 0.51 on the hold-out test set. Visualized feature importances and showed model prediction examples.
 - **Deployment**: Served the full machine learning pipeline (preprocessing and model) as a web app using FastAPI backend and Gradio frontend within a single Docker container on Hugging Face.
 - **Testing**: Implemented comprehensive unit, integration, and end-to-end tests to validate individual components, their interactions, and entire user journeys.
 
