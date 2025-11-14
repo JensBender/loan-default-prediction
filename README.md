@@ -68,15 +68,16 @@ Developed a machine learning pipeline for loan default prediction to support cre
 
 <!-- SUMMARY -->
 ## 🎯 Summary
-Developed a machine learning solution to predict loan defaults using customer application data, empowering financial institutions to make data-driven lending decisions and minimize risk. This project involved:
+Built an end-to-end machine learning solution for predicting loan defaults using customer application data, enabling financial institutions to make data-driven lending decisions and better manage credit risk. The project includes:
 - **Data Preprocessing**: Engineered new features (e.g., job stability, city tier, state default rate), handled duplicates, data types, missing values, and outliers, scaled numerical features, and encoded categorical features.
-- **Exploratory Data Analysis**: Analyzed descriptive statistics and visualized distributions, correlations and relationships.
-- **Modeling**: Trained and evaluated eight baseline models (e.g., Logistic Regression, Random Forest, XGBoost) and tuned hyperparameters. The final model, a Random Forest Classifier with optimized decision threshold, achieved an AUC-PR of 0.59, class-1 recall of 0.79, and class-1 precision of 0.51 on the hold-out test set. Visualized feature importances and showed model prediction examples.
-- **Deployment**: Served the full machine learning pipeline (preprocessing and model) as a web app using FastAPI backend and Gradio frontend within a single Docker container on Hugging Face.
+- **Exploratory Data Analysis**: Analyzed distributions and relationships using descriptive statistics, correlations, and visualizations.
+- **Modeling**: Trained and evaluated eight baseline models (e.g., Logistic Regression, Random Forest, XGBoost) and tuned hyperparameters. Selected a Random Forest Classifier with an optimized decision threshold, achieving an AUC-PR of 0.59, recall of 0.79, and precision of 0.51 for the default class on the hold-out test set. Visualized feature importances and showed model prediction examples.
+- **Deployment**: Served the full machine learning pipeline (preprocessing and model) as a web app using a FastAPI backend and Gradio frontend within a single Docker container, hosted on Hugging Face Spaces.
 - **Testing**: Implemented comprehensive unit, integration, and end-to-end tests to validate individual components, their interactions, and entire user journeys.
 
-Model Pipeline: [huggingface.co/JensBender/loan-default-prediction-pipeline](https://huggingface.co/JensBender/loan-default-prediction-pipeline)   
-Web App: [huggingface.co/JensBender/loan-default-prediction-app](https://huggingface.co/spaces/JensBender/loan-default-prediction-app)
+**Model Pipeline:** https://huggingface.co/JensBender/loan-default-prediction-pipeline  
+**Web App:** https://huggingface.co/spaces/JensBender/loan-default-prediction-app
+
 
 ### 🛠️ Built With
 - [![Python][Python-badge]][Python-url]
