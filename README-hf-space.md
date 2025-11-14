@@ -23,21 +23,20 @@ tags:
 ---
 
 ## 🏦 Loan Default Prediction App
-A web application that predicts loan default based on customer application data, helping financial institutions make informed, data-driven lending decisions. Built with `Gradio`, `FastAPI`, `Docker` and a `scikit-learn` Random Forest model trained on over 250,000 loan applications.
+A web application that predicts loan default based on customer application data, helping financial institutions make data-driven lending decisions.  
+Built with `Gradio`, `FastAPI`, and a `scikit-learn` Random Forest model trained on over 250,000 loan applications.
 
 ---
 
-### How to Use
+### How to Use 
 1.  **Fill in Form**: Enter applicant details such as age, income, and experience.
-2.  **Click Predict**: The app will process your input and return the prediction ("Default" or "No Default") along with probabilities.
+2.  **Click Predict**: The app will process your input and return a "Default" or "No Default" prediction along with probabilities.
 3.  **Interpret Responsibly**: Use the prediction as decision support, not as the sole basis for loan approval.  
 
----
-
 ### Use via API
-You can also send requests directly to the FastAPI backend for programmatic access. This is useful for integrating the model into other apps or workflows.
+You can also send requests directly to the FastAPI backend for programmatic access. This is useful for integrating the model into other applications or systems.
 
-Example API usage with the `requests` library:
+Example API usage with Python's `requests` library:
 ```python
 import requests 
 
