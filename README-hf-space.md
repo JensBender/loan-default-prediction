@@ -94,6 +94,20 @@ print(f"Prediction: {prediction}")
 
 ---
 
+### Model Performance
+The Random Forest model achieved an **AUC-PR of 0.59** on the test set. The most influential features are income, age, and state default rate (derived via feature engineering).
+
+**Classification Report (Test)**
+|                        | Precision | Recall | F1-Score | Samples |
+|:-----------------------|:----------|:-------|:---------|:--------|
+| Class 0: Non-Defaulter | 0.97      | 0.90   | 0.93     | 22,122  |
+| Class 1: Defaulter     | 0.51      | 0.79   | 0.62     | 3,078   |
+| Accuracy               |           |        | 0.88     | 25,200  |
+| Macro Avg              | 0.74      | 0.84   | 0.78     | 25,200  |
+| Weighted Avg           | 0.91      | 0.88   | 0.89     | 25,200  |
+
+---
+
 ### Resources
 | Component | Description | Link |
 |------------|--------------|------|
