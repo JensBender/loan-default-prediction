@@ -30,7 +30,7 @@ Built with `Gradio`, `FastAPI`, and a `scikit-learn` Random Forest model trained
 ### How to Use 
 1.  **Fill in Form**: Enter applicant details such as age, income, and experience.
 2.  **Click Predict**: The app will process your input and return a "Default" or "No Default" prediction along with probabilities.
-3.  **Interpret Responsibly**: Use the prediction as decision support, not as the sole basis for loan approval.  
+3.  **Interpret Responsibly**: Use the prediction to support decision making, do **not** use for fully automated decisions without human oversight.  
 
 ### Use via API
 You can also send requests directly to the FastAPI backend for programmatic access. This is useful for integrating the model into other applications or systems.
@@ -80,12 +80,12 @@ print(f"Prediction: {prediction}")
     - Sends form data as JSON to the backend API.  
     - Displays prediction results and probabilities in real time.
 2. **FastAPI Backend (API Layer)**  
-    - Receives requests from the `Gradio` frontend or direct API calls.  
+    - Receives requests from the `Gradio` frontend or direct API requests.  
     - Loads the pre-trained pipeline from the [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline).  
     - Validates and passes data through the pipeline, and applies the decision threshold.  
     - Returns JSON responses containing predictions and probabilities.
 3. **ML Pipeline (Model Layer)**  
-   - Implements a full `scikit-learn` pipeline with preprocessing and a Random Forest Classifier model.  
+   - Implements a `scikit-learn` pipeline with a Random Forest Classifier model and preprocessing.  
    - Performs feature engineering, scaling, and encoding.  
    - Outputs predicted probabilities for both classes ("Default" and "No Default").
 4. **Deployment Environment**
@@ -104,7 +104,20 @@ print(f"Prediction: {prediction}")
 ---
 
 ### Responsible Use
-The model and by extension the web app is intended as a decision-support tool to assist in credit risk evaluation. It should **not** be used for automated lending decisions without human oversight.
+The model and by extension this web app and API are intended to be used as a tool to support credit risk assessment. They can be integrated into decision-making workflows to provide a quantitative measure of default risk for loan applicants.
+
+This model is **not** intended for:
+- Fully automated lending decisions without human oversight. The model's predictions should not be the sole factor in any financial decision.
+- Evaluating applicants from demographic, geographic, or socioeconomic backgrounds not represented in the training data.
+- Use in a production environment without rigorous, ongoing validation and fairness audits. 
+
+### Bias, Risks, and Limitations  
+The model was trained on historical data that may carry biases related to socioeconomic status, geography, or other demographic factors, potentially leading to unfair predictions for certain groups. The model can be overconfident on misclassified edge cases, assigning high probabilities to incorrect predictions. Confidence scores should not be relied upon without additional scrutiny.
+
+**Recommendations**  
+- **Human in the Loop:** Always use this model as part of a broader decision-making framework that includes human oversight.
+- **Fairness and Bias Audits:** Before deploying this model in a production environment, conduct thorough fairness and bias analyses to ensure it performs equally across different demographic groups.
+- **Model Monitoring:** Continuously monitor the model's performance and predictions to detect and mitigate any performance degradation or emerging biases.
 
 ---
 
