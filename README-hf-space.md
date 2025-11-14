@@ -123,3 +123,18 @@ The model was trained on historical data that may carry biases related to socioe
 
 ### License
 The source code for this web app on Hugging Face Spaces and the source code of the overall project on [GitHub](https://github.com/JensBender/loan-default-prediction) is licensed under the [MIT License](LICENSE). The model pipeline is licensed under [Apache-2.0](https://huggingface.co/JensBender/loan-default-prediction-pipeline/resolve/main/LICENSE).
+
+---
+
+### Citation
+If you use this model or app in your work, please cite it as follows:
+```bibtex
+@misc{bender_loan_default_prediction_2025,
+  author       = {Bender, Jens},
+  title        = {Loan Default Prediction Pipeline},
+  year         = {2025},
+  publisher    = {Hugging Face},
+  url          = {https://huggingface.co/JensBender/loan-default-prediction-pipeline},
+  note         = {Version 1.0. A scikit-learn Random Forest pipeline for predicting loan defaults. Trained on 252,000 loan applications. Source code available at \url{https://github.com/JensBender/loan-default-prediction}. Licensed under Apache-2.0.}
+}
+```
