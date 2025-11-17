@@ -118,7 +118,7 @@ This project provides a blueprint for how a financial institution can leverage m
 **Potential Impact**  
 - **Reduced Financial Loss:** Aims to decrease the loan default rate by 10%-20%, potentially saving 5M-10M INR within the first year.
 - **Increased Efficiency:** Streamlines risk assessment to cut loan processing time by 25%-40%.
-- **Enhanced Transparency:** Provides an interpretable model and identifies key risk drivers through feature importance analysis, supporting a more transparent decision-making process.
+- **Actionable Insights:** Identifies key risk drivers through feature importance analysis, making the decision-making process more data-driven.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
