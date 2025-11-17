@@ -105,6 +105,11 @@ Built an end-to-end machine learning solution for predicting loan defaults using
 **Problem**  
 Predicting loan defaults is a challenging task due to the multitude of influencing factors such as customers' demographic, financial, location, and behavioral attributes. Traditional default prediction models often oversimplify complex relationships between customer features and default risk. Machine learning offers enhanced predictive capability by capturing non-linear patterns and intricate dependencies in loan application data, enabling more accurate predictions of loan default risk.
 
+**Target Audience**  
+- Data Scientists and ML Engineers: Who want to understand the end-to-end process of building and deploying a machine learning model for a real-world financial problem.
+- Financial Analysts and Credit Risk Managers: Who are interested in how machine learning can be used as a support tool for credit risk assessment.
+- Software Developers: Who want to see an example of how to integrate a machine learning model into a web application.
+
 **Objectives**  
 - Develop a machine learning model to predict loan defaults using customer data from loan applications.
 - Compare multiple models (e.g., Logistic Regression, Random Forest, XGBoost).
