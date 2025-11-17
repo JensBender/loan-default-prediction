@@ -45,6 +45,9 @@ Developed a machine learning pipeline for loan default prediction to support cre
     <a href="#-testing">Testing</a>
   </li>
   <li>
+    <a href="#️-responsible-use">Responsible Use</a>
+  </li>
+  <li>
     <a href="#️-license">License</a>
   </li>
   <li>
@@ -343,6 +346,28 @@ Developed comprehensive unit, integration, and end-to-end tests using `pytest`.
 - **End-to-End (E2E) Tests** (`tests/e2e/`): Simulate real user journeys.
   - Utilized `Selenium` to automate browser interactions with the Gradio UI, including filling out the loan application form and submitting it.
   - Tested both "happy path" scenarios with valid inputs and error scenarios with invalid or missing inputs to ensure the UI displays the correct predictions or error messages.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- RESPONSIBLE USE -->
+## ⚠️ Responsible Use
+**Intended Use**  
+The model is intended to be used as a tool to support credit risk assessment. It can be integrated into decision-making workflows to provide a quantitative measure of default risk for loan applicants.
+
+**Out-of-Scope Use**  
+This model is **not** intended for:
+- Fully automated lending decisions without human oversight. The model's predictions should not be the sole factor in any financial decision.
+- Evaluating applicants from demographic, geographic, or socioeconomic backgrounds not represented in the training data.
+- Use in a production environment without rigorous, ongoing validation and fairness audits. 
+
+**Bias, Risks, and Limitations**  
+The model was trained on historical data that may carry biases related to socioeconomic status, geography, or other demographic factors, potentially leading to unfair predictions for certain groups. The model can be overconfident on misclassified edge cases, assigning high probabilities to incorrect predictions. Confidence scores should not be relied upon without additional scrutiny.
+
+**Recommendations**  
+- **Human in the Loop:** Always use this model as part of a broader decision-making framework that includes human oversight.
+- **Fairness and Bias Audits:** Before deploying this model in a production environment, conduct thorough fairness and bias analyses to ensure it performs equally across different demographic groups.
+- **Model Monitoring:** Continuously monitor the model's performance and predictions to detect and mitigate any performance degradation or emerging biases.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
