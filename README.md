@@ -124,9 +124,9 @@ Predicting loan defaults is a challenging task due to the multitude of influenci
 This project provides a blueprint for how a financial institution can leverage machine learning to build a support tool for credit risk assessment, leading to better and faster lending decisions.
 
 **Potential Impact**  
-- **Reduced Financial Loss:** Aims to decrease the loan default rate by 10%-20%, potentially saving 5M-10M INR within the first year.
-- **Increased Efficiency:** Streamlines risk assessment to cut loan processing time by 25%-40%.
-- **Actionable Insights:** Identifies key risk drivers through feature importance analysis, making the decision-making process more data-driven.
+- Reduced Financial Loss: Aims to decrease the loan default rate by 10%-20%, potentially saving 5M-10M INR within the first year.
+- Increased Efficiency: Streamlines risk assessment to cut loan processing time by 25%-40%.
+- Actionable Insights: Identifies key risk drivers through feature importance analysis, making the decision-making process more data-driven.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
