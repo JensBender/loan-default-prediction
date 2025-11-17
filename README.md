@@ -207,7 +207,7 @@ Used `pandas`, `numpy`, `seaborn`, and `matplotlib` for statistical analysis and
         - Analyzed relationships with contingency tables using `pandas` `crosstab`.
         - Visualized relationships with [grouped bar plots](#categorical-categorical-relationships-grouped-bar-plots) using `pandas` `crosstab` `plot` and `matplotlib`.
 
-![Correlation Heatmap](images/correlation_heatmap.png)
+<img src="images/correlation_heatmap.png" alt="Correlation Heatmap" style="width: 80%;">
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
