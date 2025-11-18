@@ -48,6 +48,9 @@ Developed a machine learning pipeline for loan default prediction to support cre
     <a href="#️-responsible-use">Responsible Use</a>
   </li>
   <li>
+    <a href="#-project-structure">Project Structure</a>
+  </li>
+  <li>
     <a href="#️-license">License</a>
   </li>
   <li>
