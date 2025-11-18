@@ -391,10 +391,10 @@ Step 5: Access the app frontend or backend using the URLs.
 - API Documentation: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ### Usage on Hugging Face
-**Web Interface**  
-Use the web UI directly: [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app)
+**Using the Web App**  
+The model pipeline is deployed as a web application on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app). You can interact with the model directly through the web interface without any installation or coding required.
 
-**Via API**  
+**Using the API**  
 You can also send requests directly to the FastAPI backend for programmatic access. This is useful for integrating the model into other applications or systems.
 
 Example API usage with Python's `requests` library:
