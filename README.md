@@ -381,39 +381,50 @@ The model was trained on historical data that may carry biases related to socioe
 ├── .github/              # GitHub Actions workflows
 │   └── workflows/
 │       └── deploy-to-hf.yml # Deploys the web app to Hugging Face Spaces
+│
 ├── backend/              # Contains the FastAPI application
 │   ├── __init__.py
 │   ├── app.py            
 │   └── schemas.py        # Pydantic schemas for data validation in API layer
+│
+├── frontend/             # Contains the Gradio application
+│   ├── __init__.py
+│   └── app.py            
+│
 ├── src/                  # Contains shared code for model training and deployment
 │   ├── __init__.py
 │   ├── custom_transformers.py # Defines custom scikit-learn transformers
 │   ├── global_constants.py  
 │   ├── pipeline.py       # Defines scikit-learn pipelines
 │   └── utils.py
-├── frontend/             # Contains the Gradio application
-│   ├── __init__.py
-│   └── app.py            
-├── images/               # Images used in the README.md
-├── loan_default_prediction.ipynb # Jupyter notebook for preprocessing, EDA and model training
+│
 ├── tests/                # Tests for the model pipeline and web app
 │   ├── __init__.py
 │   ├── unit/             # Unit tests
 │   ├── integration/      # Integration tests
 │   └── e2e/              # End-to-end tests
+│
+├── images/               # Images used in the README.md
+│
+├── loan_default_prediction.ipynb # Jupyter notebook for preprocessing, EDA and model training
+│
 ├── Dockerfile            # Defines the Docker image for the web app
-├── .gitignore
-├── .dockerignore
-├── LICENSE               
-├── pytest.ini
-├── README.md             # README for the GitHub code repository
-├── README-hf-hub.md      # README for the Hugging Face Hub model repository
-├── README-hf-space.md    # README for the Hugging Face Spaces app repository
+├── start.sh              # Shell script to start the web app
+│
 ├── requirements-notebook.txt # Training dependencies for Jupyter notebook
 ├── requirements.txt      # Deployment dependencies  
 ├── requirements-test.txt # Test dependencies 
-├── start.sh              # Shell script to start the web app
-└── upload_to_huggingface.py # Script to upload pipeline and files to Hugging Face Hub
+│
+├── README.md             # README for the GitHub code repository
+├── README-hf-hub.md      # README for the Hugging Face Hub model repository
+├── README-hf-space.md    # README for the Hugging Face Spaces app repository
+│
+├── pytest.ini            # Pytest configuration
+├── LICENSE               
+├── .gitignore
+├── .dockerignore
+│
+└── upload_to_huggingface.py # Script to upload pipeline files to Hugging Face Hub
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
