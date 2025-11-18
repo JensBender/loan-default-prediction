@@ -360,30 +360,29 @@ Developed comprehensive unit, integration, and end-to-end tests using `pytest`.
 You can run the application locally or use the hosted version on Hugging Face Spaces.
 
 ### Local Usage
-1. **Create a Virtual Environment (recommended):**
+1. Create a virtual environment (recommended):
    ```bash
    python -m venv .venv
+   ```
+2. Activate the virtual environment:
+   ```bash
    source .venv/bin/activate       # macOS & Linux
    # OR
    .\.venv\Scripts\activate        # Windows
    ```
-
-2. **Install Dependencies:**
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-
-3. **Start the Application (FastAPI + Gradio):**
-   The FastAPI backend automatically mounts the Gradio frontend, so only one command is needed:
-
+4. Start the application (FastAPI + Gradio):  
    ```bash
    uvicorn backend.app:app --reload
    ```
-
-Once running, the application is available at:
-- **Gradio UI:** [http://127.0.0.1:8000/gradio](http://127.0.0.1:8000/gradio)
-- **API Docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- **Root URL:** [http://127.0.0.1:8000](http://127.0.0.1:8000) (redirects to Gradio UI)
+   The FastAPI backend automatically mounts the Gradio frontend, so only one command is needed.
+5. Once running, the application is available at:
+    - Gradio UI: [http://127.0.0.1:8000/gradio](http://127.0.0.1:8000/gradio)
+    - API Docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+    - Root URL: [http://127.0.0.1:8000](http://127.0.0.1:8000) (redirects to Gradio UI)
 
 ### Usage on Hugging Face
 **Web Interface**  
