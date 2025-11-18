@@ -375,7 +375,6 @@ The model was trained on historical data that may carry biases related to socioe
 <!-- PROJECT STRUCTURE -->
 ## 📂 Project Structure
 ```
-.
 ├── .github/              # GitHub Actions workflows
 │   └── workflows/
 │       └── deploy-to-hf.yml # Deploys the web app to Hugging Face Spaces
@@ -383,7 +382,7 @@ The model was trained on historical data that may carry biases related to socioe
 │   ├── __init__.py
 │   ├── app.py            
 │   └── schemas.py        # Pydantic schemas for data validation in API layer
-├── src/                  # Contains shared code for frontend and backend
+├── src/                  # Contains shared code for model training and deployment
 │   ├── __init__.py
 │   ├── custom_transformers.py # Defines custom scikit-learn transformers
 │   ├── global_constants.py  
@@ -394,13 +393,14 @@ The model was trained on historical data that may carry biases related to socioe
 │   └── app.py            
 ├── images/               # Images used in the README.md
 ├── loan_default_prediction.ipynb # Jupyter notebook for preprocessing, EDA and model training
-├── tests/                # Tests for the project
+├── tests/                # Tests for the model pipeline and web app
 │   ├── __init__.py
 │   ├── unit/             # Unit tests
 │   ├── integration/      # Integration tests
 │   └── e2e/              # End-to-end tests
 ├── Dockerfile            # Defines the Docker image for the web app
 ├── .gitignore
+├── .dockerignore
 ├── LICENSE               
 ├── pytest.ini
 ├── README.md             # README for the GitHub code repository
@@ -408,7 +408,9 @@ The model was trained on historical data that may carry biases related to socioe
 ├── README-hf-space.md    # README for the Hugging Face Spaces app repository
 ├── requirements-notebook.txt # Training dependencies for Jupyter notebook
 ├── requirements.txt      # Deployment dependencies  
-└── requirements-test.txt # Test dependencies 
+├── requirements-test.txt # Test dependencies 
+├── start.sh              # Shell script to start the web app
+└── upload_to_huggingface.py # Script to upload pipeline and files to Hugging Face Hub
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
