@@ -372,6 +372,48 @@ The model was trained on historical data that may carry biases related to socioe
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+<!-- PROJECT STRUCTURE -->
+## 📂 Project Structure
+```
+.
+├── .github/              # GitHub Actions workflows
+│   └── workflows/
+│       └── deploy-to-hf.yml # Deploys the web app to Hugging Face Spaces
+├── backend/              # Contains the FastAPI application
+│   ├── __init__.py
+│   ├── app.py            
+│   └── schemas.py        # Pydantic schemas for data validation in API layer
+├── src/                  # Contains shared code for frontend and backend
+│   ├── __init__.py
+│   ├── custom_transformers.py # Defines custom scikit-learn transformers
+│   ├── global_constants.py  
+│   ├── pipeline.py       # Defines scikit-learn pipelines
+│   └── utils.py
+├── frontend/             # Contains the Gradio application
+│   ├── __init__.py
+│   └── app.py            
+├── images/               # Images used in the README.md
+├── loan_default_prediction.ipynb # Jupyter notebook for preprocessing, EDA and model training
+├── tests/                # Tests for the project
+│   ├── __init__.py
+│   ├── unit/             # Unit tests
+│   ├── integration/      # Integration tests
+│   └── e2e/              # End-to-end tests
+├── Dockerfile            # Defines the Docker image for the web app
+├── .gitignore
+├── LICENSE               
+├── pytest.ini
+├── README.md             # README for the GitHub code repository
+├── README-hf-hub.md      # README for the Hugging Face Hub model repository
+├── README-hf-space.md    # README for the Hugging Face Spaces app repository
+├── requirements-notebook.txt # Training dependencies for Jupyter notebook
+├── requirements.txt      # Deployment dependencies  
+└── requirements-test.txt # Test dependencies 
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 <!-- LICENSE -->
 ## ©️ License
 Summary of license terms for all project components:
