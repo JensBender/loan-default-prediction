@@ -42,6 +42,9 @@ Developed a machine learning pipeline for loan default prediction to support cre
     <a href="#-deployment">Deployment</a>
   </li>
   <li>
+    <a href="#-usage">Usage</a>
+  </li>
+  <li>
     <a href="#-testing">Testing</a>
   </li>
   <li>
@@ -349,6 +352,83 @@ Developed comprehensive unit, integration, and end-to-end tests using `pytest`.
 - **End-to-End (E2E) Tests** (`tests/e2e/`): Simulate real user journeys.
   - Utilized `Selenium` to automate browser interactions with the Gradio UI, including filling out the loan application form and submitting it.
   - Tested both "happy path" scenarios with valid inputs and error scenarios with invalid or missing inputs to ensure the UI displays the correct predictions or error messages.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## ▶️ Usage
+You can run the application locally or use the hosted version on Hugging Face Spaces.
+
+### Local Usage
+1. **Create a Virtual Environment (recommended):**
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate       # macOS & Linux
+   # OR
+   .\.venv\Scripts\activate        # Windows
+   ```
+
+2. **Install Dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Start the Application (FastAPI + Gradio):**
+   The FastAPI backend automatically mounts the Gradio frontend, so only one command is needed:
+
+   ```bash
+   uvicorn backend.app:app --reload
+   ```
+
+Once running, the application is available at:
+- **Gradio UI:** [http://127.0.0.1:8000/gradio](http://127.0.0.1:8000/gradio)
+- **API Docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- **Root URL:** [http://127.0.0.1:8000](http://127.0.0.1:8000) (redirects to Gradio UI)
+
+### Usage on Hugging Face
+**Web Interface**  
+Use the web UI directly: [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app)
+
+**Via API**  
+You can also send requests directly to the FastAPI backend for programmatic access. This is useful for integrating the model into other applications or systems.
+
+Example API usage with Python's `requests` library:
+
+```python
+import requests 
+
+# Create example applicant data (JSON payload)
+applicant_data = {
+    "income": 300000,
+    "age": 30,
+    "experience": 3,
+    "married": "single",
+    "house_ownership": "rented",
+    "car_ownership": "no",
+    "profession": "artist",
+    "city": "sikar",
+    "state": "rajasthan",
+    "current_job_yrs": 3,
+    "current_house_yrs": 11,
+}
+
+# API request to FastAPI predict endpoint on Hugging Face Spaces
+prediction_api_url = "https://jensbender-loan-default-prediction-app.hf.space/api/predict"
+response = requests.post(prediction_api_url, json=applicant_data)
+
+# Check if request was successful
+response.raise_for_status()
+
+# Extract prediction and probability of default
+prediction_response = response.json()
+prediction_result = prediction_response["results"][0]
+prediction = prediction_result["prediction"]
+default_probability = prediction_result["probabilities"]["Default"]
+
+# Show results
+print(f"Probability of default: {default_probability * 100:.1f}% (threshold: 29.0%)")
+print(f"Prediction: {prediction}")
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
