@@ -435,6 +435,50 @@ print(f"Probability of default: {default_probability * 100:.1f}% (threshold: 29.
 print(f"Prediction: {prediction}")
 ```
 
+### Downloading and Using the Pipeline
+The pipeline is serialized as a `joblib` file. You can download and use it for inference with the `huggingface_hub` library as shown below. The optimized decision threshold of 0.29 is not part of the pipeline itself and has to be applied in post-processing.
+
+```python
+from huggingface_hub import hf_hub_download
+import joblib
+import pandas as pd
+
+# Download the pipeline from Hugging Face Hub and load it into memory
+pipeline_path = hf_hub_download(
+  "JensBender/loan-default-prediction-pipeline",
+  "loan_default_rf_pipeline.joblib"
+)
+pipeline = joblib.load(pipeline_path)
+
+# Create a sample DataFrame
+# Note: The column names and data types must match the training data
+applicant_data = pd.DataFrame({
+    "income": [300000],
+    "age": [30],
+    "experience": [3],
+    "married": ["single"],
+    "house_ownership": ["rented"],
+    "car_ownership": ["no"],
+    "profession": ["Artist"],
+    "city": ["Sikar"],
+    "state": ["Rajasthan"],
+    "current_job_yrs": [3],
+    "current_house_yrs": [11],
+})
+
+# Get predicted probabilities 
+probabilities = pipeline.predict_proba(applicant_data)  # np.ndarray containing both classes (0: no default, 1: default)
+default_probability = probabilities[0, 1]  # row 0, column 1 
+
+# Apply optimized threshold to make a classification decision
+threshold = 0.29
+prediction = "Default" if default_probability >= threshold else "No Default"
+
+# Show results
+print(f"Probability of default: {default_probability * 100:.1f}% (threshold: 29.0%)")
+print(f"Prediction: {prediction}")
+```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
