@@ -383,8 +383,20 @@ To run the web app on your local machine:
    ```bash
    uvicorn backend.app:app --port 7860
    ```
-4. Access the app:
-   Open [http://127.0.0.1:7860](http://127.0.0.1:7860) in your browser.
+4. Access the app: Open [http://127.0.0.1:7860](http://127.0.0.1:7860) in your browser.
+
+**Run with Docker**  
+Alternatively, you can run the web app in a Docker container to match the production environment exactly.
+
+1. Build the Docker image:
+   ```bash
+   docker build -t loan-default-prediction-app .
+   ```
+2. Run the container:
+   ```bash
+   docker run --name loan-default-prediction-app -p 7860:7860 loan-default-prediction-app
+   ```
+3. Access the app: Open [http://127.0.0.1:7860](http://127.0.0.1:7860) in your browser.
 
 ### API
 The REST API allows for programmatic access and integration into other systems. It is available both on the Hugging Face Space and when running locally.
