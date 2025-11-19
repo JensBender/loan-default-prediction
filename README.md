@@ -360,9 +360,8 @@ Developed comprehensive unit, integration, and end-to-end tests using `pytest`.
 You can interact with the model pipeline via the web app, the API, or by downloading the pipeline for local inference.
 
 ### Web App
-**Online Demo**  
-The easiest way to use the model is through the hosted web app on Hugging Face Spaces:  
-[**Launch Web App**](https://huggingface.co/spaces/JensBender/loan-default-prediction-app)
+**On Hugging Face**  
+The easiest way to use the model is through the web app on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app). You can interact with the model directly through the web interface without any installation or coding required.
 
 **Run Locally**  
 To run the web app on your local machine:
@@ -392,13 +391,10 @@ Step 4: Start the app (FastAPI backend with mounted Gradio frontend).
 uvicorn backend.app:app --reload
 ```
 
-Step 5: Access the app frontend or backend using the URLs.
-- Gradio UI: [http://127.0.0.1:8000/gradio](http://127.0.0.1:8000/gradio)
-- FastAPI Prediction Endpoint: [http://127.0.0.1:8000/api/predict](http://127.0.0.1:8000/api/predict)
-- API Documentation: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+Step 5: Open the web app in your browser at [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
 ### API
-The REST API allows for programmatic access and integration into other systems. It is available both on the hosted Hugging Face Space and your local instance.
+The REST API allows for programmatic access and integration into other systems. It is available both on the Hugging Face Space and when running locally.
 
 Example API usage with Python's `requests` library:
 
@@ -423,8 +419,8 @@ applicant_data = {
 # API request to FastAPI predict endpoint 
 # On Hugging Face Spaces
 prediction_api_url = "https://jensbender-loan-default-prediction-app.hf.space/api/predict"
-# On local machine
-# prediction_api_url = "http://127.0.0.1:8000/api/predict"  # uncomment if running locally
+# On local machine (uncomment when running locally)
+# prediction_api_url = "http://127.0.0.1:8000/api/predict"  
 
 # Send request
 response = requests.post(prediction_api_url, json=applicant_data)
