@@ -356,7 +356,7 @@ Developed comprehensive unit, integration, and end-to-end tests using `pytest`.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-## 💻 Usage
+## ▶️ Usage
 You can interact with the model pipeline via the web app, the API, or by downloading the pipeline for local inference.
 
 ### Web App
@@ -381,10 +381,10 @@ To run the web app on your local machine:
    ```
 3. Start the app:
    ```bash
-   uvicorn backend.app:app --reload
+   uvicorn backend.app:app --port 7860
    ```
 4. Access the app:
-   Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
+   Open [http://127.0.0.1:7860](http://127.0.0.1:7860) in your browser.
 
 ### API
 The REST API allows for programmatic access and integration into other systems. It is available both on the Hugging Face Space and when running locally.
@@ -413,7 +413,7 @@ applicant_data = {
 # On Hugging Face Spaces
 prediction_api_url = "https://jensbender-loan-default-prediction-app.hf.space/api/predict"
 # On local machine (uncomment when running locally)
-# prediction_api_url = "http://127.0.0.1:8000/api/predict"  
+# prediction_api_url = "http://127.0.0.1:7860/api/predict"  
 
 # Send request
 response = requests.post(prediction_api_url, json=applicant_data)
