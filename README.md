@@ -356,10 +356,17 @@ Developed comprehensive unit, integration, and end-to-end tests using `pytest`.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-## ▶️ Usage
-You can run the application locally or use the hosted version on Hugging Face Spaces.
+## 💻 Usage
+You can interact with the model pipeline via the web app, the API, or by downloading the pipeline for local inference.
 
-### Local Usage
+### Web App
+**Online Demo**  
+The easiest way to use the model is through the hosted web app on Hugging Face Spaces:  
+[**Launch Web App**](https://huggingface.co/spaces/JensBender/loan-default-prediction-app)
+
+**Run Locally**  
+To run the web app on your local machine:
+
 Step 1: Create a virtual environment (recommended).
 ```bash
 python -m venv .venv
@@ -390,12 +397,8 @@ Step 5: Access the app frontend or backend using the URLs.
 - FastAPI Prediction Endpoint: [http://127.0.0.1:8000/api/predict](http://127.0.0.1:8000/api/predict)
 - API Documentation: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
-### Usage on Hugging Face
-**Using the Web App**  
-The model pipeline is deployed as a web application on [Hugging Face Spaces](https://huggingface.co/spaces/JensBender/loan-default-prediction-app). You can interact with the model directly through the web interface without any installation or coding required.
-
-**Using the API**  
-You can also send requests directly to the FastAPI backend for programmatic access. This is useful for integrating the model into other applications or systems.
+### API
+The REST API allows for programmatic access and integration into other systems. It is available both on the hosted Hugging Face Space and your local instance.
 
 Example API usage with Python's `requests` library:
 
@@ -417,8 +420,13 @@ applicant_data = {
     "current_house_yrs": 11,
 }
 
-# API request to FastAPI predict endpoint on Hugging Face Spaces
+# API request to FastAPI predict endpoint 
+# On Hugging Face Spaces
 prediction_api_url = "https://jensbender-loan-default-prediction-app.hf.space/api/predict"
+# On local machine
+# prediction_api_url = "http://127.0.0.1:8000/api/predict"  # uncomment if running locally
+
+# Send request
 response = requests.post(prediction_api_url, json=applicant_data)
 
 # Check if request was successful
@@ -435,8 +443,8 @@ print(f"Probability of default: {default_probability * 100:.1f}% (threshold: 29.
 print(f"Prediction: {prediction}")
 ```
 
-### Downloading and Using the Pipeline
-The pipeline is serialized as a `joblib` file. You can download and use it for inference with the `huggingface_hub` library as shown below. The optimized decision threshold of 0.29 is not part of the pipeline itself and has to be applied in post-processing.
+### Model Pipeline
+For direct access to the model without the web app or API layer, the pipeline is serialized as a `joblib` file. You can download and use it for inference with the `huggingface_hub` library as shown below. The optimized decision threshold of 0.29 is not part of the pipeline itself and has to be applied in post-processing.
 
 ```python
 from huggingface_hub import hf_hub_download
