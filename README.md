@@ -365,33 +365,26 @@ The easiest way to use the model is through the web app on [Hugging Face Spaces]
 
 **Run Locally**  
 To run the web app on your local machine:
-
-Step 1: Create a virtual environment (recommended).
-```bash
-python -m venv .venv
-```
-
-Step 2: Activate the virtual environment.  
-- Linux & macOS:
-  ```bash
-  source .venv/bin/activate       
-  ```
-- Windows:
-  ```bash
-  .venv\Scripts\activate 
-  ```
-
-Step 3: Install dependencies.
-```bash
-pip install -r requirements.txt
-```
-
-Step 4: Start the app (FastAPI backend with mounted Gradio frontend).  
-```bash
-uvicorn backend.app:app --reload
-```
-
-Step 5: Open the web app in your browser at [http://127.0.0.1:8000](http://127.0.0.1:8000).
+1. Create and activate a virtual environment (recommended):
+   ```bash
+   python -m venv .venv
+   
+   # Linux & macOS
+   source .venv/bin/activate
+   
+   # Windows
+   .venv\Scripts\activate
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Start the app:
+   ```bash
+   uvicorn backend.app:app --reload
+   ```
+4. Access the app:
+   Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 
 ### API
 The REST API allows for programmatic access and integration into other systems. It is available both on the Hugging Face Space and when running locally.
