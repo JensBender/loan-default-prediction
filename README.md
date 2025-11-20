@@ -398,7 +398,7 @@ Alternatively, you can run the web app in a Docker container to match the produc
    ```
 2. Run the container:
    ```bash
-   docker run --name loan-default-prediction-app -p 7860:7860 loan-default-prediction-app
+   docker run --name loan-default-prediction-app -p 7860:7860 --env-file .env loan-default-prediction-app
    ```
 3. Access the app: Open [http://127.0.0.1:7860](http://127.0.0.1:7860) in your browser.
 
