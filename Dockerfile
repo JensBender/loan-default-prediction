@@ -4,8 +4,8 @@ FROM python:3.10-slim-bookworm
 # Set the working directory in the container
 WORKDIR /app
 
-# Install curl & tar (to download GeoLite2)
-RUN apt-get update && apt-get install -y --no-install-recommends curl tar && rm -rf /var/lib/apt/lists/*
+# Install curl (to download GeoLite2), tar (to unzip it) & dos2unix (to fix Windows line endings)
+RUN apt-get update && apt-get install -y --no-install-recommends curl tar dos2unix && rm -rf /var/lib/apt/lists/*
 
 # Copy the requirements file and install dependencies
 COPY requirements.txt .
@@ -17,8 +17,8 @@ COPY ./backend ./backend
 COPY ./frontend ./frontend
 COPY ./start.sh .
 
-# Make the start script executable
-RUN chmod +x ./start.sh
+# Fix start script line endings and make it executable
+RUN dos2unix ./start.sh && chmod +x ./start.sh
 
 # Expose Gradio port
 EXPOSE 7860  
