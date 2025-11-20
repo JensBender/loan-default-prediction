@@ -46,6 +46,11 @@ Developed a machine learning pipeline for loan default prediction to support cre
   </li>
   <li>
     <a href="#️-usage">Usage</a>
+    <ul>
+      <li><a href="#web-app">Web App</a></li>      
+      <li><a href="#api">API</a></li>
+      <li><a href="#model-pipeline">Model Pipeline</a></li>
+    </ul>
   </li>
   <li>
     <a href="#️-responsible-use">Responsible Use</a>
