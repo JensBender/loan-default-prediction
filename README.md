@@ -387,7 +387,6 @@ To run the web app on your local machine:
 
 **Run with Docker**  
 Alternatively, you can run the web app in a Docker container to match the production environment exactly.
-
 1. Build the Docker image:
    ```bash
    docker build -t loan-default-prediction-app .
@@ -445,7 +444,8 @@ print(f"Prediction: {prediction}")
 ```
 
 ### Model Pipeline
-For direct access to the model without the web app or API layer, the pipeline is serialized as a `joblib` file. You can download and use it for inference with the `huggingface_hub` library as shown below. The optimized decision threshold of 0.29 is not part of the pipeline itself and has to be applied in post-processing.
+For direct inference, download the serialized `joblib` pipeline using `huggingface_hub`.  
+**Note:** Unlike the API, the pipeline requires a `pandas DataFrame` input and returns probabilities. You must manually apply the optimized decision threshold of `0.29`. 
 
 ```python
 from huggingface_hub import hf_hub_download
