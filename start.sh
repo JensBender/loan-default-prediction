@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e  # exit immediately if any command fails
 
+# Load environment variables from .env file if it exists
+if [ -f .env ]; then
+    export $(grep -v '^#' .env | xargs)
+fi
+
 # Create geoip_db directory (if it doesn't exist already)
 mkdir -p /app/geoip_db
 
