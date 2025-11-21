@@ -368,9 +368,9 @@ Developed comprehensive unit, integration, and end-to-end tests using `pytest`.
 ## ⚙️ Getting Started
 **Prerequisites**  
 Ensure you have the following installed:
-*   **Python 3.10+**: [Download Python](https://www.python.org/downloads/)
-*   **Git**: [Download Git](https://git-scm.com/downloads)
-*   **Docker Desktop** (Optional for Dockerized web app): [Download Docker](https://www.docker.com/products/docker-desktop/)
+- [**Python 3.10+**](https://www.python.org/downloads/): To run the code and install dependencies.
+- [**Git**](https://git-scm.com/downloads): To clone the repository.
+- [**Docker Desktop**](https://www.docker.com/products/docker-desktop/) (Optional): To run the application in a container.
 
 **MaxMind License Key**  
 The web app requires a MaxMind license key to download the GeoLite2 Country database for country-level geolocation tracking.
