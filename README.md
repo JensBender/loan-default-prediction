@@ -243,7 +243,7 @@ The top-performing models were selected for hyperparameter tuning: Random Forest
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### ⚙️ Hyperparameter Tuning  
+### 🎛️ Hyperparameter Tuning  
 Performed random search with 5-fold cross-validation using `sklearn` `RandomizedSearchCV`. Evaluated the best-performing model from each algorithm using precision-recall curves on the validation data. Random Forest demonstrated the highest AUC-PR (0.62), followed by XGBoost (0.61).  
 ![Precision-Recall Curves: Hyperparameter-Tuned Models](images/precision_recall_curves_tuned.png)
 
@@ -360,6 +360,20 @@ Developed comprehensive unit, integration, and end-to-end tests using `pytest`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## ⚙️ Getting Started
+Ensure you have the following installed:
+*   **Python 3.10+**: [Download Python](https://www.python.org/downloads/)
+*   **Git**: [Download Git](https://git-scm.com/downloads)
+*   **Docker Desktop** (Optional): Required if you want to run the Dockerized web app. [Download Docker](https://www.docker.com/products/docker-desktop/)
+
+**MaxMind License Key**  
+The web app requires a MaxMind license key to download the GeoLite2 Country database for country-level geolocation tracking.
+1.  Create a free account at [MaxMind](https://www.maxmind.com/).
+2.  Generate a license key.
+3.  Create a `.env` file in the root directory and add your key:
+    ```bash
+    MAXMIND_LICENSE_KEY=your_license_key_here
+    ```
 
 ## ▶️ Usage
 You can interact with the model pipeline via the web app, the API, or by downloading the pipeline for local inference.
