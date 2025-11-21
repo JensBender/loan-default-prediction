@@ -449,8 +449,8 @@ print(f"Prediction: {prediction}")
 ```
 
 ### Model Pipeline
-For direct inference, download the serialized `joblib` pipeline using `huggingface_hub`.  
-**Note:** Unlike the API, the pipeline requires a `pandas DataFrame` input and returns probabilities. You must manually apply the optimized decision threshold of `0.29`. 
+To use the pipeline directly for local inference, you can download the serialized `joblib` pipeline using the `huggingface_hub` library.  
+**Note:** Unlike the API, which handles data conversion and thresholding automatically, the pipeline requires a `pandas DataFrame` input and returns raw probabilities. You must manually apply the optimized decision threshold to obtain a prediction. 
 
 ```python
 from huggingface_hub import hf_hub_download
