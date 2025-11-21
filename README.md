@@ -363,20 +363,24 @@ Developed comprehensive unit, integration, and end-to-end tests using `pytest`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+
+<!-- GETTING STARTED -->
 ## ⚙️ Getting Started
+**Prerequisites**  
 Ensure you have the following installed:
 *   **Python 3.10+**: [Download Python](https://www.python.org/downloads/)
 *   **Git**: [Download Git](https://git-scm.com/downloads)
-*   **Docker Desktop** (Optional): Required if you want to run the Dockerized web app. [Download Docker](https://www.docker.com/products/docker-desktop/)
+*   **Docker Desktop** (Optional for Dockerized web app): [Download Docker](https://www.docker.com/products/docker-desktop/)
 
 **MaxMind License Key**  
 The web app requires a MaxMind license key to download the GeoLite2 Country database for country-level geolocation tracking.
-1.  Create a free account at [MaxMind](https://www.maxmind.com/).
-2.  Generate a license key.
-3.  Create a `.env` file in the root directory and add your key:
+1. Create a free account at [MaxMind](https://www.maxmind.com/).
+2. Generate a license key.
+3. Create a `.env` file in the root directory and add your key:
     ```bash
     MAXMIND_LICENSE_KEY=your_license_key_here
     ```
+4. For Hugging Face Spaces: Add your key as a secret named `MAXMIND_LICENSE_KEY` in your Space settings (`Settings` -> `Variables and secrets` -> `New secret`).
 
 ## ▶️ Usage
 You can interact with the model pipeline via the web app, the API, or by downloading the pipeline for local inference.
