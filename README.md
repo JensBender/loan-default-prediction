@@ -89,7 +89,7 @@ Built an end-to-end machine learning solution for predicting loan defaults using
 - **Data Preprocessing**: Engineered new features (e.g., job stability, city tier, state default rate), handled duplicates, data types, missing values, and outliers, scaled numerical features, and encoded categorical features.
 - **Exploratory Data Analysis**: Analyzed distributions and relationships using descriptive statistics, correlations, and visualizations.
 - **Modeling**: Trained and evaluated eight baseline models (e.g., Logistic Regression, Random Forest, XGBoost) and tuned hyperparameters. Selected a Random Forest Classifier with an optimized decision threshold, achieving an AUC-PR of 0.59, recall of 0.79, and precision of 0.51 for the default class on the hold-out test set. Visualized feature importances and showed model prediction examples.
-- **Deployment**: Served the full machine learning pipeline (preprocessing and model) as a web app using a FastAPI backend and Gradio frontend within a single Docker container, hosted on Hugging Face Spaces.
+- **Deployment**: Served the full machine learning pipeline (preprocessing and model) as a web app using a FastAPI backend and Gradio frontend within a single Docker container, hosted on Hugging Face Spaces. Automated deployment via GitHub Actions to sync web app files to Hugging Face Spaces on every push.
 - **Testing**: Implemented comprehensive unit, integration, and end-to-end tests to validate individual components, their interactions, and entire user journeys.
 
 **Model Pipeline:** [Hugging Face Hub](https://huggingface.co/JensBender/loan-default-prediction-pipeline)  
@@ -108,6 +108,7 @@ Built an end-to-end machine learning solution for predicting loan defaults using
 - [![pytest][pytest-badge]][pytest-url]
 - [![Selenium][Selenium-badge]][Selenium-url]
 - [![Hugging Face][HuggingFace-badge]][HuggingFace-url]
+- [![GitHub Actions][GitHubActions-badge]][GitHubActions-url]
 - [![VS Code][VSCode-badge]][VSCode-url]
 - [![Jupyter Notebook][JupyterNotebook-badge]][JupyterNotebook-url]
 
@@ -723,6 +724,8 @@ Training Data
 [Selenium-url]: https://www.selenium.dev/
 [HuggingFace-badge]: https://img.shields.io/badge/Hugging%20Face-ffcc00?style=for-the-badge&logo=huggingface&logoColor=black
 [HuggingFace-url]: https://huggingface.co/
+[GitHubActions-badge]: https://img.shields.io/badge/github%20actions-%236E5494.svg?style=for-the-badge&logo=githubactions&logoColor=white
+[GitHubActions-url]: https://github.com/features/actions
 [VSCode-badge]: https://img.shields.io/badge/VS%20Code-0078D4?style=for-the-badge&logo=visualstudiocode&logoColor=white
 [VSCode-url]: https://code.visualstudio.com/
 [JupyterNotebook-badge]: https://img.shields.io/badge/Jupyter-F37626.svg?style=for-the-badge&logo=Jupyter&logoColor=white
