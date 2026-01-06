@@ -5,7 +5,7 @@
 <img src="images/header-image.webp">
 
 <!-- SHORT SUMMARY  -->
-Developed a machine learning pipeline for loan default prediction to support credit risk assessment. Engineered, scaled, and encoded features. Trained, tuned, and evaluated eight models. Deployed a Random Forest Classifier with an optimized decision threshold (AUC-PR: 0.59, recall: 0.79 for defaulters) as a Dockerized web app with a FastAPI backend and Gradio frontend, hosted on Hugging Face Spaces.
+Developed a machine learning pipeline for loan default prediction to support credit risk assessment. Engineered, scaled, and encoded features. Trained, tuned, and evaluated eight models. Deployed a Random Forest Classifier with an optimized decision threshold (AUC-PR: 0.59, recall: 0.79 for defaulters) as a Dockerized web app with a FastAPI backend and Gradio frontend, hosted on Hugging Face Spaces. Automated deployment via GitHub Actions and ensured reliability via unit, integration, and E2E testing.
 
 ---
 
